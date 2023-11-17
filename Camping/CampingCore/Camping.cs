@@ -14,9 +14,13 @@ namespace CampingCore
         public Camping()
         {
             this.Places = new ObservableCollection<Place>();
-            for(int i = 1; i <= 10; i++)
+            for(int i = 6; i <= 10; i++)
             {
                 Places.Add(new Place(i, true, 1, 1, i));
+            }
+            for(int i = 1; i <= 5; i++) 
+            {
+                Places.Add(new Place(i, false, 1, 10, i));
             }
         }
     }

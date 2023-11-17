@@ -7,53 +7,54 @@
         mc:Ignorable="d"
         Title="PlacesOverviewPage">
     <!--Grid for leftside bar and the place overview-->
-        <Grid Name ="OverviewGrid">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*"/>
-                <ColumnDefinition Width="7*"/>
-            </Grid.ColumnDefinitions>
-            <Border Grid.Column="1" Grid.RowSpan="1" BorderBrush="Black" 
+    <Grid Name ="OverviewGrid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="7*"/>
+        </Grid.ColumnDefinitions>
+        <Border Grid.Column="1" Grid.RowSpan="1" BorderBrush="Black" 
         BorderThickness="1,1,1,1" Background="{x:Null}" >
-            </Border>
-            <!--Grid for the filters and list of places-->
-            <Grid Name="ListGrid">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="5*"/>
-                    <RowDefinition Height="10*"/>
-                </Grid.RowDefinitions>
+        </Border>
+        <!--Grid for the filters and list of places-->
+        <Grid Name="ListGrid">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="5*"/>
+                <RowDefinition Height="10*"/>
+            </Grid.RowDefinitions>
             <Border Grid.Column="1" Grid.RowSpan="1" BorderBrush="Black" 
                     BorderThickness="1, 1, 1, 1" Background="{x:Null}"/>
             <Label Grid.Row="0" Content="Aankomstdatum" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-                <Label Grid.Row="0" Content="Vertrekdatum" HorizontalAlignment="Left" Margin="118,10,0,0" VerticalAlignment="Top"/>
-                <CheckBox Name="PowerCheckBox" Grid.Row="0" Content="Stroom" HorizontalAlignment="Left" Margin="10,75,0,0" VerticalAlignment="Top"/>
-                <DatePicker Grid.Row="0" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
-                <DatePicker Grid.Row="0" HorizontalAlignment="Left" Margin="118,41,0,0" VerticalAlignment="Top"/>
-                <Label Content="Aantal personen" Margin="0,98,108,53"/>
-                <TextBox x:Name="PersonCountTextBox"  Margin="101,105,31,60" TextChanged="PersonCountTextBox_Changed" >
-                </TextBox>
-                <Label x:Name="PersonCountPlaceholder" Content="Vul aantal personen in" Background="Transparent" Opacity="0.5" IsHitTestVisible="False" Margin="101,101,20,56" />
+            <Label Grid.Row="0" Content="Vertrekdatum" HorizontalAlignment="Left" Margin="118,10,0,0" VerticalAlignment="Top"/>
+            <CheckBox Name="PowerCheckBox" Grid.Row="0" Content="Stroom" HorizontalAlignment="Left" Margin="10,75,0,0" VerticalAlignment="Top"/>
+            <DatePicker Grid.Row="0" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
+            <DatePicker Grid.Row="0" HorizontalAlignment="Left" Margin="118,41,0,0" VerticalAlignment="Top"/>
+            <Label Content="Aantal personen" Margin="0,98,108,53"/>
+            <TextBox x:Name="PersonCountTextBox"  Margin="101,105,150,105" TextChanged="PersonCountTextBox_Changed">
+            </TextBox>
+            <Label x:Name="PersonCountPlaceholder" Content="Vul aantal personen in" Background="Transparent" Opacity="0.5" IsHitTestVisible="False" Margin="101,101,20,56" />
             <Button Content="Pas filters toe" Margin="10,151,0,0" Click="ApplyFilters_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80"/>
             <ListView Grid.Row="1" Name="PlacesListView">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Width="90" DisplayMemberBinding="{Binding PlaceNumber}">
-                                <GridViewColumn.Header>
-                                    <GridViewColumnHeader Tag="Naam">Plaatsnummer</GridViewColumnHeader>
-                                </GridViewColumn.Header>
-                            </GridViewColumn>
-                            <GridViewColumn Width="60" DisplayMemberBinding="{Binding PricePerNight}">
-                                <GridViewColumn.Header>
-                                    <GridViewColumnHeader Tag="Prijs">Prijs</GridViewColumnHeader>
-                                </GridViewColumn.Header>
-                            </GridViewColumn>
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Width="90" DisplayMemberBinding="{Binding PlaceNumber}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Tag="Naam">Plaatsnummer</GridViewColumnHeader>
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
+                        <GridViewColumn Width="60" DisplayMemberBinding="{Binding PricePerNight}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Tag="Prijs">Prijs</GridViewColumnHeader>
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
                         <GridViewColumn Width="120" DisplayMemberBinding="{Binding NumberOfPeople}">
                             <GridViewColumn.Header>
                                 <GridViewColumnHeader Tag="Prijs">Aantal personen</GridViewColumnHeader>
                             </GridViewColumn.Header>
                         </GridViewColumn>
                     </GridView>
-                    </ListView.View>
-                </ListView>
-            </Grid>
+                </ListView.View>
+            </ListView>
+            <Button Content="Verwijder filters" Margin="118,151,0,0" Click="RemoveFilters_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80"/>
         </Grid>
+    </Grid>
 </Page>

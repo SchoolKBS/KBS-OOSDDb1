@@ -41,14 +41,35 @@ namespace CampingUI
         {
             HasPower = (bool)PowerCheckBox.IsChecked;
         }
-        private int GetComboBoxResult()
-        {
-            return 0;
-        }
         private void PersonCountTextBox_Changed(Object sender, TextChangedEventArgs e)
         {
             if (PersonCountTextBox.Text != "") PersonCountPlaceholder.Visibility = Visibility.Hidden;
             else PersonCountPlaceholder.Visibility = Visibility.Visible;
+        }
+        private void GetTextFromTextbox()
+        {
+            int number;
+            string TextFromPersonCountTextBox = PersonCountTextBox.Text;
+            if (int.TryParse(TextFromPersonCountTextBox, out number))
+            {
+                PersonsSizeOfPlace = number;
+                if (PersonsSizeOfPlace < 1)
+                {
+                    throw new ArgumentOutOfRangeException(); //Getal kleiner dan 1
+                }
+                else
+                {
+                    if (PersonsSizeOfPlace % 2 == 1)
+                    {
+                        PersonsSizeOfPlace += 1;
+                    }
+                }
+            }
+            else
+            {
+                PersonsSizeOfPlace = 0;
+                //throw new FormatException(); //Exceptie voor geen getal
+            }
         }
 
         private void ApplyFilters_Click(object sender, RoutedEventArgs e)
@@ -56,53 +77,18 @@ namespace CampingUI
 
             GetValueFromPowerCheckBox();
             GetTextFromTextbox();
-            MessageBox.Show($"{HasPower}");
-        }
-        private void GetTextFromTextbox()
-        {
-            /*PersonsSizeOfPlace = 0;
-            string TextFromPersonCountTextBox = PersonCountTextBox.ToString();
-            if(int.TryParse(PersonsSizeOfPlace, out PersonsSizeOfPlace))
-            {
-                if(PersonsSizeOfPlace < 1)
-                {
-                    throw new ArgumentOutOfRangeException(); //Getal kleiner dan 1
-                }
-                else
-                {
-                    if(PersonsSizeOfPlace % 2 == 1)
-                    {
-                        PersonsSizeOfPlace++;
-                    }
-                }
-            }
-            else
-            {
-                throw new FormatException(); //Exceptie voor geen getal
-            }*/
+            var results = Camping.Places.Where(i => i.HasPower == HasPower)
+                                        .Where(i => i.NumberOfPeople > PersonsSizeOfPlace)
+                                        .Select(i => i);
+            PlacesListView.ItemsSource = results;
         }
 
-
-        /*private GridViewColumnHeader listViewSortCol = null;
-        private SortAdorner listViewSortAdorner = null;
-        private void ColumnHeader_Click(object sender, RoutedEventArgs e)
+        private void RemoveFilters_Click(object sender, RoutedEventArgs e)
         {
-            GridViewColumnHeader column = (sender as GridViewColumnHeader);
-            string sortBy = column.Tag.ToString();
-            if (listViewSortCol != null)
-            {
-                AdornerLayer.GetAdornerLayer(listViewSortCol).Remove(listViewSortAdorner);
-                PlacesListView.Items.SortDescriptions.Clear();
-            }
-
-            ListSortDirection newDir = ListSortDirection.Ascending;
-            if (listViewSortCol == column && listViewSortAdorner.Direction == newDir)
-                newDir = ListSortDirection.Descending;
-
-            listViewSortCol = column;
-            listViewSortAdorner = new SortAdorner(listViewSortCol, newDir);
-            AdornerLayer.GetAdornerLayer(listViewSortCol).Add(listViewSortAdorner);
-            PlacesListView.Items.SortDescriptions.Add(new SortDescription(sortBy, newDir));
-        }*/
+            //Datums leegmaken
+            PowerCheckBox.IsChecked = false;
+            PersonCountTextBox.Text = "";
+            PlacesListView.ItemsSource = Camping.Places;
+        }   
     }
 }
