@@ -27,8 +27,7 @@ namespace CampingUI
         
         private void BtnClickReservations(object sender, RoutedEventArgs e)
         {
-            // Do the same for the Reservations window.
-            //Main.Content = new ReservationsOverviewWindow(); (Voorbeeld)
+            Main.Content = new ReservationsOverviewWindow(); 
         }
 
         private void BtnClickPlaces(object sender, RoutedEventArgs e)
