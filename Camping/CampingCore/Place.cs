@@ -13,6 +13,7 @@ namespace CampingCore
         public int SurfaceArea { get; set; }
         public int NumberOfPeople { get; set; }
         public int PricePerNight { get; set; }
+        public string Description { get; set; }
 
         public Place(int placeNumber, bool hasElectricity, int surfaceArea, int numberOfPeople, int pricePerNight)
         {

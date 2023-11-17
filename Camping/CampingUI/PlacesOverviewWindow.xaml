@@ -1,73 +1,59 @@
-﻿<Window x:Class="CampingUI.PlacesOverviewWindow"
+﻿<Page x:Class="CampingUI.PlacesOverviewPage"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CampingUI"
         mc:Ignorable="d"
-        Title="PlacesOverviewWindow" Height="450" Width="800">
-    <Grid Name="NavGrid">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="7*"/>
-        </Grid.RowDefinitions>
-        <Border Grid.Column="1" Grid.RowSpan="1" BorderBrush="Black" 
-BorderThickness="0, 0, 0, 1" Background="{x:Null}" />
-
-        <!--Grid for leftside bar and the place overview-->
-        <Grid Name ="OverviewGrid" Grid.Row="1" Grid.Column="1">
+        Title="PlacesOverviewPage">
+    <!--Grid for leftside bar and the place overview-->
+        <Grid Name ="OverviewGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="7*"/>
             </Grid.ColumnDefinitions>
             <Border Grid.Column="1" Grid.RowSpan="1" BorderBrush="Black" 
-        BorderThickness="1,0,1,1" Background="{x:Null}" >
+        BorderThickness="1,1,1,1" Background="{x:Null}" >
             </Border>
             <!--Grid for the filters and list of places-->
             <Grid Name="ListGrid">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="6*"/>
-                    <RowDefinition Height="6*"/>
+                    <RowDefinition Height="5*"/>
+                    <RowDefinition Height="10*"/>
                 </Grid.RowDefinitions>
-                <Border Grid.Column="1" Grid.RowSpan="1" BorderBrush="Black" 
-    BorderThickness="0, 0, 0, 1" Background="{x:Null}" >
-                </Border>
-                <Label Grid.Row="0" Content="Aankomstdatum" HorizontalAlignment="Left" Margin="3,10,0,0" VerticalAlignment="Top"/>
-                <Label Grid.Row="0" Content="Personen aantal" HorizontalAlignment="Left" Margin="3,90,0,0" VerticalAlignment="Top"/>
+            <Border Grid.Column="1" Grid.RowSpan="1" BorderBrush="Black" 
+                    BorderThickness="1, 1, 1, 1" Background="{x:Null}"/>
+            <Label Grid.Row="0" Content="Aankomstdatum" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
                 <Label Grid.Row="0" Content="Vertrekdatum" HorizontalAlignment="Left" Margin="118,10,0,0" VerticalAlignment="Top"/>
-                <CheckBox Grid.Row="0" Content="Stroom" HorizontalAlignment="Left" Margin="3,70,0,0" VerticalAlignment="Top" Checked="CheckBox_Checked"/>
-                <DatePicker Grid.Row="0" HorizontalAlignment="Left" Margin="3,41,0,0" VerticalAlignment="Top"/>
+                <CheckBox Name="PowerCheckBox" Grid.Row="0" Content="Stroom" HorizontalAlignment="Left" Margin="10,75,0,0" VerticalAlignment="Top"/>
+                <DatePicker Grid.Row="0" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
                 <DatePicker Grid.Row="0" HorizontalAlignment="Left" Margin="118,41,0,0" VerticalAlignment="Top"/>
-                <ComboBox HorizontalAlignment="Left" Margin="10,116,0,0" VerticalAlignment="Top" Width="167" IsEditable="True"
- IsReadOnly="True" Text="Selecteer personen aantal">
-                    <ComboBoxItem>2 Personen</ComboBoxItem>
-                    <ComboBoxItem>4 Personen</ComboBoxItem>
-                    <ComboBoxItem>6 Personen</ComboBoxItem>
-                    <ComboBoxItem>8 of meer Personen</ComboBoxItem>
-                </ComboBox>
-                <ListView Grid.Row="1" Name="PlacesListView">
+                <Label Content="Aantal personen" Margin="0,98,108,53"/>
+                <TextBox x:Name="PersonCountTextBox"  Margin="101,105,31,60" TextChanged="PersonCountTextBox_Changed" >
+                </TextBox>
+                <Label x:Name="PersonCountPlaceholder" Content="Vul aantal personen in" Background="Transparent" Opacity="0.5" IsHitTestVisible="False" Margin="101,101,20,56" />
+            <Button Content="Pas filters toe" Margin="10,151,0,0" Click="ApplyFilters_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80"/>
+            <ListView Grid.Row="1" Name="PlacesListView">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Width="120" DisplayMemberBinding="{Binding PlaceNumber}">
+                            <GridViewColumn Width="90" DisplayMemberBinding="{Binding PlaceNumber}">
                                 <GridViewColumn.Header>
-                                    <GridViewColumnHeader Tag="Naam">Naam</GridViewColumnHeader>
+                                    <GridViewColumnHeader Tag="Naam">Plaatsnummer</GridViewColumnHeader>
                                 </GridViewColumn.Header>
                             </GridViewColumn>
-                            <GridViewColumn Width="80" DisplayMemberBinding="{Binding PricePerNight}">
+                            <GridViewColumn Width="60" DisplayMemberBinding="{Binding PricePerNight}">
                                 <GridViewColumn.Header>
                                     <GridViewColumnHeader Tag="Prijs">Prijs</GridViewColumnHeader>
                                 </GridViewColumn.Header>
                             </GridViewColumn>
-                        </GridView>
+                        <GridViewColumn Width="120" DisplayMemberBinding="{Binding NumberOfPeople}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Tag="Prijs">Aantal personen</GridViewColumnHeader>
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
+                    </GridView>
                     </ListView.View>
                 </ListView>
-
             </Grid>
         </Grid>
-        <Button Content="Plaatsen" HorizontalAlignment="Left" Margin="723,16,0,0" VerticalAlignment="Top"/>
-        <Button Content="Reserveringen" HorizontalAlignment="Left" Margin="610,16,0,0" VerticalAlignment="Top"/>
-    </Grid>
-</Window>
+</Page>

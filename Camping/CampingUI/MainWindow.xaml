@@ -11,13 +11,10 @@
         ResizeMode="CanMinimize"
         >
     <Grid>
-        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock Text="Welkom" FontSize="30" HorizontalAlignment="Center"/>
-            <TextBlock Text="Welkom bij de Camping Administratie Applicatie." FontSize="20" HorizontalAlignment="Center"/>
-            <StackPanel Orientation="Horizontal" Height="100">
-                <Button Content="Reserveringen" Width="200" Height="50" FontSize="20" Margin="0, 0, 12.5, 0" Click="BtnClickReservations"/>
-                <Button Content="Plaatsen" Width="200" Height="50" FontSize="20" Margin="12.5, 0, 0, 0" Click="BtnClickPlaces"/>
-            </StackPanel>
+        <StackPanel Orientation="Horizontal" Height="75" HorizontalAlignment="Right" VerticalAlignment="Top">
+            <Button Content="Reserveringen" Width="200" Height="50" FontSize="20" Margin="0, 0, 12.5, 0" Click="BtnClickReservations"/>
+            <Button Content="Plaatsen" Width="200" Height="50" FontSize="20" Margin="12.5, 0, 0, 0" Click="BtnClickPlaces"/>
         </StackPanel>
+        <Frame x:Name="Main" Margin="0, 75, 0, 0"/>
     </Grid>
 </Window>
