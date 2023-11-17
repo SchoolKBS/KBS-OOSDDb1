@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34202.233
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CampingUI", "CampingUI\CampingUI.csproj", "{B781199F-EA69-44AF-87D4-EDF54AADE8EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CampingUI", "CampingUI\CampingUI.csproj", "{B781199F-EA69-44AF-87D4-EDF54AADE8EA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CampingCore", "CampingCore\CampingCore.csproj", "{06400976-CA8C-45F3-B8D7-7D09A14AEFF9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CampingDataAccess", "CampingDataAccess\CampingDataAccess.csproj", "{9A2EEB25-3AED-4B07-B499-6BB36CC868B4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{747D926F-5F92-4D36-AFF7-B69B9F1CA9F5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{9A2EEB25-3AED-4B07-B499-6BB36CC868B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9A2EEB25-3AED-4B07-B499-6BB36CC868B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9A2EEB25-3AED-4B07-B499-6BB36CC868B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{747D926F-5F92-4D36-AFF7-B69B9F1CA9F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{747D926F-5F92-4D36-AFF7-B69B9F1CA9F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{747D926F-5F92-4D36-AFF7-B69B9F1CA9F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{747D926F-5F92-4D36-AFF7-B69B9F1CA9F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

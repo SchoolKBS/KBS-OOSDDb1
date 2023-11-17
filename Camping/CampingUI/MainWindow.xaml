@@ -7,6 +7,9 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-
+        <StackPanel Orientation="Horizontal" Height="75" HorizontalAlignment="center" VerticalAlignment="center">
+            <Button Content="Reserveringen" Width="200" Height="50" FontSize="20" Margin="0, 0, 10, 0" Click="BtnClickReservations"/>
+            <Button Content="Plaatsen" Width="200" Height="50" FontSize="20" Margin="10, 0, 0, 0" Click="BtnClickPlaces"/>
+        </StackPanel>
     </Grid>
 </Window>
