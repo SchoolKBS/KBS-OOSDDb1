@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -26,15 +27,14 @@ namespace CampingUI
         public PlacesOverviewWindow()
         {
             InitializeComponent();
-            
-            
-            this.Camping = new Camping(); // Creates a camping.
 
-            ListBox listbox = new ListBox(); // Creates a ListBox to show in the WPF UI
-            Grid.SetRow(listbox, 1);        // Adds a new row to the ListBox.
-            listbox.ItemsSource = Camping.Places;   // For all items in the ListBox use the camping places.
-            ListGrid.Children.Add(listbox);     // Adds each items inside the listBox to the grid UI.
-            
+
+            this.Camping = new Camping(); // Creates a camping.
+            if (Camping.Places.Count() > 0)
+            {
+                PlacesListView.ItemsSource = Camping.Places;   // For all items in the ListBox use the camping places.  
+
+            }
         }
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
@@ -46,5 +46,27 @@ namespace CampingUI
         {
 
         }
+
+        /*private GridViewColumnHeader listViewSortCol = null;
+        private SortAdorner listViewSortAdorner = null;
+        private void ColumnHeader_Click(object sender, RoutedEventArgs e)
+        {
+            GridViewColumnHeader column = (sender as GridViewColumnHeader);
+            string sortBy = column.Tag.ToString();
+            if (listViewSortCol != null)
+            {
+                AdornerLayer.GetAdornerLayer(listViewSortCol).Remove(listViewSortAdorner);
+                PlacesListView.Items.SortDescriptions.Clear();
+            }
+
+            ListSortDirection newDir = ListSortDirection.Ascending;
+            if (listViewSortCol == column && listViewSortAdorner.Direction == newDir)
+                newDir = ListSortDirection.Descending;
+
+            listViewSortCol = column;
+            listViewSortAdorner = new SortAdorner(listViewSortCol, newDir);
+            AdornerLayer.GetAdornerLayer(listViewSortCol).Add(listViewSortAdorner);
+            PlacesListView.Items.SortDescriptions.Add(new SortDescription(sortBy, newDir));
+        }*/
     }
 }

@@ -48,6 +48,23 @@ BorderThickness="0, 0, 0, 1" Background="{x:Null}" />
                     <ComboBoxItem>6 Personen</ComboBoxItem>
                     <ComboBoxItem>8 of meer Personen</ComboBoxItem>
                 </ComboBox>
+                <ListView Grid.Row="1" Name="PlacesListView">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Width="120" DisplayMemberBinding="{Binding PlaceNumber}">
+                                <GridViewColumn.Header>
+                                    <GridViewColumnHeader Tag="Naam">Naam</GridViewColumnHeader>
+                                </GridViewColumn.Header>
+                            </GridViewColumn>
+                            <GridViewColumn Width="80" DisplayMemberBinding="{Binding PricePerNight}">
+                                <GridViewColumn.Header>
+                                    <GridViewColumnHeader Tag="Prijs">Prijs</GridViewColumnHeader>
+                                </GridViewColumn.Header>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+
             </Grid>
         </Grid>
         <Button Content="Plaatsen" HorizontalAlignment="Left" Margin="723,16,0,0" VerticalAlignment="Top"/>
