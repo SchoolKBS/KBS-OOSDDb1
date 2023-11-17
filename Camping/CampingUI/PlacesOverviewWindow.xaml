@@ -25,12 +25,14 @@
                     BorderThickness="1, 1, 1, 1" Background="{x:Null}"/>
             <Label Grid.Row="0" Content="Aankomstdatum" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
             <Label Grid.Row="0" Content="Vertrekdatum" HorizontalAlignment="Left" Margin="118,10,0,0" VerticalAlignment="Top"/>
-            <CheckBox Name="PowerCheckBox" Grid.Row="0" Content="Stroom" HorizontalAlignment="Left" Margin="10,75,0,0" VerticalAlignment="Top"/>
-            <DatePicker Grid.Row="0" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
-            <DatePicker Grid.Row="0" HorizontalAlignment="Left" Margin="118,41,0,0" VerticalAlignment="Top"/>
+            <!--<CheckBox Name="PowerCheckBox" Grid.Row="0" Content="Stroom" HorizontalAlignment="Left" Margin="10,75,0,0" VerticalAlignment="Top"/>-->
+            <RadioButton Name="PowerRadioButton1" Grid.Row="0" Content="Wel stroom" HorizontalAlignment="Left" Margin="10,75,0,0" VerticalAlignment="Top" Checked="PowerRadioButton_Selected"/>
+            <RadioButton Name="PowerRadioButton2" Grid.Row="0" Content="Geen stroom" HorizontalAlignment="Left" Margin="104,75,0,0" VerticalAlignment="Top" Checked="PowerRadioButton_Selected"/>
+            <RadioButton Name="PowerRadioButton3" Grid.Row="0" Content="Geen voorkeur" HorizontalAlignment="Left" Margin="203,75,0,0" VerticalAlignment="Top" Checked="PowerRadioButton_Selected" IsChecked="True"/>
+            <DatePicker Name="ArrivalDatePicker" Grid.Row="0" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
+            <DatePicker Name="DepartureDatePicker" Grid.Row="0" HorizontalAlignment="Left" Margin="118,41,0,0" VerticalAlignment="Top"/>
             <Label Content="Aantal personen" Margin="0,98,108,53"/>
-            <TextBox x:Name="PersonCountTextBox"  Margin="101,105,150,105" TextChanged="PersonCountTextBox_Changed">
-            </TextBox>
+            <TextBox x:Name="PersonCountTextBox"  Margin="101,105,150,105" TextChanged="PersonCountTextBox_Changed"/>
             <Label x:Name="PersonCountPlaceholder" Content="Vul aantal personen in" Background="Transparent" Opacity="0.5" IsHitTestVisible="False" Margin="101,101,20,56" />
             <Button Content="Pas filters toe" Margin="10,151,0,0" Click="ApplyFilters_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80"/>
             <ListView Grid.Row="1" Name="PlacesListView">
@@ -38,17 +40,17 @@
                     <GridView>
                         <GridViewColumn Width="90" DisplayMemberBinding="{Binding PlaceNumber}">
                             <GridViewColumn.Header>
-                                <GridViewColumnHeader Tag="Naam">Plaatsnummer</GridViewColumnHeader>
+                                <GridViewColumnHeader Tag="Placenumber" Click="SetSorterColumn_Click">Plaatsnummer</GridViewColumnHeader>
                             </GridViewColumn.Header>
                         </GridViewColumn>
                         <GridViewColumn Width="60" DisplayMemberBinding="{Binding PricePerNight}">
                             <GridViewColumn.Header>
-                                <GridViewColumnHeader Tag="Prijs">Prijs</GridViewColumnHeader>
+                                <GridViewColumnHeader Tag="Price" Click="SetSorterColumn_Click">Prijs</GridViewColumnHeader>
                             </GridViewColumn.Header>
                         </GridViewColumn>
                         <GridViewColumn Width="120" DisplayMemberBinding="{Binding NumberOfPeople}">
                             <GridViewColumn.Header>
-                                <GridViewColumnHeader Tag="Prijs">Aantal personen</GridViewColumnHeader>
+                                <GridViewColumnHeader Tag="PersonsCount" Click="SetSorterColumn_Click">Aantal personen</GridViewColumnHeader>
                             </GridViewColumn.Header>
                         </GridViewColumn>
                     </GridView>

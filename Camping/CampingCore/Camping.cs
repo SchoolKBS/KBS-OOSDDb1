@@ -16,13 +16,18 @@ namespace CampingCore
         {
             this.Places = new ObservableCollection<Place>();
             this.Reservations = new ObservableCollection<Reservation>();
+            for(int i = 1; i <= 5; i++)
+            {
+                Places.Add(new Place(i+30, true, 1, i*2, i));
+            }
+            for(int i = 6; i <=10; i++)
+            {
+                Places.Add(new Place(i, false, 5, i*2, i));
+            }
             for (int i = 1; i <= 10; i++)
             {
-                Places.Add(new Place(i, true, 1, 1, i));
                 Reservations.Add(new Reservation(i, DateTime.Now.AddDays(i), DateTime.Now.AddDays(i + 10), Places[i - 1]));
             }
-
-
         }
     }
 }
