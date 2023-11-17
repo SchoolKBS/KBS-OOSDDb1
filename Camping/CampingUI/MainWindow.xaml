@@ -5,11 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CampingUI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800"
+        WindowState="Maximized"
+        WindowStyle="ThreeDBorderWindow"
+        ResizeMode="CanMinimize"
+        >
     <Grid>
-        <StackPanel Orientation="Horizontal" Height="75" HorizontalAlignment="center" VerticalAlignment="center">
-            <Button Content="Reserveringen" Width="200" Height="50" FontSize="20" Margin="0, 0, 10, 0" Click="BtnClickReservations"/>
-            <Button Content="Plaatsen" Width="200" Height="50" FontSize="20" Margin="10, 0, 0, 0" Click="BtnClickPlaces"/>
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="Welkom" FontSize="30" HorizontalAlignment="Center"/>
+            <TextBlock Text="Welkom bij de Camping Administratie Applicatie." FontSize="20" HorizontalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal" Height="100">
+                <Button Content="Reserveringen" Width="200" Height="50" FontSize="20" Margin="0, 0, 12.5, 0" Click="BtnClickReservations"/>
+                <Button Content="Plaatsen" Width="200" Height="50" FontSize="20" Margin="12.5, 0, 0, 0" Click="BtnClickPlaces"/>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Window>
