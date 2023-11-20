@@ -11,7 +11,7 @@ namespace CampingCore
         public int PlaceNumber { get; set; }
         public bool HasPower { get; set; }
         public int SurfaceArea { get; set; }
-        public int NumberOfPeople { get; set; }
+        public int PersonCount { get; set; }
         public int PricePerNight { get; set; }
         public string Description { get; set; }
 
@@ -20,7 +20,7 @@ namespace CampingCore
             this.PlaceNumber = placeNumber;
             this.HasPower = hasPower;
             this.SurfaceArea = surfaceArea;
-            this.NumberOfPeople = numberOfPeople;
+            this.PersonCount = numberOfPeople;
             this.PricePerNight = pricePerNight;
         }
         public override string ToString()

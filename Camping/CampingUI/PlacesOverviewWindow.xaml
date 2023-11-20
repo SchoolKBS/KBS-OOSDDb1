@@ -23,18 +23,25 @@
             </Grid.RowDefinitions>
             <Border Grid.Column="1" Grid.RowSpan="1" BorderBrush="Black" 
                     BorderThickness="1, 1, 1, 1" Background="{x:Null}"/>
+
+            <!-- First filter for arrive filter  -->
             <Label Grid.Row="0" Content="Aankomstdatum" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
             <Label Grid.Row="0" Content="Vertrekdatum" HorizontalAlignment="Left" Margin="118,10,0,0" VerticalAlignment="Top"/>
-            <!--<CheckBox Name="PowerCheckBox" Grid.Row="0" Content="Stroom" HorizontalAlignment="Left" Margin="10,75,0,0" VerticalAlignment="Top"/>-->
+            <DatePicker Name="ArrivalDatePicker" Grid.Row="0" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
+            <DatePicker Name="DepartureDatePicker" Grid.Row="0" HorizontalAlignment="Left" Margin="118,41,0,0" VerticalAlignment="Top" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
+
+            <!-- Second filter for power  -->
             <RadioButton Name="PowerRadioButton1" Grid.Row="0" Content="Wel stroom" HorizontalAlignment="Left" Margin="10,75,0,0" VerticalAlignment="Top" Checked="PowerRadioButton_Selected"/>
             <RadioButton Name="PowerRadioButton2" Grid.Row="0" Content="Geen stroom" HorizontalAlignment="Left" Margin="104,75,0,0" VerticalAlignment="Top" Checked="PowerRadioButton_Selected"/>
             <RadioButton Name="PowerRadioButton3" Grid.Row="0" Content="Geen voorkeur" HorizontalAlignment="Left" Margin="203,75,0,0" VerticalAlignment="Top" Checked="PowerRadioButton_Selected" IsChecked="True"/>
-            <DatePicker Name="ArrivalDatePicker" Grid.Row="0" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
-            <DatePicker Name="DepartureDatePicker" Grid.Row="0" HorizontalAlignment="Left" Margin="118,41,0,0" VerticalAlignment="Top"/>
+
+            <!-- Third filter for amount of people  -->
             <Label Content="Aantal personen" Margin="0,98,108,53"/>
             <TextBox x:Name="PersonCountTextBox"  Margin="101,105,150,105" TextChanged="PersonCountTextBox_Changed"/>
             <Label x:Name="PersonCountPlaceholder" Content="Vul aantal personen in" Background="Transparent" Opacity="0.5" IsHitTestVisible="False" Margin="101,101,20,56" />
-            <Button Content="Pas filters toe" Margin="10,151,0,0" Click="ApplyFilters_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80"/>
+
+            <Button Content="Pas filters toe" Margin="10,184,0,0" Click="ApplyFilters_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80"/>
+            <!-- Show the places from the camping in a list  -->
             <ListView Grid.Row="1" Name="PlacesListView">
                 <ListView.View>
                     <GridView>
@@ -50,13 +57,15 @@
                         </GridViewColumn>
                         <GridViewColumn Width="120" DisplayMemberBinding="{Binding NumberOfPeople}">
                             <GridViewColumn.Header>
-                                <GridViewColumnHeader Tag="PersonsCount" Click="SetSorterColumn_Click">Aantal personen</GridViewColumnHeader>
+                                <GridViewColumnHeader Tag="PersonCount" Click="SetSorterColumn_Click">Aantal personen</GridViewColumnHeader>
                             </GridViewColumn.Header>
                         </GridViewColumn>
                     </GridView>
                 </ListView.View>
             </ListView>
-            <Button Content="Verwijder filters" Margin="118,151,0,0" Click="RemoveFilters_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80"/>
+            <Button Content="Verwijder filters" Margin="112,184,0,0" Click="RemoveFilters_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80"/>
+            <Label Content="Max prijs" HorizontalAlignment="Left" Margin="10,126,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="MaxPriceRangeTextBox" Width="60" Margin="101,134,160,76" TextChanged="MaxPriceRangeTextBox_Changed"/>
         </Grid>
     </Grid>
 </Page>
