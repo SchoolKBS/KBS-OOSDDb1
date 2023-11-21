@@ -40,8 +40,15 @@
             <TextBox x:Name="PersonCountTextBox"  Margin="101,105,150,105" TextChanged="PersonCountTextBox_Changed"/>
             <Label x:Name="PersonCountPlaceholder" Content="Vul aantal personen in" Background="Transparent" Opacity="0.5" IsHitTestVisible="False" Margin="101,101,20,56" />
 
+            <!-- Fourth filter for max price -->
+            <Label Content="Max prijs" HorizontalAlignment="Left" Margin="10,126,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="MaxPriceRangeTextBox" Width="60" Margin="101,134,160,76" TextChanged="MaxPriceRangeTextBox_Changed"/>
+
+            <!-- Buttons to apply or remove the filters -->
             <Button Content="Pas filters toe" Margin="10,184,0,0" Click="ApplyFilters_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80"/>
-            <!-- Show the places from the camping in a list  -->
+            <Button Content="Verwijder filters" Margin="112,184,0,0" Click="RemoveFilters_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80"/>
+
+            <!-- Show the places from the camping in a list in a grid view and sort them.  -->
             <ListView Grid.Row="1" Name="PlacesListView">
                 <ListView.View>
                     <GridView>
@@ -55,17 +62,14 @@
                                 <GridViewColumnHeader Tag="Price" Click="SetSorterColumn_Click">Prijs</GridViewColumnHeader>
                             </GridViewColumn.Header>
                         </GridViewColumn>
-                        <GridViewColumn Width="120" DisplayMemberBinding="{Binding NumberOfPeople}">
+                        <GridViewColumn Width="120" DisplayMemberBinding="{Binding PersonCount}">
                             <GridViewColumn.Header>
                                 <GridViewColumnHeader Tag="PersonCount" Click="SetSorterColumn_Click">Aantal personen</GridViewColumnHeader>
                             </GridViewColumn.Header>
                         </GridViewColumn>
                     </GridView>
                 </ListView.View>
-            </ListView>
-            <Button Content="Verwijder filters" Margin="112,184,0,0" Click="RemoveFilters_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80"/>
-            <Label Content="Max prijs" HorizontalAlignment="Left" Margin="10,126,0,0" VerticalAlignment="Top"/>
-            <TextBox x:Name="MaxPriceRangeTextBox" Width="60" Margin="101,134,160,76" TextChanged="MaxPriceRangeTextBox_Changed"/>
+            </ListView>            
         </Grid>
     </Grid>
 </Page>

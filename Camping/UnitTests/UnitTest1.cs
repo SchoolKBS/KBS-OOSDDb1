@@ -12,7 +12,7 @@ namespace UnitTests
         public void Test1()
         {
             Camping camping = new Camping();
-            for(int i = 0; i < 10; i++)
+            for (int i = 0; i < 10; i++)
             {
                 camping.Places.Add(new Place(1, true, 1, 1, 1));
             }
