@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Xml.Schema;
 
 namespace CampingUI
 {
@@ -22,5 +23,46 @@ namespace CampingUI
         {
             InitializeComponent();
         }
+
+        public void AddGuestOnClick(object sender, RoutedEventArgs e)
+        {
+            if (!Email.Text.Contains("@") && !Email.Text.Contains("."))
+            {
+                notification.Text = "Ongeldig emailadres";
+            }
+            else
+            {
+                string[] TextInput =
+                {
+                    FirstName.Text,
+                    LastName.Text,
+                    Address.Text,
+                    City.Text,
+                    Email.Text,
+                    PhoneNumber.Text,
+                };
+
+                CheckIfInputIsValid(TextInput);
+            }
+        }
+
+        public bool CheckIfInputIsValid(String[] TextInput) 
+        {
+            foreach(string input in TextInput)
+            {
+                if (string.IsNullOrEmpty(input) || string.IsNullOrWhiteSpace(input))
+                {
+                    notification.Text = "Vul alle velden in";
+                    return false;
+                }
+                else
+                {
+                    notification.Text = "akkoord";
+                }
+            }
+            return true;
+        }
+
+     
     }
 }
