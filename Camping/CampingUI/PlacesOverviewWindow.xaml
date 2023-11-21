@@ -13,7 +13,7 @@
                 <ColumnDefinition Width="7*"/>
             </Grid.ColumnDefinitions>
             <Border Grid.Column="1" Grid.RowSpan="1" BorderBrush="Black" 
-        BorderThickness="1,1,1,1" Background="{x:Null}" >
+            BorderThickness="1,1,1,1" Background="{x:Null}" >
             </Border>
             <!--Grid for the filters and list of places-->
             <Grid Name="ListGrid">
@@ -21,9 +21,9 @@
                     <RowDefinition Height="5*"/>
                     <RowDefinition Height="10*"/>
                 </Grid.RowDefinitions>
-            <Border Grid.Column="1" Grid.RowSpan="1" BorderBrush="Black" 
+                <Border Grid.Column="1" Grid.RowSpan="1" BorderBrush="Black" 
                     BorderThickness="1, 1, 1, 1" Background="{x:Null}"/>
-            <Label Grid.Row="0" Content="Aankomstdatum" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                <Label Grid.Row="0" Content="Aankomstdatum" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
                 <Label Grid.Row="0" Content="Vertrekdatum" HorizontalAlignment="Left" Margin="118,10,0,0" VerticalAlignment="Top"/>
                 <CheckBox Name="PowerCheckBox" Grid.Row="0" Content="Stroom" HorizontalAlignment="Left" Margin="10,75,0,0" VerticalAlignment="Top"/>
                 <DatePicker Grid.Row="0" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
@@ -32,8 +32,8 @@
                 <TextBox x:Name="PersonCountTextBox"  Margin="101,105,31,60" TextChanged="PersonCountTextBox_Changed" >
                 </TextBox>
                 <Label x:Name="PersonCountPlaceholder" Content="Vul aantal personen in" Background="Transparent" Opacity="0.5" IsHitTestVisible="False" Margin="101,101,20,56" />
-            <Button Content="Pas filters toe" Margin="10,151,0,0" Click="ApplyFilters_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80"/>
-            <ListView Grid.Row="1" Name="PlacesListView">
+                <Button Content="Pas filters toe" Margin="10,151,0,0" Click="ApplyFilters_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80"/>
+                <ListView Grid.Row="1" Name="PlacesListView" SelectionChanged="PlacesListView_SelectionChanged">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Width="90" DisplayMemberBinding="{Binding PlaceNumber}">
@@ -54,6 +54,48 @@
                     </GridView>
                     </ListView.View>
                 </ListView>
+            </Grid>
+            <!--Grid for the overview of the selected place-->
+            <Grid Grid.Column="1" Name="PlaceOverviewGrid" Visibility="Collapsed">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                <!--Grid for place info-->
+                <Grid Grid.Row="0" Name="UpperGrid">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0" Name="InfoGrid">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="3*"/>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Row="0" Name="nrLabel" FontSize="30" FontWeight="Bold" Content=""></Label>
+                        <Label Grid.Row="1" Name="areaLabel" FontSize="20" Content=""></Label>
+                        <Label Grid.Row="2" Name="nrPeopleLabel" FontSize="20" Content=""></Label>
+                        <Label Grid.Row="3" Name="electricityLabel" FontSize="20" Content=""></Label>
+                        <Label Grid.Row="4" Name="priceLabel" FontSize="20" Content=""></Label>
+                        <Label Grid.Row="5" Name="descriptionLabel" FontSize="20" Content=""></Label>
+                    </Grid>
+                    <Viewbox Grid.Column="1" Margin="10">
+                        <Calendar x:Name="ReservationCalender" Width="auto"></Calendar>
+                    </Viewbox>
+                </Grid>
+                <!--Grid for button -->
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="1" Name="NewReservationButton" Content="Nieuwe Resevering Maken" Margin="20"/>
+                </Grid>
             </Grid>
         </Grid>
 </Page>

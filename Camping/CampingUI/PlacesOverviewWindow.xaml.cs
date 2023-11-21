@@ -82,6 +82,35 @@ namespace CampingUI
             }*/
         }
 
+        private void PlacesListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if(PlacesListView.SelectedItems != null)
+            {
+                Place place = (Place) PlacesListView.SelectedItem;
+                nrLabel.Content = place;
+                areaLabel.Content = "Oppervlakte: " + place.SurfaceArea;
+                nrPeopleLabel.Content = "Aantal personnen:" + place.NumberOfPeople;
+                electricityLabel.Content = "Toegang tot stroom: ";
+                if (place.HasElectricity) electricityLabel.Content += "Ja";
+                else electricityLabel.Content += "Nee";
+                priceLabel.Content = "Prijs: " + place.PricePerNight;
+                descriptionLabel.Content = "Beschrijving: " + place.Description;
+                PlaceOverviewGrid.Visibility = Visibility.Visible;
+                ReservationCalender.BlackoutDates.Clear();
+                var reservations = Camping.Reservations.Where(r => r.place.PlaceNumber == place.PlaceNumber).ToList();
+                reservations = reservations.Where(r => r.EindDatum >= DateTime.Now).ToList();
+                ReservationCalender.BlackoutDates.AddDatesInPast();
+                foreach ( var reservation in reservations )
+                {
+                    ReservationCalender.BlackoutDates.Add(new CalendarDateRange(reservation.StartDatum, reservation.EindDatum));
+                }
+            }
+            else
+            {
+                PlaceOverviewGrid.Visibility = Visibility.Collapsed;
+            }
+        }
+
 
         /*private GridViewColumnHeader listViewSortCol = null;
         private SortAdorner listViewSortAdorner = null;
