@@ -20,15 +20,15 @@ namespace CampingUI
         public int PersonCount = 0;
         private DateTime _arrivalDate, _departureDate;
         private bool _isSortedAscending;
-        public double MaxPriceRange;
+        private double _maxPriceRange;
         private bool _wrongFilter = false;
 
         public PlacesOverviewPage()
         {
             InitializeComponent();
             this._camping = new Camping(); // Creates a camping.
-            MaxPriceRange = _camping.Places.Max(i => i.PricePerNight);
-            MaxPriceRangeTextBox.Text = $"{MaxPriceRange}"; //Set the MaxPriceRange as a standard
+            _maxPriceRange = _camping.Places.Max(i => i.PricePerNight);
+            MaxPriceRangeTextBox.Text = $"{_maxPriceRange}"; //Set the _maxPriceRange as a standard
             PersonCountTextBox.Text = $"{PersonCount}"; //Set the text in the textbox to 0
             _placesSortedAndOrFiltered = _camping.Places; //get all the places to the variable
             PlacesListView.ItemsSource = _placesSortedAndOrFiltered;   // For all items in the ListBox use the camping places.  
@@ -111,7 +111,7 @@ namespace CampingUI
                 string MaxPriceRangeText = MaxPriceRangeTextBox.Text.Replace(".", ",");
                 if (double.TryParse(MaxPriceRangeText, out number) && number >= 0)       // Checks if int can be parsed and if number is bigger or equal to 0
                 {
-                    MaxPriceRange = number;
+                    _maxPriceRange = number;
                 }
                 else
                 {
@@ -122,8 +122,8 @@ namespace CampingUI
             }
             else
             {
-                MaxPriceRange = _camping.Places.Max(i => i.PricePerNight);
-                MaxPriceRangeTextBox.Text = $"{MaxPriceRange}";
+                _maxPriceRange = _camping.Places.Max(i => i.PricePerNight);
+                MaxPriceRangeTextBox.Text = $"{_maxPriceRange}";
             }
         }
 
@@ -161,7 +161,7 @@ namespace CampingUI
             SetMaxPriceFromMaxPriceRangeTextBox();
             SetArrivalAndDepartureDates();
             _placesSortedAndOrFiltered = _camping.Places;
-            Filter(_arrivalDate, _departureDate, PersonCount, MaxPriceRange, _hasPower);
+            Filter(_arrivalDate, _departureDate, PersonCount, _maxPriceRange, _hasPower);
 
         }
 
@@ -188,9 +188,9 @@ namespace CampingUI
             DepartureDatePicker.SelectedDate = null;
             PowerRadioButton3.IsChecked = true;
             PersonCount = 0;
-            MaxPriceRange = _camping.Places.Max(i => i.PricePerNight);
+            _maxPriceRange = _camping.Places.Max(i => i.PricePerNight);
             PersonCountTextBox.Text = $"{PersonCount}"; ;
-            MaxPriceRangeTextBox.Text = $"{MaxPriceRange}";
+            MaxPriceRangeTextBox.Text = $"{_maxPriceRange}";
             PlacesListView.ItemsSource = _camping.Places;
             ResetBackgroundsFilters();
             _wrongFilter = false;
@@ -263,7 +263,7 @@ namespace CampingUI
         {
             if (maxPriceRange >= _camping.Places.Min(i => i.PricePerNight))
             {
-                _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Intersect(_camping.Places.Where(i => i.PricePerNight <= MaxPriceRange).Select(i => i));
+                _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Intersect(_camping.Places.Where(i => i.PricePerNight <= _maxPriceRange).Select(i => i));
             }
         }
 

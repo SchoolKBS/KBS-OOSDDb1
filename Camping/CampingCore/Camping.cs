@@ -4,12 +4,15 @@ namespace CampingCore
 {
     public class Camping
     {
-        public ObservableCollection<Place> Places { get; set; }
+        public List<Place> Places {
+            get; //{ get uit database} 
+            set; }
         public ObservableCollection<Reservation> Reservations { get; set; }
 
         public Camping()
         {
-            this.Places = new ObservableCollection<Place>();
+            this.Places = new List<Place>();
+            //this.Places = GetPlaces();
             this.Reservations = new ObservableCollection<Reservation>();
             for (int i = 1; i <= 10; i++)
             {
