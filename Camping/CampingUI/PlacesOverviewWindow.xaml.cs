@@ -81,22 +81,28 @@ namespace CampingUI
                 throw new FormatException(); //Exceptie voor geen getal
             }*/
         }
-
+        // Is used everytime a different place is selected in the place list
         private void PlacesListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if(PlacesListView.SelectedItems != null)
             {
                 Place place = (Place) PlacesListView.SelectedItem;
+
                 nrLabel.Content = place;
                 areaLabel.Content = "Oppervlakte: " + place.SurfaceArea;
                 nrPeopleLabel.Content = "Aantal personnen:" + place.NumberOfPeople;
                 electricityLabel.Content = "Toegang tot stroom: ";
+
                 if (place.HasElectricity) electricityLabel.Content += "Ja";
                 else electricityLabel.Content += "Nee";
+
                 priceLabel.Content = "Prijs: " + place.PricePerNight;
                 descriptionLabel.Content = "Beschrijving: " + place.Description;
+
                 PlaceOverviewGrid.Visibility = Visibility.Visible;
                 ReservationCalender.BlackoutDates.Clear();
+
+                ReservationCalender.SelectedDate = null;
                 var reservations = Camping.Reservations.Where(r => r.place.PlaceNumber == place.PlaceNumber).ToList();
                 reservations = reservations.Where(r => r.EindDatum >= DateTime.Now).ToList();
                 ReservationCalender.BlackoutDates.AddDatesInPast();
