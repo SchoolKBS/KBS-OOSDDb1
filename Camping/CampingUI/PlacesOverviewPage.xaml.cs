@@ -1,11 +1,21 @@
 ﻿using CampingCore;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 
 namespace CampingUI
 {
@@ -314,6 +324,41 @@ namespace CampingUI
                 }
             }
             return availablePlacesBetweenDates;
+        }
+        // Is used everytime a different place is selected in the place list
+        private void PlacesListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if(PlacesListView.SelectedItems != null)
+            {
+                Place place = (Place) PlacesListView.SelectedItem;
+
+                nrLabel.Content = place;
+                areaLabel.Content = "Oppervlakte: " + place.SurfaceArea;
+                nrPeopleLabel.Content = "Aantal personnen:" + place.NumberOfPeople;
+                electricityLabel.Content = "Toegang tot stroom: ";
+
+                if (place.HasElectricity) electricityLabel.Content += "Ja";
+                else electricityLabel.Content += "Nee";
+
+                priceLabel.Content = "Prijs: " + place.PricePerNight;
+                descriptionLabel.Content = "Beschrijving: " + place.Description;
+
+                PlaceOverviewGrid.Visibility = Visibility.Visible;
+                ReservationCalender.BlackoutDates.Clear();
+
+                ReservationCalender.SelectedDate = null;
+                var reservations = Camping.Reservations.Where(r => r.place.PlaceNumber == place.PlaceNumber).ToList();
+                reservations = reservations.Where(r => r.EindDatum >= DateTime.Now).ToList();
+                ReservationCalender.BlackoutDates.AddDatesInPast();
+                foreach ( var reservation in reservations )
+                {
+                    ReservationCalender.BlackoutDates.Add(new CalendarDateRange(reservation.StartDatum, reservation.EindDatum));
+                }
+            }
+            else
+            {
+                PlaceOverviewGrid.Visibility = Visibility.Collapsed;
+            }
         }
     }
 }
