@@ -22,35 +22,31 @@ namespace CampingUI
     public partial class ReservationsOverviewWindow : Page
     {
 
-        public static Camping Camping { get; set; }
-
-
+        private Camping _camping { get; set; }
 
         public ReservationsOverviewWindow()
         {
             InitializeComponent();
+            _camping = new Camping();
 
-            if (Camping == null)
-            {
-                Camping = new Camping();
-            }
-
-
-            if (Camping.Reservations.Count() > 0) //Checks if reservations exist to load list
+            //Checks if reservations exist to load list
+            if (_camping.Reservations.Count() > 0) 
             {
                 LoadReservationList();
             }
       
         }
-        public void LoadReservationList() //Fills list with reservations
+
+        //Fills list with reservations
+        public void LoadReservationList() 
         {
-            ReservationsListView.ItemsSource = Camping.Reservations.OrderBy(reservation => reservation.StartDate).ThenBy(reservation => reservation.place.PlaceNumber); //Takes reservations
+            ReservationsListView.ItemsSource = _camping.Reservations.OrderBy(reservation => reservation.ArrivalDate).ThenBy(reservation => reservation.Place.PlaceNumber); //Takes reservations
         }
 
 
 
-   
-        public void DeleteButton_Click(object sender, RoutedEventArgs e) //Function to delete reservations
+        //Function to delete reservations
+        public void DeleteButton_Click(object sender, RoutedEventArgs e) 
         {
             Button? button = sender as Button;
 
@@ -63,13 +59,13 @@ namespace CampingUI
                 if (reservationToDelete != null)
                 {
                     // Show a confirmation dialog
-                    MessageBoxResult result = MessageBox.Show("Are you sure you want to delete Reservation " + reservationToDelete.ReservationNumber + "?", "Warning!", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    MessageBoxResult result = MessageBox.Show("Weet je zeker dat je reservering " + reservationToDelete.ReservationNumber + "wil verwijderen?", "Waarschuwing!", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
                     // Check the users choice
                     if (result == MessageBoxResult.Yes)
                     {
                         // User clicked Yes, so delete the reservation
-                        Camping.Reservations.Remove(reservationToDelete);
+                        _camping.Reservations.Remove(reservationToDelete);
 
                         // Refresh the ListView
                         LoadReservationList();

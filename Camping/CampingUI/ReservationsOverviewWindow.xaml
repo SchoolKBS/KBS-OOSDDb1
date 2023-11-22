@@ -32,35 +32,34 @@ BorderThickness="1,1,1,1" Background="{x:Null}" />
             <ListView Grid.Row="1" Name="ReservationsListView" HorizontalContentAlignment="Center">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Width="140" DisplayMemberBinding="{Binding ReservationNumber}">
+                        <GridViewColumn Width="auto" DisplayMemberBinding="{Binding ReservationNumber}">
                             <GridViewColumn.Header>
-                                <GridViewColumnHeader Tag="Nummer">ReservationNumber</GridViewColumnHeader>
+                                <GridViewColumnHeader Tag="ReservationNumber">Reservatienummer</GridViewColumnHeader>
                             </GridViewColumn.Header>
                         </GridViewColumn>
-                        <GridViewColumn Width="180" DisplayMemberBinding="{Binding StartDate, StringFormat={}{0:MM/dd/yyyy}}">
+                        <GridViewColumn Width="auto" DisplayMemberBinding="{Binding ArrivalDate, StringFormat={}{0:MM/dd/yyyy}}">
                             <GridViewColumn.Header>
-                                <GridViewColumnHeader Tag="Start">StartDate</GridViewColumnHeader>
+                                <GridViewColumnHeader Tag="ArrivalDate">Aankomst datum</GridViewColumnHeader>
                             </GridViewColumn.Header>
                         </GridViewColumn>
-                        <GridViewColumn Width="180" DisplayMemberBinding="{Binding EndDate, StringFormat={}{0:MM/dd/yyyy}}">
+                        <GridViewColumn Width="auto" DisplayMemberBinding="{Binding DepartureDate, StringFormat={}{0:MM/dd/yyyy}}">
                             <GridViewColumn.Header>
-                                <GridViewColumnHeader Tag="Eind">EndDate</GridViewColumnHeader>
+                                <GridViewColumnHeader Tag="DepartureDate">Vertrek datum</GridViewColumnHeader>
                             </GridViewColumn.Header>
                         </GridViewColumn>
-                        <GridViewColumn Width="90" DisplayMemberBinding="{Binding place}">
+                        <GridViewColumn Width="auto" DisplayMemberBinding="{Binding Place}">
                             <GridViewColumn.Header>
-                                <GridViewColumnHeader Tag="Place">Place</GridViewColumnHeader>
+                                <GridViewColumnHeader Tag="Place">Plaats</GridViewColumnHeader>
                             </GridViewColumn.Header>
                         </GridViewColumn>
-                        <GridViewColumn Width="60">
+                        <GridViewColumn Width="70">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button Content="Delete" Click="DeleteButton_Click" CommandParameter="{Binding}" />
+                                    <Button Content="Verwijder" Click="DeleteButton_Click" CommandParameter="{Binding}" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                     </GridView>
-                    
                 </ListView.View>
             </ListView>
         </Grid>
