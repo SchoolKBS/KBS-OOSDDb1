@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CampingCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,11 +21,13 @@ namespace CampingUI
     /// </summary>
     public partial class MainWindow : Window
     {
+        public Camping camping { get; set; }
         public MainWindow()
         {
             InitializeComponent();
+            this.camping = new Camping();
         }
-        
+
         private void BtnClickReservations(object sender, RoutedEventArgs e)
         {
             Main.Content = new ReservationsOverviewWindow(); 

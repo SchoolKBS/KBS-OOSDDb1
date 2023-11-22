@@ -21,17 +21,62 @@ namespace CampingUI
     /// </summary>
     public partial class ReservationsOverviewWindow : Page
     {
-        public Camping Camping { get; set; }
+
+        public static Camping Camping { get; set; }
+
+
 
         public ReservationsOverviewWindow()
         {
             InitializeComponent();
-            this.Camping = new Camping(); // Creates a camping.
 
-            ListBox listbox = new ListBox(); // Creates a ListBox to show in the WPF UI
-            Grid.SetRow(listbox, 1);        // Adds a new row to the ListBox.
-            listbox.ItemsSource = Camping.Reservations.OrderBy(reservation => reservation.StartDatum).ThenBy(reservation => reservation.place.PlaceNumber);   // For all items in the ListBox use the camping places.
-            ListGrid.Children.Add(listbox);     // Adds each items inside the listBox to the grid UI.
+            if (Camping == null)
+            {
+                Camping = new Camping();
+            }
+
+
+            if (Camping.Reservations.Count() > 0) //Checks if reservations exist to load list
+            {
+                LoadReservationList();
+            }
+      
+        }
+        public void LoadReservationList() //Fills list with reservations
+        {
+            ReservationsListView.ItemsSource = Camping.Reservations.OrderBy(reservation => reservation.StartDate).ThenBy(reservation => reservation.place.PlaceNumber); //Takes reservations
+        }
+
+
+
+   
+        public void DeleteButton_Click(object sender, RoutedEventArgs e) //Function to delete reservations
+        {
+            Button? button = sender as Button;
+
+            //Button pressed?
+            if (button != null)
+            {
+                Reservation? reservationToDelete = button.CommandParameter as Reservation; //Takes reservation
+
+
+                if (reservationToDelete != null)
+                {
+                    // Show a confirmation dialog
+                    MessageBoxResult result = MessageBox.Show("Are you sure you want to delete Reservation " + reservationToDelete.ReservationNumber + "?", "Warning!", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                    // Check the users choice
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        // User clicked Yes, so delete the reservation
+                        Camping.Reservations.Remove(reservationToDelete);
+
+                        // Refresh the ListView
+                        LoadReservationList();
+                    }
+                    // If the user clicked No, do nothing
+                }
+            }
 
         }
     }

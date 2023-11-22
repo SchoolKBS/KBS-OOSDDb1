@@ -9,6 +9,8 @@
         WindowState="Maximized"
         WindowStyle="ThreeDBorderWindow"
         ResizeMode="CanMinimize"
+        
+        
         >
     <Grid>
         <StackPanel Orientation="Horizontal" Height="75" HorizontalAlignment="Right" VerticalAlignment="Top">

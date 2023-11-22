@@ -8,9 +8,9 @@ namespace CampingCore
 {
     public class Reservation
     {
-        public int ReservatieNummer { get; set; }
-        public DateTime StartDatum { get; set; }
-        public DateTime EindDatum { get; set; }
+        public int ReservationNumber { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
         public Place place { get; set; }
 
         public Employee Employee { get; set; } //Who handled the Reservation
@@ -21,15 +21,15 @@ namespace CampingCore
         public Reservation(int ID, DateTime Start, DateTime Eind, Place place)
 
         {
-            this.ReservatieNummer = ID;
-            this.StartDatum = Start;
-            this.EindDatum = Eind;
+            this.ReservationNumber = ID;
+            this.StartDate = Start;
+            this.EndDate = Eind;
             this.place = place;
-
+          
         }
         public override string ToString()
         {
-            return "Reservatie: " + ReservatieNummer + " Plek: " + place.PlaceNumber + " Start: " + StartDatum.ToShortDateString() + " - Eind " + EindDatum.ToShortDateString();
+            return "Reservatie: " + ReservationNumber + " Plek: " + place.PlaceNumber + " Start: " + StartDate.ToShortDateString() + " - Eind " + EndDate.ToShortDateString();
 
         }
 
