@@ -16,44 +16,82 @@
         BorderThickness="1,1,1,1" Background="{x:Null}" >
             </Border>
             <!--Grid for the filters and list of places-->
-            <Grid Name="ListGrid">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="5*"/>
-                    <RowDefinition Height="10*"/>
-                </Grid.RowDefinitions>
+        <Grid Name="ListGrid">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="5*"/>
+                <RowDefinition Height="10*"/>
+            </Grid.RowDefinitions>
             <Border Grid.Column="1" Grid.RowSpan="1" BorderBrush="Black" 
                     BorderThickness="1, 1, 1, 1" Background="{x:Null}"/>
             <Label Grid.Row="0" Content="Aankomstdatum" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-                <Label Grid.Row="0" Content="Vertrekdatum" HorizontalAlignment="Left" Margin="118,10,0,0" VerticalAlignment="Top"/>
-                <CheckBox Name="PowerCheckBox" Grid.Row="0" Content="Stroom" HorizontalAlignment="Left" Margin="10,75,0,0" VerticalAlignment="Top"/>
-                <DatePicker Grid.Row="0" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
-                <DatePicker Grid.Row="0" HorizontalAlignment="Left" Margin="118,41,0,0" VerticalAlignment="Top"/>
-                <Label Content="Aantal personen" Margin="0,98,108,53"/>
-                <TextBox x:Name="PersonCountTextBox"  Margin="101,105,31,60" TextChanged="PersonCountTextBox_Changed" >
-                </TextBox>
-                <Label x:Name="PersonCountPlaceholder" Content="Vul aantal personen in" Background="Transparent" Opacity="0.5" IsHitTestVisible="False" Margin="101,101,20,56" />
+            <Label Grid.Row="0" Content="Vertrekdatum" HorizontalAlignment="Left" Margin="118,10,0,0" VerticalAlignment="Top"/>
+            <CheckBox Name="PowerCheckBox" Grid.Row="0" Content="Stroom" HorizontalAlignment="Left" Margin="10,75,0,0" VerticalAlignment="Top"/>
+            <DatePicker Grid.Row="0" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
+            <DatePicker Grid.Row="0" HorizontalAlignment="Left" Margin="118,41,0,0" VerticalAlignment="Top"/>
+            <Label Content="Aantal personen" Margin="0,98,108,53"/>
+            <TextBox x:Name="PersonCountTextBox"  Margin="101,105,31,60" TextChanged="PersonCountTextBox_Changed" >
+            </TextBox>
+            <Label x:Name="PersonCountPlaceholder" Content="Vul aantal personen in" Background="Transparent" Opacity="0.5" IsHitTestVisible="False" Margin="101,101,20,56" />
             <Button Content="Pas filters toe" Margin="10,151,0,0" Click="ApplyFilters_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80"/>
             <ListView Grid.Row="1" Name="PlacesListView">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Width="90" DisplayMemberBinding="{Binding PlaceNumber}">
-                                <GridViewColumn.Header>
-                                    <GridViewColumnHeader Tag="Naam">Plaatsnummer</GridViewColumnHeader>
-                                </GridViewColumn.Header>
-                            </GridViewColumn>
-                            <GridViewColumn Width="60" DisplayMemberBinding="{Binding PricePerNight}">
-                                <GridViewColumn.Header>
-                                    <GridViewColumnHeader Tag="Prijs">Prijs</GridViewColumnHeader>
-                                </GridViewColumn.Header>
-                            </GridViewColumn>
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Width="90" DisplayMemberBinding="{Binding PlaceNumber}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Tag="Naam">Plaatsnummer</GridViewColumnHeader>
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
+                        <GridViewColumn Width="60" DisplayMemberBinding="{Binding PricePerNight}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Tag="Prijs">Prijs</GridViewColumnHeader>
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
                         <GridViewColumn Width="120" DisplayMemberBinding="{Binding NumberOfPeople}">
                             <GridViewColumn.Header>
                                 <GridViewColumnHeader Tag="Prijs">Aantal personen</GridViewColumnHeader>
                             </GridViewColumn.Header>
                         </GridViewColumn>
                     </GridView>
-                    </ListView.View>
-                </ListView>
-            </Grid>
+                </ListView.View>
+            </ListView>
         </Grid>
+
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.8*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="0.8*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="0.8*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="0.8*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="0.8*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="2*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Column="1" Grid.Row="0" Content="label" Width="150" VerticalAlignment="Bottom"/>
+            <TextBox Grid.Column="1" Grid.Row="1" Height="30" Width="150" VerticalContentAlignment="Top"/>
+
+            <Label Grid.Column="1" Grid.Row="2" Content="label" Width="150" VerticalAlignment="Bottom"/>
+            <TextBox Grid.Column="1" Grid.Row="3" Height="30" Width="150" VerticalContentAlignment="Top" />
+
+            <Label Grid.Column="1" Grid.Row="4" Content="label" Width="150" VerticalAlignment="Bottom"/>
+            <TextBox Grid.Column="1" Grid.Row="5" Height="30" Width="150" VerticalContentAlignment="Top" />
+
+            <Label Grid.Column="1" Grid.Row="6" Content="label" Width="150" VerticalAlignment="Bottom"/>
+            <TextBox Grid.Column="1" Grid.Row="7" Height="30" Width="150" VerticalContentAlignment="Top" />
+
+            <Label Grid.Column="1" Grid.Row="8" Content="label" Width="150" VerticalAlignment="Bottom"/>
+            <TextBox Grid.Column="1" Grid.Row="9" Height="30" Width="150" VerticalContentAlignment="Top" />
+
+            <Button Grid.Row="10" Grid.Column="1" Height="35" Width="180">Plaats toevoegen</Button>
+        </Grid>
+    </Grid>
 </Page>
