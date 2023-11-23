@@ -44,32 +44,19 @@ namespace CampingUI
             PlacesListView.ItemsSource = _placesSortedAndOrFiltered;   // For all items in the ListBox use the camping places.
         }
 
-        // Function (EventHandler) to check if the text in the PersonCountTextBox is empty or not
-        // and to show the placeholdertext or the filled in text
-        private void PersonCountTextBox_Changed(Object sender, TextChangedEventArgs e)
+        //Function (EventHandler) that resets the background of a textbox if the filters are reset
+        private void TextBox_Changed(object sender, TextChangedEventArgs e)
         {
-            if (PersonCountTextBox.Text != "") PersonCountPlaceholder.Visibility = Visibility.Hidden;
-            else PersonCountPlaceholder.Visibility = Visibility.Visible;
-            if (PersonCountTextBox.Background.Equals(Brushes.Red))
+            TextBox textbox = (TextBox)sender;
+            if (textbox.Background.Equals(Brushes.Red))
             {
-                PersonCountTextBox.Background = Brushes.White;
+                textbox.Background = Brushes.White;
                 _wrongFilter = false;
             }
         }
 
-        // Function (EventHandler) to check if the MaxPriceRangeTextBox has been changed to reset
-        // the background color to white incase the color was previously red
-        private void MaxPriceRangeTextBox_Changed(object sender, TextChangedEventArgs e)
-        {
-            if (MaxPriceRangeTextBox.Background.Equals(Brushes.Red))
-            {
-                MaxPriceRangeTextBox.Background = Brushes.White;
-                _wrongFilter = false;
-            }
-        }
-
-        //Function (EventHandler) to reset the datepickers to backgroundcolor white incase they were red before
-        private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+            //Function (EventHandler) to reset the datepickers to backgroundcolor white incase they were red before
+            private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
             if(ArrivalDatePicker.Background.Equals(Brushes.Red) && DepartureDatePicker.Background.Equals(Brushes.Red))
             {
@@ -142,7 +129,6 @@ namespace CampingUI
         {
             _arrivalDate = GetDatePickerDate(ArrivalDatePicker);
             _departureDate = GetDatePickerDate(DepartureDatePicker);
-            MessageBox.Show($"{_arrivalDate}, {_departureDate}");
             if (_arrivalDate >= _departureDate || _arrivalDate.Date < DateTime.Now.Date)
             {
                 ArrivalDatePicker.Background = Brushes.Red;
@@ -156,10 +142,15 @@ namespace CampingUI
         // Returns a date
         private DateTime GetDatePickerDate(DatePicker datePicker)
         {
-            DateTime date = DateTime.Today.AddDays(-1);
+            DateTime date;
             if (datePicker.SelectedDate.HasValue)
             {
                 date = datePicker.SelectedDate.Value.Date;
+            }
+            else
+            {
+                int tagValue = int.Parse(datePicker.Tag.ToString());
+                date = DateTime.MaxValue.AddDays(tagValue);
             }
             return date;
             //Kijken in de reserveringen lijst op die specifieke plek, en kijken of de gekozen tijdperiode nog niet bestaat

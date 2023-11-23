@@ -28,8 +28,8 @@
             <!-- First filter for arrive filter  -->
             <Label Grid.Row="0" Content="Aankomstdatum" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
             <Label Grid.Row="0" Content="Vertrekdatum" HorizontalAlignment="Left" Margin="118,10,0,0" VerticalAlignment="Top"/>
-            <DatePicker Name="ArrivalDatePicker" Grid.Row="0" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
-            <DatePicker Name="DepartureDatePicker" Grid.Row="0" HorizontalAlignment="Left" Margin="118,41,0,0" VerticalAlignment="Top" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
+            <DatePicker Name="ArrivalDatePicker" Tag="-2" Grid.Row="0" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
+            <DatePicker Name="DepartureDatePicker" Tag="-1" Grid.Row="0" HorizontalAlignment="Left" Margin="118,41,0,0" VerticalAlignment="Top" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
 
             <!-- Second filter for power  -->
             <RadioButton Name="PowerRadioButton1" Grid.Row="0" Content="Wel stroom" HorizontalAlignment="Left" Margin="10,75,0,0" VerticalAlignment="Top" Checked="PowerRadioButton_Selected"/>
@@ -38,12 +38,11 @@
 
             <!-- Third filter for amount of people  -->
             <Label Content="Aantal personen" Margin="0,98,108,53"/>
-            <TextBox x:Name="PersonCountTextBox"  Margin="101,105,150,95" TextChanged="PersonCountTextBox_Changed"/>
-            <Label x:Name="PersonCountPlaceholder" Content="Vul aantal personen in" Background="Transparent" Opacity="0.5" IsHitTestVisible="False" Margin="101,101,20,56" />
+            <TextBox x:Name="PersonCountTextBox" HorizontalAlignment="Left" Margin="100" Width="60" Height="20" TextChanged="TextBox_Changed"/>
 
             <!-- Fourth filter for max price -->
             <Label Content="Max prijs" HorizontalAlignment="Left" Margin="10,126,0,0" VerticalAlignment="Top"/>
-            <TextBox x:Name="MaxPriceRangeTextBox" Width="60" Margin="101,134,160,66" TextChanged="MaxPriceRangeTextBox_Changed"/>
+            <TextBox x:Name="MaxPriceRangeTextBox" Width="60" Margin="101,134,160,66" TextChanged="TextBox_Changed"/> 
 
             <!-- Buttons to apply or remove the filters -->
             <Button Content="Pas filters toe" Margin="10,184,0,0" Click="ApplyFilters_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80"/>
