@@ -24,76 +24,215 @@ namespace CampingUI
     /// </summary>
     public partial class PlacesOverviewPage : Page
     {
-        public Camping Camping { get; set; }
-        public bool HasPower { get; set; }
-        public int PersonsSizeOfPlace { get; set; }
+        private Camping _camping;
+        private IEnumerable<Place> _placesSortedAndOrFiltered;
+        private bool? _hasPower;
+        public int PersonCount = 0;
+        private DateTime _arrivalDate, _departureDate;
+        private bool _isSortedAscending;
+        private double _maxPriceRange;
+        private bool _wrongFilter = false;
 
         public PlacesOverviewPage()
         {
             InitializeComponent();
-            this.Camping = new Camping(); // Creates a camping.
-            if (Camping.Places.Count() > 0)
+            this._camping = new Camping(); // Creates a camping.
+            _maxPriceRange = _camping.Places.Max(i => i.PricePerNight);
+            MaxPriceRangeTextBox.Text = $"{_maxPriceRange}"; //Set the _maxPriceRange as a standard
+            PersonCountTextBox.Text = $"{PersonCount}"; //Set the text in the textbox to 0
+            _placesSortedAndOrFiltered = _camping.Places; //get all the places to the variable
+            PlacesListView.ItemsSource = _placesSortedAndOrFiltered;   // For all items in the ListBox use the camping places.
+        }
+
+        //Function (EventHandler) that resets the background of a textbox if the filters are reset
+        private void TextBox_Changed(object sender, TextChangedEventArgs e)
+        {
+            TextBox textbox = (TextBox)sender;
+            if (textbox.Background.Equals(Brushes.Red))
             {
-                PlacesListView.ItemsSource = Camping.Places;   // For all items in the ListBox use the camping places.  
+                textbox.Background = Brushes.White;
+                _wrongFilter = false;
             }
         }
-        private void GetValueFromPowerCheckBox()
-        {
-            HasPower = (bool)PowerCheckBox.IsChecked;
-        }
-        private int GetComboBoxResult()
-        {
-            return 0;
-        }
-        private void PersonCountTextBox_Changed(Object sender, TextChangedEventArgs e)
-        {
-            if (PersonCountTextBox.Text != "") PersonCountPlaceholder.Visibility = Visibility.Hidden;
-            else PersonCountPlaceholder.Visibility = Visibility.Visible;
-        }
 
-        private void ApplyFilters_Click(object sender, RoutedEventArgs e)
+            //Function (EventHandler) to reset the datepickers to backgroundcolor white incase they were red before
+            private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
-
-            GetValueFromPowerCheckBox();
-            GetTextFromTextbox();
-            MessageBox.Show($"{HasPower}");
-        }
-        private void GetTextFromTextbox()
-        {
-            /*PersonsSizeOfPlace = 0;
-            string TextFromPersonCountTextBox = PersonCountTextBox.ToString();
-            if(int.TryParse(PersonsSizeOfPlace, out PersonsSizeOfPlace))
+            if(ArrivalDatePicker.Background.Equals(Brushes.Red) && DepartureDatePicker.Background.Equals(Brushes.Red))
             {
-                if(PersonsSizeOfPlace < 1)
+                ArrivalDatePicker.Background = Brushes.White;
+                DepartureDatePicker.Background = Brushes.White;
+                _wrongFilter = false;
+            }
+        }
+
+        // Function (EventHandler) to know which radiobutton is pressed regarding the power boolean
+        private void PowerRadioButton_Selected(object sender, RoutedEventArgs e)
+        {
+            var radioButton = (RadioButton)sender;
+            if (radioButton.Content.ToString().Equals("Wel stroom")) _hasPower = true;
+            else if (radioButton.Content.ToString().Equals("Geen stroom")) _hasPower = false;
+            else _hasPower = null;
+        }
+
+        // Function to get the PersonCount from the PersonCountTextBox text
+        private void SetPersonCountFromPersonCountTextBox()
+        {
+            int number;
+            if (!string.IsNullOrEmpty(PersonCountTextBox.Text))
+            {
+                if (int.TryParse(PersonCountTextBox.Text, out number) && number >= 0)// Checks if int can be parsed and if number is bigger or equal to 0
                 {
-                    throw new ArgumentOutOfRangeException(); //Getal kleiner dan 1
+                    PersonCount = number;
                 }
                 else
                 {
-                    if(PersonsSizeOfPlace % 2 == 1)
-                    {
-                        PersonsSizeOfPlace++;
-                    }
+                    PersonCountTextBox.Background = Brushes.Red;
+                    _wrongFilter = true;
                 }
+
             }
             else
             {
-                throw new FormatException(); //Exceptie voor geen getal
-            }*/
+                PersonCount = 0;
+                PersonCountTextBox.Text = $"{PersonCount}";
+            }
         }
+
+        // Function to get the max price range from the MaxPriceRangeTextBox text
+        private void SetMaxPriceFromMaxPriceRangeTextBox()
+        {
+            double number;
+            if (!string.IsNullOrEmpty(MaxPriceRangeTextBox.Text))
+            {
+                string MaxPriceRangeText = MaxPriceRangeTextBox.Text.Replace(".", ",");
+                if (double.TryParse(MaxPriceRangeText, out number) && number >= 0)       // Checks if int can be parsed and if number is bigger or equal to 0
+                {
+                    _maxPriceRange = number;
+                }
+                else
+                {
+                    MaxPriceRangeTextBox.Background = Brushes.Red;
+                    _wrongFilter = true;
+                }
+                    
+            }
+            else
+            {
+                _maxPriceRange = _camping.Places.Max(i => i.PricePerNight);
+                MaxPriceRangeTextBox.Text = $"{_maxPriceRange}";
+            }
+        }
+
+        //Function to set the _arrivalDate and _departureDate
+        private void SetArrivalAndDepartureDates()
+        {
+            _arrivalDate = GetDatePickerDate(ArrivalDatePicker);
+            _departureDate = GetDatePickerDate(DepartureDatePicker);
+            if (_arrivalDate >= _departureDate || _arrivalDate.Date < DateTime.Now.Date)
+            {
+                ArrivalDatePicker.Background = Brushes.Red;
+                DepartureDatePicker.Background = Brushes.Red;
+                _wrongFilter = true;
+            }
+        }
+
+
+        // Function to get the Date entered in a DatePicker (ArrivalDatePicker or DepartureDatePicker)
+        // Returns a date
+        private DateTime GetDatePickerDate(DatePicker datePicker)
+        {
+            DateTime date;
+            if (datePicker.SelectedDate.HasValue)
+            {
+                date = datePicker.SelectedDate.Value.Date;
+            }
+            else
+            {
+                int tagValue = int.Parse(datePicker.Tag.ToString());
+                date = DateTime.MaxValue.AddDays(tagValue);
+            }
+            return date;
+            //Kijken in de reserveringen lijst op die specifieke plek, en kijken of de gekozen tijdperiode nog niet bestaat
+        }
+
+        // Function (EventHandler) to apply the filters chosen after the "Pas filters toe" button is pressed
+        private void ApplyFilters_Click(object sender, RoutedEventArgs e)
+        {
+            SetPersonCountFromPersonCountTextBox();
+            SetMaxPriceFromMaxPriceRangeTextBox();
+            SetArrivalAndDepartureDates();
+            _placesSortedAndOrFiltered = _camping.Places;
+            Filter(_arrivalDate, _departureDate, PersonCount, _maxPriceRange, _hasPower);
+
+        }
+
+        // Function to filter the places List based on either or choice on arrival and departure date, amount of people possible on the place,
+        // The max price a guest is willing to pay and if it has power or not 
+        private void Filter(DateTime arrivalDate, DateTime departureDate, int personCount, double maxPriceRange, bool? hasPower)
+        {
+
+            if (!_wrongFilter)
+            {
+                _placesSortedAndOrFiltered = PlacesOverviewPageFilter.GetFilteredListOnPrice(maxPriceRange, _placesSortedAndOrFiltered, _camping);
+                _placesSortedAndOrFiltered = PlacesOverviewPageFilter.GetFilteredListOnPersonCount(personCount, _placesSortedAndOrFiltered, _camping);
+                _placesSortedAndOrFiltered = PlacesOverviewPageFilter.GetFilteredListOnDate(arrivalDate, departureDate, _placesSortedAndOrFiltered, _camping);
+                _placesSortedAndOrFiltered = PlacesOverviewPageFilter.GetFilteredListOnPower(hasPower, _placesSortedAndOrFiltered, _camping);
+                PlacesListView.ItemsSource = _placesSortedAndOrFiltered;
+            }
+
+        }
+
+        // Function (EventHandler) to remove all the filters and reset the filters to their default state.
+        private void RemoveFilters_Click(object sender, RoutedEventArgs e)
+        {
+            ArrivalDatePicker.SelectedDate = null;
+            DepartureDatePicker.SelectedDate = null;
+            PowerRadioButton3.IsChecked = true;
+            PersonCount = 0;
+            _maxPriceRange = _camping.Places.Max(i => i.PricePerNight);
+            PersonCountTextBox.Text = $"{PersonCount}"; ;
+            MaxPriceRangeTextBox.Text = $"{_maxPriceRange}";
+            PlacesListView.ItemsSource = _camping.Places;
+            ResetBackgroundsFilters();
+            _wrongFilter = false;
+        }
+
+        //Function to reset all the filters input fields to the standard background color
+        private void ResetBackgroundsFilters()
+        {
+            ArrivalDatePicker.Background = Brushes.White;
+            DepartureDatePicker.Background = Brushes.White;
+            MaxPriceRangeTextBox.Background = Brushes.White;
+            PersonCountTextBox.Background = Brushes.White;
+        }
+
+        // Function (EventHandler) to sort the list of places based on the clicked column name and corresponding data
+        private void SetSorterColumn_Click(object sender, RoutedEventArgs e)
+        {
+            GridViewColumnHeader gridViewColumnHeader = (GridViewColumnHeader)sender;
+            if (gridViewColumnHeader.Tag.ToString().Equals("Placenumber"))
+                _placesSortedAndOrFiltered = PlacesOverviewPageSorting.SortColumnPlaceNumber(_isSortedAscending, _placesSortedAndOrFiltered);
+            else if (gridViewColumnHeader.Tag.ToString().Equals("Price"))
+                _placesSortedAndOrFiltered = PlacesOverviewPageSorting.SortColumnPrice(_isSortedAscending, _placesSortedAndOrFiltered);
+            else
+                _placesSortedAndOrFiltered = PlacesOverviewPageSorting.SortColumnPersonCount(_isSortedAscending, _placesSortedAndOrFiltered);
+            _isSortedAscending = !_isSortedAscending;
+            PlacesListView.ItemsSource = _placesSortedAndOrFiltered;
+        }
+
         // Is used everytime a different place is selected in the place list
         private void PlacesListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if(PlacesListView.SelectedItems != null)
             {
                 Place place = (Place) PlacesListView.SelectedItem;
-
                 nrLabel.Content = place;
                 areaLabel.Content = "Oppervlakte: " + place.SurfaceArea;
-                nrPeopleLabel.Content = "Aantal personnen:" + place.NumberOfPeople;
+                nrPeopleLabel.Content = "Aantal personnen:" + place.PersonCount;
                 electricityLabel.Content = "Toegang tot stroom: ";
 
-                if (place.HasElectricity) electricityLabel.Content += "Ja";
+                if (place.HasPower) electricityLabel.Content += "Ja";
                 else electricityLabel.Content += "Nee";
 
                 priceLabel.Content = "Prijs: " + place.PricePerNight;
@@ -103,7 +242,7 @@ namespace CampingUI
                 ReservationCalender.BlackoutDates.Clear();
 
                 ReservationCalender.SelectedDate = null;
-                var reservations = Camping.Reservations.Where(r => r.place.PlaceNumber == place.PlaceNumber).ToList();
+                var reservations = _camping.Reservations.Where(r => r.place.PlaceNumber == place.PlaceNumber).ToList();
                 reservations = reservations.Where(r => r.EindDatum >= DateTime.Now).ToList();
                 ReservationCalender.BlackoutDates.AddDatesInPast();
                 foreach ( var reservation in reservations )
@@ -116,28 +255,5 @@ namespace CampingUI
                 PlaceOverviewGrid.Visibility = Visibility.Collapsed;
             }
         }
-
-
-        /*private GridViewColumnHeader listViewSortCol = null;
-        private SortAdorner listViewSortAdorner = null;
-        private void ColumnHeader_Click(object sender, RoutedEventArgs e)
-        {
-            GridViewColumnHeader column = (sender as GridViewColumnHeader);
-            string sortBy = column.Tag.ToString();
-            if (listViewSortCol != null)
-            {
-                AdornerLayer.GetAdornerLayer(listViewSortCol).Remove(listViewSortAdorner);
-                PlacesListView.Items.SortDescriptions.Clear();
-            }
-
-            ListSortDirection newDir = ListSortDirection.Ascending;
-            if (listViewSortCol == column && listViewSortAdorner.Direction == newDir)
-                newDir = ListSortDirection.Descending;
-
-            listViewSortCol = column;
-            listViewSortAdorner = new SortAdorner(listViewSortCol, newDir);
-            AdornerLayer.GetAdornerLayer(listViewSortCol).Add(listViewSortAdorner);
-            PlacesListView.Items.SortDescriptions.Add(new SortDescription(sortBy, newDir));
-        }*/
     }
 }
