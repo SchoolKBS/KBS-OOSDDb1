@@ -109,23 +109,73 @@ namespace CampingUI
 
         public void AddPlaceOnClick(object sender, RoutedEventArgs e)
         {
-            bool hasElectricity = false;
+            string[] TextInput =
+            {
+                PlaceNumber.Text,
+                SurfaceArea.Text,
+                PricePerPersonPerNight.Text,
+                NumberOfPeople.Text,
+                HasElectricity.SelectionBoxItem.ToString()
+            };
+
+            //Checks if the required textboxes are filled
+            if (CheckIfInputIsValid(TextInput))
+            {
+                AddPlaceToDatabase();
+            }
+        }
+
+        public void AddPlaceToDatabase()
+        {
+            //Parses the string inputs from textboxes to ints
             int placeNumber = Int32.Parse(PlaceNumber.Text);
             int surfaceArea = Int32.Parse(SurfaceArea.Text);
             int pricePerPersonPerNight = Int32.Parse(PricePerPersonPerNight.Text);
             int amountOfPeople = Int32.Parse(NumberOfPeople.Text);
             string electricity = HasElectricity.SelectionBoxItem.ToString();
             string placeDescription = PlaceDescription.Text;
-            if(electricity.Equals("Ja"))
+
+            //Checks if the place has electricity 
+            bool hasElectricity;
+            if (electricity.Equals("Ja"))
             {
                 hasElectricity = true;
             }
+            else
+            {
+                hasElectricity = false;
+            }
 
+            //Make a new place with the input of the textboxes
             Place place = new Place(placeNumber, hasElectricity, surfaceArea, amountOfPeople, pricePerPersonPerNight, placeDescription);
 
             Database db = new Database();
             db.AddPlaceToDatabase(place);
-            InitializeComponent();
+
+            //Clears textboxes when the data is inserted in the database
+            foreach (var textbox in AddPlace.Children)
+            {
+                if (textbox is TextBox textBox)
+                {
+                    textBox.Text = string.Empty;
+                }
+            }
+
+            AddPlaceMessage.Text = "Nieuwe plaats is toegevoegd";
+            AddPlaceMessage.Foreground = Brushes.Green;
+        }
+        public bool CheckIfInputIsValid(string[] TextInput)
+        {
+            foreach (string input in TextInput)
+            {
+                if (string.IsNullOrEmpty(input) || string.IsNullOrWhiteSpace(input))
+                {
+                    AddPlaceMessage.Text = "Nog niet alle benodigde velden zijn ingevuld";
+                    AddPlaceMessage.Foreground = Brushes.Red;
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }
