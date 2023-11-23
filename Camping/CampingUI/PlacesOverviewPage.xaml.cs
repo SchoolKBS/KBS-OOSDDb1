@@ -41,7 +41,7 @@ namespace CampingUI
             MaxPriceRangeTextBox.Text = $"{_maxPriceRange}"; //Set the _maxPriceRange as a standard
             PersonCountTextBox.Text = $"{PersonCount}"; //Set the text in the textbox to 0
             _placesSortedAndOrFiltered = _camping.Places; //get all the places to the variable
-            PlacesListView.ItemsSource = _placesSortedAndOrFiltered;   // For all items in the ListBox use the camping places.  
+            PlacesListView.ItemsSource = _placesSortedAndOrFiltered;   // For all items in the ListBox use the camping places.
         }
 
         // Function (EventHandler) to check if the text in the PersonCountTextBox is empty or not
@@ -142,7 +142,8 @@ namespace CampingUI
         {
             _arrivalDate = GetDatePickerDate(ArrivalDatePicker);
             _departureDate = GetDatePickerDate(DepartureDatePicker);
-            if (_arrivalDate >= _departureDate || _arrivalDate.Date < DateTime.Now)
+            MessageBox.Show($"{_arrivalDate}, {_departureDate}");
+            if (_arrivalDate >= _departureDate || _arrivalDate.Date < DateTime.Now.Date)
             {
                 ArrivalDatePicker.Background = Brushes.Red;
                 DepartureDatePicker.Background = Brushes.Red;
@@ -182,10 +183,10 @@ namespace CampingUI
 
             if (!_wrongFilter)
             {
-                GetFilteredListOnPrice(maxPriceRange);
-                GetFilteredListOnPersonCount(personCount);
-                GetFilteredListOnDate(arrivalDate, departureDate);
-                GetFilteredListOnPower(hasPower);
+                _placesSortedAndOrFiltered = PlacesOverviewPageFilter.GetFilteredListOnPrice(maxPriceRange, _placesSortedAndOrFiltered, _camping);
+                _placesSortedAndOrFiltered = PlacesOverviewPageFilter.GetFilteredListOnPersonCount(personCount, _placesSortedAndOrFiltered, _camping);
+                _placesSortedAndOrFiltered = PlacesOverviewPageFilter.GetFilteredListOnDate(arrivalDate, departureDate, _placesSortedAndOrFiltered, _camping);
+                _placesSortedAndOrFiltered = PlacesOverviewPageFilter.GetFilteredListOnPower(hasPower, _placesSortedAndOrFiltered, _camping);
                 PlacesListView.ItemsSource = _placesSortedAndOrFiltered;
             }
 
@@ -215,129 +216,32 @@ namespace CampingUI
             PersonCountTextBox.Background = Brushes.White;
         }
 
-
-        // Function to sort the list on placenumbers 
-        // Returns a bool to know which way the list is sorted now
-        private bool SortColumnPlaceNumber(bool isSorted)
-        {
-            if (isSorted) _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.OrderBy(i => i.PlaceNumber).Select(i => i);
-            else _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.OrderByDescending(i => i.PlaceNumber).Select(i => i);
-            isSorted = !isSorted;
-            return isSorted;
-        }
-
-        // Function to sort the list on price 
-        // Returns a bool to know which way the list is sorted now
-        private bool SortColumnPrice(bool isSorted)
-        {
-            if (isSorted) _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.OrderBy(i => i.PricePerNight).Select(i => i);
-            else _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.OrderByDescending(i => i.PricePerNight).Select(i => i);
-            isSorted = !isSorted;
-            return isSorted;
-        }
-
-        // Function to sort the list on amount of possible people on a place 
-        // Returns a bool to know which way the list is sorted now
-        private bool SortColumnPersonCount(bool isSorted)
-        {
-            if (isSorted) _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.OrderBy(i => i.PersonCount).Select(i => i);
-            else _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.OrderByDescending(i => i.PersonCount).Select(i => i);
-            isSorted = !isSorted;
-            return isSorted;
-        }
-
         // Function (EventHandler) to sort the list of places based on the clicked column name and corresponding data
-        public void SetSorterColumn_Click(object sender, RoutedEventArgs e)
+        private void SetSorterColumn_Click(object sender, RoutedEventArgs e)
         {
             GridViewColumnHeader gridViewColumnHeader = (GridViewColumnHeader)sender;
             if (gridViewColumnHeader.Tag.ToString().Equals("Placenumber"))
-                _isSortedAscending = SortColumnPlaceNumber(_isSortedAscending);
+                _placesSortedAndOrFiltered = PlacesOverviewPageSorting.SortColumnPlaceNumber(_isSortedAscending, _placesSortedAndOrFiltered);
             else if (gridViewColumnHeader.Tag.ToString().Equals("Price"))
-                _isSortedAscending = SortColumnPrice(_isSortedAscending);
+                _placesSortedAndOrFiltered = PlacesOverviewPageSorting.SortColumnPrice(_isSortedAscending, _placesSortedAndOrFiltered);
             else
-                _isSortedAscending = SortColumnPersonCount(_isSortedAscending);
+                _placesSortedAndOrFiltered = PlacesOverviewPageSorting.SortColumnPersonCount(_isSortedAscending, _placesSortedAndOrFiltered);
+            _isSortedAscending = !_isSortedAscending;
             PlacesListView.ItemsSource = _placesSortedAndOrFiltered;
         }
 
-        // Function to filter the list of places on the bool hasPower
-        private void GetFilteredListOnPower(bool? hasPower)
-        {
-            if (hasPower != null)
-            {
-                _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Intersect(_camping.Places.Where(i => i.HasPower == _hasPower).Select(i => i));
-            }
-        }
-
-        // Function to filter the list of places on the integer maxPriceRange 
-        private void GetFilteredListOnPrice(double maxPriceRange)
-        {
-            if (maxPriceRange >= _camping.Places.Min(i => i.PricePerNight))
-            {
-                _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Intersect(_camping.Places.Where(i => i.PricePerNight <= _maxPriceRange).Select(i => i));
-            }
-        }
-
-        // Function to filter the list of places on the int personCount
-        private void GetFilteredListOnPersonCount(int personCount)
-        {
-            if (personCount >= 0)
-            {
-                _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Intersect(_camping.Places.Where(i => i.PersonCount >= PersonCount).Select(i => i));
-            }
-        }
-
-        // Function to filter the list of places on the arrival and departure date
-        private void GetFilteredListOnDate(DateTime arrivalDate, DateTime departureDate)
-        {
-            if (arrivalDate.Date < departureDate.Date && arrivalDate.Date >= DateTime.Now.Date)
-            {
-                _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Intersect(GetAvailablePlacesBetweenDates(arrivalDate.Date, departureDate.Date));
-            }
-        }
-
-        // Function to get the places available between the arrival and departure date
-        // Returns an IEnumerable<Place>
-        private IEnumerable<Place> GetAvailablePlacesBetweenDates(DateTime arrivalDate, DateTime departureDate)
-        {
-            List<Place> availablePlacesBetweenDates = new List<Place>();
-            foreach (Place place in _camping.Places)
-            {
-                int counter = 0;
-                //All reservations of place
-                var reservationsOnPlace = _camping.Reservations.Where(i => i.place.PlaceNumber == place.PlaceNumber).Select(i => i);
-                if (reservationsOnPlace.Count() > 0)
-                {
-                    foreach (Reservation reservation in reservationsOnPlace)
-                    {
-                        if ((arrivalDate <= reservation.StartDatum.Date && reservation.StartDatum.Date <= departureDate) //StartDate of a reservation is between the arrival and departure date
-                        || (arrivalDate <= reservation.EindDatum.Date && reservation.EindDatum.Date <= departureDate) //EndDate of a reservation is between the arrival and departure date
-                        || (reservation.StartDatum.Date <= arrivalDate && reservation.EindDatum.Date >= departureDate)) // Arrival and departure is between the reservation dates
-                        {
-                            counter++;
-                        }
-                    }
-                }
-                //counter will be 0 if no reservations interfere with the arrival and departure date
-                if (counter == 0)
-                {
-                    availablePlacesBetweenDates.Add(place);
-                }
-            }
-            return availablePlacesBetweenDates;
-        }
         // Is used everytime a different place is selected in the place list
         private void PlacesListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if(PlacesListView.SelectedItems != null)
             {
                 Place place = (Place) PlacesListView.SelectedItem;
-
                 nrLabel.Content = place;
                 areaLabel.Content = "Oppervlakte: " + place.SurfaceArea;
-                nrPeopleLabel.Content = "Aantal personnen:" + place.NumberOfPeople;
+                nrPeopleLabel.Content = "Aantal personnen:" + place.PersonCount;
                 electricityLabel.Content = "Toegang tot stroom: ";
 
-                if (place.HasElectricity) electricityLabel.Content += "Ja";
+                if (place.HasPower) electricityLabel.Content += "Ja";
                 else electricityLabel.Content += "Nee";
 
                 priceLabel.Content = "Prijs: " + place.PricePerNight;
@@ -347,7 +251,7 @@ namespace CampingUI
                 ReservationCalender.BlackoutDates.Clear();
 
                 ReservationCalender.SelectedDate = null;
-                var reservations = Camping.Reservations.Where(r => r.place.PlaceNumber == place.PlaceNumber).ToList();
+                var reservations = _camping.Reservations.Where(r => r.place.PlaceNumber == place.PlaceNumber).ToList();
                 reservations = reservations.Where(r => r.EindDatum >= DateTime.Now).ToList();
                 ReservationCalender.BlackoutDates.AddDatesInPast();
                 foreach ( var reservation in reservations )

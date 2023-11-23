@@ -50,7 +50,7 @@
             <Button Content="Verwijder filters" Margin="112,184,0,0" Click="RemoveFilters_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80"/>
 
             <!-- Show the places from the camping in a list in a grid view and sort them.  -->
-            <ListView Grid.Row="1" Name="PlacesListView">
+            <ListView Grid.Row="1" Name="PlacesListView" SelectionChanged="PlacesListView_SelectionChanged">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Width="90" DisplayMemberBinding="{Binding PlaceNumber}">

@@ -17,6 +17,6 @@
             <Button x:Name="PlacesButton" Content="Plaatsen" Width="200" Height="50" FontSize="20" Margin="12.5, 0, 0, 0" Click="PlacesButton_Click"/>
         </StackPanel>
         <!-- In this frame the pages will show up -->
-        <Frame x:Name="Main" Margin="0, 75, 0, 0"/>
+        <Frame x:Name="Main" Margin="0, 75, 0, 0" NavigationUIVisibility="Hidden"/>
     </Grid>
 </Window>
