@@ -1,4 +1,5 @@
 ﻿using CampingCore;
+using CampingDataAccess;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -29,19 +30,21 @@ namespace CampingUI
         private bool? _hasPower;
         public int PersonCount = 0;
         private DateTime _arrivalDate, _departureDate;
-        private bool _isSortedAscending;
+        private bool _isSortedAscending = true;
         private double _maxPriceRange;
         private bool _wrongFilter = false;
+        private string _headerTag;
 
-        public PlacesOverviewPage()
+        public PlacesOverviewPage(Camping camping, CampingRepository campingRepository)
         {
             InitializeComponent();
-            this._camping = new Camping(); // Creates a camping.
+            this._camping = camping; // Creates a camping.
             _maxPriceRange = _camping.Places.Max(i => i.PricePerNight);
             MaxPriceRangeTextBox.Text = $"{_maxPriceRange}"; //Set the _maxPriceRange as a standard
             PersonCountTextBox.Text = $"{PersonCount}"; //Set the text in the textbox to 0
             _placesSortedAndOrFiltered = _camping.Places; //get all the places to the variable
             PlacesListView.ItemsSource = _placesSortedAndOrFiltered;   // For all items in the ListBox use the camping places.
+            this._headerTag = "Placenumber";
         }
 
         //Function (EventHandler) that resets the background of a textbox if the filters are reset
@@ -159,9 +162,11 @@ namespace CampingUI
         // Function (EventHandler) to apply the filters chosen after the "Pas filters toe" button is pressed
         private void ApplyFilters_Click(object sender, RoutedEventArgs e)
         {
+
             SetPersonCountFromPersonCountTextBox();
             SetMaxPriceFromMaxPriceRangeTextBox();
             SetArrivalAndDepartureDates();
+            _camping.Places = _camping.CampingRepository.GetPlaces();
             _placesSortedAndOrFiltered = _camping.Places;
             Filter(_arrivalDate, _departureDate, PersonCount, _maxPriceRange, _hasPower);
 
@@ -178,6 +183,7 @@ namespace CampingUI
                 _placesSortedAndOrFiltered = PlacesOverviewPageFilter.GetFilteredListOnPersonCount(personCount, _placesSortedAndOrFiltered, _camping);
                 _placesSortedAndOrFiltered = PlacesOverviewPageFilter.GetFilteredListOnDate(arrivalDate, departureDate, _placesSortedAndOrFiltered, _camping);
                 _placesSortedAndOrFiltered = PlacesOverviewPageFilter.GetFilteredListOnPower(hasPower, _placesSortedAndOrFiltered, _camping);
+                _placesSortedAndOrFiltered = PlacesOverviewPageSorting.SetSortDuringFiltering(_isSortedAscending, _headerTag, _placesSortedAndOrFiltered);
                 PlacesListView.ItemsSource = _placesSortedAndOrFiltered;
             }
 
@@ -193,7 +199,9 @@ namespace CampingUI
             _maxPriceRange = _camping.Places.Max(i => i.PricePerNight);
             PersonCountTextBox.Text = $"{PersonCount}"; ;
             MaxPriceRangeTextBox.Text = $"{_maxPriceRange}";
-            PlacesListView.ItemsSource = _camping.Places;
+            _camping.Places = _camping.CampingRepository.GetPlaces();
+            _placesSortedAndOrFiltered = _camping.Places;
+            PlacesListView.ItemsSource = _placesSortedAndOrFiltered;
             ResetBackgroundsFilters();
             _wrongFilter = false;
         }
@@ -211,15 +219,23 @@ namespace CampingUI
         private void SetSorterColumn_Click(object sender, RoutedEventArgs e)
         {
             GridViewColumnHeader gridViewColumnHeader = (GridViewColumnHeader)sender;
-            if (gridViewColumnHeader.Tag.ToString().Equals("Placenumber"))
+            _placesSortedAndOrFiltered = SortColumns(gridViewColumnHeader.Tag.ToString());
+            PlacesListView.ItemsSource = _placesSortedAndOrFiltered;
+        }
+
+        private IEnumerable<Place> SortColumns(string headerTag)
+        {
+            if (headerTag.Equals("Placenumber"))
                 _placesSortedAndOrFiltered = PlacesOverviewPageSorting.SortColumnPlaceNumber(_isSortedAscending, _placesSortedAndOrFiltered);
-            else if (gridViewColumnHeader.Tag.ToString().Equals("Price"))
+            else if (headerTag.Equals("Price"))
                 _placesSortedAndOrFiltered = PlacesOverviewPageSorting.SortColumnPrice(_isSortedAscending, _placesSortedAndOrFiltered);
             else
                 _placesSortedAndOrFiltered = PlacesOverviewPageSorting.SortColumnPersonCount(_isSortedAscending, _placesSortedAndOrFiltered);
             _isSortedAscending = !_isSortedAscending;
-            PlacesListView.ItemsSource = _placesSortedAndOrFiltered;
+            _headerTag = headerTag;
+            return _placesSortedAndOrFiltered;
         }
+
 
         // Is used everytime a different place is selected in the place list
         private void PlacesListView_SelectionChanged(object sender, SelectionChangedEventArgs e)

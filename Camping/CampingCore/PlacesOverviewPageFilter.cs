@@ -21,9 +21,10 @@ namespace CampingCore
         // Function to filter the list of places on the integer maxPriceRange 
         public static IEnumerable<Place> GetFilteredListOnPrice(double maxPriceRange, IEnumerable<Place> _placesSortedAndOrFiltered, Camping _camping)
         {
+
             if (maxPriceRange >= _camping.Places.Min(i => i.PricePerNight))
             {
-                _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Intersect(_camping.Places.Where(i => i.PricePerNight <= maxPriceRange).Select(i => i));
+                _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Intersect(_camping.Places.Select(i => i));
             }
             return _placesSortedAndOrFiltered;
 

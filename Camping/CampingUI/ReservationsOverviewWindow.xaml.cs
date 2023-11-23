@@ -11,10 +11,10 @@ namespace CampingUI
     {
         public Camping Camping { get; set; }
 
-        public ReservationsOverviewWindow()
+        public ReservationsOverviewWindow(Camping camping)
         {
             InitializeComponent();
-            this.Camping = new Camping(); // Creates a camping.
+            this.Camping = camping; // Creates a camping.
 
             ListBox listbox = new ListBox(); // Creates a ListBox to show in the WPF UI
             Grid.SetRow(listbox, 1);        // Adds a new row to the ListBox.

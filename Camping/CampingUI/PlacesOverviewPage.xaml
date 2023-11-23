@@ -36,7 +36,7 @@
             <RadioButton Name="PowerRadioButton2" Grid.Row="0" Content="Geen stroom" HorizontalAlignment="Left" Margin="104,75,0,0" VerticalAlignment="Top" Checked="PowerRadioButton_Selected"/>
             <RadioButton Name="PowerRadioButton3" Grid.Row="0" Content="Geen voorkeur" HorizontalAlignment="Left" Margin="203,75,0,0" VerticalAlignment="Top" Checked="PowerRadioButton_Selected" IsChecked="True"/>
 
-            <!-- Third filter for amount of people  -->
+            <!-- Third filter for amount of people.  -->
             <Label Content="Aantal personen" Margin="0,98,108,53"/>
             <TextBox x:Name="PersonCountTextBox" HorizontalAlignment="Left" Margin="100" Width="60" Height="20" TextChanged="TextBox_Changed"/>
 
