@@ -1,4 +1,5 @@
 ﻿using CampingCore;
+using CampingDataAccess;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -31,6 +32,7 @@ namespace CampingUI
         public PlacesOverviewPage()
         {
             InitializeComponent();
+
             this.Camping = new Camping(); // Creates a camping.
             if (Camping.Places.Count() > 0)
             {
@@ -104,5 +106,26 @@ namespace CampingUI
             AdornerLayer.GetAdornerLayer(listViewSortCol).Add(listViewSortAdorner);
             PlacesListView.Items.SortDescriptions.Add(new SortDescription(sortBy, newDir));
         }*/
+
+        public void AddPlaceOnClick(object sender, RoutedEventArgs e)
+        {
+            bool hasElectricity = false;
+            int placeNumber = Int32.Parse(PlaceNumber.Text);
+            int surfaceArea = Int32.Parse(SurfaceArea.Text);
+            int pricePerPersonPerNight = Int32.Parse(PricePerPersonPerNight.Text);
+            int amountOfPeople = Int32.Parse(NumberOfPeople.Text);
+            string electricity = HasElectricity.SelectionBoxItem.ToString();
+            string placeDescription = PlaceDescription.Text;
+            if(electricity.Equals("Ja"))
+            {
+                hasElectricity = true;
+            }
+
+            Place place = new Place(placeNumber, hasElectricity, surfaceArea, amountOfPeople, pricePerPersonPerNight, placeDescription);
+
+            Database db = new Database();
+            db.AddPlaceToDatabase(place);
+            InitializeComponent();
+        }
     }
 }

@@ -15,13 +15,14 @@ namespace CampingCore
         public int PricePerNight { get; set; }
         public string Description { get; set; }
 
-        public Place(int placeNumber, bool hasElectricity, int surfaceArea, int numberOfPeople, int pricePerNight)
+        public Place(int placeNumber, bool hasElectricity, int surfaceArea, int numberOfPeople, int pricePerNight, string description)
         {
             this.PlaceNumber = placeNumber;
             this.HasElectricity = hasElectricity;
             this.SurfaceArea = surfaceArea;
             this.NumberOfPeople = numberOfPeople;
             this.PricePerNight = pricePerNight;
+            this.Description = description;
         }
         public override string ToString()
         {
