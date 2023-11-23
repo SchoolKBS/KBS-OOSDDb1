@@ -23,12 +23,13 @@
         <TextBox Grid.Column="0" Name="FirstName" TextWrapping="Wrap" Text="Voornaam" Height="30"/>
         <TextBox Grid.Column="1" Name="LastName" TextWrapping="Wrap" Text="Achternaam"  Height="30"/>
         <TextBox Grid.Column="0" Name="Insertion" Grid.Row="1" TextWrapping="Wrap" Text="Tussenvoegsel"  Height="30"/>
+        <TextBox Grid.Column="1" Name="PostalCode" Grid.Row="1" TextWrapping="Wrap" Text="PostalCode"  Height="30"/>
         <TextBox Grid.Column="0" Name="City" Grid.Row="2" TextWrapping="Wrap" Text="Woonplaats"  Height="30"/>
         <TextBox Grid.Column="1" Name="Address" Grid.Row="2" TextWrapping="Wrap" Text="Adres"  Height="30"/>
         <TextBox Grid.Column="0" Name="Email" Grid.Row="3" TextWrapping="Wrap" Text="Email"  Height="30"/>
         <TextBox Grid.Column="1" Name="PhoneNumber" Grid.Row="3" TextWrapping="Wrap" Text="Telefoonnummer"  Height="30"/>
 
-        <TextBlock Name="notification" Grid.Row="5" Grid.ColumnSpan="2" TextWrapping="Wrap" Text="TextBlock"/>
+        <TextBlock Name="notification" Grid.Row="5" Grid.ColumnSpan="2" TextWrapping="Wrap"/>
         
         <Button Grid.Row="4" Grid.ColumnSpan="2" Height="30" Click="AddGuestOnClick">Gast toevoegen</Button>
 

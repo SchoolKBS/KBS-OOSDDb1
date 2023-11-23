@@ -1,4 +1,5 @@
 ﻿using CampingCore;
+using CampingDataAccess;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,9 +41,20 @@ namespace CampingUI
                     City.Text,
                     Email.Text,
                     PhoneNumber.Text,
+                    PostalCode.Text
                 };
 
-                CheckIfInputIsValid(TextInput);
+                if (CheckIfInputIsValid(TextInput))
+                {
+                    Guest guest = new(FirstName.Text, Insertion.Text, LastName.Text, Address.Text, City.Text, Email.Text, PhoneNumber.Text, PostalCode.Text);
+
+                    Database database = new Database();
+
+                    database.AddGuestToDatabase(guest);
+                    notification.Text = "De gast is ingevoerd";
+                }
+
+                
             }
         }
 
@@ -52,12 +64,8 @@ namespace CampingUI
             {
                 if (string.IsNullOrEmpty(input) || string.IsNullOrWhiteSpace(input))
                 {
-                    notification.Text = "Vul alle velden in";
+                    notification.Text = "Vul alle benodigde velden in";
                     return false;
-                }
-                else
-                {
-                    notification.Text = "akkoord";
                 }
             }
             return true;
