@@ -162,7 +162,7 @@ namespace CampingUI
         // Function (EventHandler) to apply the filters chosen after the "Pas filters toe" button is pressed
         private void ApplyFilters_Click(object sender, RoutedEventArgs e)
         {
-
+            PlacesListView.SelectedItems.Clear();
             SetPersonCountFromPersonCountTextBox();
             SetMaxPriceFromMaxPriceRangeTextBox();
             SetArrivalAndDepartureDates();
@@ -240,7 +240,7 @@ namespace CampingUI
         // Is used everytime a different place is selected in the place list
         private void PlacesListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(PlacesListView.SelectedItems != null)
+            if(PlacesListView.SelectedItems.Count > 0)
             {
                 Place place = (Place) PlacesListView.SelectedItem;
                 nrLabel.Content = place;

@@ -24,7 +24,7 @@ namespace CampingCore
 
             if (maxPriceRange >= _camping.Places.Min(i => i.PricePerNight))
             {
-                _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Intersect(_camping.Places.Select(i => i));
+                _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Intersect(_camping.Places.Where(i => i.PricePerNight <= maxPriceRange).Select(i => i));
             }
             return _placesSortedAndOrFiltered;
 
