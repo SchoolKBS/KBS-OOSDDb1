@@ -58,10 +58,10 @@ namespace CampingUI
             }
         }
 
-            //Function (EventHandler) to reset the datepickers to backgroundcolor white incase they were red before
-            private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        //Function (EventHandler) to reset the datepickers to backgroundcolor white incase they were red before
+        private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(ArrivalDatePicker.Background.Equals(Brushes.Red) && DepartureDatePicker.Background.Equals(Brushes.Red))
+            if (ArrivalDatePicker.Background.Equals(Brushes.Red) && DepartureDatePicker.Background.Equals(Brushes.Red))
             {
                 ArrivalDatePicker.Background = Brushes.White;
                 DepartureDatePicker.Background = Brushes.White;
@@ -118,7 +118,7 @@ namespace CampingUI
                     MaxPriceRangeTextBox.Background = Brushes.Red;
                     _wrongFilter = true;
                 }
-                    
+
             }
             else
             {
@@ -240,9 +240,9 @@ namespace CampingUI
         // Is used everytime a different place is selected in the place list
         private void PlacesListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(PlacesListView.SelectedItems.Count > 0)
+            if (PlacesListView.SelectedItems.Count > 0)
             {
-                Place place = (Place) PlacesListView.SelectedItem;
+                Place place = (Place)PlacesListView.SelectedItem;
                 nrLabel.Content = place;
                 areaLabel.Content = "Oppervlakte: " + place.SurfaceArea;
                 nrPeopleLabel.Content = "Aantal personnen:" + place.PersonCount;
@@ -258,12 +258,12 @@ namespace CampingUI
                 ReservationCalender.BlackoutDates.Clear();
 
                 ReservationCalender.SelectedDate = null;
-                var reservations = _camping.Reservations.Where(r => r.place.PlaceNumber == place.PlaceNumber).ToList();
-                reservations = reservations.Where(r => r.EindDatum >= DateTime.Now).ToList();
+                var reservations = _camping.Reservations.Where(r => r.Place.PlaceNumber == place.PlaceNumber).ToList();
+                reservations = reservations.Where(r => r.DepartureDate >= DateTime.Now).ToList();
                 ReservationCalender.BlackoutDates.AddDatesInPast();
-                foreach ( var reservation in reservations )
+                foreach (var reservation in reservations)
                 {
-                    ReservationCalender.BlackoutDates.Add(new CalendarDateRange(reservation.StartDatum, reservation.EindDatum));
+                    ReservationCalender.BlackoutDates.Add(new CalendarDateRange(reservation.ArrivalDate, reservation.DepartureDate));
                 }
             }
             else

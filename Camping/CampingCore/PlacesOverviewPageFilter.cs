@@ -24,7 +24,7 @@ namespace CampingCore
 
             if (maxPriceRange >= _camping.Places.Min(i => i.PricePerNight))
             {
-                _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Intersect(_camping.Places.Where(i => i.PricePerNight <= maxPriceRange).Select(i => i));
+                _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Intersect(_camping.Places.Select(i => i));
             }
             return _placesSortedAndOrFiltered;
 
@@ -59,14 +59,14 @@ namespace CampingCore
             {
                 int counter = 0;
                 //All reservations of place
-                var reservationsOnPlace = _camping.Reservations.Where(i => i.place.PlaceNumber == place.PlaceNumber).Select(i => i);
+                var reservationsOnPlace = _camping.Reservations.Where(i => i.Place.PlaceNumber == place.PlaceNumber).Select(i => i);
                 if (reservationsOnPlace.Count() > 0)
                 {
                     foreach (Reservation reservation in reservationsOnPlace)
                     {
-                        if ((arrivalDate <= reservation.StartDatum.Date && reservation.StartDatum.Date <= departureDate) //StartDate of a reservation is between the arrival and departure date
-                        || (arrivalDate <= reservation.EindDatum.Date && reservation.EindDatum.Date <= departureDate) //EndDate of a reservation is between the arrival and departure date
-                        || (reservation.StartDatum.Date <= arrivalDate && reservation.EindDatum.Date >= departureDate)) // Arrival and departure is between the reservation dates
+                        if ((arrivalDate <= reservation.ArrivalDate.Date && reservation.ArrivalDate.Date <= departureDate) //StartDate of a reservation is between the arrival and departure date
+                        || (arrivalDate <= reservation.DepartureDate.Date && reservation.DepartureDate.Date <= departureDate) //EndDate of a reservation is between the arrival and departure date
+                        || (reservation.ArrivalDate.Date <= arrivalDate && reservation.DepartureDate.Date >= departureDate)) // Arrival and departure is between the reservation dates
                         {
                             counter++;
                         }

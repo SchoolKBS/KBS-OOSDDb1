@@ -1,29 +1,30 @@
-﻿namespace CampingCore
+﻿
+namespace CampingCore
 {
     public class Reservation
     {
-        public int ReservatieNummer { get; set; }
-        public DateTime StartDatum { get; set; }
-        public DateTime EindDatum { get; set; }
-        public Place place { get; set; }
+        public int ReservationNumber { get; set; }
+        public DateTime ArrivalDate { get; set; }
+        public DateTime DepartureDate { get; set; }
+        public Place Place { get; set; }
+        public Guest Guest { get; set; }
 
         public Employee Employee { get; set; } //Who handled the Reservation
 
-        // public Guest guest { get; set;}
-
-        //Guest still has to get added 
-        public Reservation(int ID, DateTime Start, DateTime Eind, Place place)
+        public Reservation(int reservationNumber, DateTime arrivalDate, DateTime departureDate, Place place, Guest guest, Employee employee)
 
         {
-            this.ReservatieNummer = ID;
-            this.StartDatum = Start;
-            this.EindDatum = Eind;
-            this.place = place;
+            this.ReservationNumber = reservationNumber;
+            this.ArrivalDate = arrivalDate;
+            this.DepartureDate = departureDate;
+            this.Place = place;
+            this.Guest = guest;
+            this.Employee = employee;
 
         }
         public override string ToString()
         {
-            return "Reservatie: " + ReservatieNummer + " Plek: " + place.PlaceNumber + " Start: " + StartDatum.ToShortDateString() + " - Eind " + EindDatum.ToShortDateString();
+            return "Reservatie: " + ReservationNumber + " Plaats: " + Place.PlaceNumber + " Aankomstdatum: " + ArrivalDate.ToShortDateString() + " - Vertrekdatum " + DepartureDate.ToShortDateString() + " Gast " + Guest.FirstName + " Employee " + Employee.EmployeeID;
 
         }
 
