@@ -18,7 +18,7 @@ namespace CampingUI
 
             ListBox listbox = new ListBox(); // Creates a ListBox to show in the WPF UI
             Grid.SetRow(listbox, 1);        // Adds a new row to the ListBox.
-            listbox.ItemsSource = Camping.Reservations.OrderBy(reservation => reservation.StartDatum).ThenBy(reservation => reservation.place.PlaceNumber);   // For all items in the ListBox use the camping places.
+            listbox.ItemsSource = Camping.Reservations.OrderBy(reservation => reservation.ArrivalDate).ThenBy(reservation => reservation.PlaceID);   // For all items in the ListBox use the camping places.
             ListGrid.Children.Add(listbox);     // Adds each items inside the listBox to the grid UI.
 
         }

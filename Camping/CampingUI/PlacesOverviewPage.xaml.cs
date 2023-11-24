@@ -1,4 +1,5 @@
 ﻿using CampingCore;
+using CampingCore.PlacesOverviewPageClasses;
 using CampingDataAccess;
 using System;
 using System.Collections.Generic;
@@ -236,11 +237,24 @@ namespace CampingUI
             return _placesSortedAndOrFiltered;
         }
 
+        private void DeletePlaceButton_Click(object sender, RoutedEventArgs e)
+        {
+            Place place = (Place)PlacesListView.SelectedItem;
+            MessageBoxResult deleteMessageBox = MessageBox.Show("Weet je zeker dat de volgende plaats " + place.PlaceNumber + " verwijderd wordt?", "Waarschuwing!", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (deleteMessageBox == MessageBoxResult.Yes)
+            {
+                PlacesOverviewPageDelete.DeletePlace(_camping, place);
+                PlaceOverviewGrid.Visibility = Visibility.Collapsed;
+                PlacesListView.SelectedItems.Clear();
+                
+            }
+        }
+
 
         // Is used everytime a different place is selected in the place list
         private void PlacesListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(PlacesListView.SelectedItems != null)
+            if(PlacesListView.SelectedItems.Count > 0)
             {
                 Place place = (Place) PlacesListView.SelectedItem;
                 nrLabel.Content = place;
@@ -250,20 +264,19 @@ namespace CampingUI
 
                 if (place.HasPower) electricityLabel.Content += "Ja";
                 else electricityLabel.Content += "Nee";
-
-                priceLabel.Content = "Prijs: " + place.PricePerNight;
+                priceLabel.Content = "Prijs: " + String.Format("{0:0.00}", place.PricePerNight) + "$";
                 descriptionLabel.Content = "Beschrijving: " + place.Description;
 
                 PlaceOverviewGrid.Visibility = Visibility.Visible;
                 ReservationCalender.BlackoutDates.Clear();
 
                 ReservationCalender.SelectedDate = null;
-                var reservations = _camping.Reservations.Where(r => r.place.PlaceNumber == place.PlaceNumber).ToList();
-                reservations = reservations.Where(r => r.EindDatum >= DateTime.Now).ToList();
+                var reservations = _camping.Reservations.Where(r => r.PlaceID == place.PlaceNumber).ToList();
+                reservations = reservations.Where(r => r.DepartureDate >= DateTime.Now).ToList();
                 ReservationCalender.BlackoutDates.AddDatesInPast();
                 foreach ( var reservation in reservations )
                 {
-                    ReservationCalender.BlackoutDates.Add(new CalendarDateRange(reservation.StartDatum, reservation.EindDatum));
+                    ReservationCalender.BlackoutDates.Add(new CalendarDateRange(reservation.ArrivalDate, reservation.DepartureDate));
                 }
             }
             else

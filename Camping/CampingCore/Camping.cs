@@ -13,10 +13,9 @@ namespace CampingCore
             this.CampingRepository = campingRepository;
             this.Reservations = new ObservableCollection<Reservation>();
             this.Places = this.CampingRepository.GetPlaces();
-            for (int i = 1; i <= 10; i++)
+            for (int i = 1; i <= 5; i++)
             {
-                //Places.Add(new Place(i, true, 1, i * 2, i));
-                Reservations.Add(new Reservation(i, DateTime.Now.AddDays(i), DateTime.Now.AddDays(i + 10), Places[i - 1]));
+                Reservations.Add(new Reservation(i, DateTime.Now.AddDays(i), DateTime.Now.AddDays(i + 10), Places[i].PlaceNumber, i, i, i, i%2==0, i));
             }
             this.Places = this.CampingRepository.GetPlaces();
 

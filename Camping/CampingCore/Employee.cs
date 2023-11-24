@@ -4,7 +4,7 @@
     {
         public int EmployeeID { get; set; }
 
-        public Employee(string firstName, string prepositionName, string lastName, int employeeID) : base(firstName, prepositionName, lastName)
+        public Employee(int employeeID, string firstName, string lastName, string infix) : base(firstName, lastName, infix)
         {
             this.EmployeeID = employeeID;
         }
