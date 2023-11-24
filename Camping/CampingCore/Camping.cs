@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+using System;
+using System.Collections.ObjectModel;
 
 namespace CampingCore
 {
@@ -12,13 +13,20 @@ namespace CampingCore
         {
             this.CampingRepository = campingRepository;
             this.Reservations = new ObservableCollection<Reservation>();
-            this.Places = this.CampingRepository.GetPlaces();
             for (int i = 1; i <= 5; i++)
             {
                 Reservations.Add(new Reservation(i, DateTime.Now.AddDays(i), DateTime.Now.AddDays(i + 10), Places[i].PlaceNumber, i, i, i, i%2==0, i));
             }
             this.Places = this.CampingRepository.GetPlaces();
 
+                // Generate random start date
+                DateTime startDate = DateTime.Now.AddDays(random.Next(1, 11));
+
+                // Generate random end date based on start date
+                DateTime endDate = startDate.AddDays(random.Next(1, 11));
+
+                Reservations.Add(new Reservation(i, startDate, endDate, Places[i - 1]));
+            }
         }
     }
 }
