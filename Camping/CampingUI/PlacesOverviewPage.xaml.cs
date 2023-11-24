@@ -121,7 +121,7 @@ namespace CampingUI
                     MaxPriceRangeTextBox.Background = Brushes.Red;
                     _wrongFilter = true;
                 }
-                    
+
             }
             else
             {
@@ -165,7 +165,7 @@ namespace CampingUI
         // Function (EventHandler) to apply the filters chosen after the "Pas filters toe" button is pressed
         private void ApplyFilters_Click(object sender, RoutedEventArgs e)
         {
-
+            PlacesListView.SelectedItems.Clear();
             SetPersonCountFromPersonCountTextBox();
             SetMaxPriceFromMaxPriceRangeTextBox();
             SetArrivalAndDepartureDates();
@@ -285,7 +285,7 @@ namespace CampingUI
         {
             if(PlacesListView.SelectedItems.Count > 0)
             {
-                Place place = (Place) PlacesListView.SelectedItem;
+                Place place = (Place)PlacesListView.SelectedItem;
                 nrLabel.Content = place;
                 areaLabel.Content = "Oppervlakte: " + place.SurfaceArea;
                 nrPeopleLabel.Content = "Aantal personnen:" + place.PersonCount;
@@ -303,7 +303,7 @@ namespace CampingUI
                 var reservations = _camping.Reservations.Where(r => r.PlaceID == place.PlaceNumber).ToList();
                 reservations = reservations.Where(r => r.DepartureDate >= DateTime.Now).ToList();
                 ReservationCalender.BlackoutDates.AddDatesInPast();
-                foreach ( var reservation in reservations )
+                foreach (var reservation in reservations)
                 {
                     ReservationCalender.BlackoutDates.Add(new CalendarDateRange(reservation.ArrivalDate, reservation.DepartureDate));
                 }

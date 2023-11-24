@@ -1,4 +1,5 @@
-﻿namespace CampingCore
+﻿
+namespace CampingCore
 {
     public class Reservation
     {
