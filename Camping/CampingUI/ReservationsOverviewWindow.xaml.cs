@@ -1,5 +1,6 @@
 ﻿using CampingCore;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace CampingUI
@@ -15,12 +16,12 @@ namespace CampingUI
         public ReservationsOverviewWindow(Camping camping)
         {
             InitializeComponent();
-
+            _camping = camping;
             ListBox listbox = new ListBox(); // Creates a ListBox to show in the WPF UI
             Grid.SetRow(listbox, 1);        // Adds a new row to the ListBox.
-            listbox.ItemsSource = Camping.Reservations.OrderBy(reservation => reservation.ArrivalDate).ThenBy(reservation => reservation.PlaceID);   // For all items in the ListBox use the camping places.
+            listbox.ItemsSource = _camping.Reservations.OrderBy(reservation => reservation.ArrivalDate).ThenBy(reservation => reservation.PlaceID);   // For all items in the ListBox use the camping places.
             ListGrid.Children.Add(listbox);     // Adds each items inside the listBox to the grid UI.
-            _camping = new Camping();
+            
 
             //Checks if reservations exist to load list.
             if (_camping.Reservations.Count() > 0) 
@@ -33,7 +34,7 @@ namespace CampingUI
         //Fills list with reservations
         public void LoadReservationList() 
         {
-            ReservationsListView.ItemsSource = _camping.Reservations.OrderBy(reservation => reservation.ArrivalDate).ThenBy(reservation => reservation.Place.PlaceNumber); //Takes reservations
+            ReservationsListView.ItemsSource = _camping.Reservations.OrderBy(reservation => reservation.ArrivalDate).ThenBy(reservation => reservation.PlaceID); //Takes reservations
         }
 
 

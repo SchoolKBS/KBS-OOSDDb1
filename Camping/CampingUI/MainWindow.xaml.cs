@@ -19,9 +19,9 @@ namespace CampingUI
         public MainWindow()
         {
             InitializeComponent();
-
             this.CampingRepository = new CampingRepository();
             this.Camping = new Camping(CampingRepository);
+
         }
 
         //Function (EventHandler) to open the reservations page

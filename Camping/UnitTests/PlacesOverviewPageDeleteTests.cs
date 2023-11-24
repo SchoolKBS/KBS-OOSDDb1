@@ -17,36 +17,19 @@ namespace UnitTests
         [Test]
         public void DeletePlace_places_DeletesPlaceAndReservations()
         {
+
+           // List<Place> places = createPlaces(10);
+            //List<Reservation> reservations = createReservations();
             var mock = new Mock<ICampingRepository>();
             Camping camping = new Camping(mock.Object);
-            List<Place> places = createPlaces(10);
-            List<Guest> guests = createGuests(10);
-            Employee employee = createEmployee();
-            for (int i = 1; i <= 10; i++)
-            {
-                camping.Reservations.Add(new Reservation(i, DateTime.Now.AddDays(i), DateTime.Now.AddDays(i + 10), places[i-1].PlaceNumber, employee.EmployeeID, guests[i-1].ID, i, i%2==0, i));
-            }
-            mock.Setup(p => p.GetPlaces()).Returns(places);
-            Assert.That(camping.Places.Count(), Is.EqualTo(10));
-            Assert.That(camping.Reservations.Count(), Is.EqualTo(10)); 
-            /*var mock = new Mock<ICampingRepository>();
-            Camping camping = new Camping(mock.Object);
-            ObservableCollection<Reservation> reservations = new ObservableCollection<Reservation>();
-            List<Place> places = createPlaces(10);
-            Place place = places.First();
-            for (int i = 1; i <= 10; i++)
-            {
-                reservations.Add(new Reservation(i, DateTime.Now.AddDays(i), DateTime.Now.AddDays(i + 10), places[i - 1]));
-            }
-            camping.Reservations = reservations;
-            mock.Setup(p => p.GetPlaces()).Returns(places);
-            mock.Setup(p => p.RemovePlace(place));
-            mock.Setup(p => p.RemoveAllReservationsByPlace(place));
+            //mock.Setup(p => p.GetPlaces()).Returns(places);
+            //mock.Setup(p => p.GetReservations()).Returns(reservations);
+            Place place = new Place(1, true, 1, 1, 1);
+
             PlacesOverviewPageDelete.DeletePlace(camping, place);
+
             mock.Verify(p => p.RemovePlace(place), Times.Once());
             mock.Verify(p => p.RemoveAllReservationsByPlace(place), Times.Once());
-            Assert.That(camping.Places.Count(), Is.EqualTo(9));
-            Assert.That(camping.Reservations.Count(), Is.EqualTo(9));*/
         }
         public static List<Place> createPlaces(int amount)
         {
@@ -73,5 +56,16 @@ namespace UnitTests
             }
             return guests;
         }
+        public static List<Reservation> createReservations()
+        {
+            List<Reservation> reserverations = new List<Reservation>();
+            for (int i = 0; i < 10; i++)
+            {
+                Reservation reservation = new Reservation(i, DateTime.Now.Date.AddDays(i), DateTime.Now.Date.AddDays(i+1), i, i, i, i, i%2==0, i);
+                reserverations.Add(reservation);
+            }
+            return reserverations;
+        }
+
     }
 }

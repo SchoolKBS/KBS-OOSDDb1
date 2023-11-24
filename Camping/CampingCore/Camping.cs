@@ -6,27 +6,20 @@ namespace CampingCore
     public class Camping
     {
         public List<Place> Places { get; set;}
-        public ObservableCollection<Reservation> Reservations { get; set; }
+        public List<Reservation> Reservations { get; set; }
         public ICampingRepository CampingRepository { get; private set; }
 
         public Camping(ICampingRepository campingRepository)
         {
             this.CampingRepository = campingRepository;
-            this.Reservations = new ObservableCollection<Reservation>();
+            this.Reservations = new List<Reservation>();
+            this.Places = this.CampingRepository.GetPlaces();
+            this.Reservations = this.CampingRepository.GetReservations();
             for (int i = 1; i <= 5; i++)
             {
-                Reservations.Add(new Reservation(i, DateTime.Now.AddDays(i), DateTime.Now.AddDays(i + 10), Places[i].PlaceNumber, i, i, i, i%2==0, i));
+                //Reservations.Add(new Reservation(i, DateTime.Now.AddDays(i), DateTime.Now.AddDays(i + 10), Places[i-1].PlaceNumber, i, i, i, i%2==0, i));
             }
-            this.Places = this.CampingRepository.GetPlaces();
-
-                // Generate random start date
-                DateTime startDate = DateTime.Now.AddDays(random.Next(1, 11));
-
-                // Generate random end date based on start date
-                DateTime endDate = startDate.AddDays(random.Next(1, 11));
-
-                Reservations.Add(new Reservation(i, startDate, endDate, Places[i - 1]));
-            }
+            
         }
     }
 }

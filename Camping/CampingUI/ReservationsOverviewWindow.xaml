@@ -29,7 +29,7 @@ BorderThickness="1,1,1,1" Background="{x:Null}" >
 BorderThickness="1,1,1,1" Background="{x:Null}" />
 
 
-            <ListView Grid.Row="1" Name="ReservationsListView" HorizontalContentAlignment="Center">
+            <ListView Grid.Row="1" x:Name="ReservationsListView" HorizontalContentAlignment="Center">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Width="auto" DisplayMemberBinding="{Binding ReservationNumber}">

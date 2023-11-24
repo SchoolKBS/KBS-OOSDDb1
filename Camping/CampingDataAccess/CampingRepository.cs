@@ -50,9 +50,9 @@ namespace CampingDataAccess
                 }
                 return result;
         }
-        public List<Place> GetPlaceFromPlaceID(int id)
+        public Place GetPlaceFromPlaceID(int id)
         {
-            List<Place> results = new List<Place>();
+            Place place = null;
             string sql = "SELECT * FROM Place WHERE PlaceID = @PlaceID";
 
             using (var connection = new SqlConnection(connectionString))
@@ -66,16 +66,16 @@ namespace CampingDataAccess
                         command.Parameters.AddWithValue("PlaceID", id);
                         while (reader.Read())
                         {
-                            results.Add(new Place(reader.GetInt32(0),
+                            place = new Place(reader.GetInt32(0),
                                 Convert.ToBoolean(reader.GetByte(1)),
                                 reader.GetInt32(2),
                                 reader.GetInt32(4),
-                                Convert.ToDouble(reader.GetDecimal(3))));
+                                Convert.ToDouble(reader.GetDecimal(3)));
                         }
                     }
                 }
             }
-            return results;
+            return place;
         }
         public List<Reservation> GetReservations()
         {
@@ -96,12 +96,12 @@ namespace CampingDataAccess
                             result.Add(new Reservation(reader.GetInt32(0),
                                 reader.GetDateTime(1),
                                 reader.GetDateTime(2),
+                                reader.GetInt32(3),
                                 reader.GetInt32(4),
                                 reader.GetInt32(5),
                                 reader.GetInt32(6),
-                                reader.GetInt32(7),
-                                Convert.ToBoolean(reader.GetByte(8)),
-                                reader.GetDouble(9)
+                                Convert.ToBoolean(reader.GetByte(7)),
+                                reader.GetDouble(8)
                                 ));
                         }
                     }
@@ -151,15 +151,15 @@ namespace CampingDataAccess
                     {
                         while (reader.Read())
                         {
-                            result.Add(new Guest(reader.GetInt32(0),
-                                reader.GetString(1),
-                                reader.GetString(3),
-                                reader.GetString(2),
-                                reader.GetString(4),
-                                reader.GetString(5),
-                                reader.GetString(6),
-                                reader.GetString(7),
-                                reader.GetString(8)));
+                            var string1 = reader.GetString(1);
+                            var string2 = reader.GetString(2);
+                            var string3 = reader.GetString(3);
+                            var string4 = reader.GetString(4);
+                            var string5 = reader.GetString(5);
+                            var string6 = reader.GetString(6);
+                            var string7 = reader.GetString(7);
+                            var string8 = reader.GetString(8);
+                            result.Add(new Guest(reader.GetInt32(0), string1, string2, string3, string4, string5, string6, string7, string8));
                         }
                     }
                 }
@@ -168,7 +168,7 @@ namespace CampingDataAccess
         }
         public void RemoveAllReservationsByPlace(Place place)
         {
-            string sql = "DELETE FROM Reservation WHERE placeID = @placeID";
+            string sql = "DELETE FROM Reservation WHERE PlaceID = @PlaceID";
 
             using (var connection = new SqlConnection(connectionString))
             {
@@ -176,7 +176,7 @@ namespace CampingDataAccess
 
                 using (var command = new SqlCommand(sql, connection))
                 {
-                    command.Parameters.AddWithValue("name", place.PlaceNumber);
+                    command.Parameters.AddWithValue("@PlaceID", place.PlaceNumber);
                     command.ExecuteNonQuery();
                 }
                 connection.Close();
@@ -184,7 +184,7 @@ namespace CampingDataAccess
         }
         public void RemovePlace(Place place)
         {
-            string sql = "DELETE FROM Place WHERE placeID = @placeID";
+            string sql = "DELETE FROM Place WHERE PlaceID = @PlaceID";
 
             using (var connection = new SqlConnection(connectionString))
             {
@@ -192,7 +192,7 @@ namespace CampingDataAccess
 
                 using (var command = new SqlCommand(sql, connection))
                 {
-                    command.Parameters.AddWithValue("name", place.PlaceNumber);
+                    command.Parameters.AddWithValue("PlaceID", place.PlaceNumber);
                     command.ExecuteNonQuery();
                 }
                 connection.Close();
@@ -200,7 +200,7 @@ namespace CampingDataAccess
         }
         public void AddDummyDataPlaces()
         {
-            string sql = "INSERT INTO Place (PlaceID, Power, SurfaceArea, PricePerNightPerPerson, AmountOfPeople, description) VALUES (@PlaceID, @Power, @SurfaceArea, @PricePerNightPerPerson, @AmountOfPeople, @description);\"";
+            string sql = "INSERT INTO Place (PlaceID, Power, SurfaceArea, PricePerNightPerPerson, AmountOfPeople, description) VALUES (@PlaceID, @Power, @SurfaceArea, @PricePerNightPerPerson, @AmountOfPeople, @description);";
 
             using (var connection = new SqlConnection(connectionString))
             {
@@ -215,6 +215,7 @@ namespace CampingDataAccess
                         command.Parameters.AddWithValue("SurfaceArea", i);
                         command.Parameters.AddWithValue("PricePerNightPerPerson", i);
                         command.Parameters.AddWithValue("AmountOfPeople", i);
+                        command.Parameters.AddWithValue("description", "");
                         command.ExecuteNonQuery();
                     }
                 }
@@ -223,16 +224,16 @@ namespace CampingDataAccess
         }
         public void AddDummyDataEmployee(string firstName, string lastName, string infix)
         {
-            string sql = "INSERT INTO Employee (FirstName, LastName, Infix) VALUES (FirstName, LastName, Infix);\"";
+            string sql = "INSERT INTO Employee (FirstName, LastName, Infix) VALUES (@FirstName, @LastName, @Infix);";
 
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
                     using (var command = new SqlCommand(sql, connection))
                     {
-                        command.Parameters.AddWithValue("FirstName", firstName);
-                        command.Parameters.AddWithValue("LastName", lastName);
-                        command.Parameters.AddWithValue("Infix", infix);
+                        command.Parameters.AddWithValue("@FirstName", firstName);
+                        command.Parameters.AddWithValue("@LastName", lastName);
+                        command.Parameters.AddWithValue("@Infix", infix);
                         command.ExecuteNonQuery();
                     }
                 connection.Close();
@@ -240,7 +241,7 @@ namespace CampingDataAccess
         }
         public void AddDummyDataGuests(string firstName, string lastName, string infix, string email, string city, string address, int i)
         {
-            string sql = "INSERT INTO Guest (FirstName, LastName, Infix, Email, Phonenumber, City, Address, PostalCode) VALUES (FirstName, LastName, Infix, Email, Phonenumber, City, Address, PostalCode);\"";
+            string sql = "INSERT INTO Guest (FirstName, LastName, Infix, Email, Phonenumber, City, Address, PostalCode) VALUES (FirstName, LastName, Infix, Email, Phonenumber, City, Address, PostalCode);";
 
             using (var connection = new SqlConnection(connectionString))
             {
@@ -262,21 +263,21 @@ namespace CampingDataAccess
         }
         public void AddDummyDataReservations(int placeID, int employeeID, int guestID, int i)
         {
-            string sql = "INSERT INTO Reservations (ReservationID, ArrivalDate, DepartureDate, PlaceID, EmployeeID, GuestID, PersonCount, IsPaid, Price) VALUES (@ReservationID, @ArrivalDate, @DepartureDate, @PlaceID, @EmployeeID, @GuestID, @PersonCount, @IsPaid, @Price);\"";
+            string sql = "INSERT INTO Reservation (ArrivalDate, DepartureDate, PlaceID, EmployeeID, GuestID, PersonCount, IsPaid, Price) VALUES ( @ArrivalDate, @DepartureDate, @PlaceID, @EmployeeID, @GuestID, @PersonCount, @IsPaid, @Price);";
 
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
                 using (var command = new SqlCommand(sql, connection))
                 {
-                    command.Parameters.AddWithValue("ArrivalDate", DateTime.Now.Date.AddDays(i));
-                    command.Parameters.AddWithValue("DepartureDate", DateTime.Now.Date.AddDays(i + 10));
-                    command.Parameters.AddWithValue("PlaceID", placeID);
-                    command.Parameters.AddWithValue("EmployeeID", employeeID);
-                    command.Parameters.AddWithValue("GuestID", guestID);
-                    command.Parameters.AddWithValue("PersonCount", i);
-                    command.Parameters.AddWithValue("IsPaid", i % 2 == 0);
-                    command.Parameters.AddWithValue("Price", i);
+                    command.Parameters.AddWithValue("@ArrivalDate", DateTime.Now.Date.AddDays(i));
+                    command.Parameters.AddWithValue("@DepartureDate", DateTime.Now.Date.AddDays(i + 10));
+                    command.Parameters.AddWithValue("@PlaceID", placeID);
+                    command.Parameters.AddWithValue("@EmployeeID", employeeID);
+                    command.Parameters.AddWithValue("@GuestID", guestID);
+                    command.Parameters.AddWithValue("@PersonCount", i);
+                    command.Parameters.AddWithValue("@IsPaid", i % 2 == 0);
+                    command.Parameters.AddWithValue("@Price", i);
                     command.ExecuteNonQuery();
                 }
                 connection.Close();
@@ -284,9 +285,10 @@ namespace CampingDataAccess
         }
         public void AddDummyData()
         {
+
             AddDummyDataPlaces();
             var places = GetPlaces();
-            AddDummyDataEmployee("Jan", "Jansen", null);
+            AddDummyDataEmployee("Jan", "Jansen", "");
             var employees = GetEmployees();
             List<string> firstNames = MakeFirstNamesList();
             List<string> lastNames = MakeFirstNamesList();
@@ -344,9 +346,9 @@ namespace CampingDataAccess
             throw new NotImplementedException();
         }
 
-        Place ICampingRepository.GetPlaceFromPlaceID(int id)
+        /*Place ICampingRepository.GetPlaceFromPlaceID(int id)
         {
             throw new NotImplementedException();
-        }
+        }*/
     }
 }
