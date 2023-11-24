@@ -22,9 +22,9 @@ namespace CampingCore.PlacesOverviewPageClasses
         public static IEnumerable<Place> GetFilteredListOnPrice(double maxPriceRange, IEnumerable<Place> _placesSortedAndOrFiltered, Camping _camping)
         {
 
-            if (maxPriceRange >= _camping.Places.Min(i => i.PricePerNight))
+            if (maxPriceRange >= _placesSortedAndOrFiltered.Min(i => i.PricePerNight))
             {
-                _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Intersect(_camping.Places.Select(i => i));
+                _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Intersect(_camping.Places.Where(i => i.PricePerNight <= maxPriceRange).Select(i => i));
             }
             return _placesSortedAndOrFiltered;
 

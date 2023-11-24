@@ -37,14 +37,14 @@ BorderThickness="1,1,1,1" Background="{x:Null}" />
                                 <GridViewColumnHeader Tag="ReservationNumber">Reservatienummer</GridViewColumnHeader>
                             </GridViewColumn.Header>
                         </GridViewColumn>
-                        <GridViewColumn Width="auto" DisplayMemberBinding="{Binding ArrivalDate, StringFormat={}{0:MM/dd/yyyy}}">
+                        <GridViewColumn Width="auto" DisplayMemberBinding="{Binding ArrivalDate, StringFormat={}{0:dd/MM/yyyy}}">
                             <GridViewColumn.Header>
-                                <GridViewColumnHeader Tag="ArrivalDate">Aankomst datum</GridViewColumnHeader>
+                                <GridViewColumnHeader Tag="ArrivalDate">Aankomstdatum</GridViewColumnHeader>
                             </GridViewColumn.Header>
                         </GridViewColumn>
-                        <GridViewColumn Width="auto" DisplayMemberBinding="{Binding DepartureDate, StringFormat={}{0:MM/dd/yyyy}}">
+                        <GridViewColumn Width="auto" DisplayMemberBinding="{Binding DepartureDate, StringFormat={}{0:dd/MM/yyyy}}">
                             <GridViewColumn.Header>
-                                <GridViewColumnHeader Tag="DepartureDate">Vertrek datum</GridViewColumnHeader>
+                                <GridViewColumnHeader Tag="DepartureDate">Vertrekdatum</GridViewColumnHeader>
                             </GridViewColumn.Header>
                         </GridViewColumn>
                         <GridViewColumn Width="auto" DisplayMemberBinding="{Binding GuestID}">
@@ -54,7 +54,7 @@ BorderThickness="1,1,1,1" Background="{x:Null}" />
                         </GridViewColumn>
                         <GridViewColumn Width="auto" DisplayMemberBinding="{Binding EmployeeID}">
                             <GridViewColumn.Header>
-                                <GridViewColumnHeader Tag="Employee">Werknemersnummer</GridViewColumnHeader>
+                                <GridViewColumnHeader Tag="Employee">Werknemer</GridViewColumnHeader>
                             </GridViewColumn.Header>
                         </GridViewColumn>
                         <GridViewColumn Width="auto" DisplayMemberBinding="{Binding PlaceID}">
