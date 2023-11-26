@@ -12,6 +12,7 @@ namespace CampingCore
         public List<Reservation> GetReservations();
         public void RemoveAllReservationsByPlace(Place place);
         public void RemovePlace(Place place);
+        public void AddReservation(Reservation reservation);
         public void AddDummyDataPlaces();
         public void AddDummyData();
         public void AddDummyDataReservations(int placeID, int employeeID, int guestID, int i);

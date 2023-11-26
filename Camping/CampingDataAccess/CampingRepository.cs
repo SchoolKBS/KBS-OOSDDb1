@@ -306,29 +306,26 @@ namespace CampingDataAccess
 
         public void AddReservation(Reservation reservation)
         {
-            try
+            string slq = 
+                "INSERT INTO Reservation (ArrivalDate, DepartureDate, PlaceID, EmployeeID, GuestID, PersonCount, IsPaid, Price)" +
+                "VALUES (@stDate, @enDate, @plID, @emID, @guID, @PersonCount, @IsPaid, @Price)";
+            using(var connection = new SqlConnection(connectionString))
             {
-                string slq = 
-                    "INSERT into Reservation (StartDate, EndData, PlaceID, EmployeeID, GuestID)" +
-                    "VALUES (@stDate, @enDate, @plID, @emID, @guID)";
-                using(var connection = new SqlConnection(connectionString))
+                connection.Open();
+                using(var command = new SqlCommand(slq, connection))
                 {
-                    connection.Open();
-                    using(var command = new SqlCommand(slq))
-                    {
-                        command.Prepare();
-                        command.Parameters.AddWithValue("@stDate", reservation.StartDatum.Date);
-                        command.Parameters.AddWithValue("@enDate", reservation.EindDatum.Date);
-                        command.Parameters.AddWithValue("@plID", reservation.place.PlaceNumber);
-                        command.Parameters.AddWithValue("@emID", 1);
-                        command.Parameters.AddWithValue("@guID", getLatestGuestID());
-                        command.ExecuteNonQuery();
-                    }
+                    command.Prepare();
+                    command.Parameters.AddWithValue("@stDate", reservation.ArrivalDate.Date);
+                    command.Parameters.AddWithValue("@enDate", reservation.DepartureDate.Date);
+                    command.Parameters.AddWithValue("@plID", reservation.PlaceID);
+                    command.Parameters.AddWithValue("@emID", reservation.EmployeeID);
+                    command.Parameters.AddWithValue("@guID", reservation.GuestID);
+                    command.Parameters.AddWithValue("@PersonCount", reservation.personCount);
+                    command.Parameters.AddWithValue("@IsPaid", reservation.IsPaid);
+                    command.Parameters.AddWithValue("@Price", reservation.Price);
+                    command.ExecuteNonQuery();
                 }
-            }
-            catch (Exception ex)
-            {
-                //for custrom exceptions
+                connection.Close();
             }
         }
         public int getLatestGuestID()
@@ -349,6 +346,7 @@ namespace CampingDataAccess
                         }
                     }
                 }
+                connection.Close();
             }
             return result;
         }
