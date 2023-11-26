@@ -9,6 +9,8 @@
         WindowState="Maximized"
         WindowStyle="ThreeDBorderWindow"
         ResizeMode="CanMinimize"
+        
+        
         >
     <Grid>
         <!-- This shows the navigation bar for all pages in the WPF application -->

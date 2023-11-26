@@ -1,4 +1,5 @@
 using CampingCore;
+using CampingCore.PlacesOverviewPageClasses;
 using CampingDataAccess;
 using System.Numerics;
 

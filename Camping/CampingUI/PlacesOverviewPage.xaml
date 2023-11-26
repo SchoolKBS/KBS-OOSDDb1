@@ -28,27 +28,27 @@
                     BorderThickness="1, 1, 1, 1" Background="{x:Null}"/>
 
             <!-- First filter for arrive filter  -->
-            <Label Grid.Row="0" Content="Aankomstdatum" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-            <Label Grid.Row="0" Content="Vertrekdatum" HorizontalAlignment="Left" Margin="120,10,0,0" VerticalAlignment="Top"/>
+            <Label Grid.Row="0" Content="Aankomstdatum" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontFamily="Calibri" FontWeight="Bold"/>
+            <Label Grid.Row="0" Content="Vertrekdatum" HorizontalAlignment="Left" Margin="120,10,0,0" VerticalAlignment="Top" FontFamily="Calibri" FontWeight="Bold"/>
             <DatePicker Name="ArrivalDatePicker" Tag="-2" Grid.Row="0" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
             <DatePicker Name="DepartureDatePicker" Tag="-1" Grid.Row="0" HorizontalAlignment="Left" Margin="120,40,0,0" VerticalAlignment="Top" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
 
             <!-- Second filter for power  -->
-            <RadioButton Name="PowerRadioButton1" Grid.Row="0" Content="Wel stroom" HorizontalAlignment="Left" Margin="10,75,0,0" VerticalAlignment="Top" Checked="PowerRadioButton_Selected"/>
-            <RadioButton Name="PowerRadioButton2" Grid.Row="0" Content="Geen stroom" HorizontalAlignment="Left" Margin="120,75,0,0" VerticalAlignment="Top" Checked="PowerRadioButton_Selected"/>
-            <RadioButton Name="PowerRadioButton3" Grid.Row="0" Content="Geen voorkeur" HorizontalAlignment="Left" Margin="240,75,0,0" VerticalAlignment="Top" Checked="PowerRadioButton_Selected" IsChecked="True"/>
+            <RadioButton Name="PowerRadioButton1" Grid.Row="0" Content="Wel stroom" HorizontalAlignment="Left" Margin="10,75,0,0" VerticalAlignment="Top" Checked="PowerRadioButton_Selected" FontFamily="Calibri" FontWeight="Bold"/>
+            <RadioButton Name="PowerRadioButton2" Grid.Row="0" Content="Geen stroom" HorizontalAlignment="Left" Margin="120,75,0,0" VerticalAlignment="Top" Checked="PowerRadioButton_Selected" FontFamily="Calibri" FontWeight="Bold"/>
+            <RadioButton Name="PowerRadioButton3" Grid.Row="0" Content="Geen voorkeur" HorizontalAlignment="Left" Margin="240,75,0,0" VerticalAlignment="Top" Checked="PowerRadioButton_Selected" IsChecked="True" FontFamily="Calibri" FontWeight="Bold"/>
 
             <!-- Third filter for amount of people  -->
-            <Label Content="Aantal personen" HorizontalAlignment="Left" Margin="10,100,0,0" VerticalAlignment="Top"/>
+            <Label Content="Aantal personen" HorizontalAlignment="Left" Margin="10,100,0,0" VerticalAlignment="Top" FontFamily="Calibri" FontWeight="Bold"/>
             <TextBox x:Name="PersonCountTextBox" HorizontalAlignment="Left" Margin="120,105,0,0" VerticalAlignment="Top" Width="60" Height="20" TextChanged="TextBox_Changed"/>
 
             <!-- Fourth filter for max price -->
-            <Label Content="Max prijs" HorizontalAlignment="Left" Margin="10,135,0,0" VerticalAlignment="Top"/>
+            <Label Content="Max prijs" HorizontalAlignment="Left" Margin="10,135,0,0" VerticalAlignment="Top" FontFamily="Calibri" FontWeight="Bold"/>
             <TextBox x:Name="MaxPriceRangeTextBox" HorizontalAlignment="Left" Margin="120,140,0,0" VerticalAlignment="Top" Width="60" Height="20" TextChanged="TextBox_Changed"/> 
 
             <!-- Buttons to apply or remove the filters -->
             <Button Content="Pas filters toe" Margin="10,175,0,25" Click="ApplyFilters_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80"/>
-            <Button Content="Verwijder filters" Margin="120,175,0,25" Click="RemoveFilters_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80"/>
+            <Button Content="Verwijder filters" Margin="120,175,0,25" Click="RemoveFilters_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="90"/>
 
             <!-- Show the places from the camping in a list in a grid view and sort them.  -->
             <ListView Grid.Row="1" Name="PlacesListView" SelectionChanged="PlacesListView_SelectionChanged">
@@ -61,7 +61,7 @@
                         </GridViewColumn>
                         <GridViewColumn Width="60" DisplayMemberBinding="{Binding PricePerNight}">
                             <GridViewColumn.Header>
-                                <GridViewColumnHeader Tag="Price" Click="SetSorterColumn_Click">Prijs</GridViewColumnHeader>
+                                <GridViewColumnHeader Tag="Price" Click="SetSorterColumn_Click">Prijs ($)</GridViewColumnHeader>
                             </GridViewColumn.Header>
                         </GridViewColumn>
                         <GridViewColumn Width="120" DisplayMemberBinding="{Binding PersonCount}">
@@ -112,7 +112,8 @@
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="1" Name="NewReservationButton" Content="Nieuwe Resevering Maken" Margin="20" Click="NewReservation_Click"/>
+                <Button Grid.Column="0" Name="NewReservationButton" Content="Nieuwe Resevering Maken" Margin="20" Height="50" Click="NewReservation_Click"/>
+                <Button Grid.Column="2" Name="DeletePlaceButton" Content="Verwijder plaats" Margin="20" Height="50" Click="DeletePlaceButton_Click"/>
             </Grid>
         </Grid>
     </Grid>
