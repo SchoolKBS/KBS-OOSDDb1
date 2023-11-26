@@ -26,6 +26,7 @@ namespace CampingUI
     public partial class PlacesOverviewPage : Page
     {
         private Camping _camping;
+        public Camping Camping { get { return _camping; } }
         private IEnumerable<Place> _placesSortedAndOrFiltered;
         private bool? _hasPower;
         public int PersonCount = 0;
@@ -34,6 +35,7 @@ namespace CampingUI
         private double _maxPriceRange;
         private bool _wrongFilter = false;
         private string _headerTag;
+        public bool FilterAplied = false;
 
         public PlacesOverviewPage(Camping camping, CampingRepository campingRepository)
         {
@@ -185,6 +187,7 @@ namespace CampingUI
                 _placesSortedAndOrFiltered = PlacesOverviewPageFilter.GetFilteredListOnPower(hasPower, _placesSortedAndOrFiltered, _camping);
                 _placesSortedAndOrFiltered = PlacesOverviewPageSorting.SetSortDuringFiltering(_isSortedAscending, _headerTag, _placesSortedAndOrFiltered);
                 PlacesListView.ItemsSource = _placesSortedAndOrFiltered;
+                FilterAplied = true;
             }
 
         }
@@ -204,6 +207,7 @@ namespace CampingUI
             PlacesListView.ItemsSource = _placesSortedAndOrFiltered;
             ResetBackgroundsFilters();
             _wrongFilter = false;
+            FilterAplied = false;
         }
 
         //Function to reset all the filters input fields to the standard background color
@@ -234,6 +238,11 @@ namespace CampingUI
             _isSortedAscending = !_isSortedAscending;
             _headerTag = headerTag;
             return _placesSortedAndOrFiltered;
+        }
+
+        private void NewReservation_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new ReservationCreationPage(this));
         }
 
 

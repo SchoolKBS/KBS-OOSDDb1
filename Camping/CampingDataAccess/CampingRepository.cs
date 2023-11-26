@@ -49,7 +49,54 @@ namespace CampingDataAccess
             
 
         }
-
+        public void AddReservation(Reservation reservation)
+        {
+            try
+            {
+                string slq = 
+                    "INSERT into Reservation (StartDate, EndData, PlaceID, EmployeeID, GuestID)" +
+                    "VALUES (@stDate, @enDate, @plID, @emID, @guID)";
+                using(var connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    using(var command = new SqlCommand(slq))
+                    {
+                        command.Prepare();
+                        command.Parameters.AddWithValue("@stDate", reservation.StartDatum.Date);
+                        command.Parameters.AddWithValue("@enDate", reservation.EindDatum.Date);
+                        command.Parameters.AddWithValue("@plID", reservation.place.PlaceNumber);
+                        command.Parameters.AddWithValue("@emID", 1);
+                        command.Parameters.AddWithValue("@guID", getLatestGuestID());
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //for custrom exceptions
+            }
+        }
+        public int getLatestGuestID()
+        {
+            int result = 0;
+            string sql =
+                "SELECT MAX(GuestID) FROM Guest";
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using(var command = new SqlCommand(sql))
+                {
+                    using(var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            result = reader.GetInt32(0);
+                        }
+                    }
+                }
+            }
+            return result;
+        }
         public List<Reservation> GetReservations()
         {
             throw new NotImplementedException();

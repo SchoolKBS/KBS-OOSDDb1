@@ -112,7 +112,7 @@
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="1" Name="NewReservationButton" Content="Nieuwe Resevering Maken" Margin="20"/>
+                <Button Grid.Column="1" Name="NewReservationButton" Content="Nieuwe Resevering Maken" Margin="20" Click="NewReservation_Click"/>
             </Grid>
         </Grid>
     </Grid>

@@ -1,0 +1,73 @@
+﻿<Page x:Class="CampingUI.ReservationCreationPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:CampingUI"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="ReservationCreationPage">
+
+    <Grid Background="LightGray">
+        <Grid Background="White" HorizontalAlignment="Center" VerticalAlignment="Center" Width="600" Height="500">
+        <Grid.RowDefinitions>
+                <RowDefinition Height="200"/>
+                <RowDefinition Height="200"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <!--Grid for the reservation information-->
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                <!-- Datepicker for the reservation -->
+                <Label Grid.Row="1" Grid.Column="0" Content="Aankomsttijd" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,20,0"/>
+                <Label Grid.Row="2" Grid.Column="0" Content="Vertrektijd" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,20,0"/>
+                <DatePicker Name="ArrivalDatePicker" Grid.Row="1" Grid.Column="1" Height="25" Width="160" VerticalAlignment="Center" HorizontalAlignment="Left" SelectedDateChanged="ArrivalDatePicker_DateChanged"/>
+                <DatePicker Name="DepartureDatePicker" Grid.Row="2" Grid.Column="1" Height="25" Width="160" VerticalAlignment="Center" HorizontalAlignment="Left" SelectedDateChanged="DepartureDatePicker_DateChanged"/>
+                <!-- People Count input -->
+                <Label Grid.Row="3" Grid.Column="0" Content="Aantal Personen" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,20,0"/>
+                <TextBox x:Name="PeopleCountText" Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" Height="25" Width="160" HorizontalAlignment="Left" TextChanged="PeopleCountText_Changed"/>
+                <!-- Price fields -->
+                <Grid Grid.Row="4" Grid.Column="0" Margin="0,0,20,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0" Content="Prijs:" HorizontalAlignment="Right"/>
+                    <TextBox Grid.Column="1" x:Name="PriceTB" IsReadOnly="True"/>
+                </Grid>
+                <Grid Grid.Row="4" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0" Content="Is betaald" HorizontalAlignment="Right"/>
+                    <CheckBox Grid.Column="1" x:Name="IsPaidCB" VerticalAlignment="Center"/>
+                </Grid>
+            </Grid>
+            <!--Grid for the Guest information-->
+            <Grid Grid.Row="1">
+                
+            </Grid>
+            <!-- Accept and cancel buttons -->
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Name="CancelReservationCreationBtn" Content="Cancel" Height="40" Margin="40,0,40,0" Click="CancelReservation_Click"/>
+                <Button Grid.Column="1" Name="AcceptReservationCreationBtn" Content="Accept" Height="40" Margin="40,0,40,0" Click="AcceptReservation_Click"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>
