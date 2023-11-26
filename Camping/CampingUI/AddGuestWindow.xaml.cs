@@ -46,7 +46,7 @@ namespace CampingUI
 
                 if (CheckIfInputIsValid(TextInput))
                 {
-                    Guest guest = new(FirstName.Text, Insertion.Text, LastName.Text, Address.Text, City.Text, Email.Text, PhoneNumber.Text, PostalCode.Text);
+                    Guest guest = new Guest(FirstName.Text, Insertion.Text, LastName.Text, Address.Text, City.Text, Email.Text, PhoneNumber.Text, PostalCode.Text);
 
                     Database database = new Database();
 

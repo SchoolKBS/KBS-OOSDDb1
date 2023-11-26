@@ -10,7 +10,7 @@
 
     <Grid Background="LightGray">
         <Grid Background="White" HorizontalAlignment="Center" VerticalAlignment="Center" Width="600" Height="500">
-        <Grid.RowDefinitions>
+            <Grid.RowDefinitions>
                 <RowDefinition Height="200"/>
                 <RowDefinition Height="200"/>
                 <RowDefinition Height="auto"/>
@@ -57,7 +57,93 @@
             </Grid>
             <!--Grid for the Guest information-->
             <Grid Grid.Row="1">
-                
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <!-- Firstname Grid -->
+                    <Grid Grid.Row="0" Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Content="Voornaam*" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        <TextBox x:Name="FirstNameTB" Grid.Column="1" Margin="5" TextChanged="Input_Changed"/>
+                    </Grid>
+                    <!-- Infix Grid -->
+                    <Grid Grid.Row="0" Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Content="Tussenvoegsel" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        <TextBox x:Name="InfixTB" Grid.Column="1" Margin="5"/>
+                    </Grid>
+                    <!-- Lastname Grid -->
+                    <Grid Grid.Row="1" Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Content="Achternaam*" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        <TextBox x:Name="LastnameTB" Grid.Column="1" Margin="5" TextChanged="Input_Changed"/>
+                    </Grid>
+                    <!-- Postalcode Grid -->
+                    <Grid Grid.Row="2" Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Content="Postcode" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        <TextBox x:Name="PostalCodeTB" Grid.Column="1" Margin="5"/>
+                    </Grid>
+                    <!-- City Grid -->
+                    <Grid Grid.Row="2" Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Content="Stad" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        <TextBox x:Name="CityTB" Grid.Column="1" Margin="5"/>
+                    </Grid>
+                    <!-- Address Grid -->
+                    <Grid Grid.Row="3" Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Content="Adres" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        <TextBox x:Name="AddressTB" Grid.Column="1" Margin="5"/>
+                    </Grid>
+                    <!-- Phone number Grid -->
+                    <Grid Grid.Row="4" Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Content="Telefoonnummer*" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        <TextBox x:Name="PhoneNumberTB" Grid.Column="1" Margin="5" TextChanged="Input_Changed"/>
+                    </Grid>
+                    <!-- Email Grid -->
+                    <Grid Grid.Row="4" Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Content="Email" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        <TextBox x:Name="EmailTB" Grid.Column="1" Margin="5"/>
+                    </Grid>
+                </Grid>
             </Grid>
             <!-- Accept and cancel buttons -->
             <Grid Grid.Row="2">
@@ -65,8 +151,8 @@
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Name="CancelReservationCreationBtn" Content="Cancel" Height="40" Margin="40,0,40,0" Click="CancelReservation_Click"/>
-                <Button Grid.Column="1" Name="AcceptReservationCreationBtn" Content="Accept" Height="40" Margin="40,0,40,0" Click="AcceptReservation_Click"/>
+                <Button Grid.Column="0" Name="AcceptReservationCreationBtn" Content="Accept" Height="40" Margin="40,0,40,0" Click="AcceptReservation_Click"/>
+                <Button Grid.Column="1" Name="CancelReservationCreationBtn" Content="Cancel" Height="40" Margin="40,0,40,0" Click="CancelReservation_Click"/>
             </Grid>
         </Grid>
     </Grid>

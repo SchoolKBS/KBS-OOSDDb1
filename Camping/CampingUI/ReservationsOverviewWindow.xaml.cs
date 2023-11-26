@@ -50,13 +50,14 @@ namespace CampingUI
                 if (reservationToDelete != null)
                 {
                     // Show a confirmation dialog
-                    MessageBoxResult result = MessageBox.Show("Weet je zeker dat je reservering " + reservationToDelete.ReservationNumber + "wil verwijderen?", "Waarschuwing!", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    MessageBoxResult result = MessageBox.Show("Weet je zeker dat je reservering " + reservationToDelete.ReservationNumber + " wil verwijderen?", "Waarschuwing!", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
                     // Check the users choice
                     if (result == MessageBoxResult.Yes)
                     {
                         // User clicked Yes, so delete the reservation
                         _camping.Reservations.Remove(reservationToDelete);
+                        _camping.CampingRepository.RemoveReservation(reservationToDelete);
 
                         // Refresh the ListView
                         LoadReservationList();

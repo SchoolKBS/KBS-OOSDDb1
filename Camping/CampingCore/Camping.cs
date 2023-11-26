@@ -14,8 +14,6 @@ namespace CampingCore
             this.CampingRepository = campingRepository;
             this.Reservations = this.CampingRepository.GetReservations();
             this.Places = this.CampingRepository.GetPlaces();
-
-
         }
     }
 }

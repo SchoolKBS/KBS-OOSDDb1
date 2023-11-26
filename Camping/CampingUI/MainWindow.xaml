@@ -17,7 +17,9 @@
         <StackPanel Orientation="Horizontal" Height="75" HorizontalAlignment="Right" VerticalAlignment="Top">
             <Button x:Name="ReservationsButton"  Content="Reserveringen" Width="200" Height="50" FontSize="20" Margin="0, 0, 12.5, 0" Click="ReservationsButton_Click"/>
             <Button x:Name="PlacesButton" Content="Plaatsen" Width="200" Height="50" FontSize="20" Margin="12.5, 0, 0, 0" Click="PlacesButton_Click"/>
+            <!--
             <Button Content="Gasten" Width="200" Height="50" FontSize="20" Margin="12.5, 0, 0, 0" Click="BtnClickGuests"/>
+            -->
         </StackPanel>
         <!-- In this frame the pages will show up -->
         <Frame x:Name="Main" Margin="0, 75, 0, 0" NavigationUIVisibility="Hidden"/>

@@ -1,4 +1,5 @@
 ﻿using CampingCore;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,11 +66,11 @@ namespace CampingUI
         }
         private double CalcPrice()
         {
-            int.TryParse(PeopleCountText.Text, out var TextToString);
-            if (TextToString.GetType() == typeof(int) && TextToString > 0)
+            int.TryParse(PeopleCountText.Text, out var TextToInt);
+            if (TextToInt.GetType() == typeof(int) && TextToInt > 0 && TextToInt <= place.PersonCount)
             {
                 PeopleCountText.Background = null;
-                return place.PricePerNight * TextToString;
+                return place.PricePerNight * TextToInt;
             }
             else
             {
@@ -79,9 +80,11 @@ namespace CampingUI
         }
         public bool CheckValues()
         {
-            if(!CheckDates()) return false;
-            if(!CheckPeopleCount()) return false;
-            return true;
+            bool result = true;
+            if(!CheckDates() && result) result = false;
+            if(!CheckPeopleCount() && result) result = false;
+            if(!CheckGuestInputFields() && result) result = false;
+            return result;
         }
         public bool CheckDates()
         {
@@ -93,17 +96,28 @@ namespace CampingUI
             {
                 DepartureDatePicker.Background = Brushes.Red;
             }
-            return !(!ArrivalDatePicker.SelectedDate.HasValue || !DepartureDatePicker.SelectedDate.HasValue);
+            return ArrivalDatePicker.SelectedDate.HasValue && DepartureDatePicker.SelectedDate.HasValue;
         }
         public bool CheckPeopleCount()
         {
             bool result = int.TryParse(PeopleCountText.Text, out int number);
             if (!result) PeopleCountText.Background = Brushes.Red;
+            else if(number > place.PersonCount)
+            {
+                result = false;
+                PeopleCountText.Background = Brushes.Red;
+            }
             return result;
+        }
+        public bool CheckGuestInputFields()
+        {
+            if (FirstNameTB.Text.IsNullOrEmpty()) FirstNameTB.Background = Brushes.Red;
+            if (LastnameTB.Text.IsNullOrEmpty()) LastnameTB.Background = Brushes.Red;
+            if (PhoneNumberTB.Text.IsNullOrEmpty()) PhoneNumberTB.Background = Brushes.Red;
+            return !FirstNameTB.Text.IsNullOrEmpty() && !LastnameTB.Text.IsNullOrEmpty() && !PhoneNumberTB.Text.IsNullOrEmpty();
         }
         private void PeopleCountText_Changed(object sender, TextChangedEventArgs e)
         {
-            
             price = CalcPrice();
             PriceTB.Text = price.ToString() + "$";
         }
@@ -145,8 +159,18 @@ namespace CampingUI
         {
             if (CheckValues())
             {
-                _camping.CampingRepository.AddReservation(new Reservation(0, (DateTime)ArrivalDatePicker.SelectedDate, (DateTime)DepartureDatePicker.SelectedDate, place.PlaceNumber, 2, 1, int.Parse(PeopleCountText.Text), IsPaidCB.IsChecked.Value, price));
+                Guest guest = new Guest(FirstNameTB.Text, InfixTB.Text, LastnameTB.Text, AddressTB.Text, CityTB.Text, EmailTB.Text, PhoneNumberTB.Text, PostalCodeTB.Text);
+                _camping.CampingRepository.AddGuest(guest);
+                _camping.CampingRepository.AddReservation(new Reservation(0, (DateTime)ArrivalDatePicker.SelectedDate, (DateTime)DepartureDatePicker.SelectedDate, place.PlaceNumber, 2, _camping.CampingRepository.GetLastGuestID(), int.Parse(PeopleCountText.Text), IsPaidCB.IsChecked.Value, price));
                 NavigationService.GoBack();
+            }
+        }
+
+        private void Input_Changed(object sender, TextChangedEventArgs e)
+        {
+            if(sender.GetType() == typeof(TextBox)) {
+                TextBox textbox = (TextBox)sender;
+                textbox.Background = null;
             }
         }
     }

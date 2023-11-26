@@ -9,6 +9,7 @@ namespace CampingCore
     public class Guest
     {
         public int ID { get; set; }
+        public string FirstName { get; set; }
         public string LastName { get; set; }
         public string PrepositionName { get; set; }
         public string Address { get; set; }
@@ -28,6 +29,10 @@ namespace CampingCore
             this.Email = email;
             this.PhoneNumber = phoneNumber;
             this.PostalCode = postalCode;
+        }
+        public Guest(string firstName, string prepositionName, string lastName, string address, string city, string email, string phoneNumber, string postalCode) : this(1, firstName, prepositionName, lastName, address, city, email, phoneNumber, postalCode)
+        {
+
         }
 
     }

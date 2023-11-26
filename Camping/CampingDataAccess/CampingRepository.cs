@@ -391,6 +391,66 @@ namespace CampingDataAccess
         {
             throw new NotImplementedException();
         }
+
+        public void RemoveReservation(Reservation reservation)
+        {
+            string sql = "DELETE FROM Reservation WHERE ReservationID = @ReservationID";
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using(var command = new SqlCommand(sql, connection)) {
+                    command.Prepare();
+                    command.Parameters.AddWithValue("@ReservationID", reservation.ReservationNumber);
+                    command.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+        }
+
+        public void AddGuest(Guest guest)
+        {
+            string sql = "INSERT INTO Guest (FirstName, LastName, Infix, Email, Phonenumber, City, Address, PostalCode) VALUES (@FirstName, @LastName, @Infix, @Email, @Phonenumber, @City, @Address, @PostalCode);";
+            using(var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using(var command = new SqlCommand(sql, connection))
+                {
+                    command.Prepare();
+                    command.Parameters.AddWithValue("@FirstName", guest.FirstName);
+                    command.Parameters.AddWithValue("@LastName", guest.LastName);
+                    command.Parameters.AddWithValue("@Infix", guest.PrepositionName);
+                    command.Parameters.AddWithValue("@Email", guest.Email);
+                    command.Parameters.AddWithValue("@Phonenumber", guest.PhoneNumber);
+                    command.Parameters.AddWithValue("@City", guest.City);
+                    command.Parameters.AddWithValue("@Address", guest.Address);
+                    command.Parameters.AddWithValue("@PostalCode", guest.PostalCode);
+                    command.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+        }
+
+        public int GetLastGuestID()
+        {
+            string sql = "SELECT MAX(GuestID) FROM Guest";
+            int result = 0;
+            using(var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using(var command = new SqlCommand(sql,connection))
+                {
+                    using(var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            result = reader.GetInt32(0);
+                        }
+                    }
+                }
+                connection.Close();
+            }
+            return result;
+        }
     }
 }
 
