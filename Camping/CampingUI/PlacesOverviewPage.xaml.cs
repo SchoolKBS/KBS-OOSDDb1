@@ -158,7 +158,8 @@ namespace CampingUI
             else
             {
                 int tagValue = int.Parse(datePicker.Tag.ToString());
-                date = DateTime.MaxValue.AddDays(tagValue);
+                if (tagValue == -1) date = DateTime.MinValue;
+                else date = DateTime.MaxValue.AddDays(tagValue);
             }
             return date;
             //Kijken in de reserveringen lijst op die specifieke plek, en kijken of de gekozen tijdperiode nog niet bestaat
