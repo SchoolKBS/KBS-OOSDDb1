@@ -54,6 +54,7 @@ namespace CampingUI
         private void ArrivalDatePicker_DateChanged(object sender, SelectionChangedEventArgs e)
         {
             ArrivalDatePicker.Background = null;
+            DepartureDatePicker.SelectedDate = null;
             this.ArrivalDatePicker.Text = ArrivalDatePicker.SelectedDate.ToString();
             ShowAvailableDatesDeparture();
 
@@ -67,10 +68,11 @@ namespace CampingUI
         private double CalcPrice()
         {
             int.TryParse(PeopleCountText.Text, out var TextToInt);
-            if (TextToInt.GetType() == typeof(int) && TextToInt > 0 && TextToInt <= place.PersonCount)
+            if (TextToInt.GetType() == typeof(int) && TextToInt > 0 && TextToInt <= place.PersonCount && ArrivalDatePicker.SelectedDate.HasValue && DepartureDatePicker.SelectedDate.HasValue)
             {
+                int dayscount = (int) DepartureDatePicker.SelectedDate.Value.Subtract(ArrivalDatePicker.SelectedDate.Value).TotalDays;
                 PeopleCountText.Background = null;
-                return place.PricePerNight * TextToInt;
+                return place.PricePerNight * TextToInt * dayscount;
             }
             else
             {
@@ -135,12 +137,13 @@ namespace CampingUI
         {
             if (ArrivalDatePicker.SelectedDate != null)
             {
+                DepartureDatePicker.BlackoutDates.Clear();
                 DateTime arrivalDate = (DateTime) ArrivalDatePicker.SelectedDate;
                 DepartureDatePicker.IsEnabled = true;
                 DepartureDatePicker.DisplayDateStart = new DateTime(arrivalDate.Year, arrivalDate.Month, 1);
                 DepartureDatePicker.BlackoutDates.Add(new CalendarDateRange(DepartureDatePicker.DisplayDateStart.Value, arrivalDate));
                 var reservations = _camping.Reservations.Where(r => r.PlaceID == place.PlaceNumber && r.ArrivalDate > DateTime.Today).ToList();
-                if (reservations.Count > 0)
+                if (reservations.Count > 0  && reservations.Min(r => r.ArrivalDate) > ArrivalDatePicker.SelectedDate)
                 {
                     var SoonestReservationStart = reservations.Min(r => r.ArrivalDate);
                     DepartureDatePicker.DisplayDateEnd = new DateTime(SoonestReservationStart.Year, SoonestReservationStart.Month, DateTime.DaysInMonth(SoonestReservationStart.Year, SoonestReservationStart.Month));
