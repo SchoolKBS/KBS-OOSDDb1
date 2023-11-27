@@ -21,10 +21,10 @@ namespace CampingDataAccess
                     using (MySqlCommand command = new MySqlCommand("INSERT INTO place (PlaceID, Power, SurfaceArea, PricePerNightPerPerson, AmountOfPeople, description) VALUES (@PlaceID, @Power, @SurfaceArea, @PricePerNightPerPerson, @AmountOfPeople, @description)", connection))
                     {
                         command.Parameters.AddWithValue("@PlaceID", place.PlaceNumber);
-                        command.Parameters.AddWithValue("@Power", place.HasElectricity);
+                        command.Parameters.AddWithValue("@Power", place.HasPower);
                         command.Parameters.AddWithValue("@SurfaceArea", place.SurfaceArea);
                         command.Parameters.AddWithValue("@PricePerNightPerPerson", place.PricePerNight);
-                        command.Parameters.AddWithValue("@AmountOfPeople", place.NumberOfPeople);
+                        command.Parameters.AddWithValue("@AmountOfPeople", place.PersonCount);
                         command.Parameters.AddWithValue("@description", place.Description);
                         command.ExecuteNonQuery();
                     }

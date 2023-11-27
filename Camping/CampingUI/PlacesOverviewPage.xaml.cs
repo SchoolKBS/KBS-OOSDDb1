@@ -285,6 +285,7 @@ namespace CampingUI
         {
             if(PlacesListView.SelectedItems.Count > 0)
             {
+                AddPlaceGrid.Visibility = Visibility.Collapsed;
                 Place place = (Place)PlacesListView.SelectedItem;
                 nrLabel.Content = place;
                 areaLabel.Content = "Oppervlakte: " + place.SurfaceArea;
@@ -314,8 +315,15 @@ namespace CampingUI
             }
         }
 
+        private void AddPlaceButton_Click(object sender, RoutedEventArgs e)
+        {
+            PlaceOverviewGrid.Visibility = Visibility.Collapsed;
+            AddPlaceGrid.Visibility = Visibility.Visible;
+
+        }
         public void AddPlaceOnClick(object sender, RoutedEventArgs e)
         {
+
             string[] TextInput =
             {
                 PlaceNumber.Text,
@@ -359,11 +367,13 @@ namespace CampingUI
                 //Make a new place with the input of the textboxes
                 Place place = new Place(placeNumber, hasElectricity, surfaceArea, amountOfPeople, pricePerPersonPerNight, placeDescription);
 
-                Database db = new Database();
-                db.AddPlaceToDatabase(place);
+                //Database db = new Database();
+                //db.AddPlaceToDatabase(place);
+                _camping.CampingRepository.AddPlace(place);
+
 
                 //Clears textboxes when the data is inserted in the database
-                foreach (var textbox in AddPlace.Children)
+                foreach (var textbox in AddPlaceGrid.Children)
                 {
                     if (textbox is TextBox textBox)
                     {
@@ -373,8 +383,11 @@ namespace CampingUI
 
                 AddPlaceMessage.Text = "Nieuwe plaats is toegevoegd";
                 AddPlaceMessage.Foreground = Brushes.Green;
+                _camping.Places = _camping.CampingRepository.GetPlaces();
+                PlacesListView.ItemsSource = _camping.Places;
 
-            } catch(Exception ex)
+            } 
+            catch(Exception ex)
             {
                 AddPlaceMessage.Text = "Ongeldigde input";
                 AddPlaceMessage.Foreground = Brushes.Red;
