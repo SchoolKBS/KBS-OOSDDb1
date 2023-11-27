@@ -43,11 +43,6 @@ namespace CampingUI
 
             Main.Content = new PlacesOverviewPage(Camping, CampingRepository);
         }
-
-        private void BtnClickGuests(object sender, RoutedEventArgs e) 
-        {
-            Main.Content = new AddGuestWindow();
-        }
     }
 
 
