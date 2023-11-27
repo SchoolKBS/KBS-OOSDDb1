@@ -11,6 +11,8 @@ namespace CampingDataAccess
     public class Database
     {
         private string connectionString = "Server=localhost;Database=camping;User ID=root; Password: lestaenbenthe";
+        
+        //Function to add place to DB (mySQL)
         public void AddPlaceToDatabase(Place place)
         {
             try
@@ -35,6 +37,8 @@ namespace CampingDataAccess
                 Console.WriteLine(ex.Message);
             }
         }
+
+        //Function to add guest to DB (mySQL)
         public void AddGuestToDatabase(Guest guest)
         {
             try

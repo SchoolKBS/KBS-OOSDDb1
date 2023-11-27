@@ -342,6 +342,8 @@ namespace CampingUI
             AddPlaceGrid.Visibility = Visibility.Visible;
 
         }
+
+        //Function (EventHandler) To add a place when the add place button is clicked
         public void AddPlaceOnClick(object sender, RoutedEventArgs e)
         {
 
@@ -361,6 +363,7 @@ namespace CampingUI
             }
         }
 
+        //Function to initiate the addPlace function from the database and show/hide the correct screen
         public void AddPlaceToDatabase()
         {
             try
@@ -415,6 +418,8 @@ namespace CampingUI
             }
 
         }
+
+        //Function to check if the input is null or not from a text array
         public bool CheckIfInputIsNotNull(string[] TextInput)
         {
             foreach (string input in TextInput)
