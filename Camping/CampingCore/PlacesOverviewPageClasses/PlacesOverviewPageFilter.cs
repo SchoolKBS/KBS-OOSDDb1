@@ -41,9 +41,9 @@ namespace CampingCore.PlacesOverviewPageClasses
         }
 
         // Function to filter the list of places on the arrival and departure date
-        public static IEnumerable<Place> GetFilteredListOnDate(DateTime arrivalDate, DateTime departureDate, IEnumerable<Place> _placesSortedAndOrFiltered, Camping _camping)
+        public static IEnumerable<Place> GetFilteredListOnDate(bool emptyDates, DateTime arrivalDate, DateTime departureDate, IEnumerable<Place> _placesSortedAndOrFiltered, Camping _camping)
         {
-            if (arrivalDate.Date < departureDate.Date && arrivalDate.Date >= DateTime.Now.Date)
+            if (arrivalDate.Date < departureDate.Date && arrivalDate.Date >= DateTime.Now.Date && !emptyDates)
             {
                 _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Intersect(GetAvailablePlacesBetweenDates(arrivalDate.Date, departureDate.Date, _camping));
             }

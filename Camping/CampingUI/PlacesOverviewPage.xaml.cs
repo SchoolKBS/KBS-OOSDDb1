@@ -38,6 +38,7 @@ namespace CampingUI
         private bool _wrongFilter = false;
         private string _headerTag;
         public bool FilterAplied = false;
+        private bool _emptyDates = true;
 
         public PlacesOverviewPage(Camping camping, CampingRepository campingRepository)
         {
@@ -107,7 +108,7 @@ namespace CampingUI
             }
         }
 
-        // Function to get the max price range from the MaxPriceRangeTextBox text
+        // Function to get the max Price range from the MaxPriceRangeTextBox text
         private void SetMaxPriceFromMaxPriceRangeTextBox()
         {
             double number;
@@ -137,11 +138,19 @@ namespace CampingUI
         {
             _arrivalDate = GetDatePickerDate(ArrivalDatePicker);
             _departureDate = GetDatePickerDate(DepartureDatePicker);
-            if (_arrivalDate >= _departureDate || _arrivalDate.Date < DateTime.Now.Date)
+            if (_arrivalDate.Equals(DateTime.MaxValue.Date) && _departureDate.Equals(DateTime.MinValue.Date))
             {
-                ArrivalDatePicker.Background = Brushes.Red;
-                DepartureDatePicker.Background = Brushes.Red;
-                _wrongFilter = true;
+                _emptyDates = true;
+            }
+            else
+            {
+                _emptyDates = false;
+                if (_arrivalDate >= _departureDate || _arrivalDate.Date < DateTime.Now.Date)
+                {
+                    ArrivalDatePicker.Background = Brushes.Red;
+                    DepartureDatePicker.Background = Brushes.Red;
+                    _wrongFilter = true;
+                }
             }
         }
 
@@ -158,8 +167,8 @@ namespace CampingUI
             else
             {
                 int tagValue = int.Parse(datePicker.Tag.ToString());
-                if (tagValue == -1) date = DateTime.MinValue;
-                else date = DateTime.MaxValue.AddDays(tagValue);
+                if (tagValue == -1) date = DateTime.MinValue.Date;
+                else date = DateTime.MaxValue.Date;
             }
             return date;
             //Kijken in de reserveringen lijst op die specifieke plek, en kijken of de gekozen tijdperiode nog niet bestaat
@@ -181,8 +190,8 @@ namespace CampingUI
 
         }
 
-        // Function to filter the places List based on either or choice on arrival and departure date, amount of people possible on the place,
-        // The max price a guest is willing to pay and if it has power or not 
+        // Function to filter the places List based on either or choice on arrival and departure date, amount of people possible on the _place,
+        // The max Price a guest is willing to pay and if it has power or not 
         private void Filter(DateTime arrivalDate, DateTime departureDate, int personCount, double maxPriceRange, bool? hasPower)
         {
 
@@ -190,7 +199,7 @@ namespace CampingUI
             {
                 _placesSortedAndOrFiltered = PlacesOverviewPageFilter.GetFilteredListOnPrice(maxPriceRange, _placesSortedAndOrFiltered, _camping);
                 _placesSortedAndOrFiltered = PlacesOverviewPageFilter.GetFilteredListOnPersonCount(personCount, _placesSortedAndOrFiltered, _camping);
-                _placesSortedAndOrFiltered = PlacesOverviewPageFilter.GetFilteredListOnDate(arrivalDate, departureDate, _placesSortedAndOrFiltered, _camping);
+                _placesSortedAndOrFiltered = PlacesOverviewPageFilter.GetFilteredListOnDate(_emptyDates, arrivalDate, departureDate, _placesSortedAndOrFiltered, _camping);
                 _placesSortedAndOrFiltered = PlacesOverviewPageFilter.GetFilteredListOnPower(hasPower, _placesSortedAndOrFiltered, _camping);
                 _placesSortedAndOrFiltered = PlacesOverviewPageSorting.SetSortDuringFiltering(_isSortedAscending, _headerTag, _placesSortedAndOrFiltered);
                 PlacesListView.ItemsSource = _placesSortedAndOrFiltered;
@@ -264,7 +273,7 @@ namespace CampingUI
             NavigationService.Navigate(new ReservationCreationPage(this));
         }
 
-        //Function (EventHandler) that deletes a place and its reservations from the camping
+        //Function (EventHandler) that deletes a _place and its reservations from the camping
         private void DeletePlaceButton_Click(object sender, RoutedEventArgs e)
         {
             Place place = (Place)PlacesListView.SelectedItem;
@@ -291,7 +300,7 @@ namespace CampingUI
         }
 
 
-        // Is used everytime a different place is selected in the place list
+        // Is used everytime a different _place is selected in the _place list
         private void PlacesListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if(PlacesListView.SelectedItems.Count > 0)
@@ -311,6 +320,7 @@ namespace CampingUI
                 ReservationCalender.BlackoutDates.Clear();
 
                 ReservationCalender.SelectedDate = null;
+                _camping.Reservations = _camping.CampingRepository.GetReservations();
                 var reservations = _camping.Reservations.Where(r => r.PlaceID == place.PlaceNumber).ToList();
                 reservations = reservations.Where(r => r.DepartureDate >= DateTime.Now).ToList();
                 ReservationCalender.BlackoutDates.AddDatesInPast();

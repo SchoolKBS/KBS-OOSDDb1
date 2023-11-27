@@ -90,7 +90,7 @@ namespace UnitTests
             IEnumerable<Place> places = new List<Place>();
             camping.Places = listToCheck;
             places = listToCheck;
-            places = PlacesOverviewPageFilter.GetFilteredListOnDate(DateTime.Now.Date.AddDays(1), DateTime.Now.Date.AddDays(5), camping.Places, camping);
+            places = PlacesOverviewPageFilter.GetFilteredListOnDate(false, DateTime.Now.Date.AddDays(1), DateTime.Now.Date.AddDays(5), camping.Places, camping);
             Assert.That(places.Count(), Is.EqualTo(5));
         }
 
