@@ -66,8 +66,8 @@ namespace CampingUI
         {
             DepartureDatePicker.Background = null;
             this.DepartureDatePicker.Text = DepartureDatePicker.SelectedDate.ToString();
-            price = CalcPrice();
-            PriceTB.Text = price.ToString() + "$";
+            Price = CalcPrice();
+            PriceTB.Text = Price.ToString() + "$";
         }
         //Calcultes the price for the reservation based on the input fields PeopleCountText and the datepickers. Returns last (correct) price if input is incorrect
         private double CalcPrice()
@@ -177,7 +177,7 @@ namespace CampingUI
             {
                 Guest guest = new Guest(FirstNameTB.Text, InfixTB.Text, LastnameTB.Text, AddressTB.Text, CityTB.Text, EmailTB.Text, PhoneNumberTB.Text, PostalCodeTB.Text);
                 _camping.CampingRepository.AddGuest(guest);
-                _camping.CampingRepository.AddReservation(new Reservation(0, (DateTime)ArrivalDatePicker.SelectedDate, (DateTime)DepartureDatePicker.SelectedDate, place.PlaceNumber, 2, _camping.CampingRepository.GetLastGuestID(), int.Parse(PeopleCountText.Text), IsPaidCB.IsChecked.Value, price));
+                _camping.CampingRepository.AddReservation(new Reservation(0, (DateTime)ArrivalDatePicker.SelectedDate, (DateTime)DepartureDatePicker.SelectedDate, _place.PlaceNumber, 2, _camping.CampingRepository.GetLastGuestID(), int.Parse(PeopleCountText.Text), IsPaidCB.IsChecked.Value, Price));
                 NavigationService.Navigate(new PlacesOverviewPage(_camping, (CampingRepository)_camping.CampingRepository));
             }
         }
