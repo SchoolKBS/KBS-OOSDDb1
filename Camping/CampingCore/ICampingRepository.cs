@@ -25,5 +25,6 @@ namespace CampingCore
         public Place GetEmployeeFromEmployeeID(int id);
         public Place GetGuestFromGuestID(int id);
         public int GetLastGuestID();
+        public void AddPlace(Place place);
     }
 }

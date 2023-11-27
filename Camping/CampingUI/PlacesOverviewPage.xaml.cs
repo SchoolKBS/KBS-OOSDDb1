@@ -305,6 +305,7 @@ namespace CampingUI
         {
             if(PlacesListView.SelectedItems.Count > 0)
             {
+                AddPlaceGrid.Visibility = Visibility.Collapsed;
                 Place place = (Place)PlacesListView.SelectedItem;
                 nrLabel.Content = place;
                 areaLabel.Content = "Oppervlakte: " + place.SurfaceArea;
@@ -333,6 +334,99 @@ namespace CampingUI
             {
                 PlaceOverviewGrid.Visibility = Visibility.Collapsed;
             }
+        }
+
+        private void AddPlaceButton_Click(object sender, RoutedEventArgs e)
+        {
+            PlaceOverviewGrid.Visibility = Visibility.Collapsed;
+            AddPlaceGrid.Visibility = Visibility.Visible;
+
+        }
+        public void AddPlaceOnClick(object sender, RoutedEventArgs e)
+        {
+
+            string[] TextInput =
+            {
+                PlaceNumber.Text,
+                SurfaceArea.Text,
+                PricePerPersonPerNight.Text,
+                NumberOfPeople.Text,
+                HasElectricity.SelectionBoxItem.ToString()
+            };
+
+            //Checks if the required textboxes are filled
+            if (CheckIfInputIsNotNull(TextInput))
+            {
+                AddPlaceToDatabase();
+            }
+        }
+
+        public void AddPlaceToDatabase()
+        {
+            try
+            {
+                //Parses the string inputs from textboxes to ints
+                int placeNumber = Int32.Parse(PlaceNumber.Text);
+                int surfaceArea = Int32.Parse(SurfaceArea.Text);
+                int pricePerPersonPerNight = Int32.Parse(PricePerPersonPerNight.Text);
+                int amountOfPeople = Int32.Parse(NumberOfPeople.Text);
+                string electricity = HasElectricity.SelectionBoxItem.ToString();
+                string placeDescription = PlaceDescription.Text;
+
+
+                //Checks if the place has electricity 
+                bool hasElectricity;
+                if (electricity.Equals("Ja"))
+                {
+                    hasElectricity = true;
+                }
+                else
+                {
+                    hasElectricity = false;
+                }
+
+                //Make a new place with the input of the textboxes
+                Place place = new Place(placeNumber, hasElectricity, surfaceArea, amountOfPeople, pricePerPersonPerNight, placeDescription);
+
+                //Database db = new Database();
+                //db.AddPlaceToDatabase(place);
+                _camping.CampingRepository.AddPlace(place);
+
+
+                //Clears textboxes when the data is inserted in the database
+                foreach (var textbox in AddPlaceGrid.Children)
+                {
+                    if (textbox is TextBox textBox)
+                    {
+                        textBox.Text = string.Empty;
+                    }
+                }
+
+                AddPlaceMessage.Text = "Nieuwe plaats is toegevoegd";
+                AddPlaceMessage.Foreground = Brushes.Green;
+                _camping.Places = _camping.CampingRepository.GetPlaces();
+                PlacesListView.ItemsSource = _camping.Places;
+
+            } 
+            catch(Exception ex)
+            {
+                AddPlaceMessage.Text = "Ongeldigde input";
+                AddPlaceMessage.Foreground = Brushes.Red;
+            }
+
+        }
+        public bool CheckIfInputIsNotNull(string[] TextInput)
+        {
+            foreach (string input in TextInput)
+            {
+                if (string.IsNullOrEmpty(input) || string.IsNullOrWhiteSpace(input))
+                {
+                    AddPlaceMessage.Text = "Nog niet alle benodigde velden zijn ingevuld";
+                    AddPlaceMessage.Foreground = Brushes.Red;
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }

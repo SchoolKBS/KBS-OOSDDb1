@@ -16,6 +16,11 @@
             this.SurfaceArea = surfaceArea;
             this.PersonCount = numberOfPeople;
             this.PricePerNight = pricePerNight;
+            this.Description = "";
+        }
+        public Place(int placeNumber, bool hasPower, int surfaceArea, int numberOfPeople, double pricePerNight, string description) : this(placeNumber, hasPower, surfaceArea, numberOfPeople, pricePerNight)
+        {
+            this.Description = description;
         }
         public override string ToString()
         {
