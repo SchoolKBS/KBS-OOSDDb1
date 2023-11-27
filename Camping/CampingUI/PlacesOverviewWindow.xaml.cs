@@ -119,7 +119,7 @@ namespace CampingUI
             };
 
             //Checks if the required textboxes are filled
-            if (CheckIfInputIsValid(TextInput))
+            if (CheckIfInputIsNotNull(TextInput))
             {
                 AddPlaceToDatabase();
             }
@@ -127,44 +127,54 @@ namespace CampingUI
 
         public void AddPlaceToDatabase()
         {
-            //Parses the string inputs from textboxes to ints
-            int placeNumber = Int32.Parse(PlaceNumber.Text);
-            int surfaceArea = Int32.Parse(SurfaceArea.Text);
-            int pricePerPersonPerNight = Int32.Parse(PricePerPersonPerNight.Text);
-            int amountOfPeople = Int32.Parse(NumberOfPeople.Text);
-            string electricity = HasElectricity.SelectionBoxItem.ToString();
-            string placeDescription = PlaceDescription.Text;
-
-            //Checks if the place has electricity 
-            bool hasElectricity;
-            if (electricity.Equals("Ja"))
+            try
             {
-                hasElectricity = true;
-            }
-            else
-            {
-                hasElectricity = false;
-            }
+                //Parses the string inputs from textboxes to ints
+                int placeNumber = Int32.Parse(PlaceNumber.Text);
+                int surfaceArea = Int32.Parse(SurfaceArea.Text);
+                int pricePerPersonPerNight = Int32.Parse(PricePerPersonPerNight.Text);
+                int amountOfPeople = Int32.Parse(NumberOfPeople.Text);
+                string electricity = HasElectricity.SelectionBoxItem.ToString();
+                string placeDescription = PlaceDescription.Text;
 
-            //Make a new place with the input of the textboxes
-            Place place = new Place(placeNumber, hasElectricity, surfaceArea, amountOfPeople, pricePerPersonPerNight, placeDescription);
 
-            Database db = new Database();
-            db.AddPlaceToDatabase(place);
-
-            //Clears textboxes when the data is inserted in the database
-            foreach (var textbox in AddPlace.Children)
-            {
-                if (textbox is TextBox textBox)
+                //Checks if the place has electricity 
+                bool hasElectricity;
+                if (electricity.Equals("Ja"))
                 {
-                    textBox.Text = string.Empty;
+                    hasElectricity = true;
                 }
+                else
+                {
+                    hasElectricity = false;
+                }
+
+                //Make a new place with the input of the textboxes
+                Place place = new Place(placeNumber, hasElectricity, surfaceArea, amountOfPeople, pricePerPersonPerNight, placeDescription);
+
+                Database db = new Database();
+                db.AddPlaceToDatabase(place);
+
+                //Clears textboxes when the data is inserted in the database
+                foreach (var textbox in AddPlace.Children)
+                {
+                    if (textbox is TextBox textBox)
+                    {
+                        textBox.Text = string.Empty;
+                    }
+                }
+
+                AddPlaceMessage.Text = "Nieuwe plaats is toegevoegd";
+                AddPlaceMessage.Foreground = Brushes.Green;
+
+            } catch(Exception ex)
+            {
+                AddPlaceMessage.Text = "Ongeldigde input";
+                AddPlaceMessage.Foreground = Brushes.Red;
             }
 
-            AddPlaceMessage.Text = "Nieuwe plaats is toegevoegd";
-            AddPlaceMessage.Foreground = Brushes.Green;
         }
-        public bool CheckIfInputIsValid(string[] TextInput)
+        public bool CheckIfInputIsNotNull(string[] TextInput)
         {
             foreach (string input in TextInput)
             {

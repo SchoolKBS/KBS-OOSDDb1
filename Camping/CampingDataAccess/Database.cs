@@ -10,7 +10,7 @@ namespace CampingDataAccess
 {
     public class Database
     {
-        private string connectionString = "Server=localhost;Database=camping;User ID=root;";
+        private string connectionString = "Server=localhost;Database=camping;User ID=root; Password: lestaenbenthe";
         public void AddPlaceToDatabase(Place place)
         {
             try
