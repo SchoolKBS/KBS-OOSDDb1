@@ -1,28 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CampingCore
+﻿namespace CampingCore
 {
     public class Place
     {
         public int PlaceNumber { get; set; }
-        public bool HasElectricity { get; set; }
+        public bool HasPower { get; set; }
         public int SurfaceArea { get; set; }
-        public int NumberOfPeople { get; set; }
-        public int PricePerNight { get; set; }
+        public int PersonCount { get; set; }
+        public double PricePerNight { get; set; }
         public string Description { get; set; }
 
-        public Place(int placeNumber, bool hasElectricity, int surfaceArea, int numberOfPeople, int pricePerNight, string description)
+        public Place(int placeNumber, bool hasPower, int surfaceArea, int numberOfPeople, double pricePerNight)
         {
             this.PlaceNumber = placeNumber;
-            this.HasElectricity = hasElectricity;
+            this.HasPower = hasPower;
             this.SurfaceArea = surfaceArea;
-            this.NumberOfPeople = numberOfPeople;
+            this.PersonCount = numberOfPeople;
             this.PricePerNight = pricePerNight;
-            this.Description = description;
         }
         public override string ToString()
         {

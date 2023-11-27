@@ -1,17 +1,16 @@
-﻿using System;
+﻿using CampingCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using CampingDataAccess;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace CampingUI
 {
@@ -20,21 +19,31 @@ namespace CampingUI
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        public CampingRepository CampingRepository { get; private set; }
+        public Camping Camping { get; private set; }
         public MainWindow()
         {
             InitializeComponent();
-        }
-        
-        private void BtnClickReservations(object sender, RoutedEventArgs e)
-        {
-            Main.Content = new ReservationsOverviewWindow(); 
+            this.CampingRepository = new CampingRepository();
+            this.Camping = new Camping(CampingRepository);
+
         }
 
-        private void BtnClickPlaces(object sender, RoutedEventArgs e)
+        //Function (EventHandler) to open the reservations page
+        private void ReservationsButton_Click(object sender, RoutedEventArgs e)
         {
-            Main.Content = new PlacesOverviewPage();     
+            Main.Content = new ReservationsOverviewWindow(Camping, CampingRepository);
+        }
+
+        //Function (EventHandler) to open the places overview page
+        private void PlacesButton_Click(object sender, RoutedEventArgs e)
+        {
+
+            Main.Content = new PlacesOverviewPage(Camping, CampingRepository);
         }
     }
 
 
 }
+

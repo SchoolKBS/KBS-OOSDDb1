@@ -1,4 +1,4 @@
-﻿<Page x:Class="CampingUI.PlacesOverviewPage"
+<Page x:Class="CampingUI.PlacesOverviewPage"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -7,55 +7,115 @@
         mc:Ignorable="d"
         Title="PlacesOverviewPage">
     <!--Grid for leftside bar and the place overview-->
-        <Grid Name ="OverviewGrid">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*"/>
-                <ColumnDefinition Width="7*"/>
-            </Grid.ColumnDefinitions>
-            <Border Grid.Column="1" Grid.RowSpan="1" BorderBrush="Black" 
+    <Grid Name ="OverviewGrid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="7*"/>
+        </Grid.ColumnDefinitions>
+        <Border Grid.Column="1" Grid.RowSpan="1" BorderBrush="Black" 
         BorderThickness="1,1,1,1" Background="{x:Null}" >
-            </Border>
-            <!--Grid for the filters and list of places-->
+        </Border>
+        <!--Grid for the filters and list of places-->
         <Grid Name="ListGrid">
             <Grid.RowDefinitions>
-                <RowDefinition Height="5*"/>
-                <RowDefinition Height="10*"/>
+                <RowDefinition Height="Auto"/>
+                <!-- Adjust as needed -->
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <!-- Adjust as needed -->
             </Grid.RowDefinitions>
             <Border Grid.Column="1" Grid.RowSpan="1" BorderBrush="Black" 
                     BorderThickness="1, 1, 1, 1" Background="{x:Null}"/>
-            <Label Grid.Row="0" Content="Aankomstdatum" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-            <Label Grid.Row="0" Content="Vertrekdatum" HorizontalAlignment="Left" Margin="118,10,0,0" VerticalAlignment="Top"/>
-            <CheckBox Name="PowerCheckBox" Grid.Row="0" Content="Stroom" HorizontalAlignment="Left" Margin="10,75,0,0" VerticalAlignment="Top"/>
-            <DatePicker Grid.Row="0" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
-            <DatePicker Grid.Row="0" HorizontalAlignment="Left" Margin="118,41,0,0" VerticalAlignment="Top"/>
-            <Label Content="Aantal personen" Margin="0,98,108,53"/>
-            <TextBox x:Name="PersonCountTextBox"  Margin="101,105,31,60" TextChanged="PersonCountTextBox_Changed" >
-            </TextBox>
-            <Label x:Name="PersonCountPlaceholder" Content="Vul aantal personen in" Background="Transparent" Opacity="0.5" IsHitTestVisible="False" Margin="101,101,20,56" />
-            <Button Content="Pas filters toe" Margin="10,151,0,0" Click="ApplyFilters_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80"/>
-            <ListView Grid.Row="1" Name="PlacesListView">
+
+            <!-- First filter for arrive filter  -->
+            <Label Grid.Row="0" Content="Aankomstdatum" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontFamily="Calibri" FontWeight="Bold"/>
+            <Label Grid.Row="0" Content="Vertrekdatum" HorizontalAlignment="Left" Margin="120,10,0,0" VerticalAlignment="Top" FontFamily="Calibri" FontWeight="Bold"/>
+            <DatePicker Name="ArrivalDatePicker" Tag="-2" Grid.Row="0" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
+            <DatePicker Name="DepartureDatePicker" Tag="-1" Grid.Row="0" HorizontalAlignment="Left" Margin="120,40,0,0" VerticalAlignment="Top" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
+
+            <!-- Second filter for power  -->
+            <RadioButton Name="PowerRadioButton1" Grid.Row="0" Content="Wel stroom" HorizontalAlignment="Left" Margin="10,75,0,0" VerticalAlignment="Top" Checked="PowerRadioButton_Selected" FontFamily="Calibri" FontWeight="Bold"/>
+            <RadioButton Name="PowerRadioButton2" Grid.Row="0" Content="Geen stroom" HorizontalAlignment="Left" Margin="120,75,0,0" VerticalAlignment="Top" Checked="PowerRadioButton_Selected" FontFamily="Calibri" FontWeight="Bold"/>
+            <RadioButton Name="PowerRadioButton3" Grid.Row="0" Content="Geen voorkeur" HorizontalAlignment="Left" Margin="240,75,0,0" VerticalAlignment="Top" Checked="PowerRadioButton_Selected" IsChecked="True" FontFamily="Calibri" FontWeight="Bold"/>
+
+            <!-- Third filter for amount of people  -->
+            <Label Content="Aantal personen" HorizontalAlignment="Left" Margin="10,100,0,0" VerticalAlignment="Top" FontFamily="Calibri" FontWeight="Bold"/>
+            <TextBox x:Name="PersonCountTextBox" HorizontalAlignment="Left" Margin="120,105,0,0" VerticalAlignment="Top" Width="60" Height="20" TextChanged="TextBox_Changed"/>
+
+            <!-- Fourth filter for max price -->
+            <Label Content="Max prijs" HorizontalAlignment="Left" Margin="10,135,0,0" VerticalAlignment="Top" FontFamily="Calibri" FontWeight="Bold"/>
+            <TextBox x:Name="MaxPriceRangeTextBox" HorizontalAlignment="Left" Margin="120,140,0,0" VerticalAlignment="Top" Width="60" Height="20" TextChanged="TextBox_Changed"/> 
+
+            <!-- Buttons to apply or remove the filters -->
+            <Button Content="Pas filters toe" Margin="10,175,0,25" Click="ApplyFilters_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80"/>
+            <Button Content="Verwijder filters" Margin="120,175,0,25" Click="RemoveFilters_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="90"/>
+
+            <!-- Show the places from the camping in a list in a grid view and sort them.  -->
+            <ListView Grid.Row="1" Name="PlacesListView" SelectionChanged="PlacesListView_SelectionChanged">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Width="90" DisplayMemberBinding="{Binding PlaceNumber}">
                             <GridViewColumn.Header>
-                                <GridViewColumnHeader Tag="Naam">Plaatsnummer</GridViewColumnHeader>
+                                <GridViewColumnHeader Tag="Placenumber" Click="SetSorterColumn_Click">Plaatsnummer</GridViewColumnHeader>
                             </GridViewColumn.Header>
                         </GridViewColumn>
                         <GridViewColumn Width="60" DisplayMemberBinding="{Binding PricePerNight}">
                             <GridViewColumn.Header>
-                                <GridViewColumnHeader Tag="Prijs">Prijs</GridViewColumnHeader>
+                                <GridViewColumnHeader Tag="Price" Click="SetSorterColumn_Click">Prijs ($)</GridViewColumnHeader>
                             </GridViewColumn.Header>
                         </GridViewColumn>
-                        <GridViewColumn Width="120" DisplayMemberBinding="{Binding NumberOfPeople}">
+                        <GridViewColumn Width="120" DisplayMemberBinding="{Binding PersonCount}">
                             <GridViewColumn.Header>
-                                <GridViewColumnHeader Tag="Prijs">Aantal personen</GridViewColumnHeader>
+                                <GridViewColumnHeader Tag="PersonCount" Click="SetSorterColumn_Click">Aantal personen</GridViewColumnHeader>
                             </GridViewColumn.Header>
                         </GridViewColumn>
                     </GridView>
                 </ListView.View>
-            </ListView>
+            </ListView>            
         </Grid>
-
+                <!--Grid for the overview of the selected place-->
+        <Grid Grid.Column="1" Name="PlaceOverviewGrid" Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="4*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <!--Grid for place info-->
+            <Grid Grid.Row="0" Name="UpperGrid">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0" Name="InfoGrid">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="3*"/>
+                    </Grid.RowDefinitions>
+                    <Label Grid.Row="0" Name="nrLabel" FontSize="30" FontWeight="Bold" Content=""></Label>
+                    <Label Grid.Row="1" Name="areaLabel" FontSize="20" Content=""></Label>
+                    <Label Grid.Row="2" Name="nrPeopleLabel" FontSize="20" Content=""></Label>
+                    <Label Grid.Row="3" Name="electricityLabel" FontSize="20" Content=""></Label>
+                    <Label Grid.Row="4" Name="priceLabel" FontSize="20" Content=""></Label>
+                    <Label Grid.Row="5" Name="descriptionLabel" FontSize="20" Content=""></Label>
+                </Grid>
+                <Viewbox Grid.Column="1" Margin="10">
+                    <Calendar x:Name="ReservationCalender" Width="auto"></Calendar>
+                </Viewbox>
+            </Grid>
+            <!--Grid for button -->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Name="NewReservationButton" Content="Nieuwe Resevering Maken" Margin="20" Height="50"/>
+                <Button Grid.Column="2" Name="DeletePlaceButton" Content="Verwijder plaats" Margin="20" Height="50" Click="DeletePlaceButton_Click"/>
+            </Grid>
+        </Grid>
         <Grid Grid.Column="1" Name="AddPlace">
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.8*"/>
@@ -104,6 +164,7 @@
             <Button Grid.Row="12" Grid.Column="1" Height="35" Width="180" Click="AddPlaceOnClick">Plaats toevoegen</Button>
 
             <TextBlock Grid.Row="13" Grid.Column="1" HorizontalAlignment="Center" x:Name="AddPlaceMessage"/>
+            
         </Grid>
     </Grid>
 </Page>

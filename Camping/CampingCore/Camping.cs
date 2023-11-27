@@ -1,26 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CampingCore
 {
     public class Camping
     {
-        public ObservableCollection<Place> Places { get; set; }
-        public ObservableCollection<Reservation> Reservations { get; set; }
-
-        public Camping()
+        public List<Place> Places { get; set;}
+        public List<Reservation> Reservations { get; set; }
+        public ICampingRepository CampingRepository { get; private set; }
+        public Camping() { }
+        public Camping(ICampingRepository campingRepository)
         {
-            this.Places = new ObservableCollection<Place>();
-            this.Reservations = new ObservableCollection<Reservation>();
-            for (int i = 1; i <= 10; i++)
-            {
-                Places.Add(new Place(i, true, 1, 1, 1, ""));
-                Reservations.Add(new Reservation(i, DateTime.Now.AddDays(i), DateTime.Now.AddDays(i + 10), Places[i - 1]));
-            }
+            this.CampingRepository = campingRepository;
+            this.Reservations = this.CampingRepository.GetReservations();
+            this.Places = this.CampingRepository.GetPlaces();
+
 
         }
     }
