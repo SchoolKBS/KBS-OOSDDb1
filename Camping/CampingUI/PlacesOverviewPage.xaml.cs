@@ -277,14 +277,15 @@ namespace CampingUI
         private void DeletePlaceButton_Click(object sender, RoutedEventArgs e)
         {
             Place place = (Place)PlacesListView.SelectedItem;
-            MessageBoxResult deleteMessageBox = MessageBox.Show("Weet je zeker dat de volgende plaats " + place.PlaceNumber + " verwijderd wordt?", "Waarschuwing!", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                MessageBoxResult deleteMessageBox = MessageBox.Show("Weet je zeker dat de volgende plaats " + place.PlaceNumber + " verwijderd wordt?", "Waarschuwing!", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (deleteMessageBox == MessageBoxResult.Yes)
             {
                 _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Where(i => i.PlaceNumber != place.PlaceNumber).ToList();
-                PlacesOverviewPageDelete.DeletePlace(_camping, place);
+                PlacesOverviewPageDelete.DeletePlace(_camping, place, DateTime.Now.Date);
                 _camping.Places = _camping.CampingRepository.GetPlaces();
                 ReloadScreenDataAfterDeletePlace();
             }
+            
         }
         private void ReloadScreenDataAfterDeletePlace()
         {
@@ -299,6 +300,21 @@ namespace CampingUI
             MaxPriceRangeTextBox.Text = $"{_maxPriceRange}";
         }
 
+        private void SetDeleteButtonClickableIfNoReservations()
+        {
+            Place place = (Place)PlacesListView.SelectedItem;
+            var placesReservations = _camping.Reservations.Where(i => i.PlaceID == place.PlaceNumber)
+                                                          .Where(i => i.DepartureDate >= DateTime.Now.Date).ToList();
+            if (placesReservations.Count > 0)
+            {
+                DeletePlaceButton.IsEnabled = false;
+            }
+
+            else
+            {
+                DeletePlaceButton.IsEnabled = true;
+            }
+        }
 
         // Is used everytime a different _place is selected in the _place list
         private void PlacesListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -329,6 +345,7 @@ namespace CampingUI
                 {
                     ReservationCalender.BlackoutDates.Add(new CalendarDateRange(reservation.ArrivalDate, reservation.DepartureDate));
                 }
+                SetDeleteButtonClickableIfNoReservations();
             }
             else
             {

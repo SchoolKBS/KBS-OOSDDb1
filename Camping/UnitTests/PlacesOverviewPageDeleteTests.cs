@@ -20,9 +20,9 @@ namespace UnitTests
             var mock = new Mock<ICampingRepository>();
             Camping camping = new Camping(mock.Object);
             Place place = new Place(1, true, 1, 1, 1);
-            PlacesOverviewPageDelete.DeletePlace(camping, place);
+            PlacesOverviewPageDelete.DeletePlace(camping, place, DateTime.Now.Date);
             mock.Verify(p => p.RemovePlace(place), Times.Once());
-            mock.Verify(p => p.RemoveAllReservationsByPlace(place), Times.Once());
+            mock.Verify(p => p.RemoveAllPreviousReservationsByPlace(place, DateTime.Now.Date), Times.Once());
         }
     }
 }

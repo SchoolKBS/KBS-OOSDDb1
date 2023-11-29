@@ -10,7 +10,7 @@ namespace CampingCore
     {
         public List<Place> GetPlaces();
         public List<Reservation> GetReservations();
-        public void RemoveAllReservationsByPlace(Place place);
+        public void RemoveAllPreviousReservationsByPlace(Place place, DateTime departureDate);
         public void RemovePlace(Place place);
         public void RemoveReservation(Reservation reservation);
         public void AddReservation(Reservation reservation);

@@ -165,9 +165,9 @@ namespace CampingDataAccess
             }
             return result;
         }
-        public void RemoveAllReservationsByPlace(Place place)
+        public void RemoveAllPreviousReservationsByPlace(Place place, DateTime departureDate)
         {
-            string sql = "DELETE FROM Reservation WHERE PlaceID = @PlaceID";
+            string sql = "DELETE FROM Reservation WHERE PlaceID = @PlaceID AND DepartureDate < @DepartureDate";
 
             using (var connection = new SqlConnection(connectionString))
             {
@@ -176,6 +176,7 @@ namespace CampingDataAccess
                 using (var command = new SqlCommand(sql, connection))
                 {
                     command.Parameters.AddWithValue("@PlaceID", place.PlaceNumber);
+                    command.Parameters.AddWithValue("@DepartureDate", departureDate);
                     command.ExecuteNonQuery();
                 }
                 connection.Close();

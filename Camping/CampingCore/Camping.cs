@@ -8,7 +8,6 @@ namespace CampingCore
         public List<Place> Places { get; set;}
         public List<Reservation> Reservations { get; set; }
         public ICampingRepository CampingRepository { get; private set; }
-        public Camping() { }
         public Camping(ICampingRepository campingRepository)
         {
             this.CampingRepository = campingRepository;

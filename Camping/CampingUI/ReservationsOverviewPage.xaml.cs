@@ -1,5 +1,6 @@
 ﻿using CampingCore;
 using CampingDataAccess;
+using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -31,7 +32,7 @@ namespace CampingUI
         //Fills list with reservations
         public void LoadReservationList() 
         {
-            ReservationsListView.ItemsSource = _camping.Reservations.OrderBy(reservation => reservation.ArrivalDate).ThenBy(reservation => reservation.PlaceID); //Takes reservations
+            ReservationsListView.ItemsSource = _camping.Reservations.Where(reservation => reservation.DepartureDate >= DateTime.Now.Date).OrderBy(reservation => reservation.ArrivalDate).ThenBy(reservation => reservation.PlaceID); //Takes reservations
         }
 
 
