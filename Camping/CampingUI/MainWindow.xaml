@@ -5,20 +5,149 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CampingUI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
+        Title="Camping Administration Applicatie" Height="1080" Width="1920"
         WindowState="Maximized"
-        WindowStyle="ThreeDBorderWindow"
-        ResizeMode="CanMinimize"
-        
-        
-        >
+        WindowStyle="None" 
+        ResizeMode="CanMinimize">
+
+    <Window.Background>
+        <SolidColorBrush Color="#11284D"/>
+        <!-- Set the background color for the window -->
+    </Window.Background>
+
     <Grid>
-        <!-- This shows the navigation bar for all pages in the WPF application -->
-        <StackPanel Orientation="Horizontal" Height="75" HorizontalAlignment="Right" VerticalAlignment="Top">
-            <Button x:Name="ReservationsButton"  Content="Reserveringen" Width="200" Height="50" FontSize="20" Margin="0, 0, 12.5, 0" Click="ReservationsButton_Click"/>
-            <Button x:Name="PlacesButton" Content="Plaatsen" Width="200" Height="50" FontSize="20" Margin="12.5, 0, 0, 0" Click="PlacesButton_Click"/>
-        </StackPanel>
-        <!-- In this frame the pages will show up -->
-        <Frame x:Name="Main" Margin="0, 75, 0, 0" NavigationUIVisibility="Hidden"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70" />
+            <!-- Row for custom title bar -->
+            <RowDefinition Height="*" />
+            <!-- Row for containers -->
+        </Grid.RowDefinitions>
+
+        <!-- Custom title bar with close and minimize buttons -->
+        <Grid Background="#11284D">
+            <!-- StackPanel for the image and title -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="25,0,0,0">
+                <!-- Image to the left of the title -->
+                <Image Source="/CampingUI;component/logo.png" Width="50" Height="40" VerticalAlignment="Center"/>
+                <!-- Title to stay on the left -->
+                <TextBlock FontSize="18" Text="Camping Administration Applicatie" Foreground="White" Margin="10,10,0,0" />
+            </StackPanel>
+            
+            <!-- Centered stack panel for buttons -->
+            <!-- Centered stack panel for buttons -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Button x:Name="HomeButton" Background="Transparent" BorderBrush="Transparent" Foreground="White" FontWeight="Bold" Height="50" FontSize="20" Margin="0, 0, 12.5, 0" Click="HomeButton_Click">
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+                                <TextBlock Text="Plattegrond" TextDecorations="None" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Foreground" Value="Orange"/>
+                                    <Setter Property="TextBlock.TextDecorations" Value="Underline"/>
+                                    <Setter Property="Cursor" Value="Hand"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+                <Button x:Name="ReservationsButton" Background="Transparent" BorderBrush="Transparent" Foreground="White" FontWeight="Bold" Height="50" FontSize="20" Margin="0, 0, 12.5, 0" Click="ReservationsButton_Click">
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+                                <TextBlock Text="Reserveringen" TextDecorations="None" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Foreground" Value="Orange"/>
+                                    <Setter Property="TextBlock.TextDecorations" Value="Underline"/>
+                                    <Setter Property="Cursor" Value="Hand"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+                <Button x:Name="PlacesButton" Background="Transparent" BorderBrush="Transparent" Foreground="White" FontWeight="Bold" Height="50" FontSize="20" Margin="0, 0, 12.5, 0" Click="PlacesButton_Click">
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+                                <TextBlock Text="Plaatsen" TextDecorations="None" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Foreground" Value="Orange"/>
+                                    <Setter Property="TextBlock.TextDecorations" Value="Underline"/>
+                                    <Setter Property="Cursor" Value="Hand"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </StackPanel>
+
+
+            <!-- Buttons to stay on the right -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0, 0, 25, 0">
+                <StackPanel.Style>
+                    <Style TargetType="StackPanel">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Cursor" Value="Hand"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
+
+                <Button Width="30" Height="30" Click="MinimizeButton_Click" Margin="0, 0, 10, 0" Background="Orange" BorderBrush="Transparent" FontSize="20" Foreground="White" BorderThickness="0">
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Grid>
+                                <Ellipse Fill="Orange"/>
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <Button.Content>
+                        <Image Source="/CampingUI;component/minimise.png" Width="20" Height="20"/>
+                    </Button.Content>
+                </Button>
+
+                <Button Width="30" Height="30" Click="CloseButton_Click" Margin="10, 0, 0, 0" Background="Red" BorderBrush="Transparent" FontSize="20" Foreground="White" BorderThickness="0">
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Grid>
+                                <Ellipse Fill="Red"/>
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <Button.Content>
+                        <Image Source="/CampingUI;component/close.png" Width="20" Height="20"/>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+
+
+        </Grid>
+
+        <!-- Main content area with border in the second row -->
+        <Border BorderBrush="Black" BorderThickness="0" VerticalAlignment="Stretch" Grid.Row="1">
+            <Frame x:Name="Main" VerticalAlignment="Stretch" NavigationUIVisibility="Hidden"/>
+        </Border>
     </Grid>
 </Window>

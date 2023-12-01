@@ -8,7 +8,35 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="NewFolder2\**" />
+    <Compile Remove="NewFolder3\**" />
+    <EmbeddedResource Remove="NewFolder2\**" />
+    <EmbeddedResource Remove="NewFolder3\**" />
+    <None Remove="NewFolder2\**" />
+    <None Remove="NewFolder3\**" />
+    <Page Remove="NewFolder2\**" />
+    <Page Remove="NewFolder3\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="close.png" />
+    <None Remove="minimise.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\CampingCore\CampingCore.csproj" />
     <ProjectReference Include="..\CampingDataAccess\CampingDataAccess.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="close.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="logo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="minimise.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 </Project>

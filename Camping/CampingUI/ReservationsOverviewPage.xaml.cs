@@ -19,14 +19,12 @@ namespace CampingUI
         {
             InitializeComponent();
             _camping = camping;
-            
 
             //Checks if reservations exist to load list.
-            if (_camping.Reservations.Count() > 0) 
+            if (_camping.Reservations.Count() > 0)
             {
                 LoadReservationList();
             }
-      
         }
 
         //Fills list with reservations
