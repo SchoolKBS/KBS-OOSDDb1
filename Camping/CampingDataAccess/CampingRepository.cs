@@ -182,6 +182,31 @@ namespace CampingDataAccess
                 connection.Close();
             }
         }
+
+        public void UpdatePlaceData(Place place)
+        {
+            string sql = "UPDATE Place SET Power = @Power, SurfaceArea = @SurfaceArea, PricePerNightPerPerson = @PricePerNightPerPerson, AmountOfPeople = @AmountOfPeople, description = @description WHERE PlaceID = @PlaceID";
+
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                using (var command = new SqlCommand(sql, connection))
+                {
+                    command.Prepare();
+                    command.Parameters.AddWithValue("@PlaceID", place.PlaceNumber);
+                    command.Parameters.AddWithValue("@Power", place.HasPower);
+                    command.Parameters.AddWithValue("@SurfaceArea", place.SurfaceArea);
+                    command.Parameters.AddWithValue("@PricePerNightPerPerson", place.PricePerNight);
+                    command.Parameters.AddWithValue("@AmountOfPeople", place.PersonCount);
+                    command.Parameters.AddWithValue("@description", place.Description);
+                    command.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+        }
+
+
         public void RemovePlace(Place place)
         {
             string sql = "DELETE FROM Place WHERE PlaceID = @PlaceID";

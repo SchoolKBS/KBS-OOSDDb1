@@ -8,6 +8,15 @@
         Title="PlacesOverviewPage">
     <!--Grid for leftside bar and the place overview-->
     <Grid Name ="OverviewGrid">
+        <Grid.Resources>
+            <Style TargetType="Label">
+                <Setter Property="Foreground" Value="White"/>
+            </Style>
+            <Style TargetType="RadioButton">
+                <Setter Property="Foreground" Value="White"/>
+            </Style>
+        </Grid.Resources>
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
             <ColumnDefinition Width="7*"/>
@@ -17,6 +26,16 @@
         </Border>
         <!--Grid for the filters and list of places-->
         <Grid Name="ListGrid">
+            <Grid.Resources>
+                <Style TargetType="ListViewItem">
+                    <Style.Triggers>
+                        <Trigger Property="ItemsControl.AlternationIndex"  Value="0">
+                            <Setter Property="Background" Value="#153260" />
+                        </Trigger>
+                    </Style.Triggers>
+                    <Setter Property="Foreground" Value="White"/>
+                </Style>
+            </Grid.Resources>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <!-- Adjust as needed -->
@@ -52,7 +71,7 @@
             <Button Content="Verwijder filters" Margin="120,175,0,25" Click="RemoveFilters_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="90"/>
 
             <!-- Show the places from the camping in a list in a grid view and sort them.  -->
-            <ListView Grid.Row="1" Name="PlacesListView" SelectionChanged="PlacesListView_SelectionChanged">
+            <ListView Grid.Row="1" Name="PlacesListView" SelectionChanged="PlacesListView_SelectionChanged" Background="#1d4381">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Width="90" DisplayMemberBinding="{Binding PlaceNumber}">
@@ -115,7 +134,8 @@
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Name="NewReservationButton" Content="Nieuwe Resevering Maken" Margin="20" Height="50" Click="NewReservation_Click"/>
+                <Button Grid.Column="0" Name="NewReservationButton" Content="Nieuwe resevering maken" Margin="20" Height="50" Click="NewReservation_Click"/>
+                <Button Grid.Column="1" Name="EditPlaceButton" Content="Plaats aanpassen" Margin="20" Height="50" Click="EditPlaceButton_Click"/>
                 <Button Grid.Column="2" Name="DeletePlaceButton" Content="Verwijder plaats" Margin="20" Height="50" Click="DeletePlaceButton_Click"/>
             </Grid>
         </Grid>
@@ -149,7 +169,7 @@
             <TextBox Grid.Column="1" Grid.Row="3" Height="30" Width="150" x:Name="SurfaceArea"/>
 
             <Label Grid.Column="1" Grid.Row="4" Content="*Stroom" Width="150" VerticalAlignment="Bottom"/>
-            <ComboBox Grid.Column="1" Grid.Row="5" Height="30" Width="150" x:Name="HasElectricity">
+            <ComboBox Grid.Column="1" Grid.Row="5" Height="30" Width="150" x:Name="HasPower">
                 <ComboBoxItem Content="Ja"/>
                 <ComboBoxItem Content="Nee"/>
             </ComboBox>
@@ -164,8 +184,8 @@
             <Label Grid.Column="1" Grid.Row="10" Content="Beschrijving" Width="150" VerticalAlignment="Bottom"/>
             <TextBox Grid.Column="1" Grid.Row="11" Height="30" Width="150" x:Name="PlaceDescription"/>
 
-            <Button Grid.Row="12" Grid.Column="1" Height="35" Width="180" Click="AddPlaceOnClick">Plaats toevoegen</Button>
-
+            <Button Name="AddPlaceButton" Content="Plaats toevoegen" Grid.Row="12" Grid.Column="1" Height="35" Width="180" Click="AddPlaceOnClick"/>
+            <Button Visibility="Collapsed" Name="ConfirmEditButton" Content="Aanpassen" Grid.Row="12" Grid.Column="1" Height="35" Width="180" Click="EditPlaceConfirmButton_Click"/>
             <TextBlock Grid.Row="13" Grid.Column="1" HorizontalAlignment="Center" x:Name="AddPlaceMessage"/>
             
         </Grid>

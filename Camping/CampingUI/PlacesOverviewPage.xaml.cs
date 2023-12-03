@@ -51,6 +51,13 @@ namespace CampingUI
             _placesSortedAndOrFiltered = _camping.Places; //get all the places to the variable
             PlacesListView.ItemsSource = _placesSortedAndOrFiltered; // For all items in the ListBox use the camping places.
             this._headerTag = "Placenumber";
+            /*foreach (ListViewItem item in PlacesListView.Items)
+            {
+                if (item.TabIndex % 2 == 0)
+                    item.Background = new SolidColorBrush(Color.FromRgb(21, 50, 96));
+                else
+                    item.Background = new SolidColorBrush(Color.FromRgb(29, 67, 129));
+            }*/
         }
 
         //Function (EventHandler) that resets the background of a textbox if the filters are reset
@@ -277,18 +284,19 @@ namespace CampingUI
         private void DeletePlaceButton_Click(object sender, RoutedEventArgs e)
         {
             Place place = (Place)PlacesListView.SelectedItem;
-                MessageBoxResult deleteMessageBox = MessageBox.Show("Weet je zeker dat de volgende plaats " + place.PlaceNumber + " verwijderd wordt?", "Waarschuwing!", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            MessageBoxResult deleteMessageBox = MessageBox.Show("Weet je zeker dat de volgende plaats " + place.PlaceNumber + " verwijderd wordt?", "Waarschuwing!", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (deleteMessageBox == MessageBoxResult.Yes)
             {
                 _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Where(i => i.PlaceNumber != place.PlaceNumber).ToList();
                 PlacesOverviewPageDelete.DeletePlace(_camping, place, DateTime.Now.Date);
-                _camping.Places = _camping.CampingRepository.GetPlaces();
-                ReloadScreenDataAfterDeletePlace();
+                ReloadScreenDataPlaces();
             }
-            
+
         }
-        private void ReloadScreenDataAfterDeletePlace()
+        private void ReloadScreenDataPlaces()
         {
+            _camping.Places = _camping.CampingRepository.GetPlaces();
+            _placesSortedAndOrFiltered = _camping.Places;
             PlaceOverviewGrid.Visibility = Visibility.Collapsed;
             PlacesListView.SelectedItems.Clear();
             PlacesListView.ItemsSource = _placesSortedAndOrFiltered;
@@ -319,7 +327,7 @@ namespace CampingUI
         // Is used everytime a different _place is selected in the _place list
         private void PlacesListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(PlacesListView.SelectedItems.Count > 0)
+            if (PlacesListView.SelectedItems.Count > 0)
             {
                 AddPlaceGrid.Visibility = Visibility.Collapsed;
                 Place place = (Place)PlacesListView.SelectedItem;
@@ -370,7 +378,7 @@ namespace CampingUI
                 SurfaceArea.Text,
                 PricePerPersonPerNight.Text,
                 NumberOfPeople.Text,
-                HasElectricity.SelectionBoxItem.ToString()
+                HasPower.SelectionBoxItem.ToString()
             };
 
             //Checks if the required textboxes are filled
@@ -390,23 +398,21 @@ namespace CampingUI
                 int surfaceArea = Int32.Parse(SurfaceArea.Text);
                 int pricePerPersonPerNight = Int32.Parse(PricePerPersonPerNight.Text);
                 int amountOfPeople = Int32.Parse(NumberOfPeople.Text);
-                string electricity = HasElectricity.SelectionBoxItem.ToString();
+                string electricity = HasPower.SelectionBoxItem.ToString();
                 string placeDescription = PlaceDescription.Text;
-
-
                 //Checks if the place has electricity 
-                bool hasElectricity;
+                bool hasPower;
                 if (electricity.Equals("Ja"))
                 {
-                    hasElectricity = true;
+                    hasPower = true;
                 }
                 else
                 {
-                    hasElectricity = false;
+                    hasPower = false;
                 }
 
                 //Make a new place with the input of the textboxes
-                Place place = new Place(placeNumber, hasElectricity, surfaceArea, amountOfPeople, pricePerPersonPerNight, placeDescription);
+                Place place = new Place(placeNumber, hasPower, surfaceArea, amountOfPeople, pricePerPersonPerNight, placeDescription);
 
                 //Database db = new Database();
                 //db.AddPlaceToDatabase(place);
@@ -422,18 +428,98 @@ namespace CampingUI
                     }
                 }
 
+
+                //misschien aanpassen zodat deze niet blijft staan
                 AddPlaceMessage.Text = "Nieuwe plaats is toegevoegd";
                 AddPlaceMessage.Foreground = Brushes.Green;
                 _camping.Places = _camping.CampingRepository.GetPlaces();
                 PlacesListView.ItemsSource = _camping.Places;
 
-            } 
-            catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 AddPlaceMessage.Text = "Ongeldigde input";
                 AddPlaceMessage.Foreground = Brushes.Red;
             }
 
+        }
+
+        private void EditPlaceButton_Click(object sender, RoutedEventArgs e)
+        {
+            Place place = (Place)PlacesListView.SelectedItem;
+            PlaceOverviewGrid.Visibility = Visibility.Collapsed;
+            AddPlaceGrid.Visibility = Visibility.Visible;
+            AddPlaceButton.Visibility = Visibility.Collapsed;
+            ConfirmEditButton.Visibility = Visibility.Visible;
+            AddPlaceDataToTextfields(place);
+
+        }
+
+        private void AddPlaceDataToTextfields(Place place)
+        {
+            PlaceNumber.Text = place.PlaceNumber.ToString();
+            PlaceNumber.IsEnabled = false;
+            SurfaceArea.Text = place.SurfaceArea.ToString();
+            if (place.HasPower)
+                HasPower.SelectedItem = "Ja";
+            else
+                HasPower.SelectedItem = "Nee";
+            NumberOfPeople.Text = place.PersonCount.ToString();
+            PricePerPersonPerNight.Text = place.PricePerNight.ToString();
+            PlaceDescription.Text = place.Description.ToString();
+        }
+
+        private Place GetPlaceFromTextBoxes()
+        {
+            try
+            {
+                //Parses the string inputs from textboxes to ints
+                int placeNumber = Int32.Parse(PlaceNumber.Text);
+                int surfaceArea = Int32.Parse(SurfaceArea.Text);
+                double pricePerPersonPerNight = double.Parse(PricePerPersonPerNight.Text);
+                int personCount = Int32.Parse(NumberOfPeople.Text);
+                string electricity = HasPower.SelectionBoxItem.ToString();
+                string placeDescription = PlaceDescription.Text;
+                //Checks if the place has electricity 
+                bool hasPower;
+                if (electricity.Equals("Ja"))
+                    hasPower = true;
+                else
+                    hasPower = false;
+                return new Place(placeNumber, hasPower, surfaceArea, personCount, pricePerPersonPerNight, placeDescription);
+            }
+            catch
+            {
+                AddPlaceMessage.Text = "Ongeldigde input";
+                AddPlaceMessage.Foreground = Brushes.Red;
+                return null;
+            }
+        }
+
+        private void EditPlaceConfirmButton_Click(object sender, RoutedEventArgs e)
+        {
+            Place place = null;
+            while(place == null)
+            {
+                place = GetPlaceFromTextBoxes();
+            }
+            _camping.CampingRepository.UpdatePlaceData(place);
+            AddPlaceButton.Visibility = Visibility.Visible;
+            ConfirmEditButton.Visibility = Visibility.Collapsed;
+            AddPlaceGrid.Visibility = Visibility.Collapsed;
+            ReloadScreenDataPlaces();
+            ResetDataFromTextfields();
+        }
+
+        private void ResetDataFromTextfields()
+        {
+            PlaceNumber.Text = null;
+            PlaceNumber.IsEnabled = true;
+            SurfaceArea.Text = null;
+            HasPower.Text = null;
+            NumberOfPeople.Text = null;
+            PricePerPersonPerNight.Text = null;
+            PlaceDescription.Text = null;
         }
 
         //Function to check if the input is null or not from a text array
