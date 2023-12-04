@@ -1,6 +1,7 @@
 ﻿using CampingCore;
 using CampingDataAccess;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,22 +18,83 @@ namespace CampingUI
 
         public ReservationsOverviewWindow(Camping camping, SqliteRepository campingRepository)
         {
-            InitializeComponent();
-            _camping = camping;
+               InitializeComponent();
+                _camping = camping;
 
-            //Checks if reservations exist to load list.
-            if (_camping.Reservations.Count() > 0)
-            {
-                LoadReservationList();
-            }
+                //Checks if reservations exist to load list.
+                if (_camping.Reservations.Count() > 0)
+                {
+                    LoadReservationList(); 
+        }
         }
 
-        //Fills list with reservations
-        public void LoadReservationList() 
+    //Fills list with reservations
+    public void LoadReservationList() 
         {
             ReservationsListView.ItemsSource = _camping.Reservations.Where(reservation => reservation.DepartureDate >= DateTime.Now.Date).OrderBy(reservation => reservation.ArrivalDate).ThenBy(reservation => reservation.PlaceID); //Takes reservations
         }
 
+        public void ApplyFilters()
+        {
+            IEnumerable<Reservation> filteredReservations = _camping.Reservations;
+
+            DateTime? arrivalDate = ArrivalDatePickerr.SelectedDate;
+            if (arrivalDate.HasValue)
+            {
+                filteredReservations = filteredReservations.Where(reservation => reservation.ArrivalDate.Date >= arrivalDate.Value.Date);
+            }
+
+            // Filter by Departure Date
+            DateTime? departureDate = DepartureDatePickerr.SelectedDate;
+            if (departureDate.HasValue)
+            {
+                filteredReservations = filteredReservations.Where(reservation => reservation.DepartureDate.Date <= departureDate.Value.Date);
+            }
+
+            // Filter by Number of People
+            if (int.TryParse(PersonCountTextBoxx.Text, out int personCount))
+            {
+                filteredReservations = filteredReservations.Where(reservation => reservation.PersonCount == personCount);
+            }
+
+            // Filter by Place Number
+            if (int.TryParse(PlaceNumerBox.Text, out int placeNumber))
+            {
+                filteredReservations = filteredReservations.Where(reservation => reservation.PlaceID == placeNumber);
+            }
+
+            // Filter by Guest Name
+            if (int.TryParse(GuestNameBox.Text, out int guestID))
+            {
+                filteredReservations = filteredReservations.Where(reservation => reservation.GuestID == guestID);
+            }
+            // Apply the combined filters and update the ListView
+            ReservationsListView.ItemsSource = filteredReservations
+                .OrderBy(reservation => reservation.ArrivalDate)
+                .ThenBy(reservation => reservation.PlaceID);
+        }
+
+        private void ApplyFilters_Clickk(object sender, RoutedEventArgs e)
+        {
+            ApplyFilters();
+        }
+
+        private void RemoveFilters_Clickk(object sender, RoutedEventArgs e)
+        {
+            RemoveFilters();
+        }
+        private void RemoveFilters()
+        {
+            // Clear filter criteria
+            ArrivalDatePickerr.SelectedDate = null;
+            DepartureDatePickerr.SelectedDate = null;
+            PersonCountTextBoxx.Text = string.Empty;
+            PlaceNumerBox.Text = string.Empty;
+            GuestNameBox.Text = string.Empty;
+
+            // Reload the original data without filters
+            LoadReservationList();
+        }
 
 
         //Function to delete reservations
