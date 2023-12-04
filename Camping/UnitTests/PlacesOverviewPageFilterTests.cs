@@ -10,7 +10,7 @@ namespace UnitTests
         [Test]
         public void GetFilteredListOnPower_places_returnsList()
         {
-            CampingRepository campingRepository = new CampingRepository();
+            SqliteRepository campingRepository = new SqliteRepository();
             Camping camping = new Camping(campingRepository);
             List<Place> listToCheck = new List<Place>();
 
@@ -32,7 +32,7 @@ namespace UnitTests
         [Test]
         public void GetFilteredListOnPersonCount_places_returnsList()
         {
-            CampingRepository campingRepository = new CampingRepository();
+            SqliteRepository campingRepository = new SqliteRepository();
             Camping camping = new Camping(campingRepository);
             List<Place> listToCheck = new List<Place>();
 
@@ -53,7 +53,7 @@ namespace UnitTests
         [Test]
         public void GetFilteredListOnPrice_places_returnsList()
         {
-            CampingRepository campingRepository = new CampingRepository();
+            SqliteRepository campingRepository = new SqliteRepository();
             Camping camping = new Camping(campingRepository);
             List<Place> listToCheck = new List<Place>();
 
@@ -75,7 +75,7 @@ namespace UnitTests
         [Test]
         public void GetFilteredListOnDates_places_returnsList()
         { 
-            CampingRepository campingRepository = new CampingRepository();
+            SqliteRepository campingRepository = new SqliteRepository();
             Camping camping = new Camping(campingRepository);
             List<Place> listToCheck = new List<Place>();
 
@@ -97,7 +97,7 @@ namespace UnitTests
         [Test]
         public void GetAvailablePlacesBetweenDates_places_returnsList()
         {
-            CampingRepository campingRepository = new CampingRepository();
+            SqliteRepository campingRepository = new SqliteRepository();
             Camping camping = new Camping(campingRepository);
             List<Place> listToCheck = new List<Place>();
 

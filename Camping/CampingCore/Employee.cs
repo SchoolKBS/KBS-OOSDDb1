@@ -1,4 +1,6 @@
-﻿namespace CampingCore
+﻿using System.Collections;
+
+namespace CampingCore
 {
     public class Employee : Person
     {

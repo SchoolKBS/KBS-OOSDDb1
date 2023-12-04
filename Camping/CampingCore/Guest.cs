@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,10 +9,10 @@ namespace CampingCore
 {
     public class Guest
     {
-        public int ID { get; set; }
+        public int GuestID { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string PrepositionName { get; set; }
+        public string Infix { get; set; }
         public string Address { get; set; }
         public string City { get; set; }
         public string Email { get; set; }
@@ -20,9 +21,9 @@ namespace CampingCore
 
         public Guest(int guestID, string firstName, string prepositionName, string lastName, string address, string city, string email, string phoneNumber, string postalCode)
         {
-            this.ID = guestID;
+            this.GuestID = guestID;
             this.FirstName = firstName;
-            this.PrepositionName = prepositionName;
+            this.Infix = prepositionName;
             this.LastName = lastName;
             this.Address = address;
             this.City = city;
@@ -34,6 +35,17 @@ namespace CampingCore
         {
 
         }
-
+        public Guest(ArrayList properties)
+        {
+            GuestID = (int)properties[0];
+            FirstName = (string)properties[1];
+            LastName = (string)properties[2];
+            Infix = (string)properties[3];
+            Email = (string)properties[4];
+            PhoneNumber = (string)properties[5];
+            City = (string)properties[6];
+            Address = (string)properties[7];
+            PostalCode = (string)properties[8];
+        }
     }
 }

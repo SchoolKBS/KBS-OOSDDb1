@@ -40,12 +40,12 @@ namespace CampingUI
         public bool FilterAplied = false;
         private bool _emptyDates = true;
 
-        public PlacesOverviewPage(Camping camping, CampingRepository campingRepository)
+        public PlacesOverviewPage(Camping camping, SqliteRepository campingRepository)
         {
             InitializeComponent();
             this._camping = camping; // Creates a camping.
             if (!_camping.Places.IsNullOrEmpty())
-                _maxPriceRange = _camping.Places.Max(i => i.PricePerNight);
+                _maxPriceRange = _camping.Places.Max(i => i.PricePerNightPerPerson);
             MaxPriceRangeTextBox.Text = $"{_maxPriceRange}"; //Set the _maxPriceRange as a standard
             PersonCountTextBox.Text = $"{PersonCount}"; //Set the text in the textbox to 0
             _placesSortedAndOrFiltered = _camping.Places; //get all the places to the variable
@@ -84,7 +84,7 @@ namespace CampingUI
             else _hasPower = null;
         }
 
-        // Function to get the PersonCount from the PersonCountTextBox text
+        // Function to get the AmountOfPeople from the PersonCountTextBox text
         private void SetPersonCountFromPersonCountTextBox()
         {
             int number;
@@ -128,7 +128,7 @@ namespace CampingUI
             }
             else
             {
-                _maxPriceRange = _camping.Places.Max(i => i.PricePerNight);
+                _maxPriceRange = _camping.Places.Max(i => i.PricePerNightPerPerson);
                 MaxPriceRangeTextBox.Text = $"{_maxPriceRange}";
             }
         }
@@ -218,7 +218,7 @@ namespace CampingUI
             _camping.Places = _camping.CampingRepository.GetPlaces();
             if (!_camping.Places.IsNullOrEmpty())
             {
-                _maxPriceRange = _camping.Places.Max(i => i.PricePerNight);
+                _maxPriceRange = _camping.Places.Max(i => i.PricePerNightPerPerson);
                 _placesSortedAndOrFiltered = _camping.Places;
                 PlacesListView.ItemsSource = _placesSortedAndOrFiltered;
             }
@@ -277,10 +277,10 @@ namespace CampingUI
         private void DeletePlaceButton_Click(object sender, RoutedEventArgs e)
         {
             Place place = (Place)PlacesListView.SelectedItem;
-                MessageBoxResult deleteMessageBox = MessageBox.Show("Weet je zeker dat de volgende plaats " + place.PlaceNumber + " verwijderd wordt?", "Waarschuwing!", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                MessageBoxResult deleteMessageBox = MessageBox.Show("Weet je zeker dat de volgende plaats " + place.PlaceID + " verwijderd wordt?", "Waarschuwing!", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (deleteMessageBox == MessageBoxResult.Yes)
             {
-                _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Where(i => i.PlaceNumber != place.PlaceNumber).ToList();
+                _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Where(i => i.PlaceID != place.PlaceID).ToList();
                 PlacesOverviewPageDelete.DeletePlace(_camping, place, DateTime.Now.Date);
                 _camping.Places = _camping.CampingRepository.GetPlaces();
                 ReloadScreenDataAfterDeletePlace();
@@ -293,8 +293,8 @@ namespace CampingUI
             PlacesListView.SelectedItems.Clear();
             PlacesListView.ItemsSource = _placesSortedAndOrFiltered;
 
-            if (!_placesSortedAndOrFiltered.IsNullOrEmpty() && _maxPriceRange > _placesSortedAndOrFiltered.Max(i => i.PricePerNight))
-                _maxPriceRange = _placesSortedAndOrFiltered.Max(i => i.PricePerNight);
+            if (!_placesSortedAndOrFiltered.IsNullOrEmpty() && _maxPriceRange > _placesSortedAndOrFiltered.Max(i => i.PricePerNightPerPerson))
+                _maxPriceRange = _placesSortedAndOrFiltered.Max(i => i.PricePerNightPerPerson);
             else
                 _maxPriceRange = 0;
             MaxPriceRangeTextBox.Text = $"{_maxPriceRange}";
@@ -303,7 +303,7 @@ namespace CampingUI
         private void SetDeleteButtonClickableIfNoReservations()
         {
             Place place = (Place)PlacesListView.SelectedItem;
-            var placesReservations = _camping.Reservations.Where(i => i.PlaceID == place.PlaceNumber)
+            var placesReservations = _camping.Reservations.Where(i => i.PlaceID == place.PlaceID)
                                                           .Where(i => i.DepartureDate >= DateTime.Now.Date).ToList();
             if (placesReservations.Count > 0)
             {
@@ -325,20 +325,19 @@ namespace CampingUI
                 Place place = (Place)PlacesListView.SelectedItem;
                 nrLabel.Content = place;
                 areaLabel.Content = "Oppervlakte: " + place.SurfaceArea;
-                nrPeopleLabel.Content = "Aantal personnen:" + place.PersonCount;
+                nrPeopleLabel.Content = "Aantal personnen:" + place.AmountOfPeople;
                 electricityLabel.Content = "Toegang tot stroom: ";
 
-                if (place.HasPower) electricityLabel.Content += "Ja";
+                if (place.Power) electricityLabel.Content += "Ja";
                 else electricityLabel.Content += "Nee";
-                priceLabel.Content = "Prijs: " + String.Format("{0:0.00}", place.PricePerNight) + "$";
-                descriptionLabel.Content = "Beschrijving: " + place.Description;
+                priceLabel.Content = "Prijs: " + String.Format("{0:0.00}", place.PricePerNightPerPerson) + "$";
 
                 PlaceOverviewGrid.Visibility = Visibility.Visible;
                 ReservationCalender.BlackoutDates.Clear();
 
                 ReservationCalender.SelectedDate = null;
                 _camping.Reservations = _camping.CampingRepository.GetReservations();
-                var reservations = _camping.Reservations.Where(r => r.PlaceID == place.PlaceNumber).ToList();
+                var reservations = _camping.Reservations.Where(r => r.PlaceID == place.PlaceID).ToList();
                 reservations = reservations.Where(r => r.DepartureDate >= DateTime.Now).ToList();
                 ReservationCalender.BlackoutDates.AddDatesInPast();
                 foreach (var reservation in reservations)
@@ -406,7 +405,8 @@ namespace CampingUI
                 }
 
                 //Make a new place with the input of the textboxes
-                Place place = new Place(placeNumber, hasElectricity, surfaceArea, amountOfPeople, pricePerPersonPerNight, placeDescription);
+                // -------------------------------------------------- MOET AANGEPAST WORDEN-----------------------------------------------------
+                Place place = new Place(placeNumber, hasElectricity, 1, true, surfaceArea,amountOfPeople, pricePerPersonPerNight, 1, 1);
 
                 //Database db = new Database();
                 //db.AddPlaceToDatabase(place);
