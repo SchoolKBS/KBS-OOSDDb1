@@ -11,12 +11,12 @@ namespace CampingCore
         public int PlaceID { get; set; }
         public int EmployeeID { get; set; } //Who handled the Reservation
         public int GuestID { get; set;}
-        public int PersonCount { get; set; }
+        public int AmountOfPeople { get; set; }
         public bool IsPaid { get; set; }
         public double Price { get; set; }
 
         //Guest still has to get added 
-        public Reservation(int reservationNumber, DateTime arrivalDate, DateTime departureDate, int placeID, int employeeID, int guestID, int personCount, bool isPaid, double price)
+        public Reservation(int reservationNumber, DateTime arrivalDate, DateTime departureDate, int placeID, int employeeID, int guestID, int amountOfPeople, bool isPaid, double price)
         {
             this.ReservationID = reservationNumber;
             this.ArrivalDate = arrivalDate;
@@ -24,7 +24,7 @@ namespace CampingCore
             this.PlaceID = placeID;
             this.EmployeeID = employeeID;
             this.GuestID = guestID;
-            this.PersonCount = personCount;
+            this.AmountOfPeople = amountOfPeople;
             this.IsPaid = isPaid;
             this.Price = price;
         }
@@ -36,7 +36,7 @@ namespace CampingCore
             PlaceID = (int)properties[3];
             EmployeeID = (int)properties[4];
             GuestID = (int)properties[5];
-            PersonCount = (int)properties[6];
+            AmountOfPeople = (int)properties[6];
             IsPaid = (bool)properties[7];
             Price = (double)properties[8];
         }

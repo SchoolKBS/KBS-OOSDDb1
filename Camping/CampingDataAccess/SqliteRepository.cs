@@ -556,7 +556,7 @@ namespace CampingDataAccess
                     command.Parameters.AddWithValue("@plID", reservation.PlaceID);
                     command.Parameters.AddWithValue("@emID", reservation.EmployeeID);
                     command.Parameters.AddWithValue("@guID", reservation.GuestID);
-                    command.Parameters.AddWithValue("@AmountOfPeople", reservation.PersonCount);
+                    command.Parameters.AddWithValue("@AmountOfPeople", reservation.AmountOfPeople);
                     command.Parameters.AddWithValue("@IsPaid", reservation.IsPaid);
                     command.Parameters.AddWithValue("@Price", reservation.Price);
                     command.ExecuteNonQuery();
@@ -695,6 +695,11 @@ namespace CampingDataAccess
         }
 
         public List<Area> GetAreas()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdatePlaceData(Place place)
         {
             throw new NotImplementedException();
         }

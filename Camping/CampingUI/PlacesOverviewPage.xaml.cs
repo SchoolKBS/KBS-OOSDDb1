@@ -31,13 +31,13 @@ namespace CampingUI
         public Camping Camping { get { return _camping; } }
         private IEnumerable<Place> _placesSortedAndOrFiltered;
         private bool? _hasPower;
-        public int PersonCount = 0;
+        public int AmountOfPeople = 0;
         private DateTime _arrivalDate, _departureDate;
         private bool _isSortedAscending = true;
         private double _maxPriceRange = 0;
         private bool _wrongFilter = false;
         private string _headerTag;
-        public bool FilterAplied = false;
+        public bool FilterApplied = false;
         private bool _emptyDates = true;
 
         public PlacesOverviewPage(Camping camping, SqliteRepository campingRepository)
@@ -47,17 +47,10 @@ namespace CampingUI
             if (!_camping.Places.IsNullOrEmpty())
                 _maxPriceRange = _camping.Places.Max(i => i.PricePerNightPerPerson);
             MaxPriceRangeTextBox.Text = $"{_maxPriceRange}"; //Set the _maxPriceRange as a standard
-            PersonCountTextBox.Text = $"{PersonCount}"; //Set the text in the textbox to 0
+            AmountOfPeopleTextBox.Text = $"{AmountOfPeople}"; //Set the text in the textbox to 0
             _placesSortedAndOrFiltered = _camping.Places; //get all the places to the variable
             PlacesListView.ItemsSource = _placesSortedAndOrFiltered; // For all items in the ListBox use the camping places.
-            this._headerTag = "Placenumber";
-            /*foreach (ListViewItem item in PlacesListView.Items)
-            {
-                if (item.TabIndex % 2 == 0)
-                    item.Background = new SolidColorBrush(Color.FromRgb(21, 50, 96));
-                else
-                    item.Background = new SolidColorBrush(Color.FromRgb(29, 67, 129));
-            }*/
+            this._headerTag = "PlaceID";
         }
 
         //Function (EventHandler) that resets the background of a textbox if the filters are reset
@@ -91,27 +84,27 @@ namespace CampingUI
             else _hasPower = null;
         }
 
-        // Function to get the AmountOfPeople from the PersonCountTextBox text
-        private void SetPersonCountFromPersonCountTextBox()
+        // Function to get the AmountOfPeople from the AmountOfPeopleTextBox text
+        private void SetAmountOfPeopleFromAmountOfPeopleTextBox()
         {
             int number;
-            if (!string.IsNullOrEmpty(PersonCountTextBox.Text))
+            if (!string.IsNullOrEmpty(AmountOfPeopleTextBox.Text))
             {
-                if (int.TryParse(PersonCountTextBox.Text, out number) && number >= 0)// Checks if int can be parsed and if number is bigger or equal to 0
+                if (int.TryParse(AmountOfPeopleTextBox.Text, out number) && number >= 0)// Checks if int can be parsed and if number is bigger or equal to 0
                 {
-                    PersonCount = number;
+                    AmountOfPeople = number;
                 }
                 else
                 {
-                    PersonCountTextBox.Background = Brushes.Red;
+                    AmountOfPeopleTextBox.Background = Brushes.Red;
                     _wrongFilter = true;
                 }
 
             }
             else
             {
-                PersonCount = 0;
-                PersonCountTextBox.Text = $"{PersonCount}";
+                AmountOfPeople = 0;
+                AmountOfPeopleTextBox.Text = $"{AmountOfPeople}";
             }
         }
 
@@ -185,32 +178,32 @@ namespace CampingUI
         private void ApplyFilters_Click(object sender, RoutedEventArgs e)
         {
             PlacesListView.SelectedItems.Clear();
-            SetPersonCountFromPersonCountTextBox();
+            SetAmountOfPeopleFromAmountOfPeopleTextBox();
             SetMaxPriceFromMaxPriceRangeTextBox();
             SetArrivalAndDepartureDates();
             _camping.Places = _camping.CampingRepository.GetPlaces();
             if (!_camping.Places.IsNullOrEmpty())
             {
                 _placesSortedAndOrFiltered = _camping.Places;
-                Filter(_arrivalDate, _departureDate, PersonCount, _maxPriceRange, _hasPower);
+                Filter(_arrivalDate, _departureDate, AmountOfPeople, _maxPriceRange, _hasPower);
             }
 
         }
 
         // Function to filter the places List based on either or choice on arrival and departure date, amount of people possible on the _place,
         // The max Price a guest is willing to pay and if it has power or not 
-        private void Filter(DateTime arrivalDate, DateTime departureDate, int personCount, double maxPriceRange, bool? hasPower)
+        private void Filter(DateTime arrivalDate, DateTime departureDate, int amountOfPeople, double maxPriceRange, bool? hasPower)
         {
 
             if (!_wrongFilter)
             {
                 _placesSortedAndOrFiltered = PlacesOverviewPageFilter.GetFilteredListOnPrice(maxPriceRange, _placesSortedAndOrFiltered, _camping);
-                _placesSortedAndOrFiltered = PlacesOverviewPageFilter.GetFilteredListOnPersonCount(personCount, _placesSortedAndOrFiltered, _camping);
+                _placesSortedAndOrFiltered = PlacesOverviewPageFilter.GetFilteredListOnAmountOfPeople(amountOfPeople, _placesSortedAndOrFiltered, _camping);
                 _placesSortedAndOrFiltered = PlacesOverviewPageFilter.GetFilteredListOnDate(_emptyDates, arrivalDate, departureDate, _placesSortedAndOrFiltered, _camping);
                 _placesSortedAndOrFiltered = PlacesOverviewPageFilter.GetFilteredListOnPower(hasPower, _placesSortedAndOrFiltered, _camping);
                 _placesSortedAndOrFiltered = PlacesOverviewPageSorting.SetSortDuringFiltering(_isSortedAscending, _headerTag, _placesSortedAndOrFiltered);
                 PlacesListView.ItemsSource = _placesSortedAndOrFiltered;
-                FilterAplied = true;
+                FilterApplied = true;
             }
 
         }
@@ -221,7 +214,7 @@ namespace CampingUI
             ArrivalDatePicker.SelectedDate = null;
             DepartureDatePicker.SelectedDate = null;
             PowerRadioButton3.IsChecked = true;
-            PersonCount = 0;
+            AmountOfPeople = 0;
             _camping.Places = _camping.CampingRepository.GetPlaces();
             if (!_camping.Places.IsNullOrEmpty())
             {
@@ -233,12 +226,12 @@ namespace CampingUI
             {
                 _maxPriceRange = 0;
             }
-            PersonCountTextBox.Text = $"{PersonCount}"; ;
+            AmountOfPeopleTextBox.Text = $"{AmountOfPeople}"; ;
             MaxPriceRangeTextBox.Text = $"{_maxPriceRange}";
 
             ResetBackgroundsFilters();
             _wrongFilter = false;
-            FilterAplied = false;
+            FilterApplied = false;
         }
 
         //Function to reset all the filters input fields to the standard background color
@@ -247,7 +240,7 @@ namespace CampingUI
             ArrivalDatePicker.Background = Brushes.White;
             DepartureDatePicker.Background = Brushes.White;
             MaxPriceRangeTextBox.Background = Brushes.White;
-            PersonCountTextBox.Background = Brushes.White;
+            AmountOfPeopleTextBox.Background = Brushes.White;
         }
 
         // Function (EventHandler) to sort the list of places based on the clicked column name and corresponding data
@@ -263,12 +256,12 @@ namespace CampingUI
 
         private IEnumerable<Place> SortColumns(string headerTag)
         {
-            if (headerTag.Equals("Placenumber"))
-                _placesSortedAndOrFiltered = PlacesOverviewPageSorting.SortColumnPlaceNumber(_isSortedAscending, _placesSortedAndOrFiltered);
+            if (headerTag.Equals("PlaceID"))
+                _placesSortedAndOrFiltered = PlacesOverviewPageSorting.SortColumnPlaceID(_isSortedAscending, _placesSortedAndOrFiltered);
             else if (headerTag.Equals("Price"))
                 _placesSortedAndOrFiltered = PlacesOverviewPageSorting.SortColumnPrice(_isSortedAscending, _placesSortedAndOrFiltered);
             else
-                _placesSortedAndOrFiltered = PlacesOverviewPageSorting.SortColumnPersonCount(_isSortedAscending, _placesSortedAndOrFiltered);
+                _placesSortedAndOrFiltered = PlacesOverviewPageSorting.SortColumnAmountOfPeople(_isSortedAscending, _placesSortedAndOrFiltered);
             _isSortedAscending = !_isSortedAscending;
             _headerTag = headerTag;
             return _placesSortedAndOrFiltered;
@@ -284,7 +277,7 @@ namespace CampingUI
         private void DeletePlaceButton_Click(object sender, RoutedEventArgs e)
         {
             Place place = (Place)PlacesListView.SelectedItem;
-            MessageBoxResult deleteMessageBox = MessageBox.Show("Weet je zeker dat de volgende plaats " + place.PlaceNumber + " verwijderd wordt?", "Waarschuwing!", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            MessageBoxResult deleteMessageBox = MessageBox.Show("Weet je zeker dat de volgende plaats " + place.PlaceID + " verwijderd wordt?", "Waarschuwing!", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (deleteMessageBox == MessageBoxResult.Yes)
             {
                 _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Where(i => i.PlaceID != place.PlaceID).ToList();
@@ -373,7 +366,7 @@ namespace CampingUI
 
             string[] TextInput =
             {
-                PlaceNumber.Text,
+                PlaceID.Text,
                 SurfaceArea.Text,
                 PricePerPersonPerNight.Text,
                 NumberOfPeople.Text,
@@ -393,12 +386,11 @@ namespace CampingUI
             try
             {
                 //Parses the string inputs from textboxes to ints
-                int placeNumber = Int32.Parse(PlaceNumber.Text);
+                int placeID = Int32.Parse(PlaceID.Text);
                 int surfaceArea = Int32.Parse(SurfaceArea.Text);
                 int pricePerPersonPerNight = Int32.Parse(PricePerPersonPerNight.Text);
                 int amountOfPeople = Int32.Parse(NumberOfPeople.Text);
                 string electricity = HasPower.SelectionBoxItem.ToString();
-                string placeDescription = PlaceDescription.Text;
                 //Checks if the place has electricity 
                 bool hasPower;
                 if (electricity.Equals("Ja"))
@@ -412,10 +404,8 @@ namespace CampingUI
 
                 //Make a new place with the input of the textboxes
                 // -------------------------------------------------- MOET AANGEPAST WORDEN-----------------------------------------------------
-                Place place = new Place(placeNumber, hasElectricity, 1, true, surfaceArea,amountOfPeople, pricePerPersonPerNight, 1, 1);
+                Place place = new Place(placeID, hasPower, 1, true, surfaceArea,amountOfPeople, pricePerPersonPerNight, 1, 1);
 
-                //Database db = new Database();
-                //db.AddPlaceToDatabase(place);
                 _camping.CampingRepository.AddPlace(place);
 
 
@@ -428,15 +418,13 @@ namespace CampingUI
                     }
                 }
 
-
-                //misschien aanpassen zodat deze niet blijft staan
-                AddPlaceMessage.Text = "Nieuwe plaats is toegevoegd";
-                AddPlaceMessage.Foreground = Brushes.Green;
+                //AddPlaceMessage.Text = "Nieuwe plaats is toegevoegd";
+                //AddPlaceMessage.Foreground = Brushes.Green;
                 _camping.Places = _camping.CampingRepository.GetPlaces();
                 PlacesListView.ItemsSource = _camping.Places;
 
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
                 AddPlaceMessage.Text = "Ongeldigde input";
                 AddPlaceMessage.Foreground = Brushes.Red;
@@ -457,16 +445,15 @@ namespace CampingUI
 
         private void AddPlaceDataToTextfields(Place place)
         {
-            PlaceNumber.Text = place.PlaceNumber.ToString();
-            PlaceNumber.IsEnabled = false;
+            PlaceID.Text = place.PlaceID.ToString();
+            PlaceID.IsEnabled = false;
             SurfaceArea.Text = place.SurfaceArea.ToString();
-            if (place.HasPower)
+            if (place.Power)
                 HasPower.SelectedItem = "Ja";
             else
                 HasPower.SelectedItem = "Nee";
-            NumberOfPeople.Text = place.PersonCount.ToString();
-            PricePerPersonPerNight.Text = place.PricePerNight.ToString();
-            PlaceDescription.Text = place.Description.ToString();
+            NumberOfPeople.Text = place.AmountOfPeople.ToString();
+            PricePerPersonPerNight.Text = place.AmountOfPeople.ToString();
         }
 
         private Place GetPlaceFromTextBoxes()
@@ -474,19 +461,18 @@ namespace CampingUI
             try
             {
                 //Parses the string inputs from textboxes to ints
-                int placeNumber = Int32.Parse(PlaceNumber.Text);
+                int placeID = Int32.Parse(PlaceID.Text);
                 int surfaceArea = Int32.Parse(SurfaceArea.Text);
                 double pricePerPersonPerNight = double.Parse(PricePerPersonPerNight.Text);
-                int personCount = Int32.Parse(NumberOfPeople.Text);
+                int numberOfPeople = Int32.Parse(NumberOfPeople.Text);
                 string electricity = HasPower.SelectionBoxItem.ToString();
-                string placeDescription = PlaceDescription.Text;
                 //Checks if the place has electricity 
                 bool hasPower;
                 if (electricity.Equals("Ja"))
                     hasPower = true;
                 else
                     hasPower = false;
-                return new Place(placeNumber, hasPower, surfaceArea, personCount, pricePerPersonPerNight, placeDescription);
+                return new Place(placeID, hasPower, surfaceArea, true, numberOfPeople, 1, pricePerPersonPerNight, 1, 1);
             }
             catch
             {
@@ -513,13 +499,12 @@ namespace CampingUI
 
         private void ResetDataFromTextfields()
         {
-            PlaceNumber.Text = null;
-            PlaceNumber.IsEnabled = true;
+            PlaceID.Text = null;
+            PlaceID.IsEnabled = true;
             SurfaceArea.Text = null;
             HasPower.Text = null;
             NumberOfPeople.Text = null;
             PricePerPersonPerNight.Text = null;
-            PlaceDescription.Text = null;
         }
 
         //Function to check if the input is null or not from a text array

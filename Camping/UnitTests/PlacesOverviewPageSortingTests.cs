@@ -22,11 +22,11 @@ namespace UnitTests
 
             for (int i = 1; i <= 5; i++)
             {
-                listToCheck.Add(new Place(i, true, i, i, i));
+                listToCheck.Add(new Place(i, true, i, true, i, i, i, i, i));
             }
             for (int i = 6; i <= 10; i++)
             {
-                listToCheck.Add(new Place(i, false, i, i, i));
+                listToCheck.Add(new Place(i, false, i, false, i, i, i, i, i));
             }
             IEnumerable<Place> places = new List<Place>();
             camping.Places = listToCheck;
@@ -37,7 +37,7 @@ namespace UnitTests
 
         [TestCase(true, 10)]
         [TestCase(false, 1)]
-        public void SortColumnPersonCount_boolAndInt_returnsList(bool isSorted, int number)
+        public void SortColumnAmountOfPeople_boolAndInt_returnsList(bool isSorted, int number)
         {
             SqliteRepository campingRepository = new SqliteRepository();
             Camping camping = new Camping(campingRepository);
@@ -45,22 +45,22 @@ namespace UnitTests
 
             for (int i = 1; i <= 5; i++)
             {
-                listToCheck.Add(new Place(i, true, i, i, i));
+                listToCheck.Add(new Place(i, true, i, true, i, i, i, i ,i));
             }
             for (int i = 6; i <= 10; i++)
             {
-                listToCheck.Add(new Place(i, false, i, i, i));
+                listToCheck.Add(new Place(i, false, i, false, i, i, i, i, i));
             }
             IEnumerable<Place> places = new List<Place>();
             camping.Places = listToCheck;
             places = listToCheck;
-            places = PlacesOverviewPageSorting.SortColumnPersonCount(isSorted, camping.Places);
+            places = PlacesOverviewPageSorting.SortColumnAmountOfPeople(isSorted, camping.Places);
             Assert.That(places.First().PricePerNightPerPerson, Is.EqualTo(number));
         }
 
         [TestCase(true, 10)]
         [TestCase(false, 1)]
-        public void SortColumnPlaceNumber_boolAndInt_returnsList(bool isSorted, int number)
+        public void SortColumnPlaceID_boolAndInt_returnsList(bool isSorted, int number)
         {
             SqliteRepository campingRepository = new SqliteRepository();
             Camping camping = new Camping(campingRepository);
@@ -68,16 +68,16 @@ namespace UnitTests
 
             for (int i = 1; i <= 5; i++)
             {
-                listToCheck.Add(new Place(i, true, i, i, i));
+                listToCheck.Add(new Place(i, true, i, true, i, i, i, i, i));
             }
             for (int i = 6; i <= 10; i++)
             {
-                listToCheck.Add(new Place(i, false, i, i, i));
+                listToCheck.Add(new Place(i, false, i, false, i, i, i, i, i));
             }
             IEnumerable<Place> places = new List<Place>();
             camping.Places = listToCheck;
             places = listToCheck;
-            places = PlacesOverviewPageSorting.SortColumnPlaceNumber(isSorted, camping.Places);
+            places = PlacesOverviewPageSorting.SortColumnPlaceID(isSorted, camping.Places);
             Assert.That(places.First().PricePerNightPerPerson, Is.EqualTo(number));
         }
     }
