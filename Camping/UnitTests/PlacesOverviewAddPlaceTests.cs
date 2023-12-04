@@ -8,13 +8,29 @@ namespace UnitTests
         [Test]
         public void AddValidPlace()
         {
-            int placeNumber = 12;
-            int surfaceArea = 10;
-            int pricePerPersonPerNight = 25;
-            int amountOfPeople = 2;
-            bool hasPower = true;
-            Place place = new Place(placeNumber, hasPower, surfaceArea, amountOfPeople, pricePerPersonPerNight);
-            Assert.IsTrue(place.HasPower);
+            int PlaceNumber = 12;
+            int SurfaceArea = 10;
+            int PricePerPersonPerNight = 25;
+            int AmountOfPeople = 2;
+            string Description = "Een plaats met mooi uiticht";
+            string Electricity = "ja";
+            bool HasElectricity;
+
+            if (Electricity.Equals("ja"))
+            {
+                HasElectricity = true;
+            }
+            else
+            {
+                HasElectricity = false;
+            }
+
+            Place place = new Place(PlaceNumber, HasElectricity, SurfaceArea, AmountOfPeople, PricePerPersonPerNight, Description);
+            Camping camping = new Camping();
+            camping.Places.Add(place);
+
+            Assert.IsTrue(camping.Places.Contains(place));
+            Assert.IsTrue(place.Power);
         }
 
         [Test]

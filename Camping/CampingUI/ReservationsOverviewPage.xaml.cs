@@ -15,7 +15,7 @@ namespace CampingUI
 
         private Camping _camping { get; set; }
 
-        public ReservationsOverviewWindow(Camping camping, CampingRepository campingRepository)
+        public ReservationsOverviewWindow(Camping camping, SqliteRepository campingRepository)
         {
             InitializeComponent();
             _camping = camping;
@@ -49,7 +49,7 @@ namespace CampingUI
                 if (reservationToDelete != null)
                 {
                     // Show a confirmation dialog
-                    MessageBoxResult result = MessageBox.Show("Weet je zeker dat je reservering " + reservationToDelete.ReservationNumber + " wil verwijderen?", "Waarschuwing!", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    MessageBoxResult result = MessageBox.Show("Weet je zeker dat je reservering " + reservationToDelete.ReservationID + " wil verwijderen?", "Waarschuwing!", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
                     // Check the users choice
                     if (result == MessageBoxResult.Yes)

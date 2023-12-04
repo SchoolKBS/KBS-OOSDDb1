@@ -21,13 +21,16 @@ namespace CampingUI
     public partial class MainWindow : Window
     {
 
-        public CampingRepository CampingRepository { get; private set; }
+        public SqliteRepository CampingRepository { get; private set; }
         public Camping Camping { get; private set; }
         public MainWindow()
         {
             InitializeComponent();
             Main.Navigate(new MainPage());
-            this.CampingRepository = new CampingRepository();
+            this.CampingRepository = new SqliteRepository();
+
+            //CampingRepository.AddDummyData();
+
             this.Camping = new Camping(CampingRepository);
 
         }
@@ -64,6 +67,7 @@ namespace CampingUI
             animation.Completed += (s, _) => Close();
             BeginAnimation(OpacityProperty, animation);
         }
+
 
     }
 
