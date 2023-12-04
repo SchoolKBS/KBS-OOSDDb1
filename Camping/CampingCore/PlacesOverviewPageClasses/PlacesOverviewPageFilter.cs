@@ -30,7 +30,7 @@ namespace CampingCore.PlacesOverviewPageClasses
 
         }
 
-        // Function to filter the list of places on the int PersonCount
+        // Function to filter the list of places on the int AmountOfPeople
         public static IEnumerable<Place> GetFilteredListOnPersonCount(int personCount, IEnumerable<Place> _placesSortedAndOrFiltered, Camping _camping)
         {
             if (personCount >= 0)
