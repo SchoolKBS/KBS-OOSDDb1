@@ -101,7 +101,7 @@ namespace CampingDataAccess
                 "StreetID INTEGER NOT NULL, " +
                 "Power TINYINT NOT NULL," +
                 "SurfaceArea INT NOT NULL," +
-                "PricePerNightPerPerson DECIMAL(18,2)," +
+                "PricePerNightPerPerson DECIMAL(18,2) NOT NULL," +
                 "AmountOfPeople INT NOT NULL," +
                 "Dogs TINYINT NOT NULL," +
                 "Xcord INT NOT NULL," +
