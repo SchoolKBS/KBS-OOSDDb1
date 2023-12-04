@@ -34,10 +34,10 @@ namespace CampingDataAccess
                 "LastName VARCHAR(255) NOT NULL," +
                 "Infix VARCHAR(255)," +
                 "Email VARCHAR(255)," +
-                "Phonenumber VARCHAR(255) NOT NULL," +
+                "PhoneNumber VARCHAR(255) NOT NULL," +
                 "City VARCHAR(255)," +
                 "Address VARCHAR(255)," +
-                "Postalcode VARCHAR(255)" +
+                "PostalCode VARCHAR(255)" +
                 ");";
             using (var connection = new SqliteConnection(connectionString))
             {
@@ -474,7 +474,7 @@ namespace CampingDataAccess
         }
         public void AddDummyDataGuests(string firstName, string lastName, string infix, string email, string city, string address, int i)
         {
-            string sql = "INSERT INTO Guest (FirstName, LastName, Infix, Email, Phonenumber, City, Address, PostalCode) VALUES (@FirstName, @LastName, @Infix, @Email, @Phonenumber, @City, @Address, @PostalCode);";
+            string sql = "INSERT INTO Guest (FirstName, LastName, Infix, Email, PhoneNumber, City, Address, PostalCode) VALUES (@FirstName, @LastName, @Infix, @Email, @PhoneNumber, @City, @Address, @PostalCode);";
 
             using (var connection = new SqliteConnection(connectionString))
             {
@@ -486,7 +486,7 @@ namespace CampingDataAccess
                     command.Parameters.AddWithValue("@LastName", lastName);
                     command.Parameters.AddWithValue("@Infix", infix);
                     command.Parameters.AddWithValue("@Email", email);
-                    command.Parameters.AddWithValue("@Phonenumber", i);
+                    command.Parameters.AddWithValue("@PhoneNumber", i);
                     command.Parameters.AddWithValue("@City", city);
                     command.Parameters.AddWithValue("@Address", address);
                     command.Parameters.AddWithValue("@PostalCode", i);
@@ -646,7 +646,7 @@ namespace CampingDataAccess
 
         public void AddGuest(Guest guest)
         {
-            string sql = "INSERT INTO Guest (FirstName, LastName, Infix, Email, Phonenumber, City, Address, PostalCode) VALUES (@FirstName, @LastName, @Infix, @Email, @Phonenumber, @City, @Address, @PostalCode);";
+            string sql = "INSERT INTO Guest (FirstName, LastName, Infix, Email, PhoneNumber, City, Address, PostalCode) VALUES (@FirstName, @LastName, @Infix, @Email, @PhoneNumber, @City, @Address, @PostalCode);";
             using (var connection = new SqliteConnection(connectionString))
             {
                 connection.Open();
@@ -657,7 +657,7 @@ namespace CampingDataAccess
                     command.Parameters.AddWithValue("@LastName", guest.LastName);
                     command.Parameters.AddWithValue("@Infix", guest.Infix);
                     command.Parameters.AddWithValue("@Email", guest.Email);
-                    command.Parameters.AddWithValue("@Phonenumber", guest.PhoneNumber);
+                    command.Parameters.AddWithValue("@PhoneNumber", guest.PhoneNumber);
                     command.Parameters.AddWithValue("@City", guest.City);
                     command.Parameters.AddWithValue("@Address", guest.Address);
                     command.Parameters.AddWithValue("@PostalCode", guest.PostalCode);
