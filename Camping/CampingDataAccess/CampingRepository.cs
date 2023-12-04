@@ -30,22 +30,31 @@ namespace CampingDataAccess
 
             using (var connection = new SqlConnection(connectionString))
             {
-                connection.Open();
-
-                using (var command = new SqlCommand(sql, connection))
+                try
                 {
-                    using (var reader = command.ExecuteReader())
+                    connection.Open();
+
+                    using (var command = new SqlCommand(sql, connection))
                     {
-                        while (reader.Read())
+                        using (var reader = command.ExecuteReader())
                         {
-                            result.Add(new Place(reader.GetInt32(0),
-                                Convert.ToBoolean(reader.GetByte(1)),
-                                reader.GetInt32(2),
-                                reader.GetInt32(4),
-                                Convert.ToDouble(reader.GetDecimal(3))));
+                            while (reader.Read())
+                            {
+                                result.Add(new Place(reader.GetInt32(0),
+                                    Convert.ToBoolean(reader.GetByte(1)),
+                                    reader.GetInt32(2),
+                                    reader.GetInt32(4),
+                                    Convert.ToDouble(reader.GetDecimal(3))));
+                            }
                         }
                     }
+                } catch
+                {
+
                 }
+               
+
+                
                 return result;
             }
         }
@@ -84,26 +93,32 @@ namespace CampingDataAccess
 
             using (var connection = new SqlConnection(connectionString))
             {
-                connection.Open();
-
-                using (var command = new SqlCommand(sql, connection))
+                try
                 {
-                    using (var reader = command.ExecuteReader())
+                    connection.Open();
+
+                    using (var command = new SqlCommand(sql, connection))
                     {
-                        while (reader.Read())
+                        using (var reader = command.ExecuteReader())
                         {
-                            result.Add(new Reservation(reader.GetInt32(0),
-                                reader.GetDateTime(1),
-                                reader.GetDateTime(2),
-                                reader.GetInt32(3),
-                                reader.GetInt32(4),
-                                reader.GetInt32(5),
-                                reader.GetInt32(6),
-                                Convert.ToBoolean(reader.GetByte(7)),
-                                reader.GetDouble(8)
-                                ));
+                            while (reader.Read())
+                            {
+                                result.Add(new Reservation(reader.GetInt32(0),
+                                    reader.GetDateTime(1),
+                                    reader.GetDateTime(2),
+                                    reader.GetInt32(3),
+                                    reader.GetInt32(4),
+                                    reader.GetInt32(5),
+                                    reader.GetInt32(6),
+                                    Convert.ToBoolean(reader.GetByte(7)),
+                                    reader.GetDouble(8)
+                                    ));
+                            }
                         }
                     }
+                } catch
+                {
+
                 }
             }
             return result;
