@@ -15,12 +15,16 @@ namespace CampingCore
         public void RemoveReservation(Reservation reservation);
         public void AddReservation(Reservation reservation);
         public void AddGuest(Guest guest);
+        public void AddDummyDataArea();
+        public void AddDummyDataStreet();
         public void AddDummyDataPlaces();
         public void AddDummyData();
         public void AddDummyDataReservations(int placeID, int employeeID, int guestID, int i);
         public void AddDummyDataGuests(string firstName, string lastName, string infix, string email, string city, string address, int i);
         public List<Guest> GetGuests();
         public List<Employee> GetEmployees();
+        public List<Street> GetStreets();
+        public List<Area> GetAreas();
         public Place GetPlaceFromPlaceID(int id);
         public Place GetEmployeeFromEmployeeID(int id);
         public Place GetGuestFromGuestID(int id);

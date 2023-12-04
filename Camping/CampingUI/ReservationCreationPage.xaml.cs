@@ -73,11 +73,11 @@ namespace CampingUI
         private double CalcPrice()
         {
             int.TryParse(PeopleCountText.Text, out var TextToInt);
-            if (TextToInt.GetType() == typeof(int) && TextToInt > 0 && TextToInt <= _place.PersonCount && ArrivalDatePicker.SelectedDate.HasValue && DepartureDatePicker.SelectedDate.HasValue)
+            if (TextToInt.GetType() == typeof(int) && TextToInt > 0 && TextToInt <= _place.AmountOfPeople && ArrivalDatePicker.SelectedDate.HasValue && DepartureDatePicker.SelectedDate.HasValue)
             {
                 int dayscount = (int) DepartureDatePicker.SelectedDate.Value.Subtract(ArrivalDatePicker.SelectedDate.Value).TotalDays;
                 PeopleCountText.Background = null;
-                return _place.PricePerNight * TextToInt * dayscount;
+                return _place.PricePerNightPerPerson * TextToInt * dayscount;
             }
             else
             {
@@ -112,7 +112,7 @@ namespace CampingUI
         {
             bool result = int.TryParse(PeopleCountText.Text, out int number);
             if (!result) PeopleCountText.Background = Brushes.Red;
-            else if(number > _place.PersonCount)
+            else if(number > _place.AmountOfPeople)
             {
                 result = false;
                 PeopleCountText.Background = Brushes.Red;
@@ -138,7 +138,7 @@ namespace CampingUI
         {
             ArrivalDatePicker.DisplayDateStart = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
             ArrivalDatePicker.BlackoutDates.AddDatesInPast();
-            var reservations = _camping.Reservations.Where(r => r.PlaceID == _place.PlaceNumber && r.DepartureDate > DateTime.Now).ToList();
+            var reservations = _camping.Reservations.Where(r => r.PlaceID == _place.PlaceID && r.DepartureDate > DateTime.Now).ToList();
             foreach( var reservation in reservations )
             {
                 ArrivalDatePicker.BlackoutDates.Add(new CalendarDateRange(reservation.ArrivalDate, reservation.DepartureDate));
@@ -155,7 +155,7 @@ namespace CampingUI
                 DepartureDatePicker.IsEnabled = true;
                 DepartureDatePicker.DisplayDateStart = new DateTime(arrivalDate.Year, arrivalDate.Month, 1);
                 DepartureDatePicker.BlackoutDates.Add(new CalendarDateRange(DepartureDatePicker.DisplayDateStart.Value, arrivalDate));
-                var reservations = _camping.Reservations.Where(r => r.PlaceID == _place.PlaceNumber && r.ArrivalDate > DateTime.Today).ToList();
+                var reservations = _camping.Reservations.Where(r => r.PlaceID == _place.PlaceID && r.ArrivalDate > DateTime.Today).ToList();
                 if (reservations.Count > 0  && reservations.Min(r => r.ArrivalDate) > ArrivalDatePicker.SelectedDate)
                 {
                     var SoonestReservationStart = reservations.Min(r => r.ArrivalDate);
@@ -179,8 +179,8 @@ namespace CampingUI
                 _camping.CampingRepository.AddGuest(guest);
                 //Database db = new Database();
                 //db.AddGuestToDatabase(guest);
-                _camping.CampingRepository.AddReservation(new Reservation(0, (DateTime)ArrivalDatePicker.SelectedDate, (DateTime)DepartureDatePicker.SelectedDate, _place.PlaceNumber, 2, _camping.CampingRepository.GetLastGuestID(), int.Parse(PeopleCountText.Text), IsPaidCB.IsChecked.Value, Price));
-                NavigationService.Navigate(new PlacesOverviewPage(_camping, (CampingRepository)_camping.CampingRepository));
+                _camping.CampingRepository.AddReservation(new Reservation(0, (DateTime)ArrivalDatePicker.SelectedDate, (DateTime)DepartureDatePicker.SelectedDate, _place.PlaceID, 2, _camping.CampingRepository.GetLastGuestID(), int.Parse(PeopleCountText.Text), IsPaidCB.IsChecked.Value, Price));
+                NavigationService.Navigate(new PlacesOverviewPage(_camping, (SqliteRepository)_camping.CampingRepository));
             }
         }
         // Changes the background of textbox back to normal if its value was changed

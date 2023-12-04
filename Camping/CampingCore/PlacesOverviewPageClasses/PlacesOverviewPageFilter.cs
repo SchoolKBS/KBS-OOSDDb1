@@ -13,7 +13,7 @@ namespace CampingCore.PlacesOverviewPageClasses
         {
             if (hasPower != null)
             {
-                _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Intersect(_camping.Places.Where(i => i.HasPower == hasPower).Select(i => i));
+                _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Intersect(_camping.Places.Where(i => i.Power == hasPower).Select(i => i));
             }
             return _placesSortedAndOrFiltered;
         }
@@ -22,20 +22,20 @@ namespace CampingCore.PlacesOverviewPageClasses
         public static IEnumerable<Place> GetFilteredListOnPrice(double maxPriceRange, IEnumerable<Place> _placesSortedAndOrFiltered, Camping _camping)
         {
 
-            if (maxPriceRange >= _placesSortedAndOrFiltered.Min(i => i.PricePerNight))
+            if (maxPriceRange >= _placesSortedAndOrFiltered.Min(i => i.PricePerNightPerPerson))
             {
-                _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Intersect(_camping.Places.Where(i => i.PricePerNight <= maxPriceRange).Select(i => i));
+                _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Intersect(_camping.Places.Where(i => i.PricePerNightPerPerson <= maxPriceRange).Select(i => i));
             }
             return _placesSortedAndOrFiltered;
 
         }
 
-        // Function to filter the list of places on the int personCount
+        // Function to filter the list of places on the int PersonCount
         public static IEnumerable<Place> GetFilteredListOnPersonCount(int personCount, IEnumerable<Place> _placesSortedAndOrFiltered, Camping _camping)
         {
             if (personCount >= 0)
             {
-                _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Intersect(_camping.Places.Where(i => i.PersonCount >= personCount).Select(i => i));
+                _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Intersect(_camping.Places.Where(i => i.AmountOfPeople >= personCount).Select(i => i));
             }
             return _placesSortedAndOrFiltered;
         }
@@ -59,7 +59,7 @@ namespace CampingCore.PlacesOverviewPageClasses
             {
                 int counter = 0;
                 //All reservations of place
-                var reservationsOnPlace = _camping.Reservations.Where(i => i.PlaceID == place.PlaceNumber).Select(i => i);
+                var reservationsOnPlace = _camping.Reservations.Where(i => i.PlaceID == place.PlaceID).Select(i => i);
                 if (reservationsOnPlace.Count() > 0)
                 {
                     foreach (Reservation reservation in reservationsOnPlace)
