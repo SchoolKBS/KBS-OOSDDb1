@@ -179,7 +179,7 @@ namespace CampingUI
                 _camping.CampingRepository.AddGuest(guest);
                 //Database db = new Database();
                 //db.AddGuestToDatabase(guest);
-                _camping.CampingRepository.AddReservation(new Reservation(0, (DateTime)ArrivalDatePicker.SelectedDate, (DateTime)DepartureDatePicker.SelectedDate, _place.PlaceID, 2, _camping.CampingRepository.GetLastGuestID(), int.Parse(PeopleCountText.Text), IsPaidCB.IsChecked.Value, Price));
+                _camping.CampingRepository.AddReservation(new Reservation(0, (DateTime)ArrivalDatePicker.SelectedDate, (DateTime)DepartureDatePicker.SelectedDate, _place.PlaceID, _camping.CampingRepository.GetLastGuestID(), int.Parse(PeopleCountText.Text), IsPaidCB.IsChecked.Value, Price));
                 NavigationService.Navigate(new PlacesOverviewPage(_camping, (SqliteRepository)_camping.CampingRepository));
             }
         }
