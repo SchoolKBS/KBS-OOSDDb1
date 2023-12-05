@@ -19,12 +19,6 @@
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
-        "Entry"
-        {
-        "MsmKey" = "8:_8EAD0EFCBCEB401AA4176FB0A7274A58"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
     }
     "Configurations"
     {
@@ -107,6 +101,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
             }
         }
     }
@@ -139,26 +141,6 @@
         }
         "File"
         {
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8EAD0EFCBCEB401AA4176FB0A7274A58"
-            {
-            "SourcePath" = "8:C:\\Users\\Tiesg\\Downloads\\logo.ico"
-            "TargetName" = "8:logo.ico"
-            "Tag" = "8:"
-            "Folder" = "8:_D0AB17472A9B466E9B7D42AA586E061F"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
         }
         "FileType"
         {
@@ -347,7 +329,7 @@
             "Target" = "8:_0779E7ED070B4A3F953076EAE2226F10"
             "Folder" = "8:_DF1F92F22D51427AACC098547BC08560"
             "WorkingFolder" = "8:_D0AB17472A9B466E9B7D42AA586E061F"
-            "Icon" = "8:_8EAD0EFCBCEB401AA4176FB0A7274A58"
+            "Icon" = "8:"
             "Feature" = "8:"
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_9BB6FB66ECD64419A4DC9A3EB984F528"
@@ -361,7 +343,7 @@
             "Target" = "8:_0779E7ED070B4A3F953076EAE2226F10"
             "Folder" = "8:_D0AB17472A9B466E9B7D42AA586E061F"
             "WorkingFolder" = "8:_D0AB17472A9B466E9B7D42AA586E061F"
-            "Icon" = "8:_8EAD0EFCBCEB401AA4176FB0A7274A58"
+            "Icon" = "8:"
             "Feature" = "8:"
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_CAEE535E0F9D450890A31E0E59B91579"
@@ -375,7 +357,7 @@
             "Target" = "8:_0779E7ED070B4A3F953076EAE2226F10"
             "Folder" = "8:_52467B4D729746B5913D1556162848B2"
             "WorkingFolder" = "8:_D0AB17472A9B466E9B7D42AA586E061F"
-            "Icon" = "8:_8EAD0EFCBCEB401AA4176FB0A7274A58"
+            "Icon" = "8:"
             "Feature" = "8:"
             }
         }
