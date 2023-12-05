@@ -24,8 +24,33 @@ namespace CampingUI
         {
             InitializeComponent();
 
-            //Get guests from database
+            //Get all guests from database
             GuestOverviewItemsControl.ItemsSource = sql.GetGuests();
+        }
+
+        public void SelectGuestByID(int GuestID)
+        {
+            sql.GetGuestFromGuestID(GuestID);
+        }
+
+        public void FilterOnGuestName_Click(object sender, RoutedEventArgs e)
+        {
+            string FirstName = GuestFirstNameTextBox.Text;
+            string LastName = GuestLastNameTextBox.Text;
+
+            //Checks which fields are used to search a guest
+            if(string.IsNullOrEmpty(FirstName) && !string.IsNullOrEmpty(LastName))
+            {
+                GuestOverviewItemsControl.ItemsSource = sql.GetGuestsByLastName(LastName);
+
+            } else if (!string.IsNullOrEmpty(FirstName) && string.IsNullOrEmpty(LastName))
+            {
+                GuestOverviewItemsControl.ItemsSource = sql.GetGuestsByFirstName(FirstName);
+
+            } else if(!string.IsNullOrEmpty(FirstName) && !string.IsNullOrEmpty(LastName))
+            {
+                GuestOverviewItemsControl.ItemsSource = sql.GetGuestsByFirstAndLastName(FirstName, LastName);
+            }
         }
     }
 }

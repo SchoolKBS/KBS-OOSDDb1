@@ -460,7 +460,7 @@ namespace CampingDataAccess
             AddDummyDataPlaces();
             var places = GetPlaces();
             List<string> firstNames = MakeFirstNamesList();
-            List<string> lastNames = MakeFirstNamesList();
+            List<string> lastNames = MakeLastNamesList();
             List<string> infixes = MakeFirstNamesList();
             for (int i = 0; i < firstNames.Count; i++)
             {
@@ -535,20 +535,20 @@ namespace CampingDataAccess
             firstNames.Add("Sam");
             return firstNames;
         }
-        private List<string> MakeLastNameList()
+        private List<string> MakeLastNamesList()
         {
-            List<string> firstNames = new List<string>();
-            firstNames.Add("Jansen");
-            firstNames.Add("Pietson");
-            firstNames.Add("Baarssen");
-            firstNames.Add("Bouma");
-            firstNames.Add("Greve");
-            firstNames.Add("Bos");
-            firstNames.Add("Kleij");
-            firstNames.Add("Luwental");
-            firstNames.Add("Boerma");
-            firstNames.Add("Harke");
-            return firstNames;
+            List<string> lastNames = new List<string>();
+            lastNames.Add("Jansen");
+            lastNames.Add("Pietson");
+            lastNames.Add("Baarssen");
+            lastNames.Add("Bouma");
+            lastNames.Add("Greve");
+            lastNames.Add("Bos");
+            lastNames.Add("Kleij");
+            lastNames.Add("Luwental");
+            lastNames.Add("Boerma");
+            lastNames.Add("Harke");
+            return lastNames;
         }
 
         public Place GetEmployeeFromEmployeeID(int id)
@@ -630,6 +630,118 @@ namespace CampingDataAccess
         public List<Area> GetAreas()
         {
             throw new NotImplementedException();
+        }
+        
+        public List<Guest> GetGuestsByFirstAndLastName(string FirstName, string LastName) 
+        {
+            List<Guest> guests = new List<Guest>();
+            string sql = "SELECT * FROM Guest WHERE FirstName = @FirstName AND LastName = @LastName";
+
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+                using (var command = new SqliteCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@FirstName", FirstName);
+                    command.Parameters.AddWithValue("@LastName", LastName);
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            ArrayList Properties = new ArrayList();
+                            for (int i = 0; i < reader.FieldCount; i++)
+                            {
+                                string columnName = reader.GetName(i);
+                                Type columnType = reader.GetFieldType(i);
+                                object colmnValue = reader.GetValue(i);
+
+                                PropertyInfo property = typeof(Guest).GetProperty(columnName);
+                                if (property != null)
+                                {
+                                    Properties.Add(Convert.ChangeType(colmnValue, property.PropertyType));
+                                }
+                            }
+                            guests.Add(new Guest(Properties));
+                        }
+                    }
+                }
+            }
+            return guests;
+        }
+
+        public List<Guest> GetGuestsByFirstName(string FirstName)
+        {
+            List<Guest> guests = new List<Guest>();
+            string sql = "SELECT * FROM Guest WHERE FirstName = @FirstName";
+
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+                using (var command = new SqliteCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@FirstName", FirstName);
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            ArrayList Properties = new ArrayList();
+                            for (int i = 0; i < reader.FieldCount; i++)
+                            {
+                                string columnName = reader.GetName(i);
+                                Type columnType = reader.GetFieldType(i);
+                                object colmnValue = reader.GetValue(i);
+
+                                PropertyInfo property = typeof(Guest).GetProperty(columnName);
+                                if (property != null)
+                                {
+                                    Properties.Add(Convert.ChangeType(colmnValue, property.PropertyType));
+                                }
+                            }
+                            guests.Add(new Guest(Properties));
+                        }
+                    }
+                }
+            }
+            return guests;
+        }
+
+        public List<Guest> GetGuestsByLastName(string LastName)
+        {
+            List<Guest> guests = new List<Guest>();
+            string sql = "SELECT * FROM Guest WHERE LastName = @LastName";
+
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+                using (var command = new SqliteCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@LastName", LastName);
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            ArrayList Properties = new ArrayList();
+                            for (int i = 0; i < reader.FieldCount; i++)
+                            {
+                                string columnName = reader.GetName(i);
+                                Type columnType = reader.GetFieldType(i);
+                                object colmnValue = reader.GetValue(i);
+
+                                PropertyInfo property = typeof(Guest).GetProperty(columnName);
+                                if (property != null)
+                                {
+                                    Properties.Add(Convert.ChangeType(colmnValue, property.PropertyType));
+                                }
+                            }
+                            guests.Add(new Guest(Properties));
+                        }
+                    }
+                }
+            }
+            return guests;
         }
     }
 }
