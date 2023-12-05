@@ -21,7 +21,6 @@ namespace CampingDataAccess
             CreateAreaTable();
             CreateStreetTable();
             CreatePlaceTable();
-            CreateEmployeeTable();
             CreateGuestTable();
             CreateReservationTable();
 
@@ -34,33 +33,15 @@ namespace CampingDataAccess
                 "LastName VARCHAR(255) NOT NULL," +
                 "Infix VARCHAR(255)," +
                 "Email VARCHAR(255)," +
-                "Phonenumber VARCHAR(255) NOT NULL," +
+                "PhoneNumber VARCHAR(255) NOT NULL," +
                 "City VARCHAR(255)," +
                 "Address VARCHAR(255)," +
-                "Postalcode VARCHAR(255)" +
+                "PostalCode VARCHAR(255)" +
                 ");";
             using (var connection = new SqliteConnection(connectionString))
             {
                 connection.Open();
                 using (var cmd = new SqliteCommand(sql, connection)) 
-                {
-                    cmd.ExecuteNonQuery();
-                }
-                connection.Close();
-            }
-        }
-        public void CreateEmployeeTable()
-        {
-            string sql = " CREATE TABLE IF NOT EXISTS Employee (" +
-                "EmployeeID INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "FirstName VARCHAR(255) NOT NULL," +
-                "LastName VARCHAR(255) NOT NULL," +
-                "Infix VARCHAR(255)" +
-                ");";
-            using(var connection = new SqliteConnection(connectionString))
-            {
-                connection.Open();
-                using(var cmd = new SqliteCommand(sql, connection))
                 {
                     cmd.ExecuteNonQuery();
                 }
@@ -120,7 +101,7 @@ namespace CampingDataAccess
                 "StreetID INTEGER NOT NULL, " +
                 "Power TINYINT NOT NULL," +
                 "SurfaceArea INT NOT NULL," +
-                "PricePerNightPerPerson DECIMAL(18,2)," +
+                "PricePerNightPerPerson DECIMAL(18,2) NOT NULL," +
                 "AmountOfPeople INT NOT NULL," +
                 "Dogs TINYINT NOT NULL," +
                 "Xcord INT NOT NULL," +
@@ -144,13 +125,11 @@ namespace CampingDataAccess
                 "ArrivalDate DATE NOT NULL," +
                 "DepartureDate DATE NOT NULL," +
                 "PlaceID INTEGER NOT NULL," +
-                "EmployeeID INTEGER NOT NULL," +
                 "GuestID INTEGER NOT NULL," +
                 "AmountOfPeople INT NOT NULL," +
                 "IsPaid TINYINT NOT NULL," +
                 "Price FLOAT NOT NULL," +
                 "FOREIGN KEY(PlaceID) REFERENCES Place(PlaceID)," +
-                "FOREIGN KEY(EmployeeID) REFERENCES Employee(EmployeeID)," +
                 "FOREIGN KEY(GuestID) REFERENCES Guest(GuestID)" +
                 ");";
             using (var connection = new SqliteConnection(connectionString))
@@ -269,31 +248,7 @@ namespace CampingDataAccess
             }
             return result;
         }
-        public List<Employee> GetEmployees()
-        {
-            List<Employee> result = new List<Employee>();
-
-            string sql = "SELECT * FROM Employee";
-
-            using (var connection = new SqliteConnection(connectionString))
-            {
-                connection.Open();
-                using (var command = new SqliteCommand(sql, connection))
-                {
-                    using (var reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            result.Add(new Employee(reader.GetInt32(0),
-                                reader.GetString(1),
-                                reader.GetString(2),
-                                reader.GetString(3)));
-                        }
-                    }
-                }
-            }
-            return result;
-        }
+        
         public List<Guest> GetGuests()
         {
             List<Guest> result = new List<Guest>();
@@ -454,27 +409,9 @@ namespace CampingDataAccess
                 connection.Close();
             }
         }
-
-        public void AddDummyDataEmployee(string firstName, string lastName, string infix)
-        {
-            string sql = "INSERT INTO Employee (FirstName, LastName, Infix) VALUES (@FirstName, @LastName, @Infix);";
-
-            using (var connection = new SqliteConnection(connectionString))
-            {
-                connection.Open();
-                using (var command = new SqliteCommand(sql, connection))
-                {
-                    command.Parameters.AddWithValue("@FirstName", firstName);
-                    command.Parameters.AddWithValue("@LastName", lastName);
-                    command.Parameters.AddWithValue("@Infix", infix);
-                    command.ExecuteNonQuery();
-                }
-                connection.Close();
-            }
-        }
         public void AddDummyDataGuests(string firstName, string lastName, string infix, string email, string city, string address, int i)
         {
-            string sql = "INSERT INTO Guest (FirstName, LastName, Infix, Email, Phonenumber, City, Address, PostalCode) VALUES (@FirstName, @LastName, @Infix, @Email, @Phonenumber, @City, @Address, @PostalCode);";
+            string sql = "INSERT INTO Guest (FirstName, LastName, Infix, Email, PhoneNumber, City, Address, PostalCode) VALUES (@FirstName, @LastName, @Infix, @Email, @PhoneNumber, @City, @Address, @PostalCode);";
 
             using (var connection = new SqliteConnection(connectionString))
             {
@@ -486,7 +423,7 @@ namespace CampingDataAccess
                     command.Parameters.AddWithValue("@LastName", lastName);
                     command.Parameters.AddWithValue("@Infix", infix);
                     command.Parameters.AddWithValue("@Email", email);
-                    command.Parameters.AddWithValue("@Phonenumber", i);
+                    command.Parameters.AddWithValue("@PhoneNumber", i);
                     command.Parameters.AddWithValue("@City", city);
                     command.Parameters.AddWithValue("@Address", address);
                     command.Parameters.AddWithValue("@PostalCode", i);
@@ -495,9 +432,9 @@ namespace CampingDataAccess
                 connection.Close();
             }
         }
-        public void AddDummyDataReservations(int placeID, int employeeID, int guestID, int i)
+        public void AddDummyDataReservations(int placeID, int i)
         {
-            string sql = "INSERT INTO Reservation (ArrivalDate, DepartureDate, PlaceID, EmployeeID, GuestID, AmountOfPeople, IsPaid, Price) VALUES ( @ArrivalDate, @DepartureDate, @PlaceID, @EmployeeID, @GuestID, @AmountOfPeople, @IsPaid, @Price);";
+            string sql = "INSERT INTO Reservation (ArrivalDate, DepartureDate, PlaceID, GuestID, AmountOfPeople, IsPaid, Price) VALUES ( @ArrivalDate, @DepartureDate, @PlaceID, @GuestID, @AmountOfPeople, @IsPaid, @Price);";
 
             using (var connection = new SqliteConnection(connectionString))
             {
@@ -507,8 +444,7 @@ namespace CampingDataAccess
                     command.Parameters.AddWithValue("@ArrivalDate", DateTime.Now.Date.AddDays(i));
                     command.Parameters.AddWithValue("@DepartureDate", DateTime.Now.Date.AddDays(i + 10));
                     command.Parameters.AddWithValue("@PlaceID", placeID);
-                    command.Parameters.AddWithValue("@EmployeeID", employeeID);
-                    command.Parameters.AddWithValue("@GuestID", guestID);
+                    command.Parameters.AddWithValue("@GuestID", i);
                     command.Parameters.AddWithValue("@AmountOfPeople", i);
                     command.Parameters.AddWithValue("@IsPaid", i % 2 == 0);
                     command.Parameters.AddWithValue("@Price", i);
@@ -523,8 +459,6 @@ namespace CampingDataAccess
             AddDummyDataStreet();
             AddDummyDataPlaces();
             var places = GetPlaces();
-            AddDummyDataEmployee("Jan", "Jansen", "");
-            var employees = GetEmployees();
             List<string> firstNames = MakeFirstNamesList();
             List<string> lastNames = MakeFirstNamesList();
             List<string> infixes = MakeFirstNamesList();
@@ -535,7 +469,7 @@ namespace CampingDataAccess
             var guests = GetGuests();
             for (int i = 1; i <= guests.Count; i++)
             {
-                AddDummyDataReservations(places[i - 1].PlaceID, employees[0].EmployeeID, guests[i - 1].GuestID, i);
+                AddDummyDataReservations(places[i - 1].PlaceID, i);
             }
 
         }
@@ -554,9 +488,8 @@ namespace CampingDataAccess
                     command.Parameters.AddWithValue("@stDate", reservation.ArrivalDate.Date);
                     command.Parameters.AddWithValue("@enDate", reservation.DepartureDate.Date);
                     command.Parameters.AddWithValue("@plID", reservation.PlaceID);
-                    command.Parameters.AddWithValue("@emID", reservation.EmployeeID);
                     command.Parameters.AddWithValue("@guID", reservation.GuestID);
-                    command.Parameters.AddWithValue("@AmountOfPeople", reservation.PersonCount);
+                    command.Parameters.AddWithValue("@AmountOfPeople", reservation.AmountOfPeople);
                     command.Parameters.AddWithValue("@IsPaid", reservation.IsPaid);
                     command.Parameters.AddWithValue("@Price", reservation.Price);
                     command.ExecuteNonQuery();
@@ -646,7 +579,7 @@ namespace CampingDataAccess
 
         public void AddGuest(Guest guest)
         {
-            string sql = "INSERT INTO Guest (FirstName, LastName, Infix, Email, Phonenumber, City, Address, PostalCode) VALUES (@FirstName, @LastName, @Infix, @Email, @Phonenumber, @City, @Address, @PostalCode);";
+            string sql = "INSERT INTO Guest (FirstName, LastName, Infix, Email, PhoneNumber, City, Address, PostalCode) VALUES (@FirstName, @LastName, @Infix, @Email, @PhoneNumber, @City, @Address, @PostalCode);";
             using (var connection = new SqliteConnection(connectionString))
             {
                 connection.Open();
@@ -657,7 +590,7 @@ namespace CampingDataAccess
                     command.Parameters.AddWithValue("@LastName", guest.LastName);
                     command.Parameters.AddWithValue("@Infix", guest.Infix);
                     command.Parameters.AddWithValue("@Email", guest.Email);
-                    command.Parameters.AddWithValue("@Phonenumber", guest.PhoneNumber);
+                    command.Parameters.AddWithValue("@PhoneNumber", guest.PhoneNumber);
                     command.Parameters.AddWithValue("@City", guest.City);
                     command.Parameters.AddWithValue("@Address", guest.Address);
                     command.Parameters.AddWithValue("@PostalCode", guest.PostalCode);
