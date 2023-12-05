@@ -35,18 +35,17 @@
             <TextBox Grid.Row="2" Height="20" Width="150" HorizontalAlignment="Right"></TextBox>
             <Button Grid.Column="1" Grid.Row="2" Height="20" Width="80" Content="zoeken"/>
 
-            <ItemsControl Name="GuestOverviewItemsControl" Margin="10" Grid.ColumnSpan="2" Grid.Row="3" HorizontalAlignment="Center">
+            <ItemsControl Name="GuestOverviewItemsControl" Margin="0, 0, 0, 50" Grid.ColumnSpan="2" Grid.Row="3" HorizontalAlignment="Center">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                            <TextBlock Foreground="White" FontSize="20" FontWeight="Bold" Width="75" Text="{Binding GuestID}"/>
-                            <TextBlock Foreground="White" FontSize="20" FontWeight="Bold" Width="125" Text="{Binding LastName}"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,5" Height="30">
+                            <TextBlock Foreground="White" FontSize="18" FontWeight="Bold" Width="75" Text="{Binding GuestID}"/>
+                            <TextBlock Foreground="White" FontSize="18" FontWeight="Bold" Width="125" Text="{Binding LastName}"/>
                             <TextBlock Foreground="White" FontSize="15" Text="selecteren" TextDecorations="Underline" VerticalAlignment="Bottom"/>
                         </StackPanel>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-
         </Grid>
     </Grid>
 </Page>

@@ -17,9 +17,6 @@ using System.Windows.Shapes;
 
 namespace CampingUI
 {
-    /// <summary>
-    /// Interaction logic for GuestOverviewPage.xaml
-    /// </summary>
     public partial class GuestOverviewPage : Page
     {
         SqliteRepository sql = new SqliteRepository();
@@ -27,6 +24,7 @@ namespace CampingUI
         {
             InitializeComponent();
 
+            //Get guests from database
             GuestOverviewItemsControl.ItemsSource = sql.GetGuests();
         }
     }
