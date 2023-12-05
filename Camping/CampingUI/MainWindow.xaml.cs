@@ -60,6 +60,7 @@ namespace CampingUI
         {
             Main.Content = new GuestOverviewPage();
         }
+
         private void MinimizeButton_Click(object sender, RoutedEventArgs e)
         {
             WindowState = WindowState.Minimized;

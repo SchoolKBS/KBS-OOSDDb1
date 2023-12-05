@@ -1,4 +1,5 @@
 ﻿using CampingCore;
+using CampingDataAccess;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,17 +22,12 @@ namespace CampingUI
     /// </summary>
     public partial class GuestOverviewPage : Page
     {
+        SqliteRepository sql = new SqliteRepository();
         public GuestOverviewPage()
         {
             InitializeComponent();
 
-            var Gastenlijst = new List<Guest> { };
-
-            Guest persoon1 = new Guest(1, "Hannelore", "", "baarssen", "smederij", "dronten", "", "", "");
-
-            Gastenlijst.Add(persoon1);
-
-            GuestOverviewItemsControl.ItemsSource = Gastenlijst;
+            GuestOverviewItemsControl.ItemsSource = sql.GetGuests();
         }
     }
 }

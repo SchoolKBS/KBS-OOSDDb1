@@ -15,6 +15,7 @@
         </Grid.ColumnDefinitions>
 
         <Border Grid.Column="0" Margin="25" Padding="15" Background="#334A6E" CornerRadius="25"/>
+        <Border Grid.Column="2" Margin="25" Padding="15" Background="#334A6E" CornerRadius="25"/>
 
         <Grid>
             <Grid.ColumnDefinitions>
@@ -46,7 +47,6 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
 
-            <Border Grid.Column="1" Margin="25" Padding="15" Background="#334A6E" CornerRadius="25"/>
         </Grid>
     </Grid>
 </Page>
