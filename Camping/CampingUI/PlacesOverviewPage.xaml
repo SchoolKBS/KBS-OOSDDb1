@@ -10,6 +10,8 @@
     <Grid Name ="OverviewGrid">
         <Grid.RowDefinitions>
             <!-- First row with a fixed height of 70 -->
+            <RowDefinition Height="37.5"/>
+            <RowDefinition Height="22.5"/>
             <RowDefinition Height="60"/>
             <!-- Second row takes up the rest of the height -->
             <RowDefinition Height="*"/>
@@ -25,183 +27,201 @@
                 <Setter Property="Foreground" Value="White"/>
             </Style>
         </Grid.Resources>
-
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*" MinWidth="0"/>
-            <ColumnDefinition Width="7*" MinWidth="0"/>
-        </Grid.ColumnDefinitions>
-        <!-- Content in the first row -->
-        <Border Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Margin="25,25,25,0" Background="#11284D">
+        <Border Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Margin="25,25,25,0" Background="#11284D" Grid.RowSpan="2">
             <TextBlock FontSize="25" FontWeight="Bold" Foreground="white" Text="Plaatsen"></TextBlock>
         </Border>
-        <Border Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" Margin="25,25,25,0" Background="#11284D">
-            <TextBlock FontSize="25" FontWeight="Bold" Foreground="white" Text="Overzicht"/>
-        </Border>
-        <Border Grid.Column="1" Grid.Row="1" Margin="25" Padding="15" Background="#334A6E" CornerRadius="25"/>
-        <Border Grid.Column="0" Grid.Row="1" Margin="25" Padding="15" Background="#334A6E" CornerRadius="25">
-        <!--Grid for the filters and list of places-->
-            <Grid Name="ListGrid" Grid.Row="1">
-                <Grid.Resources>
-                    <Style TargetType="ListViewItem">
-                        <Style.Triggers>
-                            <Trigger Property="ItemsControl.AlternationIndex"  Value="0">
-                                <Setter Property="Background" Value="#153260" />
-                            </Trigger>
-                        </Style.Triggers>
-                        <Setter Property="Foreground" Value="White"/>
-                    </Style>
-                </Grid.Resources>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <!-- Adjust as needed -->
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                    <!--<RowDefinition Height="Auto"/>-->
-                    <!-- Adjust as needed -->
-                </Grid.RowDefinitions>
-                <!-- First filter for arrive filter  -->
-                <Label Grid.Row="0" Content="Aankomstdatum" HorizontalAlignment="Left" Margin="10,25,0,0" VerticalAlignment="Top" FontFamily="Calibri" FontWeight="Bold"/>
-                <Label Grid.Row="0" Content="Vertrekdatum" HorizontalAlignment="Left" Margin="120,25,0,0" VerticalAlignment="Top" FontFamily="Calibri" FontWeight="Bold"/>
-                <DatePicker Name="ArrivalDatePicker" Tag="-2" Grid.Row="0" HorizontalAlignment="Left" Margin="10,55,0,0" VerticalAlignment="Top" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
-                <DatePicker Name="DepartureDatePicker" Tag="-1" Grid.Row="0" HorizontalAlignment="Left" Margin="120,55,0,0" VerticalAlignment="Top" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
+        <Border Grid.Column="0" Grid.Row="2" Margin="25,5,25,0" Padding="15" Background="#334A6E" CornerRadius="25">
+            <Grid x:Name="FilterPlacesGrid">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Content="Aankomstdatum" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Calibri" FontWeight="Bold" Height="25" Width="93"/>
+                <Label Grid.Column="2" Content="Vertrekdatum" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Calibri" FontWeight="Bold" Height="25" Width="79"/>
+                <DatePicker Name="ArrivalDatePicker" Tag="-2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" SelectedDateChanged="DatePicker_SelectedDateChanged" Height="24" Width="102"/>
+                <DatePicker Name="DepartureDatePicker" Tag="-1" Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center" SelectedDateChanged="DatePicker_SelectedDateChanged" Height="24" Width="102"/>
 
                 <!-- Second filter for power  -->
-                <CheckBox Name="PowerCheckBoxFilter" IsThreeState="true" Grid.Row="0" Content="Geen voorkeur (stroom)" HorizontalAlignment="Left" Margin="10,90,0,0" VerticalAlignment="Top" Click="PowerCheckButton_Checked" FontFamily="Calibri" FontWeight="Bold"/>
-                <CheckBox Name="DogCheckBoxFilter" IsThreeState="true" Grid.Row="0" Content="Geen voorkeur (hond)" HorizontalAlignment="Left" Margin="150,90,0,0" VerticalAlignment="Top" Click="DogsCheckButton_Checked"  FontFamily="Calibri" FontWeight="Bold"/>
+                <CheckBox Margin="10,0,0,0" Name="PowerCheckBoxFilter" IsThreeState="true" Grid.Column="5" Content="Geen voorkeur (stroom)" HorizontalAlignment="Center" VerticalAlignment="Center" Click="PowerCheckButton_Checked" FontFamily="Calibri" FontWeight="Bold" Width="139"/>
+                <CheckBox Margin="10,0,0,0" Name="DogCheckBoxFilter" IsThreeState="true" Grid.Column="6" Content="Geen voorkeur (hond)" HorizontalAlignment="Center" VerticalAlignment="Center" Click="DogsCheckButton_Checked"  FontFamily="Calibri" FontWeight="Bold" Width="130"/>
 
                 <!-- Third filter for amount of people  -->
-                <Label Content="Aantal personen" HorizontalAlignment="Left" Margin="10,115,0,0" VerticalAlignment="Top" FontFamily="Calibri" FontWeight="Bold"/>
-                <TextBox x:Name="AmountOfPeopleTextBox" HorizontalAlignment="Left" Margin="120,120,0,0" VerticalAlignment="Top" Width="60" Height="20" TextChanged="TextBox_Changed"/>
+                <Label Margin="15,0,0,0" Content="Aantal personen" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Calibri" FontWeight="Bold" Grid.Column="7"/>
+                <TextBox x:Name="AmountOfPeopleTextBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="60" Height="20" TextChanged="TextBox_Changed" Grid.Column="8"/>
 
                 <!-- Fourth filter for max price -->
-                <Label Content="Max prijs" HorizontalAlignment="Left" Margin="10,150,0,0" VerticalAlignment="Top" FontFamily="Calibri" FontWeight="Bold"/>
-                <TextBox x:Name="MaxPriceRangeTextBox" HorizontalAlignment="Left" Margin="120,155,0,0" VerticalAlignment="Top" Width="60" Height="20" TextChanged="TextBox_Changed"/>
+                <Label Margin="15,0,0,0" Content="Max prijs" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Calibri" FontWeight="Bold" Width="56" Grid.Column="9"/>
+                <TextBox x:Name="MaxPriceRangeTextBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="60" Height="20" TextChanged="TextBox_Changed" Grid.Column="10"/>
 
                 <!-- Buttons to apply or remove the filters -->
-                <Button Content="Pas filters toe" Margin="10,200,0,25" Click="ApplyFilters_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80"/>
-                <Button Content="Verwijder filters" Margin="120,200,0,25" Click="RemoveFilters_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="90"/>
+                <Button Margin="15,0,0,0" Content="Pas filters toe" Click="ApplyFilters_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80" Grid.Column="11"/>
+                <Button Margin="15,0,0,0" Content="Verwijder filters" Click="RemoveFilters_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="90" Grid.Column="12"/>
 
-                <!-- Show the places from the camping in a list in a grid view and sort them.  -->
-
-                <ListView  Grid.Row="1" Name="PlacesListView" SelectionChanged="PlacesListView_SelectionChanged" Background="#334A6E" Margin="5" BorderThickness="0,0,0,0">
-
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Width="90" DisplayMemberBinding="{Binding PlaceID}">
-                                <GridViewColumn.Header>
-                                    <GridViewColumnHeader Tag="PlaceID" Click="SetSorterColumn_Click">Plaatsnummer</GridViewColumnHeader>
-                                </GridViewColumn.Header>
-                            </GridViewColumn>
-                            <GridViewColumn Width="60" DisplayMemberBinding="{Binding PricePerNightPerPerson}">
-                                <GridViewColumn.Header>
-                                    <GridViewColumnHeader Tag="Price" Click="SetSorterColumn_Click">Prijs ($)</GridViewColumnHeader>
-                                </GridViewColumn.Header>
-                            </GridViewColumn>
-                            <GridViewColumn Width="120" DisplayMemberBinding="{Binding AmountOfPeople}">
-                                <GridViewColumn.Header>
-                                    <GridViewColumnHeader Tag="AmountOfPeople" Click="SetSorterColumn_Click">Aantal personen</GridViewColumnHeader>
-                                </GridViewColumn.Header>
-                            </GridViewColumn>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-                <!--Button to add place-->
-                <!--<Button Grid.Row="2" Content="Nieuwe plaats toevoegen" Click="AddPlaceButton_Click" Height="Auto"/>-->
             </Grid>
         </Border>
-        <!--Grid for the overview of the selected place-->
-        <Grid Grid.Column="1" Name="PlaceOverviewGrid" Visibility="Collapsed" Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="4*"/>
-                <RowDefinition Height="1*"/>
-            </Grid.RowDefinitions>
-
-            <!--Grid for place info-->
-            <Grid Grid.Row="0" Name="UpperGrid">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="4*"/>
-                    <ColumnDefinition Width="2*"/>
-                </Grid.ColumnDefinitions>
-                <Grid Grid.Column="0" Name="InfoGrid">
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*" MinWidth="0"/>
+                <ColumnDefinition Width="7*" MinWidth="0"/>
+            </Grid.ColumnDefinitions>
+            <!-- Content in the first row -->
+            <!--<Border Grid.Column="1" Grid.Row="0" Margin="25,25,25,0" Background="#11284D" Grid.RowSpan="2"/>-->
+            <Border Grid.Column="0" Margin="25,25,25,25" Padding="15" Background="#334A6E" CornerRadius="25">
+                <!--Grid for the filters and list of places-->
+                <Grid Name="ListGrid" Grid.Row="1">
+                    <Grid.Resources>
+                        <Style TargetType="ListViewItem">
+                            <Style.Triggers>
+                                <Trigger Property="ItemsControl.AlternationIndex"  Value="0">
+                                    <Setter Property="Background" Value="#153260" />
+                                </Trigger>
+                            </Style.Triggers>
+                            <Setter Property="Foreground" Value="White"/>
+                        </Style>
+                    </Grid.Resources>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <!-- Adjust as needed -->
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <!--<RowDefinition Height="Auto"/>-->
+                        <!-- Adjust as needed -->
+                    </Grid.RowDefinitions>
+                    <!-- Show the places from the camping in a list in a grid view and sort them.  -->
+
+                    <ListView  Grid.Row="1" Name="PlacesListView" SelectionChanged="PlacesListView_SelectionChanged" Background="#334A6E" Margin="5" BorderThickness="0,0,0,0">
+
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Width="90" DisplayMemberBinding="{Binding PlaceID}">
+                                    <GridViewColumn.Header>
+                                        <GridViewColumnHeader Tag="PlaceID" Click="SetSorterColumn_Click">Plaatsnummer</GridViewColumnHeader>
+                                    </GridViewColumn.Header>
+                                </GridViewColumn>
+                                <GridViewColumn Width="60" DisplayMemberBinding="{Binding PricePerNightPerPerson}">
+                                    <GridViewColumn.Header>
+                                        <GridViewColumnHeader Tag="Price" Click="SetSorterColumn_Click">Prijs</GridViewColumnHeader>
+                                    </GridViewColumn.Header>
+                                </GridViewColumn>
+                                <GridViewColumn Width="120" DisplayMemberBinding="{Binding AmountOfPeople}">
+                                    <GridViewColumn.Header>
+                                        <GridViewColumnHeader Tag="AmountOfPeople" Click="SetSorterColumn_Click">Aantal personen</GridViewColumnHeader>
+                                    </GridViewColumn.Header>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <!--Button to add place-->
+                    <!--<Button Grid.Row="2" Content="Nieuwe plaats toevoegen" Click="AddPlaceButton_Click" Height="Auto"/>-->
+                </Grid>
+            </Border>
+            <Border Grid.Column="1" Margin="25,25,25,25" Padding="15" Background="#334A6E" CornerRadius="25">
+                <!--Grid for the overview of the selected place-->
+                <Grid Grid.Column="1" Name="PlaceOverviewGrid" Visibility="Collapsed" Grid.Row="3">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="4*"/>
                         <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="3*"/>
                     </Grid.RowDefinitions>
 
-
-                    <Label Grid.Row="0" Margin="35,25,0,0" Name="nrLabel" FontSize="30" FontWeight="Bold" Content=""></Label>
-                    <Label Grid.Row="1" Margin="35,25,0,0" Name="areaLabel" FontSize="20" Content=""></Label>
-                    <Label Grid.Row="2" Margin="35,25,0,0" Name="nrPeopleLabel" FontSize="20" Content=""></Label>
-                    <Label Grid.Row="3" Margin="35,25,0,0" Name="electricityLabel" FontSize="20" Content=""></Label>
-                    <Label Grid.Row="4" Margin="35,25,0,0" Name="priceLabel" FontSize="20" Content=""></Label>
+                    <!--Grid for place info-->
+                    <Grid Grid.Row="0" Name="UpperGrid">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="2*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0" Name="InfoGrid">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="3*"/>
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" Margin="35,0,0,0" Name="nrLabel" FontSize="30" FontWeight="Bold" Content=""></Label>
+                            <Label Grid.Row="1" Margin="35,0,0,0" Name="areaLabel" FontSize="20" Content=""></Label>
+                            <Label Grid.Row="2" Margin="35,0,0,0" Name="amountOfPeopleLabel" FontSize="20" Content=""></Label>
+                            <Label Grid.Row="3" Margin="35,0,0,0" Name="powerLabel" FontSize="20" Content=""></Label>
+                            <Label Grid.Row="4" Margin="35,0,0,0" Name="dogsLabel" FontSize="20" Content=""></Label>
+                            <Label Grid.Row="5" Margin="35,0,0,0" Name="priceLabel" FontSize="20" Content=""></Label>
+                        </Grid>
+                        <Viewbox Grid.Column="1" Margin="10">
+                            <Calendar x:Name="ReservationCalender" Width="auto" Height="auto" ></Calendar>
+                        </Viewbox>
+                    </Grid>
+                    <!--Grid for button -->
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" Name="NewReservationButton" Content="Nieuwe resevering maken" Margin="20" Height="50" Width="200" Click="NewReservation_Click"/>
+                        <Button Grid.Column="1" Name="EditPlaceButton" Content="Plaats aanpassen" Margin="20" Height="50" Width="200" Click="EditPlaceButton_Click"/>
+                        <Button Grid.Column="2" Name="DeletePlaceButton" Content="Verwijder plaats" Margin="20" Height="50" Width="200" Click="DeletePlaceButton_Click"/>
+                    </Grid>
                 </Grid>
-                <Viewbox Grid.Column="1" Margin="10">
-                    <Calendar x:Name="ReservationCalender" Width="auto" Height="auto" ></Calendar>
-                </Viewbox>
-            </Grid>
-            <!--Grid for button -->
-            <Grid Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Name="NewReservationButton" Content="Nieuwe resevering maken" Margin="20" Height="50" Width="200" Click="NewReservation_Click"/>
-                <Button Grid.Column="1" Name="EditPlaceButton" Content="Plaats aanpassen" Margin="20" Height="50" Width="200" Click="EditPlaceButton_Click"/>
-                <Button Grid.Column="2" Name="DeletePlaceButton" Content="Verwijder plaats" Margin="20" Height="50" Width="200" Click="DeletePlaceButton_Click"/>
-            </Grid>
-        </Grid>
-        <Grid Grid.Column="1" Name="EditPlaceGrid" Visibility="Collapsed" Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="4*"/>
-                <RowDefinition Height="1*"/>
-            </Grid.RowDefinitions>
-            <Label Content="" HorizontalAlignment="Center" FontSize="30" FontWeight="Bold" Name="PlaceIDLabelEdit" Margin="0,30,0,0"/>
-            <Grid Grid.Row="0">
+            </Border>
+            <Grid Grid.Column="1" Name="EditPlaceGrid" Visibility="Collapsed" Grid.Row="2">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+                <Label Content="" HorizontalAlignment="Center" FontSize="30" FontWeight="Bold" Name="PlaceIDLabelEdit" Margin="0,30,0,0"/>
+                <Grid Grid.Row="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                <!--Power, Dog, Price, Person, SurfaceArea-->
-                
-                <Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Margin="170,76,0,0" VerticalAlignment="Top" Name="PowerEditLabel"/>
-                <CheckBox Name="PowerEditCheckBox" Grid.Column="0" Grid.Row="0" IsThreeState="True" HorizontalAlignment="Left" Margin="150,45,0,0" Height="15" Click="PowerEditCheckBox_Click"/>
+                    <!--Power, Dog, Price, Person, SurfaceArea-->
 
-                <Label Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" Margin="170,76,0,0" VerticalAlignment="Top" Name="DogsAllowedEditLabel"/>
-                <CheckBox Name="DogsEditCheckBox" Grid.Column="1" Grid.Row="0" IsThreeState="True" HorizontalAlignment="Left" Margin="150,45,0,0" Height="15" Click="DogsEditCheckBox_Click"/>
+                    <Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Margin="170,76,0,0" VerticalAlignment="Top" Name="PowerEditLabel"/>
+                    <CheckBox Name="PowerEditCheckBox" Grid.Column="0" Grid.Row="0" IsThreeState="True" HorizontalAlignment="Left" Margin="150,45,0,0" Height="15" Click="PowerEditCheckBox_Click"/>
 
-                <Label Grid.Column="0" Grid.Row="1" Content="Aantal personen" Width="150" />
-                <TextBox Grid.Column="0" Grid.Row="1" Height="30" Width="150" x:Name="AmountOfPeopleEditTextBox" TextChanged="TextBox_Changed"/>
-                <Button Content="Overerven" Name="AmountOfPeopleExtendButton" Click="EditExtendButton_Click" Grid.Column="0" Grid.Row="1" Height="30" Width="70" HorizontalAlignment="Left" Margin="70,0,0,0"/>
+                    <Label Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" Margin="170,76,0,0" VerticalAlignment="Top" Name="DogsAllowedEditLabel"/>
+                    <CheckBox Name="DogsEditCheckBox" Grid.Column="1" Grid.Row="0" IsThreeState="True" HorizontalAlignment="Left" Margin="150,45,0,0" Height="15" Click="DogsEditCheckBox_Click"/>
 
-                <Label Grid.Column="1" Grid.Row="1" Content="Oppervlakte" Width="150" />
-                <TextBox Grid.Column="1" Grid.Row="1" Height="30" Width="150" x:Name="SurfaceAreaEditTextBox" TextChanged="TextBox_Changed"/>
-                <Button Content="Overerven" Name="SurfaceAreaExtendButton" Click="EditExtendButton_Click" Grid.Column="1" Grid.Row="1" Height="30" Width="70" HorizontalAlignment="Left" Margin="70,0,0,0"/>
+                    <Label Grid.Column="0" Grid.Row="1" Content="Aantal personen" Width="150" />
+                    <TextBox Grid.Column="0" Grid.Row="1" Height="30" Width="150" x:Name="AmountOfPeopleEditTextBox" TextChanged="TextBox_Changed"/>
+                    <Button Content="Overerven" Name="AmountOfPeopleExtendButton" Click="EditExtendButton_Click" Grid.Column="0" Grid.Row="1" Height="30" Width="70" HorizontalAlignment="Left" Margin="70,0,0,0"/>
 
-                <Label Grid.Column="0" Grid.Row="2" Content="Prijs per nacht per persoon" HorizontalContentAlignment="Center"/>
-                <TextBox Grid.Column="0" Grid.Row="2" Height="30" Width="150" x:Name="PricePerNightPerPersonEditTextBox" TextChanged="TextBox_Changed" HorizontalAlignment="Center"/>
-                <Button Content="Overerven" Name="PricePerNightPerPersonExtendButton" Click="EditExtendButton_Click" Grid.Column="0" Grid.Row="2" Height="30" Width="70" HorizontalAlignment="Left" Margin="70,0,0,0"/>
-            </Grid>
-            <Grid Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Button Name="ConfirmEditButton" Content="Bevestigen" Grid.Column="2" Height="35" Width="180" Click="EditPlaceConfirmButton_Click"/>
-                <Button Name="CancelEditButton" Content="Annuleren" Grid.Column="0" Height="35" Width="180" Click="CancelEditButton_Click"/>
-                <TextBlock Grid.Row="13" Grid.Column="1" HorizontalAlignment="Center" x:Name="AddPlaceMessage"/>
+                    <Label Grid.Column="1" Grid.Row="1" Content="Oppervlakte" Width="150" />
+                    <TextBox Grid.Column="1" Grid.Row="1" Height="30" Width="150" x:Name="SurfaceAreaEditTextBox" TextChanged="TextBox_Changed"/>
+                    <Button Content="Overerven" Name="SurfaceAreaExtendButton" Click="EditExtendButton_Click" Grid.Column="1" Grid.Row="1" Height="30" Width="70" HorizontalAlignment="Left" Margin="70,0,0,0"/>
+
+                    <Label Grid.Column="0" Grid.Row="2" Content="Prijs per nacht per persoon" HorizontalContentAlignment="Center"/>
+                    <TextBox Grid.Column="0" Grid.Row="2" Height="30" Width="150" x:Name="PricePerNightPerPersonEditTextBox" TextChanged="TextBox_Changed" HorizontalAlignment="Center"/>
+                    <Button Content="Overerven" Name="PricePerNightPerPersonExtendButton" Click="EditExtendButton_Click" Grid.Column="0" Grid.Row="2" Height="30" Width="70" HorizontalAlignment="Left" Margin="70,0,0,0"/>
+                </Grid>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Name="ConfirmEditButton" Content="Bevestigen" Grid.Column="2" Height="35" Width="180" Click="EditPlaceConfirmButton_Click"/>
+                    <Button Name="CancelEditButton" Content="Annuleren" Grid.Column="0" Height="35" Width="180" Click="CancelEditButton_Click"/>
+                    <TextBlock Grid.Row="13" Grid.Column="1" HorizontalAlignment="Center" x:Name="AddPlaceMessage"/>
+                </Grid>
             </Grid>
         </Grid>
     </Grid>

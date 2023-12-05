@@ -222,8 +222,10 @@ namespace CampingUI
         {
             ArrivalDatePicker.SelectedDate = null;
             DepartureDatePicker.SelectedDate = null;
-            DogCheckBoxFilter.IsChecked = null;
-            PowerCheckBoxFilter.IsChecked = null;
+            DogCheckBoxFilter.IsChecked = false;
+            DogCheckBoxFilter.Content = "Geen voorkeur (hond)";
+            PowerCheckBoxFilter.Content = "Geen voorkeur (stroom)";
+            PowerCheckBoxFilter.IsChecked = false;
             AmountOfPeople = 0;
             _camping.Places = _camping.CampingRepository.GetPlaces();
             EditPlaceGrid.Visibility = Visibility.Collapsed;
@@ -338,12 +340,16 @@ namespace CampingUI
                 Place place = (Place)PlacesListView.SelectedItem;
                 nrLabel.Content = place;
                 areaLabel.Content = "Oppervlakte: " + place.SurfaceArea;
-                nrPeopleLabel.Content = "Aantal personen:" + place.AmountOfPeople;
-                electricityLabel.Content = "Toegang tot stroom: ";
-
-                if (place.Power) electricityLabel.Content += "Ja";
-                else electricityLabel.Content += "Nee";
-                priceLabel.Content = "Prijs: " + String.Format("{0:0.00}", place.PricePerNightPerPerson) + "$";
+                amountOfPeopleLabel.Content = "Aantal personen: " + place.AmountOfPeople;
+                powerLabel.Content = "Toegang tot stroom: ";
+                
+                if (place.Power) powerLabel.Content += "Ja";
+                else powerLabel.Content += "Nee";
+                dogsLabel.Content = "Honden toegestaan: ";
+                if (place.Dogs) dogsLabel.Content += "Ja";
+                else dogsLabel.Content += "Nee";
+                priceLabel.Content = "Prijs: " + String.Format("{0:0.00}", place.PricePerNightPerPerson) + "€";
+                
 
                 PlaceOverviewGrid.Visibility = Visibility.Visible;
                 ReservationCalender.BlackoutDates.Clear();
@@ -634,7 +640,7 @@ namespace CampingUI
             CheckBox checkbox = (CheckBox)sender;
             if (checkbox.IsChecked == true)
             {
-                checkbox.Content = "Honden toegestaan";
+                checkbox.Content = "Wel honden";
                 _dogsAllowed = true;
             }
             else if (checkbox.IsChecked == false)
@@ -644,7 +650,7 @@ namespace CampingUI
             }
             else
             {
-                checkbox.Content = "Geen honden toegestaan";
+                checkbox.Content = "Geen honden";
                 _dogsAllowed = false;
             }
         }
