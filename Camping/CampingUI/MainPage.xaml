@@ -47,6 +47,9 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center">
                     <Canvas Background="white" Width="1000" Height="750" x:Name="field">
+                        <Canvas.LayoutTransform>
+                            <ScaleTransform ScaleY="0.8" ScaleX="0.8" />
+                        </Canvas.LayoutTransform>
                     </Canvas>
                 </Border>
 
