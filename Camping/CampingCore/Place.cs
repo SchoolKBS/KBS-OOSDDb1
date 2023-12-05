@@ -52,6 +52,13 @@ namespace CampingCore
             this.Xcord = (int)properties[7];
             this.Ycord = (int)properties[8];
         }
+
+        public int[] GetPlacePositions()
+        {
+            // Xcord1 = width
+            // Ycord1 = height
+            return new int[2] { Xcord, Ycord};
+        }
         public override string ToString()
         {
             return "Plaats: " + PlaceID;

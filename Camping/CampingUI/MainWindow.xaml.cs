@@ -26,7 +26,7 @@ namespace CampingUI
         public MainWindow()
         {
             InitializeComponent();
-            Main.Navigate(new MainPage());
+            Main.Navigate(new MainPage(Camping));
             this.CampingRepository = new SqliteRepository();
             
             CampingRepository.AddDummyData();
@@ -39,7 +39,7 @@ namespace CampingUI
         private void HomeButton_Click(object sender, RoutedEventArgs e)
         {
             // Navigate back to the main screen or set the desired page
-            Main.Navigate(new MainPage()); // Replace MainPage with the appropriate page class for your main screen
+            Main.Navigate(new MainPage(Camping)); // Replace MainPage with the appropriate page class for your main screen
         }
 
         //Function (EventHandler) to open the reservations page

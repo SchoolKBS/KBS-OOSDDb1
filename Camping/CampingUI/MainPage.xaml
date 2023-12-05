@@ -34,12 +34,22 @@
 
             <!-- Content in the first column -->
             <Border Grid.Column="0" Margin="25" Padding="15" Background="#334A6E" CornerRadius="25">
-                <TextBlock Foreground="white">Column 1</TextBlock>
+                <TextBlock FontSize="20" Foreground="white">Column 1</TextBlock>
             </Border>
 
             <!-- Content in the second column -->
             <Border Grid.Column="1" Margin="25" Padding="15" Background="#334A6E" CornerRadius="25">
-                <TextBlock Foreground="white">Column 2</TextBlock>
+
+                <Border
+                    BorderThickness="2"
+                    BorderBrush="Black"
+                    Background="LightGray"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+                    <Canvas Background="white" Width="1000" Height="750" x:Name="field">
+                    </Canvas>
+                </Border>
+
             </Border>
         </Grid>
     </Grid>
