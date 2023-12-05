@@ -25,7 +25,7 @@ namespace CampingCore
         public List<Street> GetStreets();
         public List<Area> GetAreas();
         public Place GetPlaceFromPlaceID(int id);
-        public Place GetGuestFromGuestID(int id);
+        public List<Guest> GetGuestFromGuestID(int id);
         public int GetLastGuestID();
         public void AddPlace(Place place);
     }

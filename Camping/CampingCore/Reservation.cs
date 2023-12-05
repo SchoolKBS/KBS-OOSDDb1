@@ -14,7 +14,21 @@ namespace CampingCore
         public bool IsPaid { get; set; }
         public double Price { get; set; }
 
+        public string GuestName {  get; set; }
+
         //Guest still has to get added 
+        public Reservation(int reservationNumber, DateTime arrivalDate, DateTime departureDate, int placeID, int guestID, int personCount, bool isPaid, double price, string guestName)
+        {
+            this.ReservationID = reservationNumber;
+            this.ArrivalDate = arrivalDate;
+            this.DepartureDate = departureDate;
+            this.PlaceID = placeID;
+            this.GuestID = guestID;
+            this.AmountOfPeople = personCount;
+            this.IsPaid = isPaid;
+            this.Price = price;
+            this.GuestName = guestName;
+        }
         public Reservation(int reservationNumber, DateTime arrivalDate, DateTime departureDate, int placeID, int guestID, int personCount, bool isPaid, double price)
         {
             this.ReservationID = reservationNumber;
@@ -25,6 +39,7 @@ namespace CampingCore
             this.AmountOfPeople = personCount;
             this.IsPaid = isPaid;
             this.Price = price;
+            this.GuestName = "Empty";
         }
         public Reservation(ArrayList properties)
         {
@@ -32,11 +47,15 @@ namespace CampingCore
             ArrivalDate = (DateTime)properties[1];
             DepartureDate = (DateTime)properties[2];
             PlaceID = (int)properties[3];
-            GuestID = (int)properties[4];
-            AmountOfPeople = (int)properties[5];
-            IsPaid = (bool)properties[6];
-            Price = (double)properties[7];
+            GuestName = (string)properties[4];
+            GuestID = (int)properties[5];
+            AmountOfPeople = (int)properties[6];
+            IsPaid = (bool)properties[7];
+            Price = (double)properties[8];
         }
+
+
+
         public override string ToString()
         {
             return "Reservering: " + ReservationID + " Plaats: " + PlaceID + " Aankomstdatum: " + ArrivalDate.ToShortDateString() + " - Vertrekdatum " + DepartureDate.ToShortDateString();

@@ -72,19 +72,26 @@ BorderThickness="1,1,1,1" Background="{x:Null}" />
                                 <GridViewColumnHeader Tag="DepartureDate">Vertrekdatum</GridViewColumnHeader>
                             </GridViewColumn.Header>
                         </GridViewColumn>
+                       
+ 
+                        <GridViewColumn Width="auto" DisplayMemberBinding="{Binding PlaceID}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Tag="Place">Plaatsnummer</GridViewColumnHeader>
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
+                        <GridViewColumn Width="auto" DisplayMemberBinding="{Binding AmountOfPeople }">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Tag="AmountOfPeople">Aantalpersonen</GridViewColumnHeader>
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
                         <GridViewColumn Width="auto" DisplayMemberBinding="{Binding GuestID}">
                             <GridViewColumn.Header>
                                 <GridViewColumnHeader Tag="Gast">Gastnummer</GridViewColumnHeader>
                             </GridViewColumn.Header>
                         </GridViewColumn>
-                        <GridViewColumn Width="auto" DisplayMemberBinding="{Binding EmployeeID}">
+                        <GridViewColumn Width="auto" DisplayMemberBinding="{Binding GuestName }">
                             <GridViewColumn.Header>
-                                <GridViewColumnHeader Tag="Employee">Werknemer</GridViewColumnHeader>
-                            </GridViewColumn.Header>
-                        </GridViewColumn>
-                        <GridViewColumn Width="auto" DisplayMemberBinding="{Binding PlaceID}">
-                            <GridViewColumn.Header>
-                                <GridViewColumnHeader Tag="Place">Plaatsnummer</GridViewColumnHeader>
+                                <GridViewColumnHeader Tag="GuestName">Gastnaam</GridViewColumnHeader>
                             </GridViewColumn.Header>
                         </GridViewColumn>
                         <GridViewColumn Width="70">

@@ -54,7 +54,7 @@ namespace CampingUI
             // Filter by Number of People
             if (int.TryParse(PersonCountTextBoxx.Text, out int personCount))
             {
-                filteredReservations = filteredReservations.Where(reservation => reservation.PersonCount == personCount);
+                filteredReservations = filteredReservations.Where(reservation => reservation.AmountOfPeople == personCount);
             }
 
             // Filter by Place Number
@@ -64,9 +64,12 @@ namespace CampingUI
             }
 
             // Filter by Guest Name
-            if (int.TryParse(GuestNameBox.Text, out int guestID))
+            if (!string.IsNullOrEmpty(GuestNameBox.Text))
             {
-                filteredReservations = filteredReservations.Where(reservation => reservation.GuestID == guestID);
+                filteredReservations = filteredReservations
+                       .Where(reservation =>
+                           reservation.GuestName.Replace(" ", "").Contains(GuestNameBox.Text.Replace(" ", ""))
+                       );
             }
             // Apply the combined filters and update the ListView
             ReservationsListView.ItemsSource = filteredReservations

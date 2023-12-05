@@ -229,18 +229,31 @@ namespace CampingDataAccess
                         while (reader.Read())
                         {
                             ArrayList Properties = new ArrayList();
-                            for (int i = 0; i < reader.FieldCount; i++)
-                            {
+                            
+                               for (int i = 0; i < reader.FieldCount; i++)
+                               {
+                               
                                 string columnName = reader.GetName(i);
                                 Type columnType = reader.GetFieldType(i);
                                 object colmnValue = reader.GetValue(i);
 
                                 PropertyInfo property = typeof(Reservation).GetProperty(columnName);
+                              
                                 if (property != null)
-                                {
-                                    Properties.Add(Convert.ChangeType(colmnValue, property.PropertyType));
-                                }
-                            }
+                                    if (columnName == "GuestID")
+                                    {
+                                        // Fetch guest name using GetGuestFromGuestID method
+                                        List<Guest> Name = GetGuestFromGuestID(Convert.ToInt32(colmnValue));
+                                        string FirstName = Name.Where(g => g != null).Select(g => g.FirstName).FirstOrDefault();
+                                        Properties.Add(FirstName);
+                                        Properties.Add(Convert.ChangeType(colmnValue, property.PropertyType));
+
+                                    }
+                                    else
+                                    {
+                                        Properties.Add(Convert.ChangeType(colmnValue, property.PropertyType));
+                                    }
+                              }   
                             result.Add(new Reservation(Properties));
                         }
                     }
@@ -248,8 +261,8 @@ namespace CampingDataAccess
             }
             return result;
         }
-        
-        public List<Guest> GetGuests()
+       
+            public List<Guest> GetGuests()
         {
             List<Guest> result = new List<Guest>();
 
@@ -556,9 +569,42 @@ namespace CampingDataAccess
             throw new NotImplementedException();
         }
 
-        public Place GetGuestFromGuestID(int id)
+        public List<Guest> GetGuestFromGuestID(int id)
         {
-            throw new NotImplementedException();
+            List<Guest> result = new List<Guest>();
+
+            string sql = "SELECT * FROM Guest WHERE GuestID = @GuestID";
+
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+                using (var command = new SqliteCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@GuestID", id);
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            ArrayList Properties = new ArrayList();
+                            for (int i = 0; i < reader.FieldCount; i++)
+                            {
+                                string columnName = reader.GetName(i);
+                                Type columnType = reader.GetFieldType(i);
+                                object colmnValue = reader.GetValue(i);
+
+                                PropertyInfo property = typeof(Guest).GetProperty(columnName);
+                                if (property != null)
+                                {
+                                    Properties.Add(Convert.ChangeType(colmnValue, property.PropertyType));
+                                }
+                            }
+                            result.Add(new Guest(Properties));
+                        }
+                    }
+                }
+            }
+            return result;
         }
 
         public void RemoveReservation(Reservation reservation)
