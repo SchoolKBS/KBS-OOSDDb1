@@ -26,12 +26,13 @@ namespace CampingUI
         public MainWindow()
         {
             InitializeComponent();
-            Main.Navigate(new MainPage(Camping));
             this.CampingRepository = new SqliteRepository();
             
             CampingRepository.AddDummyData();
 
             this.Camping = new Camping(CampingRepository);
+
+            Main.Navigate(new MainPage(Camping));
 
         }
 
