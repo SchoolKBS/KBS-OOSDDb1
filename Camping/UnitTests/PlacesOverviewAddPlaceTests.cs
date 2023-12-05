@@ -1,4 +1,5 @@
 ﻿using CampingCore;
+using CampingCore.PlacesOverviewPageClasses;
 using Moq;
 
 namespace UnitTests

@@ -1,4 +1,5 @@
 ﻿using CampingCore;
+using CampingCore.PlacesOverviewPageClasses;
 using Microsoft.Data.SqlClient;
 using Microsoft.Data.Sqlite;
 using MySqlX.XDevAPI.Common;
@@ -42,7 +43,7 @@ namespace CampingDataAccess
             using (var connection = new SqliteConnection(connectionString))
             {
                 connection.Open();
-                using (var cmd = new SqliteCommand(sql, connection)) 
+                using (var cmd = new SqliteCommand(sql, connection))
                 {
                     cmd.ExecuteNonQuery();
                 }
@@ -57,10 +58,10 @@ namespace CampingDataAccess
                 "LastName VARCHAR(255) NOT NULL," +
                 "Infix VARCHAR(255)" +
                 ");";
-            using(var connection = new SqliteConnection(connectionString))
+            using (var connection = new SqliteConnection(connectionString))
             {
                 connection.Open();
-                using(var cmd = new SqliteCommand(sql, connection))
+                using (var cmd = new SqliteCommand(sql, connection))
                 {
                     cmd.ExecuteNonQuery();
                 }
@@ -88,7 +89,7 @@ namespace CampingDataAccess
                 }
                 connection.Close();
             }
-        }        
+        }
         public void CreateStreetTable()
         {
             string sql = "CREATE TABLE IF NOT EXISTS Street (" +
@@ -112,7 +113,7 @@ namespace CampingDataAccess
                 }
                 connection.Close();
             }
-        }        
+        }
         public void CreatePlaceTable()
         {
             string sql = "CREATE TABLE IF NOT EXISTS Place (" +
@@ -367,9 +368,9 @@ namespace CampingDataAccess
             using (var connection = new SqliteConnection(connectionString))
             {
                 connection.Open();
-                for(int i = 1; i <= 4; i++)
+                for (int i = 1; i <= 4; i++)
                 {
-                    using(var command = new SqliteCommand(sql, connection))
+                    using (var command = new SqliteCommand(sql, connection))
                     {
                         command.Prepare();
                         command.Parameters.AddWithValue("@Power", i % 2 == 0);
@@ -387,13 +388,13 @@ namespace CampingDataAccess
         public void AddDummyDataStreet()
         {
             string sql = "INSERT INTO Street (AreaID, Power, Dogs, Xcord1, Ycord1, Xcord2, Ycord2) VALUES (@AreaID, @Power, @Dogs, @Xcord1, @Ycord1, @Xcord2, @Ycord2);";
-            
-            using(var connection = new SqliteConnection(connectionString))
+
+            using (var connection = new SqliteConnection(connectionString))
             {
                 connection.Open();
                 for (int i = 1; i <= 4; i++)
                 {
-                    using(var command = new SqliteCommand(sql, connection))
+                    using (var command = new SqliteCommand(sql, connection))
                     {
                         command.Prepare();
                         command.Parameters.AddWithValue("@AreaID", 1);
@@ -419,14 +420,14 @@ namespace CampingDataAccess
                     using (var command = new SqliteCommand(sql, connection))
                     {
                         command.Parameters.AddWithValue("PlaceID", i);
-                        command.Parameters.AddWithValue("StreetID", (i /3) +1);
+                        command.Parameters.AddWithValue("StreetID", (i / 3) + 1);
                         command.Parameters.AddWithValue("Power", i % 2 == 0);
                         command.Parameters.AddWithValue("SurfaceArea", i);
                         command.Parameters.AddWithValue("PricePerNightPerPerson", i);
                         command.Parameters.AddWithValue("AmountOfPeople", i);
                         command.Parameters.AddWithValue("Dogs", i % 2 == 0);
-                        command.Parameters.AddWithValue("Xcord", i *10);
-                        command.Parameters.AddWithValue("Ycord", i *10);
+                        command.Parameters.AddWithValue("Xcord", i * 10);
+                        command.Parameters.AddWithValue("Ycord", i * 10);
                         command.ExecuteNonQuery();
                     }
                 }
@@ -522,9 +523,9 @@ namespace CampingDataAccess
             AddDummyDataArea();
             AddDummyDataStreet();
             AddDummyDataPlaces();
-            var places = GetPlaces();
+            List<Place> places = GetPlaces();
             AddDummyDataEmployee("Jan", "Jansen", "");
-            var employees = GetEmployees();
+            List<Employee> employees = GetEmployees();
             List<string> firstNames = MakeFirstNamesList();
             List<string> lastNames = MakeFirstNamesList();
             List<string> infixes = MakeFirstNamesList();
@@ -532,12 +533,11 @@ namespace CampingDataAccess
             {
                 AddDummyDataGuests(firstNames[i], lastNames[i], "", "ditisemailadresnummer" + i + "@gmail.com", "stad" + i, "adres" + i, i);
             }
-            var guests = GetGuests();
+            List<Guest> guests = GetGuests();
             for (int i = 1; i <= guests.Count; i++)
             {
                 AddDummyDataReservations(places[i - 1].PlaceID, employees[0].EmployeeID, guests[i - 1].GuestID, i);
             }
-
         }
 
         public void AddReservation(Reservation reservation)
@@ -691,7 +691,38 @@ namespace CampingDataAccess
 
         public List<Street> GetStreets()
         {
-            throw new NotImplementedException();
+            List<Street> result = new List<Street>();
+
+            string sql = "SELECT * FROM Street";
+
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+                using (var cmd = new SqliteCommand(sql, connection))
+                {
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            ArrayList Properties = new ArrayList();
+                            for (int i = 0; i < reader.FieldCount; i++)
+                            {
+                                string columnName = reader.GetName(i);
+                                Type columnType = reader.GetFieldType(i);
+                                object colmnValue = reader.GetValue(i);
+
+                                PropertyInfo property = typeof(Street).GetProperty(columnName);
+                                if (property != null)
+                                {
+                                    Properties.Add(Convert.ChangeType(colmnValue, property.PropertyType));
+                                }
+                            }
+                            result.Add(new Street(Properties));
+                        }
+                    }
+                }
+                return result;
+            }
         }
 
         public List<Area> GetAreas()
@@ -699,9 +730,28 @@ namespace CampingDataAccess
             throw new NotImplementedException();
         }
 
-        public void UpdatePlaceData(Place place)
+        public void UpdatePlaceData(Place place, bool power, int surfaceArea, double pricePerNightPerPerson, int amountOfPeople, bool dogs)
         {
-            throw new NotImplementedException();
+            string sql = "UPDATE place SET Power = @Power, SurfaceArea = @SurfaceArea, PricePerNightPerPerson = @PricePerNightPerPerson, AmountOfPeople = @AmountOfPeople, Dogs = @Dogs WHERE PlaceID = @PlaceID;";
+
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+                using (var command = new SqliteCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@PlaceID", place.PlaceID);
+                    command.Parameters.AddWithValue("@Power", power);
+                    command.Parameters.AddWithValue("@SurfaceArea", surfaceArea);
+                    command.Parameters.AddWithValue("@PricePerNightPerPerson", pricePerNightPerPerson);
+                    command.Parameters.AddWithValue("@AmountOfPeople", amountOfPeople);
+                    command.Parameters.AddWithValue("@Dogs", dogs);
+                    command.Prepare();
+                    command.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+            
         }
     }
+
 }

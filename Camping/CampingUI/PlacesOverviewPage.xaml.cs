@@ -8,6 +8,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,14 +33,20 @@ namespace CampingUI
         public Camping Camping { get { return _camping; } }
         private IEnumerable<Place> _placesSortedAndOrFiltered;
         private bool? _hasPower;
+        private bool? _dogsAllowed;
         public int AmountOfPeople = 0;
         private DateTime _arrivalDate, _departureDate;
         private bool _isSortedAscending = true;
         private double _maxPriceRange = 0;
-        private bool _wrongFilter = false;
+        private bool _wrongInput = false;
         private string _headerTag;
         public bool FilterApplied = false;
         private bool _emptyDates = true;
+        private bool _hasPowerEdit;
+        private bool _dogsAllowedEdit;
+        private int _surfaceAreaEdit;
+        private double _pricePerNightPerPersonEdit;
+        private int _amountOfPeopleEdit;
 
         public PlacesOverviewPage(Camping camping, SqliteRepository campingRepository)
         {
@@ -57,31 +65,25 @@ namespace CampingUI
         private void TextBox_Changed(object sender, TextChangedEventArgs e)
         {
             TextBox textbox = (TextBox)sender;
-            if (textbox.Background.Equals(Brushes.Red))
+            if (textbox.BorderBrush.Equals(Brushes.Red))
             {
-                textbox.Background = Brushes.White;
-                _wrongFilter = false;
+                textbox.BorderThickness = new Thickness(1, 1, 1, 1);
+                textbox.BorderBrush = Brushes.White;
+                _wrongInput = false;
             }
         }
 
         //Function (EventHandler) to reset the datepickers to backgroundcolor white incase they were red before
         private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (ArrivalDatePicker.Background.Equals(Brushes.Red) && DepartureDatePicker.Background.Equals(Brushes.Red))
+            if (ArrivalDatePicker.BorderBrush.Equals(Brushes.Red) && DepartureDatePicker.BorderBrush.Equals(Brushes.Red))
             {
-                ArrivalDatePicker.Background = Brushes.White;
-                DepartureDatePicker.Background = Brushes.White;
-                _wrongFilter = false;
+                ArrivalDatePicker.BorderThickness = new Thickness(1,1,1,1);
+                ArrivalDatePicker.BorderBrush = Brushes.White;
+                DepartureDatePicker.BorderThickness = new Thickness(1,1,1,1);
+                DepartureDatePicker.BorderBrush = Brushes.White;
+                _wrongInput = false;
             }
-        }
-
-        // Function (EventHandler) to know which radiobutton is pressed regarding the power boolean
-        private void PowerRadioButton_Selected(object sender, RoutedEventArgs e)
-        {
-            var radioButton = (RadioButton)sender;
-            if (radioButton.Content.ToString().Equals("Wel stroom")) _hasPower = true;
-            else if (radioButton.Content.ToString().Equals("Geen stroom")) _hasPower = false;
-            else _hasPower = null;
         }
 
         // Function to get the AmountOfPeople from the AmountOfPeopleTextBox text
@@ -96,8 +98,9 @@ namespace CampingUI
                 }
                 else
                 {
-                    AmountOfPeopleTextBox.Background = Brushes.Red;
-                    _wrongFilter = true;
+                    AmountOfPeopleTextBox.BorderThickness = new Thickness(3, 3, 3, 3);
+                    AmountOfPeopleTextBox.BorderBrush = Brushes.Red;
+                    _wrongInput = true;
                 }
 
             }
@@ -121,8 +124,9 @@ namespace CampingUI
                 }
                 else
                 {
-                    MaxPriceRangeTextBox.Background = Brushes.Red;
-                    _wrongFilter = true;
+                    MaxPriceRangeTextBox.BorderThickness = new Thickness(3, 3, 3, 3);
+                    MaxPriceRangeTextBox.BorderBrush = Brushes.Red;
+                    _wrongInput = true;
                 }
 
             }
@@ -147,9 +151,11 @@ namespace CampingUI
                 _emptyDates = false;
                 if (_arrivalDate >= _departureDate || _arrivalDate.Date < DateTime.Now.Date)
                 {
-                    ArrivalDatePicker.Background = Brushes.Red;
-                    DepartureDatePicker.Background = Brushes.Red;
-                    _wrongFilter = true;
+                    ArrivalDatePicker.BorderThickness = new Thickness(3, 3, 3, 3);
+                    ArrivalDatePicker.BorderBrush = Brushes.Red;
+                    DepartureDatePicker.BorderThickness = new Thickness(3, 3, 3, 3);
+                    DepartureDatePicker.BorderBrush = Brushes.Red;
+                    _wrongInput = true;
                 }
             }
         }
@@ -181,6 +187,8 @@ namespace CampingUI
             SetAmountOfPeopleFromAmountOfPeopleTextBox();
             SetMaxPriceFromMaxPriceRangeTextBox();
             SetArrivalAndDepartureDates();
+            EditPlaceGrid.Visibility = Visibility.Collapsed;
+            PlaceOverviewGrid.Visibility = Visibility.Collapsed;
             _camping.Places = _camping.CampingRepository.GetPlaces();
             if (!_camping.Places.IsNullOrEmpty())
             {
@@ -195,9 +203,10 @@ namespace CampingUI
         private void Filter(DateTime arrivalDate, DateTime departureDate, int amountOfPeople, double maxPriceRange, bool? hasPower)
         {
 
-            if (!_wrongFilter)
+            if (!_wrongInput)
             {
                 _placesSortedAndOrFiltered = PlacesOverviewPageFilter.GetFilteredListOnPrice(maxPriceRange, _placesSortedAndOrFiltered, _camping);
+                _placesSortedAndOrFiltered = PlacesOverviewPageFilter.GetFilteredListOnDogs(_dogsAllowed, _placesSortedAndOrFiltered, _camping);
                 _placesSortedAndOrFiltered = PlacesOverviewPageFilter.GetFilteredListOnAmountOfPeople(amountOfPeople, _placesSortedAndOrFiltered, _camping);
                 _placesSortedAndOrFiltered = PlacesOverviewPageFilter.GetFilteredListOnDate(_emptyDates, arrivalDate, departureDate, _placesSortedAndOrFiltered, _camping);
                 _placesSortedAndOrFiltered = PlacesOverviewPageFilter.GetFilteredListOnPower(hasPower, _placesSortedAndOrFiltered, _camping);
@@ -213,9 +222,12 @@ namespace CampingUI
         {
             ArrivalDatePicker.SelectedDate = null;
             DepartureDatePicker.SelectedDate = null;
-            PowerRadioButton3.IsChecked = true;
+            DogCheckBoxFilter.IsChecked = null;
+            PowerCheckBoxFilter.IsChecked = null;
             AmountOfPeople = 0;
             _camping.Places = _camping.CampingRepository.GetPlaces();
+            EditPlaceGrid.Visibility = Visibility.Collapsed;
+            PlaceOverviewGrid.Visibility = Visibility.Collapsed;
             if (!_camping.Places.IsNullOrEmpty())
             {
                 _maxPriceRange = _camping.Places.Max(i => i.PricePerNightPerPerson);
@@ -230,7 +242,7 @@ namespace CampingUI
             MaxPriceRangeTextBox.Text = $"{_maxPriceRange}";
 
             ResetBackgroundsFilters();
-            _wrongFilter = false;
+            _wrongInput = false;
             FilterApplied = false;
         }
 
@@ -304,7 +316,7 @@ namespace CampingUI
         private void SetDeleteButtonClickableIfNoReservations()
         {
             Place place = (Place)PlacesListView.SelectedItem;
-            var placesReservations = _camping.Reservations.Where(i => i.PlaceID == place.PlaceID)
+            List<Reservation> placesReservations = _camping.Reservations.Where(i => i.PlaceID == place.PlaceID)
                                                           .Where(i => i.DepartureDate >= DateTime.Now.Date).ToList();
             if (placesReservations.Count > 0)
             {
@@ -322,11 +334,11 @@ namespace CampingUI
         {
             if (PlacesListView.SelectedItems.Count > 0)
             {
-                AddPlaceGrid.Visibility = Visibility.Collapsed;
+                EditPlaceGrid.Visibility = Visibility.Collapsed;
                 Place place = (Place)PlacesListView.SelectedItem;
                 nrLabel.Content = place;
                 areaLabel.Content = "Oppervlakte: " + place.SurfaceArea;
-                nrPeopleLabel.Content = "Aantal personnen:" + place.AmountOfPeople;
+                nrPeopleLabel.Content = "Aantal personen:" + place.AmountOfPeople;
                 electricityLabel.Content = "Toegang tot stroom: ";
 
                 if (place.Power) electricityLabel.Content += "Ja";
@@ -338,10 +350,10 @@ namespace CampingUI
 
                 ReservationCalender.SelectedDate = null;
                 _camping.Reservations = _camping.CampingRepository.GetReservations();
-                var reservations = _camping.Reservations.Where(r => r.PlaceID == place.PlaceID).ToList();
+                List<Reservation> reservations = _camping.Reservations.Where(r => r.PlaceID == place.PlaceID).ToList();
                 reservations = reservations.Where(r => r.DepartureDate >= DateTime.Now).ToList();
                 ReservationCalender.BlackoutDates.AddDatesInPast();
-                foreach (var reservation in reservations)
+                foreach (Reservation reservation in reservations)
                 {
                     ReservationCalender.BlackoutDates.Add(new CalendarDateRange(reservation.ArrivalDate, reservation.DepartureDate));
                 }
@@ -356,12 +368,12 @@ namespace CampingUI
         private void AddPlaceButton_Click(object sender, RoutedEventArgs e)
         {
             PlaceOverviewGrid.Visibility = Visibility.Collapsed;
-            AddPlaceGrid.Visibility = Visibility.Visible;
+            EditPlaceGrid.Visibility = Visibility.Visible;
 
         }
 
         //Function (EventHandler) To add a place when the add place button is clicked
-        public void AddPlaceOnClick(object sender, RoutedEventArgs e)
+        /* public void AddPlaceOnClick(object sender, RoutedEventArgs e)
         {
 
             string[] TextInput =
@@ -378,10 +390,10 @@ namespace CampingUI
             {
                 AddPlaceToDatabase();
             }
-        }
+        }*/
 
         //Function to initiate the addPlace function from the database and show/hide the correct screen
-        public void AddPlaceToDatabase()
+        /*public void AddPlaceToDatabase()
         {
             try
             {
@@ -430,82 +442,214 @@ namespace CampingUI
                 AddPlaceMessage.Foreground = Brushes.Red;
             }
 
-        }
+        }*/
 
         private void EditPlaceButton_Click(object sender, RoutedEventArgs e)
         {
             Place place = (Place)PlacesListView.SelectedItem;
             PlaceOverviewGrid.Visibility = Visibility.Collapsed;
-            AddPlaceGrid.Visibility = Visibility.Visible;
-            AddPlaceButton.Visibility = Visibility.Collapsed;
-            ConfirmEditButton.Visibility = Visibility.Visible;
-            AddPlaceDataToTextfields(place);
+            EditPlaceGrid.Visibility = Visibility.Visible;
+            //Invullen velden
+            setDataFromPlaceOnFieldsEdit(place);
 
         }
 
-        private void AddPlaceDataToTextfields(Place place)
+        private void setDataFromPlaceOnFieldsEdit(Place place)
         {
-            PlaceID.Text = place.PlaceID.ToString();
-            PlaceID.IsEnabled = false;
-            SurfaceArea.Text = place.SurfaceArea.ToString();
+            PlaceIDLabelEdit.Content = "Plaats " + place.PlaceID;
+            AmountOfPeopleEditTextBox.Text = place.AmountOfPeople.ToString();
+            SurfaceAreaEditTextBox.Text = place.SurfaceArea.ToString();
+            PricePerNightPerPersonEditTextBox.Text = place.PricePerNightPerPerson.ToString();
+            PowerEditCheckBox.IsChecked = null;
             if (place.Power)
-                HasPower.SelectedItem = "Ja";
-            else
-                HasPower.SelectedItem = "Nee";
-            NumberOfPeople.Text = place.AmountOfPeople.ToString();
-            PricePerPersonPerNight.Text = place.AmountOfPeople.ToString();
-        }
+                PowerEditCheckBox.IsChecked = true;
+            DogsEditCheckBox.IsChecked = null;
+            if (place.Dogs)
+                DogsEditCheckBox.IsChecked = true;
+            ChangeDogsLabelOnCheckBoxClick();
+            ChangePowerLabelOnCheckBoxClick();
 
-        private Place GetPlaceFromTextBoxes()
-        {
-            try
-            {
-                //Parses the string inputs from textboxes to ints
-                int placeID = Int32.Parse(PlaceID.Text);
-                int surfaceArea = Int32.Parse(SurfaceArea.Text);
-                double pricePerPersonPerNight = double.Parse(PricePerPersonPerNight.Text);
-                int numberOfPeople = Int32.Parse(NumberOfPeople.Text);
-                string electricity = HasPower.SelectionBoxItem.ToString();
-                //Checks if the place has electricity 
-                bool hasPower;
-                if (electricity.Equals("Ja"))
-                    hasPower = true;
-                else
-                    hasPower = false;
-                return new Place(placeID, hasPower, surfaceArea, true, numberOfPeople, 1, pricePerPersonPerNight, 1, 1);
-            }
-            catch
-            {
-                AddPlaceMessage.Text = "Ongeldigde input";
-                AddPlaceMessage.Foreground = Brushes.Red;
-                return null;
-            }
         }
-
         private void EditPlaceConfirmButton_Click(object sender, RoutedEventArgs e)
         {
-            Place place = null;
-            while(place == null)
+            GetEditedNumbers();
+            _hasPowerEdit = GetEditedCheckBox(PowerEditCheckBox, _hasPowerEdit);
+
+            _dogsAllowedEdit = GetEditedCheckBox(DogsEditCheckBox, _dogsAllowedEdit);
+            Place place = (Place)PlacesListView.SelectedItem;
+            //Check of goede is inputs is
+            if (!_wrongInput)
             {
-                place = GetPlaceFromTextBoxes();
+                //Updaten plaats
+                Camping.CampingRepository.UpdatePlaceData(place, _hasPowerEdit, _surfaceAreaEdit, _pricePerNightPerPersonEdit, _amountOfPeopleEdit, _dogsAllowedEdit);
+                EditPlaceGrid.Visibility = Visibility.Collapsed;
+                PlaceOverviewGrid.Visibility = Visibility.Visible;
+                ReloadScreenDataPlaces();
             }
-            _camping.CampingRepository.UpdatePlaceData(place);
-            AddPlaceButton.Visibility = Visibility.Visible;
-            ConfirmEditButton.Visibility = Visibility.Collapsed;
-            AddPlaceGrid.Visibility = Visibility.Collapsed;
-            ReloadScreenDataPlaces();
-            ResetDataFromTextfields();
+
         }
 
-        private void ResetDataFromTextfields()
+        private bool GetEditedCheckBox(CheckBox checkBox, bool editBool)
         {
-            PlaceID.Text = null;
-            PlaceID.IsEnabled = true;
-            SurfaceArea.Text = null;
-            HasPower.Text = null;
-            NumberOfPeople.Text = null;
-            PricePerPersonPerNight.Text = null;
+            Place place = (Place)PlacesListView.SelectedItem;
+            Street street = GetStreetByStreetID(place);
+            if (checkBox.IsChecked == true) editBool = true;
+            else if (checkBox.IsChecked == null) editBool = false;
+            else
+            {
+                if (checkBox.Equals(DogsEditCheckBox))
+                    editBool = street.Dogs;
+                else
+                    editBool = street.Power;
+            }
+            return editBool;
         }
+        private Street GetStreetByStreetID(Place place)
+        {
+            return _camping.CampingRepository.GetStreets().Where(i => i.StreetID == place.StreetID).First();
+        }
+
+        private void ChangeLabelOnCheckBoxClick(CheckBox checkbox, Label label, string truestring, string falsestring)
+        {
+            if (checkbox.IsChecked == true) label.Content = truestring;
+            else if (checkbox.IsChecked == false) label.Content = "Overnemen van straat eigenschappen";
+            else label.Content = falsestring;
+        }
+        private void ChangeDogsLabelOnCheckBoxClick()
+        {
+            ChangeLabelOnCheckBoxClick(DogsEditCheckBox, DogsAllowedEditLabel, "Honden toegestaan", "Geen honden toegestaan");
+        }
+        private void ChangePowerLabelOnCheckBoxClick()
+        {
+            ChangeLabelOnCheckBoxClick(PowerEditCheckBox, PowerEditLabel, "Wel stroom", "Geen stroom");
+        }
+
+        private void CancelEditButton_Click(object sender, RoutedEventArgs e)
+        {
+            
+            EditPlaceGrid.Visibility = Visibility.Collapsed;
+            PlaceOverviewGrid.Visibility = Visibility.Visible;
+            _wrongInput = false;
+        }
+
+        private void DogsEditCheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            ChangeDogsLabelOnCheckBoxClick();
+        }
+        private void PowerEditCheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            ChangePowerLabelOnCheckBoxClick();
+        }
+
+        private void GetEditedNumbers()
+        {
+            GetEditedAmountOfPeople();
+            GetEditedPricePerNightPerPerson();
+            GetEditedSurfaceArea();
+        }
+        private void GetEditedAmountOfPeople()
+        {
+            int number;
+            if (int.TryParse(AmountOfPeopleEditTextBox.Text, out number) && number >= 0 && !string.IsNullOrEmpty(AmountOfPeopleEditTextBox.Text))// Checks if int can be parsed and if number is bigger or equal to 0
+                _amountOfPeopleEdit = number;
+            else
+            {
+                AmountOfPeopleEditTextBox.BorderThickness = new Thickness(3, 3, 3, 3);
+                AmountOfPeopleEditTextBox.BorderBrush = Brushes.Red;
+                _wrongInput = true;
+            }  
+        }
+        private void GetEditedPricePerNightPerPerson()
+        {
+            double number;
+            if (double.TryParse(PricePerNightPerPersonEditTextBox.Text, out number) && number >= 0 && !string.IsNullOrEmpty(PricePerNightPerPersonEditTextBox.Text))// Checks if int can be parsed and if number is bigger or equal to 0
+                _pricePerNightPerPersonEdit = number;
+            else
+            {
+                PricePerNightPerPersonEditTextBox.BorderThickness = new Thickness(3, 3, 3, 3);
+                PricePerNightPerPersonEditTextBox.BorderBrush = Brushes.Red;
+                _wrongInput = true;
+            }
+        }
+        private void GetEditedSurfaceArea()
+        {
+            int number;
+            if (int.TryParse(SurfaceAreaEditTextBox.Text, out number) && number >= 0 && !string.IsNullOrEmpty(SurfaceAreaEditTextBox.Text))// Checks if int can be parsed and if number is bigger or equal to 0
+                _surfaceAreaEdit = number;
+            else
+            {
+                SurfaceAreaEditTextBox.BorderThickness = new Thickness(3, 3, 3, 3);
+                SurfaceAreaEditTextBox.BorderBrush = Brushes.Red;
+                _wrongInput = true;
+            }
+        }
+
+        private void PricePerNightPerPersonExtendButton_Click(object sender, RoutedEventArgs e)
+        {
+            Place place = (Place)PlacesListView.SelectedItem;
+            Street street = _camping.CampingRepository.GetStreets().Where(i => i.StreetID == place.StreetID).FirstOrDefault();
+        }
+
+        private void SurfaceAreaExtendButton_Click(object sender, RoutedEventArgs e)
+        {
+            Place place = (Place)PlacesListView.SelectedItem;
+            Street street = _camping.CampingRepository.GetStreets().Where(i => i.StreetID == place.StreetID).FirstOrDefault();
+        }
+
+        private void EditExtendButton_Click(object sender, RoutedEventArgs e)
+        {
+            Place place = (Place)PlacesListView.SelectedItem;
+            Button button = (Button)sender;
+            Street street = _camping.CampingRepository.GetStreets().Where(i => i.StreetID == place.StreetID).FirstOrDefault();
+            if (button.Name.Equals(AmountOfPeopleExtendButton.Name))
+                AmountOfPeopleEditTextBox.Text = "";
+            else if (button.Name.Equals(PricePerNightPerPersonExtendButton.Name))
+                PricePerNightPerPersonEditTextBox.Text = "";
+            else
+                SurfaceAreaEditTextBox.Text = "";
+        }
+
+        private void PowerCheckButton_Checked(object sender, RoutedEventArgs e)
+        {
+            CheckBox checkbox = (CheckBox)sender;
+            if (checkbox.IsChecked == true)
+            {
+                checkbox.Content = "Wel stroom";
+                _hasPower = true;
+            }
+            else if (checkbox.IsChecked == false)
+            {
+                checkbox.Content = "Geen voorkeur (stroom)";
+                _hasPower = null;
+            }
+            else
+            {
+                checkbox.Content = "Geen stroom";
+                _hasPower = false;
+            }
+        }
+
+        private void DogsCheckButton_Checked(object sender, RoutedEventArgs e)
+        {
+            CheckBox checkbox = (CheckBox)sender;
+            if (checkbox.IsChecked == true)
+            {
+                checkbox.Content = "Honden toegestaan";
+                _dogsAllowed = true;
+            }
+            else if (checkbox.IsChecked == false)
+            {
+                checkbox.Content = "Geen voorkeur (hond)";
+                _dogsAllowed = null;
+            }
+            else
+            {
+                checkbox.Content = "Geen honden toegestaan";
+                _dogsAllowed = false;
+            }
+        }
+
+
 
         //Function to check if the input is null or not from a text array
         public bool CheckIfInputIsNotNull(string[] TextInput)
