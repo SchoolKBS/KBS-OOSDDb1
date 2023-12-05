@@ -98,6 +98,27 @@
                         </Style>
                     </Button.Style>
                 </Button>
+
+                <Button x:Name="GuestOverviewButton" Background="Transparent" BorderBrush="Transparent" Foreground="White" FontWeight="Bold" Height="50" FontSize="20" Margin="0, 0, 12.5, 0" Click="GuestOverviewButton_Click">
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+                                <TextBlock Text="Overzicht gasten" TextDecorations="None" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Foreground" Value="Orange"/>
+                                    <Setter Property="TextBlock.TextDecorations" Value="Underline"/>
+                                    <Setter Property="Cursor" Value="Hand"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
             </StackPanel>
 
 
