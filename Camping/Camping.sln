@@ -5,11 +5,13 @@ VisualStudioVersion = 17.7.34202.233
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CampingUI", "CampingUI\CampingUI.csproj", "{B781199F-EA69-44AF-87D4-EDF54AADE8EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CampingCore", "CampingCore\CampingCore.csproj", "{06400976-CA8C-45F3-B8D7-7D09A14AEFF9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CampingCore", "CampingCore\CampingCore.csproj", "{06400976-CA8C-45F3-B8D7-7D09A14AEFF9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CampingDataAccess", "CampingDataAccess\CampingDataAccess.csproj", "{9A2EEB25-3AED-4B07-B499-6BB36CC868B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CampingDataAccess", "CampingDataAccess\CampingDataAccess.csproj", "{9A2EEB25-3AED-4B07-B499-6BB36CC868B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{747D926F-5F92-4D36-AFF7-B69B9F1CA9F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "UnitTests\UnitTests.csproj", "{747D926F-5F92-4D36-AFF7-B69B9F1CA9F5}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "OOSDD_Installer", "OOSDD_Installer\OOSDD_Installer.vdproj", "{960B5D8F-541F-41A7-8B60-23403C748996}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,20 +21,22 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{B781199F-EA69-44AF-87D4-EDF54AADE8EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B781199F-EA69-44AF-87D4-EDF54AADE8EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B781199F-EA69-44AF-87D4-EDF54AADE8EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B781199F-EA69-44AF-87D4-EDF54AADE8EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B781199F-EA69-44AF-87D4-EDF54AADE8EA}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{B781199F-EA69-44AF-87D4-EDF54AADE8EA}.Release|Any CPU.Build.0 = Debug|Any CPU
 		{06400976-CA8C-45F3-B8D7-7D09A14AEFF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{06400976-CA8C-45F3-B8D7-7D09A14AEFF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{06400976-CA8C-45F3-B8D7-7D09A14AEFF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{06400976-CA8C-45F3-B8D7-7D09A14AEFF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06400976-CA8C-45F3-B8D7-7D09A14AEFF9}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{06400976-CA8C-45F3-B8D7-7D09A14AEFF9}.Release|Any CPU.Build.0 = Debug|Any CPU
 		{9A2EEB25-3AED-4B07-B499-6BB36CC868B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9A2EEB25-3AED-4B07-B499-6BB36CC868B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9A2EEB25-3AED-4B07-B499-6BB36CC868B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9A2EEB25-3AED-4B07-B499-6BB36CC868B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A2EEB25-3AED-4B07-B499-6BB36CC868B4}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A2EEB25-3AED-4B07-B499-6BB36CC868B4}.Release|Any CPU.Build.0 = Debug|Any CPU
 		{747D926F-5F92-4D36-AFF7-B69B9F1CA9F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{747D926F-5F92-4D36-AFF7-B69B9F1CA9F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{747D926F-5F92-4D36-AFF7-B69B9F1CA9F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{747D926F-5F92-4D36-AFF7-B69B9F1CA9F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{747D926F-5F92-4D36-AFF7-B69B9F1CA9F5}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{747D926F-5F92-4D36-AFF7-B69B9F1CA9F5}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{960B5D8F-541F-41A7-8B60-23403C748996}.Debug|Any CPU.ActiveCfg = Debug
+		{960B5D8F-541F-41A7-8B60-23403C748996}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
