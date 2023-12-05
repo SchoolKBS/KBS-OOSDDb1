@@ -30,12 +30,51 @@ namespace CampingUI
         public MainPage(Camping camping)
         {
             InitializeComponent();
+
+            // Calculate scale percentages based on screen size
+            double screenWidth = SystemParameters.PrimaryScreenWidth;
+            double screenHeight = SystemParameters.PrimaryScreenHeight;
+
+            double desiredWidth = 1000;  // Replace with your desired canvas width
+            double desiredHeight = 750;  // Replace with your desired canvas height
+
+            // Calculate scaling factors while maintaining the aspect ratio
+            double aspectRatio = desiredWidth / desiredHeight;
+            double screenAspectRatio = screenWidth / screenHeight;
+
+            double scaleX = 1.0;
+            double scaleY = 1.0;
+
+            if (screenAspectRatio > aspectRatio)
+            {
+                // Screen is wider, scale based on width
+                scaleX = screenWidth / desiredWidth / 1.75;
+                scaleY = scaleX;
+            }
+            else
+            {
+                // Screen is taller, scale based on height
+                scaleY = screenHeight / desiredHeight / 1.75;
+                scaleX = scaleY;
+            }
+
+            ApplyScaleTransform(scaleX, scaleY);
+
             Camping = camping;
 
-            // Generate areas with there streets (and later places)
+            // Generate areas with their streets (and later places)
             GenerateAreas();
-          
         }
+
+        private void ApplyScaleTransform(double scaleX, double scaleY)
+        {
+            if (field.FindName("plattegrond") is ScaleTransform plattegrond)
+            {
+                plattegrond.ScaleX = scaleX;
+                plattegrond.ScaleY = scaleY;
+            }
+        }
+
 
         public void GenerateAreas()
         {
@@ -64,6 +103,7 @@ namespace CampingUI
                 Canvas.SetLeft(border, coordinates[0]); // XCord1 to place from left.
                 Canvas.SetZIndex(border, -1);
                 field.Children.Add(border);
+
 
                 // Generate streets that belong to the area.
                 GenerateStreetsPerArea(canvasArea, area);
