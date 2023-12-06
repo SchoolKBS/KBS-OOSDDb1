@@ -40,11 +40,11 @@ BorderThickness="1,1,1,1" Background="{x:Null}" />
 
             <!-- Second filter for amount of people  -->
             <Label Content="Aantal personen" HorizontalAlignment="Left" Margin="180,68,0,0" VerticalAlignment="Top" FontFamily="Calibri" FontWeight="Bold"/>
-            <TextBox x:Name="PersonCountTextBoxx" HorizontalAlignment="Left" Margin="90,102,0,0" VerticalAlignment="Top" Width="60" Height="20" />
+            <TextBox x:Name="PersonCountTextBoxx" HorizontalAlignment="Left" Margin="285,70,0,0" VerticalAlignment="Top" Width="60" Height="20" />
 
             <!-- Third filter for place number -->
             <Label Content="Plek" HorizontalAlignment="Left" Margin="10,100,0,0" VerticalAlignment="Top" FontFamily="Calibri" FontWeight="Bold"/>
-            <TextBox x:Name="PlaceNumerBox" HorizontalAlignment="Left" Margin="283,74,0,0" VerticalAlignment="Top" Width="60" Height="20"/>
+            <TextBox x:Name="PlaceNumerBox" HorizontalAlignment="Left" Margin="90,105,0,0" VerticalAlignment="Top" Width="60" Height="20"/>
 
             <!-- Fourth filter for Guest  -->
             <Label Content="Gast Naam" HorizontalAlignment="Left" Margin="10,68,0,0" VerticalAlignment="Top" FontFamily="Calibri" FontWeight="Bold"/>
@@ -72,8 +72,8 @@ BorderThickness="1,1,1,1" Background="{x:Null}" />
                                 <GridViewColumnHeader Tag="DepartureDate">Vertrekdatum</GridViewColumnHeader>
                             </GridViewColumn.Header>
                         </GridViewColumn>
-                       
- 
+
+
                         <GridViewColumn Width="auto" DisplayMemberBinding="{Binding PlaceID}">
                             <GridViewColumn.Header>
                                 <GridViewColumnHeader Tag="Place">Plaatsnummer</GridViewColumnHeader>

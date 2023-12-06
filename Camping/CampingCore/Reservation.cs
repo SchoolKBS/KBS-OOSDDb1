@@ -49,7 +49,7 @@ namespace CampingCore
             PlaceID = (int)properties[3];
             GuestName = (string)properties[4];
             GuestID = (int)properties[5];
-            AmountOfPeople = (int)properties[6];
+            AmountOfPeople = (int)properties[6]; 
             IsPaid = (bool)properties[7];
             Price = (double)properties[8];
         }
