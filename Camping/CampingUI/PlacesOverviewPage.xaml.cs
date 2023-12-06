@@ -590,11 +590,11 @@ namespace CampingUI
             Button button = (Button)sender;
             Street street = _camping.CampingRepository.CampingMapRepository.GetStreetByStreetID(place);
             if (button.Name.Equals(AmountOfPeopleExtendButton.Name))
-                AmountOfPeopleEditTextBox.Text = "";
+                AmountOfPeopleEditTextBox.Text = street.AmountOfPeople.ToString();
             else if (button.Name.Equals(PricePerNightPerPersonExtendButton.Name))
-                PricePerNightPerPersonEditTextBox.Text = "";
+                PricePerNightPerPersonEditTextBox.Text = street.PricePerNightPerPerson.ToString();
             else
-                SurfaceAreaEditTextBox.Text = "";
+                SurfaceAreaEditTextBox.Text = street.SurfaceArea.ToString();
         }
 
         private void PowerCheckButton_Checked(object sender, RoutedEventArgs e)

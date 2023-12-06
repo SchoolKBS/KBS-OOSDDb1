@@ -29,7 +29,7 @@ namespace CampingUI
             Main.Navigate(new MainPage());
             this.CampingRepository = new CampingRepository();
             
-            CampingRepository.AddDummyData();
+            //CampingRepository.AddDummyData();
 
             this.Camping = new Camping(CampingRepository);
 
