@@ -10,17 +10,17 @@ namespace UnitTests
         [Test]
         public void GetFilteredListOnPower_places_returnsList()
         {
-            SqliteRepository campingRepository = new SqliteRepository();
+            CampingRepository campingRepository = new CampingRepository();
             Camping camping = new Camping(campingRepository);
             List<Place> listToCheck = new List<Place>();
 
             for (int i = 1; i <= 5; i++)
             {
-                listToCheck.Add(new Place(i, true, i, i, i));
+                listToCheck.Add(new Place(i, true, i, true, i, i, i, i, i));
             }
             for (int i = 6; i <= 10; i++)
             {
-                listToCheck.Add(new Place(i, false, i, i, i));
+                listToCheck.Add(new Place(i, false, i, false, i, i, i, i, i));
             }
             IEnumerable<Place> places = new List<Place>();
             camping.Places = listToCheck;
@@ -30,40 +30,40 @@ namespace UnitTests
         }
 
         [Test]
-        public void GetFilteredListOnPersonCount_places_returnsList()
+        public void GetFilteredListOnAmountOfPeople_places_returnsList()
         {
-            SqliteRepository campingRepository = new SqliteRepository();
+            CampingRepository campingRepository = new CampingRepository();
             Camping camping = new Camping(campingRepository);
             List<Place> listToCheck = new List<Place>();
 
             for (int i = 1; i <= 5; i++)
             {
-                listToCheck.Add(new Place(i, true, i, i, i));
+                listToCheck.Add(new Place(i, true, i, true, i, i, i, i, i));
             }
             for (int i = 6; i <= 10; i++)
             {
-                listToCheck.Add(new Place(i, false, i, i, i));
+                listToCheck.Add(new Place(i, false, i, false, i, i, i, i, i));
             }
             IEnumerable<Place> places = new List<Place>();
             camping.Places = listToCheck;
             places = listToCheck;
-            places = PlacesOverviewPageFilter.GetFilteredListOnPersonCount(6, camping.Places, camping);
+            places = PlacesOverviewPageFilter.GetFilteredListOnAmountOfPeople(6, camping.Places, camping);
             Assert.That(places.Count(), Is.EqualTo(5));
         }
         [Test]
         public void GetFilteredListOnPrice_places_returnsList()
         {
-            SqliteRepository campingRepository = new SqliteRepository();
+            CampingRepository campingRepository = new CampingRepository();
             Camping camping = new Camping(campingRepository);
             List<Place> listToCheck = new List<Place>();
 
             for (int i = 1; i <= 5; i++)
             {
-                listToCheck.Add(new Place(i, true, i, i, i));
+                listToCheck.Add(new Place(i, true, i, true, i, i, i, i, i));
             }
             for (int i = 6; i <= 10; i++)
             {
-                listToCheck.Add(new Place(i, false, i, i, i));
+                listToCheck.Add(new Place(i, false, i, false, i, i, i, i, i));
             }
             IEnumerable<Place> places = new List<Place>();
             camping.Places = listToCheck;
@@ -75,17 +75,17 @@ namespace UnitTests
         [Test]
         public void GetFilteredListOnDates_places_returnsList()
         { 
-            SqliteRepository campingRepository = new SqliteRepository();
+            CampingRepository campingRepository = new CampingRepository();
             Camping camping = new Camping(campingRepository);
             List<Place> listToCheck = new List<Place>();
 
             for (int i = 1; i <= 5; i++)
             {
-                listToCheck.Add(new Place(i, true, i, i, i));
+                listToCheck.Add(new Place(i, true, i, true, i, i, i, i, i));
             }
             for (int i = 6; i <= 10; i++)
             {
-                listToCheck.Add(new Place(i, false, i, i, i));
+                listToCheck.Add(new Place(i, false, i, false, i, i, i, i, i));
             }
             IEnumerable<Place> places = new List<Place>();
             camping.Places = listToCheck;
@@ -97,17 +97,17 @@ namespace UnitTests
         [Test]
         public void GetAvailablePlacesBetweenDates_places_returnsList()
         {
-            SqliteRepository campingRepository = new SqliteRepository();
+            CampingRepository campingRepository = new CampingRepository();
             Camping camping = new Camping(campingRepository);
             List<Place> listToCheck = new List<Place>();
 
             for (int i = 1; i <= 5; i++)
             {
-                listToCheck.Add(new Place(i, true, i, i, i));
+                listToCheck.Add(new Place(i, true, i, true, i, i, i, i, i));
             }
             for (int i = 6; i <= 10; i++)
             {
-                listToCheck.Add(new Place(i, false, i, i, i));
+                listToCheck.Add(new Place(i, false, i, false, i, i, i, i, i));
             }
             IEnumerable<Place> places = new List<Place>();
             camping.Places = listToCheck;

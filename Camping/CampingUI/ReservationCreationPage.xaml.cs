@@ -41,7 +41,7 @@ namespace CampingUI
         public void SetKnownInformation()
         {
             _place = (Place)_page.PlacesListView.SelectedItem;
-            if (_page.FilterAplied)
+            if (_page.FilterApplied)
             {
                 if(_page.ArrivalDatePicker.SelectedDate != null) ArrivalDatePicker.SelectedDate = _page.ArrivalDatePicker.SelectedDate.Value;
                 if (_page.DepartureDatePicker.SelectedDate != null)
@@ -49,7 +49,7 @@ namespace CampingUI
                     DepartureDatePicker.IsEnabled = true;
                     DepartureDatePicker.SelectedDate = _page.DepartureDatePicker.SelectedDate.Value;
                 }
-                if(_page.PersonCount > 0)PeopleCountText.Text = _page.PersonCount.ToString();
+                if(_page.AmountOfPeople > 0)PeopleCountText.Text = _page.AmountOfPeople.ToString();
             }
         }
         // Event for when arrival date is changed, This enables deparutre date and calls ShowAvailableDatesDeparture()
@@ -176,11 +176,11 @@ namespace CampingUI
             if (CheckValues())
             {
                 Guest guest = new Guest(FirstNameTB.Text, InfixTB.Text, LastnameTB.Text, AddressTB.Text, CityTB.Text, EmailTB.Text, PhoneNumberTB.Text, PostalCodeTB.Text);
-                _camping.CampingRepository.AddGuest(guest);
+                _camping.CampingRepository.CampingGuestRepository.AddGuest(guest);
                 //Database db = new Database();
                 //db.AddGuestToDatabase(guest);
-                _camping.CampingRepository.AddReservation(new Reservation(0, (DateTime)ArrivalDatePicker.SelectedDate, (DateTime)DepartureDatePicker.SelectedDate, _place.PlaceID, _camping.CampingRepository.GetLastGuestID(), int.Parse(PeopleCountText.Text), IsPaidCB.IsChecked.Value, Price));
-                NavigationService.Navigate(new PlacesOverviewPage(_camping, (SqliteRepository)_camping.CampingRepository));
+                _camping.CampingRepository.CampingReservationRepository.AddReservation(new Reservation(0, (DateTime)ArrivalDatePicker.SelectedDate, (DateTime)DepartureDatePicker.SelectedDate, _place.PlaceID, _camping.CampingRepository.CampingGuestRepository.GetLastGuestID(), int.Parse(PeopleCountText.Text), IsPaidCB.IsChecked.Value, Price));
+                NavigationService.Navigate(new PlacesOverviewPage(_camping, (CampingRepository)_camping.CampingRepository));
             }
         }
         // Changes the background of textbox back to normal if its value was changed

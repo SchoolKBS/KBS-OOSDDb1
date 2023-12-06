@@ -8,6 +8,15 @@ namespace CampingCore.PlacesOverviewPageClasses
 {
     public class PlacesOverviewPageFilter
     {
+
+        public static IEnumerable<Place> GetFilteredListOnDogs(bool? dogsAllowed, IEnumerable<Place> _placesSortedAndOrFiltered, Camping _camping)
+        {
+            if (dogsAllowed != null)
+            {
+                _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Intersect(_camping.Places.Where(i => i.Power == dogsAllowed).Select(i => i));
+            }
+            return _placesSortedAndOrFiltered;
+        }
         // Function to filter the list of places on the bool hasPower
         public static IEnumerable<Place> GetFilteredListOnPower(bool? hasPower, IEnumerable<Place> _placesSortedAndOrFiltered, Camping _camping)
         {
@@ -31,11 +40,11 @@ namespace CampingCore.PlacesOverviewPageClasses
         }
 
         // Function to filter the list of places on the int AmountOfPeople
-        public static IEnumerable<Place> GetFilteredListOnPersonCount(int personCount, IEnumerable<Place> _placesSortedAndOrFiltered, Camping _camping)
+        public static IEnumerable<Place> GetFilteredListOnAmountOfPeople(int amountOfPeople, IEnumerable<Place> _placesSortedAndOrFiltered, Camping _camping)
         {
-            if (personCount >= 0)
+            if (amountOfPeople >= 0)
             {
-                _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Intersect(_camping.Places.Where(i => i.AmountOfPeople >= personCount).Select(i => i));
+                _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Intersect(_camping.Places.Where(i => i.AmountOfPeople >= amountOfPeople).Select(i => i));
             }
             return _placesSortedAndOrFiltered;
         }

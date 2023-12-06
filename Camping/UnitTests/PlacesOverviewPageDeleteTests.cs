@@ -1,4 +1,5 @@
 ﻿using CampingCore;
+using CampingCore.CampingRepositories;
 using CampingCore.PlacesOverviewPageClasses;
 using Microsoft.IdentityModel.Abstractions;
 using Moq;
@@ -19,10 +20,10 @@ namespace UnitTests
         {
             var mock = new Mock<ICampingRepository>();
             Camping camping = new Camping(mock.Object);
-            Place place = new Place(1, true, 1, 1, 1);
+            Place place = new Place(1, true, 1, true, 1, 1, 1, 1, 1);
             PlacesOverviewPageDelete.DeletePlace(camping, place, DateTime.Now.Date);
-            mock.Verify(p => p.RemovePlace(place), Times.Once());
-            mock.Verify(p => p.RemoveAllPreviousReservationsByPlace(place, DateTime.Now.Date), Times.Once());
+            mock.Verify(p => p.CampingPlaceRepository.RemovePlace(place), Times.Once());
+            mock.Verify(p => p.CampingReservationRepository.RemoveAllPreviousReservationsByPlace(place, DateTime.Now.Date), Times.Once());
         }
     }
 }

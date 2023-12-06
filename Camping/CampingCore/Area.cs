@@ -14,6 +14,9 @@ namespace CampingCore
         public string Name { get; set; }
         public bool Power { get; set; }
         public bool Dogs { get; set; }
+        public int SurfaceArea { get; set; }
+        public double PricePerNightPerPerson { get; set; }
+        public int AmountOfPeople { get; set; }
 
         // Creates a square for an area
         public int Ycord1 { get; set; } // LEFT TOP
@@ -26,31 +29,14 @@ namespace CampingCore
             AreaID = (int)properties[0];
             Name = (string)properties[1];
             Power = (bool)properties[2];
-            Dogs = (bool)properties[3];
-            Xcord1 = (int)properties[4];
-            Ycord1 = (int)properties[5];
-            Xcord2 = (int)properties[6];
-            Ycord2 = (int)properties[7];
-        }
-
-        public int GetID()
-        {
-            return AreaID;
-        }
-
-        public string GetName()
-        {
-            return Name;
-        }
-
-        public bool GetDogs()
-        {
-            return Dogs;
-        }
-
-        public bool GetPower()
-        {
-            return Power;
+            SurfaceArea = (int)properties[3];
+            PricePerNightPerPerson = (int)properties[4];
+            AmountOfPeople = (int)properties[5];
+            Dogs = (bool)properties[6];
+            Xcord1 = (int)properties[7];
+            Ycord1 = (int)properties[8];
+            Xcord2 = (int)properties[9];
+            Ycord2 = (int)properties[10];
         }
 
         public int[] GetAreaPositions()

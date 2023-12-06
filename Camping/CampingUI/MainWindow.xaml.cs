@@ -21,7 +21,7 @@ namespace CampingUI
     public partial class MainWindow : Window
     {
 
-        public SqliteRepository CampingRepository { get; private set; }
+        public CampingRepository CampingRepository { get; private set; }
         public Camping Camping { get; private set; }
         public MainWindow()
         {
@@ -46,7 +46,7 @@ namespace CampingUI
         //Function (EventHandler) to open the reservations page
         private void ReservationsButton_Click(object sender, RoutedEventArgs e)
         {
-            Camping.Reservations = Camping.CampingRepository.GetReservations();
+            Camping.Reservations = Camping.CampingRepository.CampingReservationRepository.GetReservations();
             Main.Content = new ReservationsOverviewWindow(Camping, CampingRepository);
         }
 
