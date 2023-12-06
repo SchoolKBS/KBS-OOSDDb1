@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CampingCore.PlacesOverviewPageClasses
 {
-    public class PlacesOverviewPageSorting
+    public class PlacesOverviewSorting
     {
         // Function to sort the list on placenumbers 
         // Returns a bool to know which way the list is sorted now

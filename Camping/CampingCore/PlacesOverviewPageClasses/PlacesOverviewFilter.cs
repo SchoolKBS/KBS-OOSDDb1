@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CampingCore.PlacesOverviewPageClasses
 {
-    public class PlacesOverviewPageFilter
+    public class PlacesOverviewFilter
     {
 
         public static IEnumerable<Place> GetFilteredListOnDogs(bool? dogsAllowed, IEnumerable<Place> _placesSortedAndOrFiltered, Camping _camping)

@@ -200,19 +200,19 @@
         <Border Grid.Column="0" Grid.Row="2" Margin="25,5,25,0" Padding="5" Background="#334A6E" CornerRadius="25">
             <Grid x:Name="FilterPlacesGrid">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" Content="Aankomstdatum" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Calibri" FontWeight="Bold" Height="25" Width="93"/>
                 <Label Grid.Column="2" Content="Vertrekdatum" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Calibri" FontWeight="Bold" Height="25" Width="79"/>
@@ -220,8 +220,8 @@
                 <DatePicker Name="DepartureDatePicker" Tag="-1" Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center" SelectedDateChanged="DatePicker_SelectedDateChanged" Height="24" Width="102"/>
 
                 <!-- Second filter for power  -->
-                <CheckBox Margin="10,0,0,0" Name="PowerCheckBoxFilter" IsThreeState="true" Grid.Column="5" Content="Geen voorkeur (stroom)" HorizontalAlignment="Center" VerticalAlignment="Center" Click="PowerCheckButton_Checked" FontFamily="Calibri" FontWeight="Bold" Width="139"/>
-                <CheckBox Margin="10,0,0,0" Name="DogCheckBoxFilter" IsThreeState="true" Grid.Column="6" Content="Geen voorkeur (hond)" HorizontalAlignment="Center" VerticalAlignment="Center" Click="DogsCheckButton_Checked"  FontFamily="Calibri" FontWeight="Bold" Width="130"/>
+                <CheckBox Margin="10,0,0,0" Name="PowerCheckBoxFilter" IsThreeState="true" Grid.Column="5" Content="Geen voorkeur (stroom)" HorizontalAlignment="Center" VerticalAlignment="Center" Click="PowerCheckBox_Checked" FontFamily="Calibri" FontWeight="Bold" Width="139"/>
+                <CheckBox Margin="10,0,0,0" Name="DogCheckBoxFilter" IsThreeState="true" Grid.Column="6" Content="Geen voorkeur (hond)" HorizontalAlignment="Center" VerticalAlignment="Center" Click="DogsCheckBox_Checked"  FontFamily="Calibri" FontWeight="Bold" Width="130"/>
 
                 <!-- Third filter for amount of people  -->
                 <Label Margin="15,0,0,0" Content="Aantal personen" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Calibri" FontWeight="Bold" Grid.Column="7"/>
@@ -361,10 +361,10 @@
 
                     <!--Power, Dog, Price, Person, SurfaceArea-->
 
-                    <Label Grid.Column="0" Grid.Row="0" FontSize="16" HorizontalAlignment="Left" Margin="170,76,0,0" VerticalAlignment="Top" Name="PowerEditLabel"/>
+                    <!--<Label Grid.Column="0" Grid.Row="0" FontSize="16" HorizontalAlignment="Left" Margin="170,76,0,0" VerticalAlignment="Top" Name="PowerEditLabel"/>-->
                     <CheckBox Name="PowerEditCheckBox" Grid.Column="0" Grid.Row="0" IsThreeState="True" HorizontalAlignment="Left" Margin="150,65,0,0" Height="15" Click="PowerEditCheckBox_Click"/>
 
-                    <Label Grid.Column="1" Grid.Row="0" FontSize="16" HorizontalAlignment="Left" Margin="140,76,0,0" VerticalAlignment="Top" Name="DogsAllowedEditLabel"/>
+                    <!--<Label Grid.Column="1" Grid.Row="0" FontSize="16" HorizontalAlignment="Left" Margin="140,76,0,0" VerticalAlignment="Top" Name="DogsAllowedEditLabel"/>-->
                     <CheckBox Name="DogsEditCheckBox" Grid.Column="1" Grid.Row="0" IsThreeState="True" HorizontalAlignment="Left" Margin="120,65,0,0" Height="15" Click="DogsEditCheckBox_Click"/>
 
                     <Label Grid.Column="0" Grid.Row="1" FontSize="16" Content="Aantal personen" Width="150" />

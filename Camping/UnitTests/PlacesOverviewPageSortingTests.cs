@@ -31,7 +31,7 @@ namespace UnitTests
             IEnumerable<Place> places = new List<Place>();
             camping.Places = listToCheck;
             places = listToCheck;
-            places = PlacesOverviewPageSorting.SortColumnPrice(isSorted, camping.Places);
+            places = PlacesOverviewSorting.SortColumnPrice(isSorted, camping.Places);
             Assert.That(places.First().PricePerNightPerPerson, Is.EqualTo(number));
         }
 
@@ -54,7 +54,7 @@ namespace UnitTests
             IEnumerable<Place> places = new List<Place>();
             camping.Places = listToCheck;
             places = listToCheck;
-            places = PlacesOverviewPageSorting.SortColumnAmountOfPeople(isSorted, camping.Places);
+            places = PlacesOverviewSorting.SortColumnAmountOfPeople(isSorted, camping.Places);
             Assert.That(places.First().PricePerNightPerPerson, Is.EqualTo(number));
         }
 
@@ -77,7 +77,7 @@ namespace UnitTests
             IEnumerable<Place> places = new List<Place>();
             camping.Places = listToCheck;
             places = listToCheck;
-            places = PlacesOverviewPageSorting.SortColumnPlaceID(isSorted, camping.Places);
+            places = PlacesOverviewSorting.SortColumnPlaceID(isSorted, camping.Places);
             Assert.That(places.First().PricePerNightPerPerson, Is.EqualTo(number));
         }
     }

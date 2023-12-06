@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CampingCore.PlacesOverviewPageClasses
 {
-    public  class PlacesOverviewPageDelete
+    public  class PlacesOverviewDelete
     {
         public static void DeletePlace(Camping camping, Place place, DateTime departureDate)
         {

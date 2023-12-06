@@ -25,7 +25,7 @@ namespace UnitTests
             IEnumerable<Place> places = new List<Place>();
             camping.Places = listToCheck;
             places = listToCheck;
-            places = PlacesOverviewPageFilter.GetFilteredListOnPower(true, camping.Places, camping);
+            places = PlacesOverviewFilter.GetFilteredListOnPower(true, camping.Places, camping);
             Assert.That(places.Count(), Is.EqualTo(5));
         }
 
@@ -47,7 +47,7 @@ namespace UnitTests
             IEnumerable<Place> places = new List<Place>();
             camping.Places = listToCheck;
             places = listToCheck;
-            places = PlacesOverviewPageFilter.GetFilteredListOnAmountOfPeople(6, camping.Places, camping);
+            places = PlacesOverviewFilter.GetFilteredListOnAmountOfPeople(6, camping.Places, camping);
             Assert.That(places.Count(), Is.EqualTo(5));
         }
         [Test]
@@ -68,7 +68,7 @@ namespace UnitTests
             IEnumerable<Place> places = new List<Place>();
             camping.Places = listToCheck;
             places = listToCheck;
-            places = PlacesOverviewPageFilter.GetFilteredListOnPrice(5.5, camping.Places, camping);
+            places = PlacesOverviewFilter.GetFilteredListOnPrice(5.5, camping.Places, camping);
             Assert.That(places.Count(), Is.EqualTo(5));
         }
 
@@ -90,7 +90,7 @@ namespace UnitTests
             IEnumerable<Place> places = new List<Place>();
             camping.Places = listToCheck;
             places = listToCheck;
-            places = PlacesOverviewPageFilter.GetFilteredListOnDate(false, DateTime.Now.Date.AddDays(1), DateTime.Now.Date.AddDays(5), camping.Places, camping);
+            places = PlacesOverviewFilter.GetFilteredListOnDate(false, DateTime.Now.Date.AddDays(1), DateTime.Now.Date.AddDays(5), camping.Places, camping);
             Assert.That(places.Count(), Is.EqualTo(5));
         }
 
@@ -112,7 +112,7 @@ namespace UnitTests
             IEnumerable<Place> places = new List<Place>();
             camping.Places = listToCheck;
             places = listToCheck;
-            places = PlacesOverviewPageFilter.GetAvailablePlacesBetweenDates(DateTime.Now.Date.AddDays(1), DateTime.Now.Date.AddDays(5), camping);
+            places = PlacesOverviewFilter.GetAvailablePlacesBetweenDates(DateTime.Now.Date.AddDays(1), DateTime.Now.Date.AddDays(5), camping);
             Assert.That(places.Count(), Is.EqualTo(5));
         }
     }
