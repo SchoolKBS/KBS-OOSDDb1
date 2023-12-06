@@ -251,10 +251,14 @@ namespace CampingUI
         //Function to reset all the filters input fields to the standard background color
         private void ResetBackgroundsFilters()
         {
-            ArrivalDatePicker.Background = Brushes.White;
-            DepartureDatePicker.Background = Brushes.White;
-            MaxPriceRangeTextBox.Background = Brushes.White;
-            AmountOfPeopleTextBox.Background = Brushes.White;
+            ArrivalDatePicker.BorderBrush = Brushes.White;
+            ArrivalDatePicker.BorderThickness = new Thickness(1, 1, 1, 1);
+            DepartureDatePicker.BorderBrush = Brushes.White;
+            DepartureDatePicker.BorderThickness = new Thickness(1, 1, 1, 1);
+            MaxPriceRangeTextBox.BorderBrush = Brushes.White;
+            MaxPriceRangeTextBox.BorderThickness = new Thickness(1, 1, 1, 1);
+            AmountOfPeopleTextBox.BorderBrush = Brushes.White;
+            AmountOfPeopleTextBox.BorderThickness = new Thickness(1, 1, 1, 1);
         }
 
         // Function (EventHandler) to sort the list of places based on the clicked column name and corresponding data
