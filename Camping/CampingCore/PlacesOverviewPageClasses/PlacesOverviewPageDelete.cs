@@ -10,8 +10,8 @@ namespace CampingCore.PlacesOverviewPageClasses
     {
         public static void DeletePlace(Camping camping, Place place, DateTime departureDate)
         {
-            camping.CampingRepository.RemoveAllPreviousReservationsByPlace(place, departureDate);
-            camping.CampingRepository.RemovePlace(place);
+            camping.CampingRepository.CampingReservationRepository.RemoveAllPreviousReservationsByPlace(place, departureDate);
+            camping.CampingRepository.CampingPlaceRepository.RemovePlace(place);
         }
     }
 }

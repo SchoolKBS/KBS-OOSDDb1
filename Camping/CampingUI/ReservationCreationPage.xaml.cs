@@ -176,11 +176,11 @@ namespace CampingUI
             if (CheckValues())
             {
                 Guest guest = new Guest(FirstNameTB.Text, InfixTB.Text, LastnameTB.Text, AddressTB.Text, CityTB.Text, EmailTB.Text, PhoneNumberTB.Text, PostalCodeTB.Text);
-                _camping.CampingRepository.AddGuest(guest);
+                _camping.CampingRepository.CampingGuestRepository.AddGuest(guest);
                 //Database db = new Database();
                 //db.AddGuestToDatabase(guest);
-                _camping.CampingRepository.AddReservation(new Reservation(0, (DateTime)ArrivalDatePicker.SelectedDate, (DateTime)DepartureDatePicker.SelectedDate, _place.PlaceID, _camping.CampingRepository.GetLastGuestID(), int.Parse(PeopleCountText.Text), IsPaidCB.IsChecked.Value, Price));
-                NavigationService.Navigate(new PlacesOverviewPage(_camping, (SqliteRepository)_camping.CampingRepository));
+                _camping.CampingRepository.CampingReservationRepository.AddReservation(new Reservation(0, (DateTime)ArrivalDatePicker.SelectedDate, (DateTime)DepartureDatePicker.SelectedDate, _place.PlaceID, _camping.CampingRepository.CampingGuestRepository.GetLastGuestID(), int.Parse(PeopleCountText.Text), IsPaidCB.IsChecked.Value, Price));
+                NavigationService.Navigate(new PlacesOverviewPage(_camping, (CampingRepository)_camping.CampingRepository));
             }
         }
         // Changes the background of textbox back to normal if its value was changed

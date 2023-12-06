@@ -1,4 +1,5 @@
 ﻿using CampingCore;
+using CampingCore.CampingRepositories;
 using Moq;
 using System;
 using System.Collections.Generic;

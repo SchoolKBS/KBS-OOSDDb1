@@ -1,4 +1,5 @@
 ﻿using CampingCore;
+using CampingCore.CampingRepositories;
 using CampingCore.PlacesOverviewPageClasses;
 using Moq;
 

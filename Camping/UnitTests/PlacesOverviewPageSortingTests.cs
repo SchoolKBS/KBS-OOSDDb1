@@ -16,7 +16,7 @@ namespace UnitTests
         [TestCase(false, 1)]
         public void SortColumnPrice_boolAndInt_returnsList(bool isSorted, int number)
         {
-            SqliteRepository campingRepository = new SqliteRepository();
+            CampingRepository campingRepository = new CampingRepository();
             Camping camping = new Camping(campingRepository);
             List<Place> listToCheck = new List<Place>();
 
@@ -39,7 +39,7 @@ namespace UnitTests
         [TestCase(false, 1)]
         public void SortColumnAmountOfPeople_boolAndInt_returnsList(bool isSorted, int number)
         {
-            SqliteRepository campingRepository = new SqliteRepository();
+            CampingRepository campingRepository = new CampingRepository();
             Camping camping = new Camping(campingRepository);
             List<Place> listToCheck = new List<Place>();
 
@@ -62,7 +62,7 @@ namespace UnitTests
         [TestCase(false, 1)]
         public void SortColumnPlaceID_boolAndInt_returnsList(bool isSorted, int number)
         {
-            SqliteRepository campingRepository = new SqliteRepository();
+            CampingRepository campingRepository = new CampingRepository();
             Camping camping = new Camping(campingRepository);
             List<Place> listToCheck = new List<Place>();
 

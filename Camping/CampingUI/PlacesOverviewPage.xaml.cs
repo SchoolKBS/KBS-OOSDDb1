@@ -48,7 +48,7 @@ namespace CampingUI
         private double _pricePerNightPerPersonEdit;
         private int _amountOfPeopleEdit;
 
-        public PlacesOverviewPage(Camping camping, SqliteRepository campingRepository)
+        public PlacesOverviewPage(Camping camping, CampingRepository campingRepository)
         {
             InitializeComponent();
             this._camping = camping; // Creates a camping.
@@ -189,7 +189,7 @@ namespace CampingUI
             SetArrivalAndDepartureDates();
             EditPlaceGrid.Visibility = Visibility.Collapsed;
             PlaceOverviewGrid.Visibility = Visibility.Collapsed;
-            _camping.Places = _camping.CampingRepository.GetPlaces();
+            _camping.Places = _camping.CampingRepository.CampingPlaceRepository.GetPlaces();
             if (!_camping.Places.IsNullOrEmpty())
             {
                 _placesSortedAndOrFiltered = _camping.Places;
@@ -227,7 +227,7 @@ namespace CampingUI
             PowerCheckBoxFilter.Content = "Geen voorkeur (stroom)";
             PowerCheckBoxFilter.IsChecked = false;
             AmountOfPeople = 0;
-            _camping.Places = _camping.CampingRepository.GetPlaces();
+            _camping.Places = _camping.CampingRepository.CampingPlaceRepository.GetPlaces();
             EditPlaceGrid.Visibility = Visibility.Collapsed;
             PlaceOverviewGrid.Visibility = Visibility.Collapsed;
             if (!_camping.Places.IsNullOrEmpty())
@@ -302,7 +302,7 @@ namespace CampingUI
         }
         private void ReloadScreenDataPlaces()
         {
-            _camping.Places = _camping.CampingRepository.GetPlaces();
+            _camping.Places = _camping.CampingRepository.CampingPlaceRepository.GetPlaces();
             _placesSortedAndOrFiltered = _camping.Places;
             PlaceOverviewGrid.Visibility = Visibility.Collapsed;
             PlacesListView.SelectedItems.Clear();
@@ -355,7 +355,7 @@ namespace CampingUI
                 ReservationCalender.BlackoutDates.Clear();
 
                 ReservationCalender.SelectedDate = null;
-                _camping.Reservations = _camping.CampingRepository.GetReservations();
+                _camping.Reservations = _camping.CampingRepository.CampingReservationRepository.GetReservations();
                 List<Reservation> reservations = _camping.Reservations.Where(r => r.PlaceID == place.PlaceID).ToList();
                 reservations = reservations.Where(r => r.DepartureDate >= DateTime.Now).ToList();
                 ReservationCalender.BlackoutDates.AddDatesInPast();
@@ -484,7 +484,7 @@ namespace CampingUI
             if (!_wrongInput)
             {
                 //Test
-                Camping.CampingRepository.UpdatePlaceData(place, _hasPowerEdit, _surfaceAreaEdit, _pricePerNightPerPersonEdit, _amountOfPeopleEdit, _dogsAllowedEdit);
+                Camping.CampingRepository.CampingPlaceRepository.UpdatePlaceData(place, _hasPowerEdit, _surfaceAreaEdit, _pricePerNightPerPersonEdit, _amountOfPeopleEdit, _dogsAllowedEdit);
                 //Test
                 EditPlaceGrid.Visibility = Visibility.Collapsed;
                 PlaceOverviewGrid.Visibility = Visibility.Visible;
@@ -496,7 +496,7 @@ namespace CampingUI
         private bool GetEditedCheckBox(CheckBox checkBox, bool editBool)
         {
             Place place = (Place)PlacesListView.SelectedItem;
-            Street street = _camping.CampingRepository.GetStreetByStreetID(place);
+            Street street = _camping.CampingRepository.CampingMapRepository.GetStreetByStreetID(place);
             if (checkBox.IsChecked == true) editBool = true;
             else if (checkBox.IsChecked == null) editBool = false;
             else
@@ -588,7 +588,7 @@ namespace CampingUI
         {
             Place place = (Place)PlacesListView.SelectedItem;
             Button button = (Button)sender;
-            Street street = _camping.CampingRepository.GetStreetByStreetID(place);
+            Street street = _camping.CampingRepository.CampingMapRepository.GetStreetByStreetID(place);
             if (button.Name.Equals(AmountOfPeopleExtendButton.Name))
                 AmountOfPeopleEditTextBox.Text = "";
             else if (button.Name.Equals(PricePerNightPerPersonExtendButton.Name))
