@@ -27,6 +27,9 @@ namespace CampingUI
         public List<Street> Streets { get; set; }
         public List<Place> Places { get; set; }
 
+        public int SelectedPlace {  get; set; }
+        private Canvas previousSelectedCanvas;
+
         public MainPage(Camping camping)
         {
             InitializeComponent();
@@ -62,6 +65,8 @@ namespace CampingUI
 
             Camping = camping;
 
+            DataContext = this;
+
             // Generate areas with their streets (and later places)
             GenerateAreas();
         }
@@ -83,6 +88,7 @@ namespace CampingUI
             foreach (var area in Areas)
             {
                 var coordinates = area.GetAreaPositions();
+
 
                 Canvas canvasArea = new Canvas
                 {
@@ -174,7 +180,8 @@ namespace CampingUI
             {
                 foreach (var place in Places)
                 {
-                    if (place.StreetID == street.StreetID) {
+                    if (place.StreetID == street.StreetID)
+                    {
                         var coordinates = place.GetPlacePositions();
 
                         // Create a Border to wrap the Canvas
@@ -189,7 +196,7 @@ namespace CampingUI
                             Width = 30,
                             Height = 30,
                             Background = Brushes.Black,
-                            Name = "Place_" + place.PlaceID.ToString(),
+                            Name = "Place_" + place.PlaceID.ToString(),                              
                         };
 
                         // Add the Canvas to the Border
@@ -214,28 +221,68 @@ namespace CampingUI
 
                         canvasPlace.Children.Add(textBlock);
 
+                        // Ensure the TextBlock is centered within the CanvasPlace
+                        canvasPlace.Loaded += (sender, e) =>
+                        {
+                            Canvas.SetTop(textBlock, (canvasPlace.ActualHeight - textBlock.ActualHeight) / 2);
+                            Canvas.SetLeft(textBlock, (canvasPlace.ActualWidth - textBlock.ActualWidth) / 2);
+                        };
+
                         // Center the Canvas within the Border
                         Canvas.SetTop(canvasPlace, (border.ActualHeight - canvasPlace.Height) / 2);
                         Canvas.SetLeft(canvasPlace, (border.ActualWidth - canvasPlace.Width) / 2);
 
-                        // Add hover effect
                         canvasPlace.MouseEnter += (sender, e) =>
                         {
-                            canvasPlace.Background = Brushes.Gray; // Change the background color on hover
+                            canvasPlace.Background = Brushes.DarkCyan; // Change the background color on hover
                         };
 
                         canvasPlace.MouseLeave += (sender, e) =>
                         {
-                            canvasPlace.Background = Brushes.Black; // Change back to the original color on leave
+                            if(place.PlaceID != SelectedPlace)
+                            {
+                                canvasPlace.Background = Brushes.Black;
+                            }
                         };
 
+                        canvasPlace.MouseLeftButtonDown += (sender, e) =>
+                        {
+                            if (previousSelectedCanvas != null)
+                            {
+                                // Change the background color of the previously selected canvas back to black
+                                previousSelectedCanvas.Background = Brushes.Black;
+                            }
+
+                            // Set the background color of the current canvas to red
+                            canvasPlace.Background = Brushes.DarkCyan;
+
+                            // Update the reference to the current canvas
+                            previousSelectedCanvas = canvasPlace;
+
+                            // Handle the click event
+                            HandlePlaceClick(place);
+                        };
                     }
                 }
             }
         }
 
+        public void HandlePlaceClick(Place place)
+        {
+            SelectedPlace = place.PlaceID;
+            PlaceIDTextBlock.Text = $"Plaats {place.PlaceID.ToString()}";
+            PlaceHasPowerLabel.Visibility = Visibility.Visible;
 
+            PlaceInfo.Visibility = Visibility.Visible;
 
+            PlaceHasPower.IsChecked = place.Power;
+            PlaceHasDogs.IsChecked = place.Dogs;
+              
+            PlaceSurfaceArea.Text = place.SurfaceArea.ToString();
+            PlacePricePerNight.Text = place.PricePerNightPerPerson.ToString();
+            PlacePersons.Text = place.AmountOfPeople.ToString();
+                
+        }
 
         private List<Color> availableColors = new List<Color>
         {
@@ -244,6 +291,30 @@ namespace CampingUI
             ChangeColorOpacity(Colors.CornflowerBlue, 0.5),
             ChangeColorOpacity(Colors.Yellow, 0.5)
         };
+
+
+        public void HandleEditPlace_Click(Object sender, RoutedEventArgs e)
+        {
+            if(PlaceRow1.IsEnabled == false)
+            {
+                PlaceRow1.IsEnabled = true;
+                PlaceRow2.IsEnabled = true;
+                PlaceRow3.IsEnabled = true;
+                PlaceRow4.IsEnabled = true;
+                PlaceRow5.IsEnabled = true;
+
+                EditButtonPlace.Content = "Opslaan";
+            } else
+            {
+                PlaceRow1.IsEnabled = false;
+                PlaceRow2.IsEnabled = false;
+                PlaceRow3.IsEnabled = false;
+                PlaceRow4.IsEnabled = false;
+                PlaceRow5.IsEnabled = false;
+
+                EditButtonPlace.Content = "Aanpassen";
+            }
+        }
 
         static Color ChangeColorOpacity(Color color, double opacity)
         {

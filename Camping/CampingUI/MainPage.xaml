@@ -34,8 +34,118 @@
 
             <!-- Content in the first column -->
             <Border Grid.Column="0" Margin="25" Padding="15" Background="#334A6E" CornerRadius="25">
-                <TextBlock FontSize="20" Foreground="white">Column 1</TextBlock>
+                <Grid Visibility="Hidden" Name="PlaceInfo">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="75"/>
+                        <RowDefinition Height="75"/>
+                        <RowDefinition Height="75"/>
+                        <RowDefinition Height="75"/>
+                        <RowDefinition Height="75"/>
+                        <RowDefinition Height="75"/>
+                        <RowDefinition Height="75"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Title of the place -->
+                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0" Name="PlaceIDTextBlock" FontSize="20" FontWeight="Bold" Foreground="White" />
+
+                    <!-- Checkbox for power -->
+                    <Grid Grid.Row="1" Name="PlaceRow1" IsEnabled="False">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Name="PlaceHasPowerLabel" Content="Heeft stroom:" Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+                        <CheckBox Name="PlaceHasPower" Margin="10, 0, 0, 0" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="1">
+                            <CheckBox.LayoutTransform>
+                                <ScaleTransform ScaleX="2" ScaleY="2" />
+                            </CheckBox.LayoutTransform>
+                        </CheckBox>
+                    </Grid>
+                    <!-- Checkbox for dogs -->
+                    <Grid Grid.Row="2" Name="PlaceRow2" IsEnabled="False">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Name="PlaceHasDogsLabel" Content="Honden toegestaan: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+                        <CheckBox Name="PlaceHasDogs" Margin="10, 0, 0, 0" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="1">
+                            <CheckBox.LayoutTransform>
+                                <ScaleTransform ScaleX="2" ScaleY="2" />
+                            </CheckBox.LayoutTransform>
+                        </CheckBox>
+                    </Grid>
+                    <!-- Checkbox for surface area -->
+                    <Grid Grid.Row="3" Name="PlaceRow3" IsEnabled="False">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Name="PlaceSurfaceAreaLabel" Content="Oppervlakte: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+                        <TextBox Name="PlaceSurfaceArea" VerticalAlignment="Center" FontSize="16" Foreground="White" Width="200" Height="40" BorderBrush="Transparent" HorizontalAlignment="Right" Grid.Column="1">
+                            <TextBox.Background>
+                                <SolidColorBrush Color="White" Opacity="0.5"/>
+                            </TextBox.Background>
+                        </TextBox>
+                    </Grid>
+
+                    <!-- Checkbox for surface area -->
+                    <Grid Grid.Row="4" Name="PlaceRow4" IsEnabled="False">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Name="PlacePricePerNightLabel" Content="Prijs Per nacht: "  Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+                        <TextBox Name="PlacePricePerNight" VerticalAlignment="Center" FontSize="16" Foreground="White" Width="200" Height="40" BorderBrush="Transparent" HorizontalAlignment="Right" Grid.Column="1">
+                            <TextBox.Background>
+                                <SolidColorBrush Color="White" Opacity="0.5"/>
+                            </TextBox.Background>
+                        </TextBox>
+                    </Grid>
+
+                    <!-- Checkbox for surface area -->
+                    <Grid Grid.Row="5" Name="PlaceRow5" IsEnabled="False">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Name="PlacePersonsLabel" Content="Aantal personen: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+                        <TextBox Name="PlacePersons" VerticalAlignment="Center" FontSize="16" Foreground="White" Width="200" Height="40" BorderBrush="Transparent" HorizontalAlignment="Right" Grid.Column="1">
+                            <TextBox.Background>
+                                <SolidColorBrush Color="White" Opacity="0.5"/>
+                            </TextBox.Background>
+                        </TextBox>
+                    </Grid>
+
+                    <Grid Grid.Row="7" IsEnabled="True" VerticalAlignment="Bottom">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Click="HandleEditPlace_Click" Height="40" HorizontalAlignment="Right" Width="150" Foreground="White" BorderBrush="Transparent">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="#01BFC6" CornerRadius="8">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                            <ContentPresenter Name="EditButtonPlace" Content="Aanpassen"/>
+                        </Button>
+
+
+                    </Grid>
+                </Grid>
             </Border>
+
 
             <!-- Content in the second column -->
             <Border Grid.Column="1" Margin="25" Padding="15" Background="#334A6E" CornerRadius="25">
