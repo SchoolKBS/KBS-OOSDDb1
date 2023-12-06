@@ -69,6 +69,9 @@ namespace CampingDataAccess
                 "AreaID INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "Name VARCHAR(255)," +
                 "Power TINYINT NOT NULL," +
+                "SurfaceArea INT NOT NULL," +
+                "PricePerNightPerPerson DECIMAL(18,2) NOT NULL," +
+                "AmountOfPeople INT NOT NULL," +
                 "Dogs TINYINT NOT NULL," +
                 "Xcord1 INT NOT NULL," +
                 "Ycord1 INT NOT NULL," +
@@ -92,6 +95,9 @@ namespace CampingDataAccess
                 "AreaID INTEGER NOT NULL," +
                 "Name VARCHAR(255), " +
                 "Power TINYINT NOT NULL," +
+                "SurfaceArea INT NOT NULL," +
+                "PricePerNightPerPerson DECIMAL(18,2) NOT NULL," +
+                "AmountOfPeople INT NOT NULL," +
                 "Dogs TINYINT NOT NULL," +
                 "Xcord1 INT NOT NULL," +
                 "Ycord1 INT NOT NULL," +
@@ -159,7 +165,7 @@ namespace CampingDataAccess
         }
         public void AddDummyDataArea()
         {
-            string sql = "INSERT INTO Area (Power, Dogs, Xcord1, Ycord1, Xcord2, Ycord2) VALUES (@Power, @Dogs, @Xcord1, @Ycord1, @Xcord2, @Ycord2);";
+            string sql = "INSERT INTO Area (Power, SurfaceArea, PricePerNightPerPerson, AmountOfPeople, Dogs, Xcord1, Ycord1, Xcord2, Ycord2) VALUES (@Power, @SurfaceArea, @PricePerNightPerPerson, @AmountOfPeople, @Dogs, @Xcord1, @Ycord1, @Xcord2, @Ycord2);";
 
             using (var connection = new SqliteConnection(ConnectionString))
             {
@@ -170,6 +176,9 @@ namespace CampingDataAccess
                     {
                         command.Prepare();
                         command.Parameters.AddWithValue("@Power", i % 2 == 0);
+                        command.Parameters.AddWithValue("@SurfaceArea", i);
+                        command.Parameters.AddWithValue("@PricePerNightPerPerson", i);
+                        command.Parameters.AddWithValue("@AmountOfPeople", i);
                         command.Parameters.AddWithValue("@Dogs", i > 2);
                         command.Parameters.AddWithValue("@Xcord1", (i % 2) * 100);
                         command.Parameters.AddWithValue("@Ycord1", (i / 2) * 100);
@@ -183,7 +192,7 @@ namespace CampingDataAccess
         }
         public void AddDummyDataStreet()
         {
-            string sql = "INSERT INTO Street (AreaID, Power, Dogs, Xcord1, Ycord1, Xcord2, Ycord2) VALUES (@AreaID, @Power, @Dogs, @Xcord1, @Ycord1, @Xcord2, @Ycord2);";
+            string sql = "INSERT INTO Street (AreaID, Power, SurfaceArea, PricePerNightPerPerson, AmountOfPeople, Dogs, Xcord1, Ycord1, Xcord2, Ycord2) VALUES (@AreaID, @Power, @SurfaceArea, @PricePerNightPerPerson, @AmountOfPeople, @Dogs, @Xcord1, @Ycord1, @Xcord2, @Ycord2);";
 
             using (var connection = new SqliteConnection(ConnectionString))
             {
@@ -195,6 +204,9 @@ namespace CampingDataAccess
                         command.Prepare();
                         command.Parameters.AddWithValue("@AreaID", 1);
                         command.Parameters.AddWithValue("@Power", i % 2 == 0);
+                        command.Parameters.AddWithValue("@SurfaceArea", i);
+                        command.Parameters.AddWithValue("@PricePerNightPerPerson", i);
+                        command.Parameters.AddWithValue("@AmountOfPeople", i);
                         command.Parameters.AddWithValue("@Dogs", i > 2);
                         command.Parameters.AddWithValue("@Xcord1", 0);
                         command.Parameters.AddWithValue("@Ycord1", (i) * 20);
