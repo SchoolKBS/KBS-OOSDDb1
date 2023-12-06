@@ -85,34 +85,37 @@ namespace CampingUI
         {
             Areas = Camping.CampingRepository.GetAreas();
 
-            foreach (var area in Areas)
+            if(Areas.Count() > 0)
             {
-                var coordinates = area.GetAreaPositions();
-
-
-                Canvas canvasArea = new Canvas
+                foreach (var area in Areas)
                 {
-                    Width = coordinates[2],
-                    Height = coordinates[3],
-                    Background = GenerateRandomBrush(),
-                    Name = "Canvas_" + area.AreaID.ToString(),
-                };
-
-                Border border = new Border
-                {
-                    BorderBrush = Brushes.Black, // Set the color of the border
-                    BorderThickness = new Thickness(1), // Set the thickness of the border
-                    Child = canvasArea
-                };
-
-                Canvas.SetTop(border, coordinates[1]);  // Ycord1 to place from top.
-                Canvas.SetLeft(border, coordinates[0]); // XCord1 to place from left.
-                Canvas.SetZIndex(border, -1);
-                field.Children.Add(border);
+                    var coordinates = area.GetAreaPositions();
 
 
-                // Generate streets that belong to the area.
-                GenerateStreetsPerArea(canvasArea, area);
+                    Canvas canvasArea = new Canvas
+                    {
+                        Width = coordinates[2],
+                        Height = coordinates[3],
+                        Background = GenerateRandomBrush(),
+                        Name = "Canvas_" + area.AreaID.ToString(),
+                    };
+
+                    Border border = new Border
+                    {
+                        BorderBrush = Brushes.Black, // Set the color of the border
+                        BorderThickness = new Thickness(1), // Set the thickness of the border
+                        Child = canvasArea
+                    };
+
+                    Canvas.SetTop(border, coordinates[1]);  // Ycord1 to place from top.
+                    Canvas.SetLeft(border, coordinates[0]); // XCord1 to place from left.
+                    Canvas.SetZIndex(border, -1);
+                    field.Children.Add(border);
+
+
+                    // Generate streets that belong to the area.
+                    GenerateStreetsPerArea(canvasArea, area);
+                }
             }
         }
 
@@ -121,12 +124,17 @@ namespace CampingUI
         {
             Streets = Camping.CampingRepository.GetStreets();
 
-            var areaStreets = Streets.Where(street => street.AreaID == area.AreaID);
+            if (Streets.Count() > 0) {
+                var areaStreets = Streets.Where(street => street.AreaID == area.AreaID);
 
-            foreach (var street in areaStreets)
-            {
-                GenerateStreet(canvasArea, street);
-                GeneratePlacesPerStreet(street);
+                if(areaStreets.Count() > 0)
+                {
+                    foreach (var street in areaStreets)
+                    {
+                        GenerateStreet(canvasArea, street);
+                        GeneratePlacesPerStreet(street);
+                    }
+                }
             }
         }
 
@@ -176,7 +184,7 @@ namespace CampingUI
         public void GeneratePlacesPerStreet(Street street)
         {
             Places = Camping.CampingRepository.GetPlaces();
-            if (street != null)
+            if (street != null && Places.Count() > 0)
             {
                 foreach (var place in Places)
                 {
