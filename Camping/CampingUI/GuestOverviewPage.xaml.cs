@@ -52,5 +52,32 @@ namespace CampingUI
                 GuestOverviewItemsControl.ItemsSource = sql.GetGuestsByFirstAndLastName(FirstName, LastName);
             }
         }
+
+        public void GuestSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Guest guest = (Guest)GuestOverviewItemsControl.SelectedItem;
+            //Makes sure a guest is selected
+            if(guest != null)
+            {
+                //Cheks if guest has an infix
+                if (guest.Infix.Length < 1)
+                {
+                    GuestFullNameTextBlock.Text = "Naam:  " + guest.FirstName + " " + guest.LastName;
+
+                }
+                else
+                {
+                    GuestFullNameTextBlock.Text = "Naam:  " + guest.FirstName + " " + guest.Infix + " " + guest.LastName;
+                }
+
+                //Texboxes display guest data
+                GuestIdTextblock.Text = "Gast  " + guest.GuestID;
+                GuestCityTextBlock.Text = "Woonplaats:  " + guest.City;
+                GuestAddressTextBlock.Text = "Adres:  " + guest.Address;
+                GuestEmailTextBlock.Text = "Email:  " + guest.Email;
+                GuestPhoneNumberTextBlock.Text = "Telefoonnummer:  " + guest.PhoneNumber;
+                GuestDetailsGrid.Visibility = Visibility.Visible;
+            }
+        }
     }
 }
