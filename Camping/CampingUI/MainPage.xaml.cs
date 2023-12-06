@@ -83,7 +83,7 @@ namespace CampingUI
 
         public void GenerateAreas()
         {
-            Areas = Camping.CampingRepository.GetAreas();
+            Areas = Camping.CampingRepository.CampingMapRepository.GetAreas();
 
             if(Areas.Count() > 0)
             {
@@ -122,7 +122,7 @@ namespace CampingUI
 
         private void GenerateStreetsPerArea(Canvas canvasArea, Area area)
         {
-            Streets = Camping.CampingRepository.GetStreets();
+            Streets = Camping.CampingRepository.CampingMapRepository.GetStreets();
 
             if (Streets.Count() > 0) {
                 var areaStreets = Streets.Where(street => street.AreaID == area.AreaID);
@@ -183,7 +183,7 @@ namespace CampingUI
 
         public void GeneratePlacesPerStreet(Street street)
         {
-            Places = Camping.CampingRepository.GetPlaces();
+            Places = Camping.CampingRepository.CampingPlaceRepository.GetPlaces();
             if (street != null && Places.Count() > 0)
             {
                 foreach (var place in Places)

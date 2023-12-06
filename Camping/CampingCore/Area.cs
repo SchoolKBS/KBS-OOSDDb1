@@ -30,7 +30,7 @@ namespace CampingCore
             Name = (string)properties[1];
             Power = (bool)properties[2];
             SurfaceArea = (int)properties[3];
-            PricePerNightPerPerson = (int)properties[4];
+            PricePerNightPerPerson = (double)properties[4];
             AmountOfPeople = (int)properties[5];
             Dogs = (bool)properties[6];
             Xcord1 = (int)properties[7];

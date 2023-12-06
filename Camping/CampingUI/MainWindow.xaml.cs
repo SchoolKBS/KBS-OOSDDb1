@@ -26,7 +26,7 @@ namespace CampingUI
         public MainWindow()
         {
             InitializeComponent();
-            this.CampingRepository = new SqliteRepository();
+            this.CampingRepository = new CampingRepository();
             
             //CampingRepository.AddDummyData();
 
