@@ -15,7 +15,7 @@ namespace CampingCore
         public double Price { get; set; }
 
         //Guest still has to get added 
-        public Reservation(int reservationNumber, DateTime arrivalDate, DateTime departureDate, int placeID, int guestID, int personCount, bool isPaid, double price)
+        public Reservation(int reservationNumber, DateTime arrivalDate, DateTime departureDate, int placeID, int guestID, int amountOfPeople, bool isPaid, double price)
         {
             this.ReservationID = reservationNumber;
             this.ArrivalDate = arrivalDate;
