@@ -257,7 +257,7 @@ namespace CampingUI
                         {
                             if (previousSelectedCanvas != null)
                             {
-                                // Change the background color of the previously selected canvas back to black
+                                // Change the background color of the previously selected canvas back to black.
                                 previousSelectedCanvas.Background = Brushes.Black;
                             }
 
