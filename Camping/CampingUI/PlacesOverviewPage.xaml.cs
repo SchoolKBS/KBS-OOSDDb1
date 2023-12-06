@@ -326,6 +326,18 @@ namespace CampingUI
             OpenEditPlace();
             setDataFromPlaceOnFieldsEdit(place);
         }
+        private void EditExtendButton_Click(object sender, RoutedEventArgs e)
+        {
+            Place place = (Place)PlacesListView.SelectedItem;
+            Button button = (Button)sender;
+            Street street = _camping.CampingRepository.CampingMapRepository.GetStreetByStreetID(place);
+            if (button.Name.Equals(AmountOfPeopleExtendButton.Name))
+                AmountOfPeopleEditTextBox.Text = street.AmountOfPeople.ToString();
+            else if (button.Name.Equals(PricePerNightPerPersonExtendButton.Name))
+                PricePerNightPerPersonEditTextBox.Text = street.PricePerNightPerPerson.ToString();
+            else
+                SurfaceAreaEditTextBox.Text = street.SurfaceArea.ToString();
+        }
         private void setDataFromPlaceOnFieldsEdit(Place place)
         {
             PlaceIDLabelEdit.Content = "Plaats " + place.PlaceID;
@@ -390,12 +402,6 @@ namespace CampingUI
             }
             return editBool;
         }
-        private void CancelEditButton_Click(object sender, RoutedEventArgs e)
-        {
-
-            OpenPlaceOverview();
-            _wrongInput = false;
-        }
         private void GetEditedNumbers()
         {
             GetEditedAmountOfPeople();
@@ -433,18 +439,13 @@ namespace CampingUI
                 _wrongInput = true;
             }
         }
-        private void EditExtendButton_Click(object sender, RoutedEventArgs e)
+        private void CancelEditButton_Click(object sender, RoutedEventArgs e)
         {
-            Place place = (Place)PlacesListView.SelectedItem;
-            Button button = (Button)sender;
-            Street street = _camping.CampingRepository.CampingMapRepository.GetStreetByStreetID(place);
-            if (button.Name.Equals(AmountOfPeopleExtendButton.Name))
-                AmountOfPeopleEditTextBox.Text = street.AmountOfPeople.ToString();
-            else if (button.Name.Equals(PricePerNightPerPersonExtendButton.Name))
-                PricePerNightPerPersonEditTextBox.Text = street.PricePerNightPerPerson.ToString();
-            else
-                SurfaceAreaEditTextBox.Text = street.SurfaceArea.ToString();
+
+            OpenPlaceOverview();
+            _wrongInput = false;
         }
+
 
 
 
