@@ -70,6 +70,7 @@ namespace CampingUI
                 GuestIdTextblock.Text = "Gast  " + guest.GuestID;
                 GuestCityTextBlock.Text = "Woonplaats:  " + guest.City;
                 GuestAddressTextBlock.Text = "Adres:  " + guest.Address;
+                GuestPostalCodeTextBlock.Text = "Postcode:  " + guest.PostalCode;
                 GuestEmailTextBlock.Text = "Email:  " + guest.Email;
                 GuestPhoneNumberTextBlock.Text = "Telefoonnummer:  " + guest.PhoneNumber;
 
@@ -105,6 +106,12 @@ namespace CampingUI
 
             sql.UpdateGuest(guest);
             GuestOverviewItemsControl.ItemsSource = sql.GetGuests();
+            ChangeGuestInformationGrid.Visibility = Visibility.Collapsed;
+            GuestDetailsGrid.Visibility = Visibility.Collapsed;
+        }
+
+        public void CancelNewGuestInformation(object sender, RoutedEventArgs e)
+        {
             ChangeGuestInformationGrid.Visibility = Visibility.Collapsed;
             GuestDetailsGrid.Visibility = Visibility.Collapsed;
         }
