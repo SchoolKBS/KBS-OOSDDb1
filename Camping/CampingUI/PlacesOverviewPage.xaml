@@ -223,13 +223,13 @@
                 <StackPanel Grid.Column="2" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <!-- Geen voorkeur (Stroom) -->
                     <Label FontSize="14" Content="Heeft stroom: " HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Calibri" FontWeight="Bold"/>
-                    <CheckBox FontSize="14" Height="30" VerticalContentAlignment="Center" Name="PowerCheckBoxFilter" Content="Geen voorkeur (Stroom)" Margin="25, 0, 0, 0" IsThreeState="true" HorizontalAlignment="Center" VerticalAlignment="Center" Click="PowerCheckBox_Checked" FontFamily="Calibri" FontWeight="Bold"/>
+                    <CheckBox FontSize="14" Height="30" VerticalContentAlignment="Center" Name="PowerCheckBoxFilter" Content="Geen voorkeur (stroom)"  IsThreeState="true" HorizontalAlignment="Center" VerticalAlignment="Center" Click="PowerCheckBox_Checked" FontFamily="Calibri" FontWeight="Bold"/>
                 </StackPanel>
                 
                 <StackPanel Grid.Column="3" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <!-- Geen voorkeur (Honden) -->
                     <Label FontSize="14" Content="Honden toegestaan: " HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Calibri" FontWeight="Bold"/>
-                    <CheckBox FontSize="14" Height="30" VerticalContentAlignment="Center" Name="DogCheckBoxFilter" Content="Geen voorkeur (Honden)" Margin="25, 0, 0, 0" IsThreeState="true" HorizontalAlignment="Center" VerticalAlignment="Center" Click="DogsCheckBox_Checked" FontFamily="Calibri" FontWeight="Bold"/>
+                    <CheckBox FontSize="14" Height="30" VerticalContentAlignment="Center" Name="DogCheckBoxFilter" Content="Geen voorkeur (hond)"  IsThreeState="true" HorizontalAlignment="Center" VerticalAlignment="Center" Click="DogsCheckBox_Checked" FontFamily="Calibri" FontWeight="Bold"/>
                 </StackPanel>
                 <!-- Aantal personen -->
                 <StackPanel Grid.Column="4" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -245,8 +245,8 @@
 
                 <!-- Buttons to apply or remove filters -->
                 <StackPanel Grid.Column="6" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Button Style="{DynamicResource ButtonStyle1Apply}" Foreground="White" FontWeight="Bold" Margin="0,0,10,0" Content="Filters toepassen" Click="ApplyFilters_Click" Height="40" Padding="20, 0, 20, 0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                    <Button Style="{DynamicResource ButtonStyle1Cancel}" Foreground="White" FontWeight="Bold" Margin="10,0,0,0" Content="Filters verwijderen" Click="RemoveFilters_Click" Padding="20, 0, 20, 0" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Button Style="{DynamicResource ButtonStyle1Apply}" Foreground="White" FontWeight="Bold" Margin="0,0,5,0" Content="Filters toepassen" Click="ApplyFilters_Click" Height="40" Padding="7, 0, 7, 0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Button Style="{DynamicResource ButtonStyle1Cancel}" Foreground="White" FontWeight="Bold" Margin="5,0,0,0" Content="Filters verwijderen" Click="RemoveFilters_Click" Padding="7, 0, 7, 0" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 </StackPanel>
             </Grid>
         </Border>
@@ -269,8 +269,8 @@
                             </Style.Triggers>
                             <Setter Property="Foreground" Value="White"/>
                             <Setter Property="FontSize" Value="16"/>
-                            <Setter Property="Height" Value="40"/>
-                            <Setter Property="Padding" Value="20"/>
+                            <Setter Property="Height" Value="30"/>
+                            <Setter Property="Padding" Value="5"/>
                         </Style>
                     </Grid.Resources>
                     <Grid.RowDefinitions>
@@ -283,30 +283,30 @@
                     </Grid.RowDefinitions>
                     <!-- Show the places from the camping in a list in a grid view and sort them.  -->
 
-                    <ListView Background="Transparent" Grid.Row="1" Name="PlacesListView" SelectionChanged="PlacesListView_SelectionChanged" Margin="5" BorderThickness="0">
+                    <ListView Background="Transparent" Grid.Row="1" Name="PlacesListView" SelectionChanged="PlacesListView_SelectionChanged" Margin="0" BorderThickness="0">
                         <ListView.Resources>
                             <Style TargetType="GridViewColumnHeader">
                                 <Setter Property="Background" Value="#667CA0"/>
                                 <Setter Property="BorderBrush" Value="Transparent"/>
                                 <Setter Property="BorderThickness" Value="0"/>
-                                <Setter Property="Height" Value="40"/>
+                                <Setter Property="Height" Value="30"/>
                             </Style>
                         </ListView.Resources>
                         <ListView.View>
                             <GridView AllowsColumnReorder="False">
-                                <GridViewColumn DisplayMemberBinding="{Binding PlaceID}">
+                                <GridViewColumn DisplayMemberBinding="{Binding PlaceID}" Width="100">
                                     <GridViewColumn.Header>
-                                        <GridViewColumnHeader Padding="10, 0, 10, 0" Foreground="White" FontSize="16" Tag="PlaceID" Click="SetSorterColumn_Click">Plaatsnummer</GridViewColumnHeader>
+                                        <GridViewColumnHeader Foreground="White" FontSize="14" Tag="PlaceID" Click="SetSorterColumn_Click">Plaatsnummer</GridViewColumnHeader>
                                     </GridViewColumn.Header>
                                 </GridViewColumn>
-                                <GridViewColumn DisplayMemberBinding="{Binding PricePerNightPerPerson}">
+                                <GridViewColumn DisplayMemberBinding="{Binding PricePerNightPerPerson}" Width="60">
                                     <GridViewColumn.Header>
-                                        <GridViewColumnHeader Padding="10, 0, 40, 0" Foreground="White" FontSize="16" Tag="Price" Click="SetSorterColumn_Click">Prijs</GridViewColumnHeader>
+                                        <GridViewColumnHeader Foreground="White" FontSize="14" Tag="Price" Click="SetSorterColumn_Click">Prijs</GridViewColumnHeader>
                                     </GridViewColumn.Header>
                                 </GridViewColumn>
-                                <GridViewColumn DisplayMemberBinding="{Binding AmountOfPeople}">
+                                <GridViewColumn DisplayMemberBinding="{Binding AmountOfPeople}" Width="130">
                                     <GridViewColumn.Header>
-                                        <GridViewColumnHeader Padding="10, 0, 10, 0" Foreground="White" FontSize="16" Tag="AmountOfPeople" Click="SetSorterColumn_Click">Aantal personen</GridViewColumnHeader>
+                                        <GridViewColumnHeader Foreground="White" FontSize="14" Tag="AmountOfPeople" Click="SetSorterColumn_Click">Aantal personen</GridViewColumnHeader>
                                     </GridViewColumn.Header>
                                 </GridViewColumn>
                             </GridView>
