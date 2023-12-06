@@ -377,7 +377,6 @@ namespace CampingUI
             EditPlaceGrid.Visibility = Visibility.Visible;
 
         }
-
         //Function (EventHandler) To add a place when the add place button is clicked
         /* public void AddPlaceOnClick(object sender, RoutedEventArgs e)
         {
@@ -455,7 +454,6 @@ namespace CampingUI
             Place place = (Place)PlacesListView.SelectedItem;
             PlaceOverviewGrid.Visibility = Visibility.Collapsed;
             EditPlaceGrid.Visibility = Visibility.Visible;
-            //Invullen velden
             setDataFromPlaceOnFieldsEdit(place);
 
         }
@@ -483,11 +481,11 @@ namespace CampingUI
 
             _dogsAllowedEdit = GetEditedCheckBox(DogsEditCheckBox, _dogsAllowedEdit);
             Place place = (Place)PlacesListView.SelectedItem;
-            //Check of goede is inputs is
             if (!_wrongInput)
             {
-                //Updaten plaats
+                //Test
                 Camping.CampingRepository.UpdatePlaceData(place, _hasPowerEdit, _surfaceAreaEdit, _pricePerNightPerPersonEdit, _amountOfPeopleEdit, _dogsAllowedEdit);
+                //Test
                 EditPlaceGrid.Visibility = Visibility.Collapsed;
                 PlaceOverviewGrid.Visibility = Visibility.Visible;
                 ReloadScreenDataPlaces();
@@ -498,7 +496,7 @@ namespace CampingUI
         private bool GetEditedCheckBox(CheckBox checkBox, bool editBool)
         {
             Place place = (Place)PlacesListView.SelectedItem;
-            Street street = GetStreetByStreetID(place);
+            Street street = _camping.CampingRepository.GetStreetByStreetID(place);
             if (checkBox.IsChecked == true) editBool = true;
             else if (checkBox.IsChecked == null) editBool = false;
             else
@@ -509,10 +507,6 @@ namespace CampingUI
                     editBool = street.Power;
             }
             return editBool;
-        }
-        private Street GetStreetByStreetID(Place place)
-        {
-            return _camping.CampingRepository.GetStreets().Where(i => i.StreetID == place.StreetID).First();
         }
 
         private void ChangeLabelOnCheckBoxClick(CheckBox checkbox, Label label, string truestring, string falsestring)
@@ -590,23 +584,11 @@ namespace CampingUI
             }
         }
 
-        private void PricePerNightPerPersonExtendButton_Click(object sender, RoutedEventArgs e)
-        {
-            Place place = (Place)PlacesListView.SelectedItem;
-            Street street = _camping.CampingRepository.GetStreets().Where(i => i.StreetID == place.StreetID).FirstOrDefault();
-        }
-
-        private void SurfaceAreaExtendButton_Click(object sender, RoutedEventArgs e)
-        {
-            Place place = (Place)PlacesListView.SelectedItem;
-            Street street = _camping.CampingRepository.GetStreets().Where(i => i.StreetID == place.StreetID).FirstOrDefault();
-        }
-
         private void EditExtendButton_Click(object sender, RoutedEventArgs e)
         {
             Place place = (Place)PlacesListView.SelectedItem;
             Button button = (Button)sender;
-            Street street = _camping.CampingRepository.GetStreets().Where(i => i.StreetID == place.StreetID).FirstOrDefault();
+            Street street = _camping.CampingRepository.GetStreetByStreetID(place);
             if (button.Name.Equals(AmountOfPeopleExtendButton.Name))
                 AmountOfPeopleEditTextBox.Text = "";
             else if (button.Name.Equals(PricePerNightPerPersonExtendButton.Name))
@@ -658,7 +640,7 @@ namespace CampingUI
 
 
         //Function to check if the input is null or not from a text array
-        public bool CheckIfInputIsNotNull(string[] TextInput)
+        /* public bool CheckIfInputIsNotNull(string[] TextInput)
         {
             foreach (string input in TextInput)
             {
@@ -670,6 +652,6 @@ namespace CampingUI
                 }
             }
             return true;
-        }
+        }*/
     }
 }
