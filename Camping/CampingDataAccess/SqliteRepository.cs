@@ -743,5 +743,29 @@ namespace CampingDataAccess
             }
             return guests;
         }
+
+        public void UpdateGuest(Guest guest)
+        {
+            string sql = "UPDATE Guest SET FirstName = @FirstName, LastName = @LastName, Infix = @Infix, Email = @Email, PhoneNumber = @PhoneNumber, City = @City, Address = @Address, PostalCode = @PostalCode WHERE GuestId = @GuestId;";
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+                using (var command = new SqliteCommand(sql, connection))
+                {
+                    command.Prepare();
+                    command.Parameters.AddWithValue("@GuestId", guest.GuestID);
+                    command.Parameters.AddWithValue("@FirstName", guest.FirstName);
+                    command.Parameters.AddWithValue("@LastName", guest.LastName);
+                    command.Parameters.AddWithValue("@Infix", guest.Infix);
+                    command.Parameters.AddWithValue("@Email", guest.Email);
+                    command.Parameters.AddWithValue("@PhoneNumber", guest.PhoneNumber);
+                    command.Parameters.AddWithValue("@City", guest.City);
+                    command.Parameters.AddWithValue("@Address", guest.Address);
+                    command.Parameters.AddWithValue("@PostalCode", guest.PostalCode);
+                    command.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+        }
     }
 }

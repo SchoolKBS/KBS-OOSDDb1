@@ -7,7 +7,6 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="GuestOverviewPage">
-
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
@@ -80,10 +79,33 @@
             <TextBlock x:Name="GuestAddressTextBlock" Grid.Row="4" HorizontalAlignment="Center" Foreground="White" FontWeight="DemiBold" FontSize="20"/>
             <TextBlock x:Name="GuestEmailTextBlock" Grid.Row="5" HorizontalAlignment="Center" Foreground="White" FontWeight="DemiBold" FontSize="20"/>
             <TextBlock x:Name="GuestPhoneNumberTextBlock" Grid.Row="6" HorizontalAlignment="Center" Foreground="White" FontWeight="DemiBold" FontSize="20"/>
-            <Button Grid.Row="6" Height="40" Width="150" Content="gegevens wijzigen" HorizontalAlignment="Center" />
-
+            <Button Grid.Row="6" Height="40" Width="150" Content="gegevens wijzigen" HorizontalAlignment="Center" Click="ChangeGuestInformation"/>
         </Grid>
 
+        <Grid x:Name="ChangeGuestInformationGrid" Grid.Column="2" Visibility="Collapsed">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="0.8*"/>
+                <RowDefinition Height="0.8*"/>
+                <RowDefinition Height="0.8*"/>
+                <RowDefinition Height="3*"/>
+            </Grid.RowDefinitions>
+
+            <TextBox x:Name="ChangeFirstNameTextBox" Grid.Row="1" Width="200" Height="30" Grid.Column="0" Margin="100, 0, 0, 0" Text="Voornaam"/>
+            <TextBox x:Name="ChangeInfixTextBox" Grid.Row="1" Width="100" Height="30" Grid.ColumnSpan="2" Text="Infix"/>
+            <TextBox x:Name="ChangeLastNameTextBox" Grid.Row="1" Width="200" Height="30" Grid.Column="1" Margin="0, 0, 100, 0" Text="Achternaam"/>
+            <TextBox x:Name="ChangeCityTextBox" Grid.Row="2" Width="200" Height="30" Grid.Column="0" Margin="100, 0, 0, 0" Text="Woonplaats"/>
+            <TextBox x:Name="ChangePostalCodeTextBox" Grid.Row="2" Width="100" Height="30" Grid.ColumnSpan="2" Text="Infix"/>
+            <TextBox x:Name="ChangeAddressTextBox" Grid.Row="2" Width="200" Height="30" Grid.Column="1" Margin="0, 0, 100, 0" Text="Adres"/>
+            <TextBox x:Name="ChangePhoneNumberTextBox" Grid.Row="3" Width="200" Height="30" Grid.Column="0" Margin="100, 0, 0, 0" Text="Telefoon"/>
+            <TextBox x:Name="ChangeEmailTextBox" Grid.Row="3" Width="200" Height="30" Grid.Column="1" Margin="0, 0, 100, 0" Text="Email"/>
+            <Button Grid.Row="4" Height="20" Width="200" Content="Opslaan" Click="SaveNewGuestInformation"/>
+        </Grid>
+        
         <Grid.Resources>
             <Style TargetType="ListViewItem">
                 <Style.Triggers>

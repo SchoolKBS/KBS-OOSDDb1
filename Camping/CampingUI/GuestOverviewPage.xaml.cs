@@ -20,17 +20,13 @@ namespace CampingUI
     public partial class GuestOverviewPage : Page
     {
         SqliteRepository sql = new SqliteRepository();
+        Guest guest;
         public GuestOverviewPage()
         {
             InitializeComponent();
 
             //Get all guests from database
             GuestOverviewItemsControl.ItemsSource = sql.GetGuests();
-        }
-
-        public void SelectGuestByID(int GuestID)
-        {
-            sql.GetGuestFromGuestID(GuestID);
         }
 
         public void FilterOnGuestName_Click(object sender, RoutedEventArgs e)
@@ -55,7 +51,7 @@ namespace CampingUI
 
         public void GuestSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Guest guest = (Guest)GuestOverviewItemsControl.SelectedItem;
+            guest = (Guest)GuestOverviewItemsControl.SelectedItem;
             //Makes sure a guest is selected
             if(guest != null)
             {
@@ -76,8 +72,41 @@ namespace CampingUI
                 GuestAddressTextBlock.Text = "Adres:  " + guest.Address;
                 GuestEmailTextBlock.Text = "Email:  " + guest.Email;
                 GuestPhoneNumberTextBlock.Text = "Telefoonnummer:  " + guest.PhoneNumber;
+
+                ChangeGuestInformationGrid.Visibility = Visibility.Collapsed;
                 GuestDetailsGrid.Visibility = Visibility.Visible;
             }
+        }
+        public void ChangeGuestInformation(object sender, RoutedEventArgs e)
+        {
+            GuestDetailsGrid.Visibility = Visibility.Collapsed;
+            ChangeFirstNameTextBox.Text = guest.FirstName;
+            ChangeInfixTextBox.Text = guest.Infix;
+            ChangeLastNameTextBox.Text = guest.LastName;
+            ChangeCityTextBox.Text = guest.City;
+            ChangePostalCodeTextBox.Text = guest.PostalCode;
+            ChangeAddressTextBox.Text = guest.Address;
+            ChangeEmailTextBox.Text = guest.Email;
+            ChangePhoneNumberTextBox.Text = guest.PhoneNumber;
+            ChangeGuestInformationGrid.Visibility = Visibility.Visible;
+        }
+
+        public void SaveNewGuestInformation(object sender, RoutedEventArgs e)
+        {
+            guest.FirstName = ChangeFirstNameTextBox.Text;
+            guest.Infix = ChangeInfixTextBox.Text;
+            guest.LastName = ChangeLastNameTextBox.Text;
+            guest.City = ChangeCityTextBox.Text;
+            guest.PostalCode = ChangePostalCodeTextBox.Text;
+            guest.Address = ChangeAddressTextBox.Text;
+            guest.Email = ChangeEmailTextBox.Text;
+            guest.PhoneNumber = ChangePhoneNumberTextBox.Text;
+           
+
+            sql.UpdateGuest(guest);
+            GuestOverviewItemsControl.ItemsSource = sql.GetGuests();
+            ChangeGuestInformationGrid.Visibility = Visibility.Collapsed;
+            GuestDetailsGrid.Visibility = Visibility.Collapsed;
         }
     }
 }
