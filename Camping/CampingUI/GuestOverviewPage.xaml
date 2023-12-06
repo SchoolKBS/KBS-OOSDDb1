@@ -38,17 +38,39 @@
             <TextBox x:Name="GuestLastNameTextBox" Grid.Row="2" Grid.ColumnSpan="2" Height="20" Width="100"  HorizontalAlignment="Center"></TextBox>
             <Button Grid.Column="1" Grid.Row="2" Height="20" Width="80" Content="zoeken" HorizontalAlignment="Center" Click="FilterOnGuestName_Click"/>
 
-            <ItemsControl Name="GuestOverviewItemsControl" Margin="0, 0, 0, 50" Grid.ColumnSpan="2" Grid.Row="3" HorizontalAlignment="Center">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,5" Height="30">
-                            <TextBlock Foreground="White" FontSize="18" FontWeight="Bold" Width="75" Text="{Binding GuestID}"/>
-                            <TextBlock Foreground="White" FontSize="18" FontWeight="Bold" Width="125" Text="{Binding LastName}"/>
-                            <Button Content="selecteren" FontSize="15" FontWeight="Bold" Background="Transparent" BorderThickness="0" Foreground="White"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+            
+            <ListView Grid.ColumnSpan="2" Width="310" Height="400" Grid.Row="3" Name="GuestOverviewItemsControl" Background="#334A6E" Margin="5" BorderThickness="0,0,0,0">
+
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Width="80" DisplayMemberBinding="{Binding GuestID}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Tag="GuestID">Gast ID</GridViewColumnHeader>
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
+                        <GridViewColumn Width="110" DisplayMemberBinding="{Binding FirstName}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Tag="FirstName">Voornaam</GridViewColumnHeader>
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
+                        <GridViewColumn Width="110" DisplayMemberBinding="{Binding LastName}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Tag="LastName">Achternaam</GridViewColumnHeader>
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
         </Grid>
+        <Grid.Resources>
+            <Style TargetType="ListViewItem">
+                <Style.Triggers>
+                    <Trigger Property="ItemsControl.AlternationIndex"  Value="0">
+                        <Setter Property="Background" Value="#153260" />
+                    </Trigger>
+                </Style.Triggers>
+                <Setter Property="Foreground" Value="White"/>
+            </Style>
+        </Grid.Resources>
     </Grid>
 </Page>
