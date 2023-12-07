@@ -104,7 +104,7 @@ namespace CampingUI
             }
             else if (PersonCountTextBoxx.Text == string.Empty)
             {
-                PlaceNumerBox.Background = Brushes.White;
+                PersonCountTextBoxx.Background = Brushes.White;
 
             }
             else
