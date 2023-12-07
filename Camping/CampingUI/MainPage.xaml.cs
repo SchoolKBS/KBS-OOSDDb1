@@ -298,8 +298,9 @@ namespace CampingUI
             if (!AddPlaceBool)
             {
                 SelectedPlace = place.PlaceID;
-                PlacePlaceID.Text = place.PlaceID.ToString();
 
+                PlacePlaceID.Text = place.PlaceID.ToString();
+                PlacePlaceID.IsEnabled = false;
 
                 PlaceHasPower.IsChecked = place.Power;
                 PlaceHasDogs.IsChecked = place.Dogs;
@@ -353,6 +354,12 @@ namespace CampingUI
                 place.Xcord -= 15;
                 place.Ycord -= 15;
             }
+            foreach(Street street in streets)
+            {
+                Area area = Camping.CampingRepository.CampingMapRepository.GetAreaByAreaID(street);
+                street.Xcord1 += area.Xcord1; ;  
+                street.Ycord1 += area.Ycord1; ;
+            }
             //MessageBox.Show($"{p.X}, {p.Y}");
             XPressed = (int)Math.Round(p.X) - 15;
             YPressed = (int)Math.Round(p.Y) - 15;
@@ -364,29 +371,15 @@ namespace CampingUI
             List<Place> placesNotInNewPlaceBorder = places.Where(i => i.Xcord >= (XPressed-45) && i.Xcord <= (XPressed+45))
                                                           .Where(i => i.Ycord >= (YPressed-45) && i.Ycord <= (YPressed+45))
                                                           .ToList();
-                                                          
-            /*List<Street> verticalStreets = streets.Where(i => i.Ycord2 > i.Xcord2).ToList();
-            List<Street> horizontalStreets = streets.Where(i => i.Ycord2 > i.Xcord2).ToList();
-            List<Street> possibleStreetsLeft = verticalStreets.Where(i => i.Ycord1 <= (Ycord - 15) && i.Ycord1 + i.Ycord2 >= (Ycord + 45))
-                                                              .Where(i => i.Xcord1 >= (Xcord - 15))
-                                                              .Where(i => i.Xcord1 <= (Xcord + 45))
+            //List<Street> StreetsCloseEnough = streets.Where(i => i.Xcord1 > XPressed && i.Ycord1 > YPressed).ToList();
+            List<Street> StreetsCloseEnough = streets.Where(i => ((i.Xcord1 - 40) >= XPressed && (i.Xcord1 - 70) <= XPressed)
+                                                              || ((i.Xcord1 + i.Xcord2 + 40) <= XPressed && (i.Xcord1 + i.Xcord2 + 70) >= XPressed)
+                                                              || ((i.Ycord1 - 40) >= YPressed && (i.Ycord1 - 70) <= YPressed)
+                                                              || ((i.Ycord1 + i.Ycord2 + 40) <= YPressed && (i.Ycord1 + i.Ycord2 + 70) >= YPressed))
                                                               .ToList();
-            List<Street> possibleStreetsRight = verticalStreets.Where(i => i.Ycord1 <= (Ycord - 15) && i.Ycord1 + i.Ycord2 >= (Ycord + 45))
-                                                              .Where(i => i.Xcord1 <= (Xcord - 15))
-                                                              .Where(i => i.Xcord1 + i.Xcord2 >= (Xcord + 45))
-                                                              .ToList();
-            List<Street> possibleStreetsTop = horizontalStreets.Where(i => i.Xcord1 <= (Xcord - 15) && i.Xcord1 + i.Xcord2 >= (Xcord + 45))
-                                                               .Where(i => i.Ycord1 >= (Ycord - 15))
-                                                               .Where(i => i.Ycord1 <= (Ycord + 45))
-                                                               .ToList();
-            List<Street> possibleStreetsBottom = horizontalStreets.Where(i => i.Xcord1 <= (Xcord - 15) && i.Xcord1 + i.Xcord2 >= (Xcord + 45))
-                                                               .Where(i => i.Ycord1 <= (Ycord - 15))
-                                                               .Where(i => i.Ycord1 + i.Ycord2 >= (Ycord + 45))
-                                                               .ToList();
-            List<Street> possibleStreets = possibleStreetsBottom.Union(possibleStreetsTop.Union(possibleStreetsRight.Union(possibleStreetsLeft))).ToList();*/
-            
-
-            if (PlaceWithinAreas.Count == 1 && placesNotInNewPlaceBorder.Count == 0) //&& possibleStreets.Count == 1) 
+            MessageBox.Show($"{StreetsCloseEnough.Count()}");
+            //MessageBox.Show($"{streets[6].Xcord1-30} - {XPressed} = {streets[6].Xcord1-30 - XPressed}");
+            if (PlaceWithinAreas.Count == 1 && placesNotInNewPlaceBorder.Count == 0 && StreetsCloseEnough.Count() > 0)  
             {
                 Area area = PlaceWithinAreas[0];
                 Camping.Places = Camping.CampingRepository.CampingPlaceRepository.GetPlaces();

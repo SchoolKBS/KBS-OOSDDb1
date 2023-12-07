@@ -11,5 +11,6 @@ namespace CampingCore.CampingRepositories
         public List<Street> GetStreets();
         public List<Area> GetAreas();
         public Street GetStreetByStreetID(Place place);
+        public Area GetAreaByAreaID(Street street);
     }
 }
