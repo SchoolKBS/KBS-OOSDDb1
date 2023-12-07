@@ -52,6 +52,7 @@ namespace CampingUI
             InitializeComponent();
             _placesOverviewPageFilter = new PlacesOverviewPageFilter();
             this._camping = camping; // Creates a camping.
+            _camping.Places = _camping.CampingRepository.CampingPlaceRepository.GetPlaces();
             if (!_camping.Places.IsNullOrEmpty())
                 _maxPriceRange = _camping.Places.Max(i => i.PricePerNightPerPerson);
             MaxPriceRangeTextBox.Text = $"{_maxPriceRange}"; //Set the _maxPriceRange as a standard
@@ -361,9 +362,7 @@ namespace CampingUI
             Place place = (Place)PlacesListView.SelectedItem;
             if (!_wrongInput)
             {
-                //Test
                 Camping.CampingRepository.CampingPlaceRepository.UpdatePlaceData(place, _hasPowerEdit, _surfaceAreaEdit, _pricePerNightPerPersonEdit, _amountOfPeopleEdit, _dogsAllowedEdit);
-                //Test
                 EditPlaceGrid.Visibility = Visibility.Collapsed;
                 PlaceOverviewGrid.Visibility = Visibility.Visible;
                 ReloadScreenDataPlaces();

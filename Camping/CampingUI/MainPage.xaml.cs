@@ -1,5 +1,6 @@
 ﻿using CampingCore;
 using CampingDataAccess;
+using Org.BouncyCastle.Crypto.Operators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,14 +27,17 @@ namespace CampingUI
         public List<Area> Areas { get; set; }
         public List<Street> Streets { get; set; }
         public List<Place> Places { get; set; }
-
+        public int XPressed {  get; set; }
+        public int YPressed { get; set; }
+        public bool WrongInput { get; set; }
         public int SelectedPlace {  get; set; }
+        private int _placeSurfaceArea, _placePersons, _placePlaceID;
+        private double _placePricePerNight;
         private Canvas previousSelectedCanvas;
 
         public MainPage(Camping camping)
         {
             InitializeComponent();
-
             // Calculate scale percentages based on screen size
             double screenWidth = SystemParameters.PrimaryScreenWidth;
             double screenHeight = SystemParameters.PrimaryScreenHeight;
@@ -84,8 +88,15 @@ namespace CampingUI
         public void GenerateAreas()
         {
             Areas = Camping.CampingRepository.CampingMapRepository.GetAreas();
+            List<Color> availableColors = new List<Color>
+            {
+            ChangeColorOpacity(Colors.Red, 0.5),
+            ChangeColorOpacity(Colors.ForestGreen, 0.5),
+            ChangeColorOpacity(Colors.CornflowerBlue, 0.5),
+            ChangeColorOpacity(Colors.Yellow, 0.5)
+            };
 
-            if(Areas.Count() > 0)
+            if (Areas.Count() > 0)
             {
                 foreach (var area in Areas)
                 {
@@ -96,7 +107,7 @@ namespace CampingUI
                     {
                         Width = coordinates[2],
                         Height = coordinates[3],
-                        Background = GenerateRandomBrush(),
+                        Background = GenerateRandomBrush(availableColors),
                         Name = "Canvas_" + area.AreaID.ToString(),
                     };
 
@@ -118,8 +129,6 @@ namespace CampingUI
                 }
             }
         }
-
-
         private void GenerateStreetsPerArea(Canvas canvasArea, Area area)
         {
             Streets = Camping.CampingRepository.CampingMapRepository.GetStreets();
@@ -137,7 +146,6 @@ namespace CampingUI
                 }
             }
         }
-
         public void GenerateStreet(Canvas canvasArea, Street street)
         {
             if (street != null)
@@ -180,7 +188,6 @@ namespace CampingUI
                 canvasArea.Children.Add(square);
             }
         }
-
         public void GeneratePlacesPerStreet(Street street)
         {
             Places = Camping.CampingRepository.CampingPlaceRepository.GetPlaces();
@@ -190,138 +197,125 @@ namespace CampingUI
                 {
                     if (place.StreetID == street.StreetID)
                     {
-                        var coordinates = place.GetPlacePositions();
-
-                        // Create a Border to wrap the Canvas
-                        Border border = new Border
-                        {
-                            BorderBrush = Brushes.White, // Set the border color
-                            BorderThickness = new Thickness(1), // Set the border thickness
-                        };
-
-                        Canvas canvasPlace = new Canvas
-                        {
-                            Width = 30,
-                            Height = 30,
-                            Background = Brushes.Black,
-                            Name = "Place_" + place.PlaceID.ToString(),                              
-                        };
-
-                        // Add the Canvas to the Border
-                        border.Child = canvasPlace;
-                        Canvas.SetZIndex(canvasPlace, 100);
-
-                        Canvas.SetTop(border, coordinates[1]);  // Ycord1 to place from top.
-                        Canvas.SetLeft(border, coordinates[0]); // XCord1 to place from left.
-
-                        // Add the Border to the main canvas
-                        field.Children.Add(border);
-
-                        // Add PlaceID as text in the center of the Canvas
-                        TextBlock textBlock = new TextBlock
-                        {
-                            Text = place.PlaceID.ToString(),
-                            Foreground = Brushes.White,
-                            HorizontalAlignment = HorizontalAlignment.Center,
-                            VerticalAlignment = VerticalAlignment.Center,
-                            FontSize = 20,
-                        };
-
-                        canvasPlace.Children.Add(textBlock);
-
-                        // Ensure the TextBlock is centered within the CanvasPlace
-                        canvasPlace.Loaded += (sender, e) =>
-                        {
-                            Canvas.SetTop(textBlock, (canvasPlace.ActualHeight - textBlock.ActualHeight) / 2);
-                            Canvas.SetLeft(textBlock, (canvasPlace.ActualWidth - textBlock.ActualWidth) / 2);
-                        };
-
-                        // Center the Canvas within the Border
-                        Canvas.SetTop(canvasPlace, (border.ActualHeight - canvasPlace.Height) / 2);
-                        Canvas.SetLeft(canvasPlace, (border.ActualWidth - canvasPlace.Width) / 2);
-
-                        canvasPlace.MouseEnter += (sender, e) =>
-                        {
-                            canvasPlace.Background = Brushes.DarkCyan; // Change the background color on hover
-                        };
-
-                        canvasPlace.MouseLeave += (sender, e) =>
-                        {
-                            if(place.PlaceID != SelectedPlace)
-                            {
-                                canvasPlace.Background = Brushes.Black;
-                            }
-                        };
-
-                        canvasPlace.MouseLeftButtonDown += (sender, e) =>
-                        {
-                            if (previousSelectedCanvas != null)
-                            {
-                                // Change the background color of the previously selected canvas back to black.
-                                previousSelectedCanvas.Background = Brushes.Black;
-                            }
-
-                            // Set the background color of the current canvas to red
-                            canvasPlace.Background = Brushes.DarkCyan;
-
-                            // Update the reference to the current canvas
-                            previousSelectedCanvas = canvasPlace;
-
-                            // Handle the click event
-                            HandlePlaceClick(place);
-                        };
+                        GeneratePlace(place, Brushes.Black, true);
                     }
                 }
             }
         }
-
-        public void HandlePlaceClick(Place place)
+        public void GeneratePlace(Place place, SolidColorBrush brush, bool AddPlaceBool)
         {
-            SelectedPlace = place.PlaceID;
-            PlaceIDTextBlock.Text = $"Plaats {place.PlaceID.ToString()}";
-            PlaceHasPowerLabel.Visibility = Visibility.Visible;
+            var coordinates = place.GetPlacePositions();
 
-            PlaceInfo.Visibility = Visibility.Visible;
-
-            PlaceHasPower.IsChecked = place.Power;
-            PlaceHasDogs.IsChecked = place.Dogs;
-              
-            PlaceSurfaceArea.Text = place.SurfaceArea.ToString();
-            PlacePricePerNight.Text = place.PricePerNightPerPerson.ToString();
-            PlacePersons.Text = place.AmountOfPeople.ToString();
-                
-        }
-
-        private List<Color> availableColors = new List<Color>
-        {
-            ChangeColorOpacity(Colors.Red, 0.5),
-            ChangeColorOpacity(Colors.ForestGreen, 0.5),
-            ChangeColorOpacity(Colors.CornflowerBlue, 0.5),
-            ChangeColorOpacity(Colors.Yellow, 0.5)
-        };
-
-
-        public void HandleEditPlace_Click(Object sender, RoutedEventArgs e)
-        {
-            if(PlaceRow1.IsEnabled == false)
+            // Create a Border to wrap the Canvas
+            Border border = new Border
             {
-                PlaceRow1.IsEnabled = true;
-                PlaceRow2.IsEnabled = true;
-                PlaceRow3.IsEnabled = true;
-                PlaceRow4.IsEnabled = true;
-                PlaceRow5.IsEnabled = true;
+                BorderBrush = Brushes.White, // Set the border color
+                BorderThickness = new Thickness(1), // Set the border thickness
+            };
 
-                EditButtonPlace.Content = "Opslaan";
-            } else
+            Canvas canvasPlace = new Canvas
             {
-                PlaceRow1.IsEnabled = false;
-                PlaceRow2.IsEnabled = false;
-                PlaceRow3.IsEnabled = false;
-                PlaceRow4.IsEnabled = false;
-                PlaceRow5.IsEnabled = false;
+                Width = 30,
+                Height = 30,
+                Background = brush,
+                Name = "Place_" + place.PlaceID.ToString(),
+            };
 
-                EditButtonPlace.Content = "Aanpassen";
+            // Add the Canvas to the Border
+            border.Child = canvasPlace;
+            Canvas.SetZIndex(canvasPlace, 100);
+
+            Canvas.SetTop(border, coordinates[1]);  // Ycord1 to place from top.
+            Canvas.SetLeft(border, coordinates[0]); // XCord1 to place from left.
+
+            // Add the Border to the main canvas
+            field.Children.Add(border);
+
+            // Add PlaceID as text in the center of the Canvas
+            if (AddPlaceBool)
+            {
+                TextBlock textBlock = new TextBlock
+                {
+                    Text = place.PlaceID.ToString(),
+                    Foreground = Brushes.White,
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    FontSize = 20,
+                };
+
+
+                canvasPlace.Children.Add(textBlock);
+
+                // Ensure the TextBlock is centered within the CanvasPlace
+                canvasPlace.Loaded += (sender, e) =>
+                {
+                    Canvas.SetTop(textBlock, (canvasPlace.ActualHeight - textBlock.ActualHeight) / 2);
+                    Canvas.SetLeft(textBlock, (canvasPlace.ActualWidth - textBlock.ActualWidth) / 2);
+                };
             }
+
+            // Center the Canvas within the Border
+            Canvas.SetTop(canvasPlace, (border.ActualHeight - canvasPlace.Height) / 2);
+            Canvas.SetLeft(canvasPlace, (border.ActualWidth - canvasPlace.Width) / 2);
+
+            if(brush == Brushes.Black)
+            {
+                canvasPlace.MouseEnter += (sender, e) =>
+                {
+                    canvasPlace.Background = Brushes.DarkCyan; // Change the background color on hover
+                };
+
+                canvasPlace.MouseLeave += (sender, e) =>
+                {
+                    if (place.PlaceID != SelectedPlace)
+                    {
+                        canvasPlace.Background = Brushes.Black;
+                    }
+                };
+            }
+
+            canvasPlace.MouseLeftButtonDown += (sender, e) =>
+            {
+                if (previousSelectedCanvas != null)
+                {
+                    // Change the background color of the previously selected canvas back to black.
+                    previousSelectedCanvas.Background = Brushes.Black;
+                }
+
+                // Set the background color of the current canvas to red
+                canvasPlace.Background = Brushes.DarkCyan;
+
+                // Update the reference to the current canvas
+                previousSelectedCanvas = canvasPlace;
+
+                // Handle the click event
+                HandlePlaceClick(place, false);
+            };
+        }
+        public void HandlePlaceClick(Place place, bool AddPlaceBool)
+        {
+            PlaceInfo.Visibility = Visibility.Visible;
+            if (!AddPlaceBool)
+            {
+                SelectedPlace = place.PlaceID;
+                PlacePlaceID.Text = place.PlaceID.ToString();
+
+
+                PlaceHasPower.IsChecked = place.Power;
+                PlaceHasDogs.IsChecked = place.Dogs;
+
+                PlaceSurfaceArea.Text = place.SurfaceArea.ToString();
+                PlacePricePerNight.Text = place.PricePerNightPerPerson.ToString();
+                PlacePersons.Text = place.AmountOfPeople.ToString();
+            }
+            else
+            {
+                PlacePlaceID.Text = null;
+                PlaceSurfaceArea.Text = null;
+                PlacePersons.Text = null;
+                PlacePricePerNight.Text = null;
+            }
+                
         }
 
         static Color ChangeColorOpacity(Color color, double opacity)
@@ -331,19 +325,174 @@ namespace CampingUI
 
         private Random random = new Random();
 
-        public Brush GenerateRandomBrush()
+        public Brush GenerateRandomBrush(List<Color> colors)
         {
-            if (availableColors.Count == 0)
+            
+            if (colors.Count == 0)
             {
                 throw new InvalidOperationException("No more colors available.");
             }
-
-            int colorIndex = random.Next(availableColors.Count);
-            Color selectedColor = availableColors[colorIndex];
-            availableColors.RemoveAt(colorIndex);
+            Color selectedColor = colors[0];
+            colors.RemoveAt(0);
 
             SolidColorBrush brush = new SolidColorBrush(selectedColor);
             return brush;
+        }
+
+        private void field_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            field.Children.Clear();
+            GenerateAreas();
+
+            Point p = Mouse.GetPosition(field);
+            List<Area> areas = Camping.CampingRepository.CampingMapRepository.GetAreas();
+            List<Street> streets = Camping.CampingRepository.CampingMapRepository.GetStreets();
+            List<Place> places = Camping.CampingRepository.CampingPlaceRepository.GetPlaces();
+            foreach(Place place in places)
+            {
+                place.Xcord -= 15;
+                place.Ycord -= 15;
+            }
+            //MessageBox.Show($"{p.X}, {p.Y}");
+            XPressed = (int)Math.Round(p.X) - 15;
+            YPressed = (int)Math.Round(p.Y) - 15;
+            List<Area> PlaceWithinAreas = areas.Where(i => i.Xcord1 <= (XPressed - 15))
+                                               .Where(i => i.Xcord1 + i.Xcord2 >= (XPressed + 45))
+                                               .Where(i => i.Ycord1 <= (YPressed - 15))
+                                               .Where(i => i.Ycord1 + i.Ycord2 >= (YPressed + 45))
+                                               .ToList();
+            List<Place> placesNotInNewPlaceBorder = places.Where(i => i.Xcord >= (XPressed-45) && i.Xcord <= (XPressed+45))
+                                                          .Where(i => i.Ycord >= (YPressed-45) && i.Ycord <= (YPressed+45))
+                                                          .ToList();
+                                                          
+            /*List<Street> verticalStreets = streets.Where(i => i.Ycord2 > i.Xcord2).ToList();
+            List<Street> horizontalStreets = streets.Where(i => i.Ycord2 > i.Xcord2).ToList();
+            List<Street> possibleStreetsLeft = verticalStreets.Where(i => i.Ycord1 <= (Ycord - 15) && i.Ycord1 + i.Ycord2 >= (Ycord + 45))
+                                                              .Where(i => i.Xcord1 >= (Xcord - 15))
+                                                              .Where(i => i.Xcord1 <= (Xcord + 45))
+                                                              .ToList();
+            List<Street> possibleStreetsRight = verticalStreets.Where(i => i.Ycord1 <= (Ycord - 15) && i.Ycord1 + i.Ycord2 >= (Ycord + 45))
+                                                              .Where(i => i.Xcord1 <= (Xcord - 15))
+                                                              .Where(i => i.Xcord1 + i.Xcord2 >= (Xcord + 45))
+                                                              .ToList();
+            List<Street> possibleStreetsTop = horizontalStreets.Where(i => i.Xcord1 <= (Xcord - 15) && i.Xcord1 + i.Xcord2 >= (Xcord + 45))
+                                                               .Where(i => i.Ycord1 >= (Ycord - 15))
+                                                               .Where(i => i.Ycord1 <= (Ycord + 45))
+                                                               .ToList();
+            List<Street> possibleStreetsBottom = horizontalStreets.Where(i => i.Xcord1 <= (Xcord - 15) && i.Xcord1 + i.Xcord2 >= (Xcord + 45))
+                                                               .Where(i => i.Ycord1 <= (Ycord - 15))
+                                                               .Where(i => i.Ycord1 + i.Ycord2 >= (Ycord + 45))
+                                                               .ToList();
+            List<Street> possibleStreets = possibleStreetsBottom.Union(possibleStreetsTop.Union(possibleStreetsRight.Union(possibleStreetsLeft))).ToList();*/
+            
+
+            if (PlaceWithinAreas.Count == 1 && placesNotInNewPlaceBorder.Count == 0) //&& possibleStreets.Count == 1) 
+            {
+                Area area = PlaceWithinAreas[0];
+                Camping.Places = Camping.CampingRepository.CampingPlaceRepository.GetPlaces();
+                int i = Camping.Places.Last().PlaceID + 1;
+
+                Place place = new Place(0, false, 1, false, 0, 0, 0, XPressed, YPressed);
+                GeneratePlace(place, Brushes.Gray, false);
+                HandlePlaceClick(place, true);
+
+                //Camping.CampingRepository.CampingPlaceRepository.AddPlace(place);
+                //Camping.CampingRepository.CampingPlaceRepository.GetPlaces();
+            }
+        }
+        public void HandleAddPlace_Click(Object sender, RoutedEventArgs e)
+        {
+            GetAddNumbers();
+            if (!WrongInput)
+            {
+                bool hasPower = false;
+                if(PlaceHasPower.IsChecked == true)
+                    hasPower = true;
+                bool hasDogs = false;
+                if (PlaceHasDogs.IsChecked == true)
+                    hasDogs = true;
+                Place place = new Place(_placePlaceID, hasPower, 1, hasDogs, _placeSurfaceArea, _placePersons, _placePricePerNight, XPressed, YPressed);
+                Camping.CampingRepository.CampingPlaceRepository.AddPlace(place);
+                Camping.CampingRepository.CampingPlaceRepository.GetPlaces();
+                PlaceInfo.Visibility = Visibility.Collapsed;
+
+                field.Children.Clear();
+                GenerateAreas();
+            }
+
+        }
+        public void HandleCancelAddPlace_Click(Object sender, RoutedEventArgs e)
+        {
+            PlaceInfo.Visibility = Visibility.Collapsed;
+
+            field.Children.Clear();
+            GenerateAreas();
+        }
+        private void GetAddNumbers()
+        {
+            GetAddAmountOfPeople();
+            GetAddPricePerNightPerPerson();
+            GetAddSurfaceArea();
+            GetAddPlaceID();
+        }
+
+        //Function (EventHandler) that resets the background of a textbox if the filters are reset
+        private void TextBox_Changed(object sender, TextChangedEventArgs e)
+        {
+            TextBox textbox = (TextBox)sender;
+            if (textbox.BorderBrush.Equals(Brushes.Red))
+            {
+                StaticUIMethods.ResetTextboxBorder(textbox);
+                WrongInput = false;
+            }
+        }
+
+        private int GetAddTextBox(TextBox textbox, int editNumber)
+        {
+            int number;
+            if (int.TryParse(textbox.Text, out number) && number >= 0 && !string.IsNullOrEmpty(textbox.Text))// Checks if int can be parsed and if number is bigger or equal to 0
+                editNumber = number;
+            else
+            {
+                StaticUIMethods.SetErrorTextboxBorder(textbox);
+                WrongInput = true;
+            }
+            return editNumber;
+        }
+
+        private void GetAddAmountOfPeople()
+        {
+            _placePersons = GetAddTextBox(PlacePersons, _placePersons);
+        }
+
+        private void GetAddSurfaceArea()
+        {
+            _placeSurfaceArea = GetAddTextBox(PlaceSurfaceArea, _placePersons);
+        }
+        private void GetAddPlaceID()
+        {
+
+            
+            _placePlaceID = GetAddTextBox(PlacePlaceID, _placePlaceID);
+            List<Place> places = Camping.Places.Where(i => i.PlaceID == _placePlaceID).ToList();
+            if(places.Count > 0)
+            {
+                StaticUIMethods.SetErrorTextboxBorder(PlacePlaceID);
+                WrongInput = true;
+                _placePlaceID = -1;
+            }
+        }
+
+        private void GetAddPricePerNightPerPerson()
+        {
+            double number;
+            if (double.TryParse(PlacePricePerNight.Text, out number) && number >= 0 && !string.IsNullOrEmpty(PlacePricePerNight.Text))// Checks if int can be parsed and if number is bigger or equal to 0
+                _placePricePerNight = number;
+            else
+            {
+                StaticUIMethods.SetErrorTextboxBorder(PlacePricePerNight);
+                WrongInput = true;
+            }
         }
     }
 }
