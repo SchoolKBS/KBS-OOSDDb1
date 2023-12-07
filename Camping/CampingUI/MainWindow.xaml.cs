@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Animation;
+using System.IO;
 
 namespace CampingUI
 {
@@ -26,9 +27,8 @@ namespace CampingUI
         public MainWindow()
         {
             InitializeComponent();
+
             this.CampingRepository = new CampingRepository();
-            
-            //CampingRepository.AddDummyData();
 
             this.Camping = new Camping(CampingRepository);
 
