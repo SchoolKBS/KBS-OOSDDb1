@@ -12,16 +12,7 @@ namespace UnitTests
         {
             CampingRepository campingRepository = new CampingRepository();
             Camping camping = new Camping(campingRepository);
-            List<Place> listToCheck = new List<Place>();
-
-            for (int i = 1; i <= 5; i++)
-            {
-                listToCheck.Add(new Place(i, true, i, true, i, i, i, i, i));
-            }
-            for (int i = 6; i <= 10; i++)
-            {
-                listToCheck.Add(new Place(i, false, i, false, i, i, i, i, i));
-            }
+            List<Place> listToCheck = CreatePlaces();
             IEnumerable<Place> places = new List<Place>();
             camping.Places = listToCheck;
             places = listToCheck;
@@ -34,16 +25,7 @@ namespace UnitTests
         {
             CampingRepository campingRepository = new CampingRepository();
             Camping camping = new Camping(campingRepository);
-            List<Place> listToCheck = new List<Place>();
-
-            for (int i = 1; i <= 5; i++)
-            {
-                listToCheck.Add(new Place(i, true, i, true, i, i, i, i, i));
-            }
-            for (int i = 6; i <= 10; i++)
-            {
-                listToCheck.Add(new Place(i, false, i, false, i, i, i, i, i));
-            }
+            List <Place> listToCheck = CreatePlaces();
             IEnumerable<Place> places = new List<Place>();
             camping.Places = listToCheck;
             places = listToCheck;
@@ -55,16 +37,7 @@ namespace UnitTests
         {
             CampingRepository campingRepository = new CampingRepository();
             Camping camping = new Camping(campingRepository);
-            List<Place> listToCheck = new List<Place>();
-
-            for (int i = 1; i <= 5; i++)
-            {
-                listToCheck.Add(new Place(i, true, i, true, i, i, i, i, i));
-            }
-            for (int i = 6; i <= 10; i++)
-            {
-                listToCheck.Add(new Place(i, false, i, false, i, i, i, i, i));
-            }
+            List<Place> listToCheck = CreatePlaces();
             IEnumerable<Place> places = new List<Place>();
             camping.Places = listToCheck;
             places = listToCheck;
@@ -77,19 +50,9 @@ namespace UnitTests
         { 
             CampingRepository campingRepository = new CampingRepository();
             Camping camping = new Camping(campingRepository);
-            List<Place> listToCheck = new List<Place>();
-
-            for (int i = 1; i <= 5; i++)
-            {
-                listToCheck.Add(new Place(i, true, i, true, i, i, i, i, i));
-            }
-            for (int i = 6; i <= 10; i++)
-            {
-                listToCheck.Add(new Place(i, false, i, false, i, i, i, i, i));
-            }
+            List<Place> listToCheck = CreatePlaces();
             IEnumerable<Place> places = new List<Place>();
             camping.Places = listToCheck;
-            places = listToCheck;
             places = PlacesOverviewFilter.GetFilteredListOnDate(false, DateTime.Now.Date.AddDays(1), DateTime.Now.Date.AddDays(5), camping.Places, camping);
             Assert.That(places.Count(), Is.EqualTo(5));
         }
@@ -99,8 +62,16 @@ namespace UnitTests
         {
             CampingRepository campingRepository = new CampingRepository();
             Camping camping = new Camping(campingRepository);
+            List<Place> listToCheck = CreatePlaces();
+            IEnumerable<Place> places = new List<Place>();
+            camping.Places = listToCheck;
+            places = listToCheck;
+            places = PlacesOverviewFilter.GetAvailablePlacesBetweenDates(DateTime.Now.Date.AddDays(1), DateTime.Now.Date.AddDays(5), camping);
+            Assert.That(places.Count(), Is.EqualTo(5));
+        }
+        public static List<Place> CreatePlaces()
+        {
             List<Place> listToCheck = new List<Place>();
-
             for (int i = 1; i <= 5; i++)
             {
                 listToCheck.Add(new Place(i, true, i, true, i, i, i, i, i));
@@ -109,11 +80,7 @@ namespace UnitTests
             {
                 listToCheck.Add(new Place(i, false, i, false, i, i, i, i, i));
             }
-            IEnumerable<Place> places = new List<Place>();
-            camping.Places = listToCheck;
-            places = listToCheck;
-            places = PlacesOverviewFilter.GetAvailablePlacesBetweenDates(DateTime.Now.Date.AddDays(1), DateTime.Now.Date.AddDays(5), camping);
-            Assert.That(places.Count(), Is.EqualTo(5));
+            return listToCheck;
         }
     }
 }

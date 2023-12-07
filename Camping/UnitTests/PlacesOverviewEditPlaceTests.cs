@@ -16,7 +16,11 @@ namespace UnitTests
         {
             var mock = new Mock<ICampingRepository>();
             Camping camping = new Camping(mock.Object);
-            Assert.Pass();
+            List<Place> places = PlacesOverviewPageFilterTests.CreatePlaces();
+            Place place = places.First();
+            camping.CampingRepository.CampingPlaceRepository.UpdatePlaceData(place, false, 11, 11, 11, false);
+            mock.Verify(p => p.CampingPlaceRepository.UpdatePlaceData(place, false, 11, 11, 11, false), Times.Once());
         }
+
     }
 }
