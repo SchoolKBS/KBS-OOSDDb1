@@ -1,6 +1,7 @@
 ﻿using CampingCore;
 using CampingCore.PlacesOverviewPageClasses;
 using CampingDataAccess;
+using Google.Protobuf.WellKnownTypes;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -77,7 +78,7 @@ namespace CampingUI
             DateTime? departureDate = DepartureDatePickerr.SelectedDate;
             if (departureDate.HasValue)
             {
-                if (departureDate > DateTime.Now.Date && departureDate >= arrivalDate)
+                if (departureDate > DateTime.Now.Date && departureDate >= arrivalDate || ArrivalDatePickerr.Text == string.Empty && !(DepartureDatePickerr.Text == string.Empty))
                 {
                     ArrivalDatePickerr.Background = Brushes.White;
                     DepartureDatePickerr.Background = Brushes.White;
