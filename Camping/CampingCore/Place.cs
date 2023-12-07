@@ -15,28 +15,28 @@ namespace CampingCore
         public int Xcord { get; set; }
         public int Ycord { get; set; }
 
-        public Place(int placeNumber, bool hasPowerbool, int street, bool canHaveDogs, int surfaceArea, int numberOfPeople, double pricePerNight, int xCord, int yCord)
+        public Place(int placeID, bool hasPowerbool, int street, bool canHaveDogs, int surfaceArea, int numberOfPeople, double pricePerNightPerPerson, int xCord, int yCord)
         {
-            this.PlaceID = placeNumber;
+            this.PlaceID = placeID;
             this.Power = hasPowerbool;
             this.StreetID = street;
             this.SurfaceArea = surfaceArea;
             this.Dogs = canHaveDogs;
             this.AmountOfPeople = numberOfPeople;
-            this.PricePerNightPerPerson = pricePerNight;
+            this.PricePerNightPerPerson = pricePerNightPerPerson;
             this.Xcord = xCord;
             this.Ycord = yCord;
 
         }
- /*       public Place(int placeNumber, bool hasPower, Street street, int surfaceArea, int numberOfPeople, double pricePerNight, int xCord, int yCord) : this(placeNumber, hasPower, street, street.Dogs, surfaceArea, numberOfPeople, pricePerNight, xCord, yCord)
+ /*       public Place(int placeID, bool hasPower, Street street, int surfaceArea, int numberOfPeople, double pricePerNightPerPerson, int xCord, int yCord) : this(placeID, hasPower, street, street.Dogs, surfaceArea, numberOfPeople, pricePerNightPerPerson, xCord, yCord)
         {
 
         }
-        public Place(int placeNumber, Street street, bool canHaveDogs, int surfaceArea, int numberOfPeople, double pricePerNight, int xCord, int yCord) : this(placeNumber, street.Power, street, canHaveDogs, surfaceArea, numberOfPeople, pricePerNight, xCord, yCord)
+        public Place(int placeID, Street street, bool canHaveDogs, int surfaceArea, int numberOfPeople, double pricePerNightPerPerson, int xCord, int yCord) : this(placeID, street.Power, street, canHaveDogs, surfaceArea, numberOfPeople, pricePerNightPerPerson, xCord, yCord)
         {
 
         }
-        public Place(int placeNumber, Street street, int surfaceArea, int numberOfPeople, double pricePerNight, int xCord, int yCord) : this(placeNumber, street.Power, street, street.Dogs, surfaceArea, numberOfPeople, pricePerNight, xCord, yCord)
+        public Place(int placeID, Street street, int surfaceArea, int numberOfPeople, double pricePerNightPerPerson, int xCord, int yCord) : this(placeID, street.Power, street, street.Dogs, surfaceArea, numberOfPeople, pricePerNightPerPerson, xCord, yCord)
         {
 
         }*/
@@ -51,6 +51,13 @@ namespace CampingCore
             this.Dogs = (bool)properties[6];
             this.Xcord = (int)properties[7];
             this.Ycord = (int)properties[8];
+        }
+
+        public int[] GetPlacePositions()
+        {
+            // Xcord1 = width
+            // Ycord1 = height
+            return new int[2] { Xcord, Ycord};
         }
         public override string ToString()
         {
