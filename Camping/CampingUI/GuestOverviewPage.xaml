@@ -210,31 +210,33 @@
             </Grid.RowDefinitions>
 
             <Label  Content="*Voornaam" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="-30, 0, 0, 0" Foreground="White"/>
-            <TextBox x:Name="ChangeFirstNameTextBox" Grid.Row="1" Width="200" Height="30" Grid.Column="0" Margin="100, 0, 0, 0" Text="Voornaam"/>
+            <TextBox x:Name="ChangeFirstNameTextBox" Grid.Row="1" Width="200" Height="30" Grid.Column="0" Margin="100, 0, 0, 0" />
 
             <Label  Content="Tussenvoegsel" Grid.ColumnSpan="2" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Center" Foreground="White"/>
-            <TextBox x:Name="ChangeInfixTextBox" Grid.Row="1" Width="100" Height="30" Grid.ColumnSpan="2" Text="Infix"/>
+            <TextBox x:Name="ChangeInfixTextBox" Grid.Row="1" Width="100" Height="30" Grid.ColumnSpan="2"/>
 
             <Label  Content="*Achternaam" Grid.Row="1" Grid.Column="1" VerticalAlignment="Top" Margin="75, 0, 0, 0" Foreground="White"/>
-            <TextBox x:Name="ChangeLastNameTextBox" Grid.Row="1" Width="200" Height="30" Grid.Column="1" Margin="0, 0, 100, 0" Text="Achternaam"/>
+            <TextBox x:Name="ChangeLastNameTextBox" Grid.Row="1" Width="200" Height="30" Grid.Column="1" Margin="0, 0, 100, 0" />
 
             <Label  Content="*Woonplaats" Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="-30, 0, 0, 0" Foreground="White"/>
-            <TextBox x:Name="ChangeCityTextBox" Grid.Row="2" Width="200" Height="30" Grid.Column="0" Margin="100, 0, 0, 0" Text="Woonplaats"/>
+            <TextBox x:Name="ChangeCityTextBox" Grid.Row="2" Width="200" Height="30" Grid.Column="0" Margin="100, 0, 0, 0"/>
 
             <Label  Content="*Postcode" Grid.ColumnSpan="2" Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0, 0, 35, 0" Foreground="White"/>
-            <TextBox x:Name="ChangePostalCodeTextBox" Grid.Row="2" Width="100" Height="30" Grid.ColumnSpan="2" Text="Infix"/>
+            <TextBox x:Name="ChangePostalCodeTextBox" Grid.Row="2" Width="100" Height="30" Grid.ColumnSpan="2" TextChanged="PostalCodeTextBox_TextChanged"/>
 
             <Label  Content="*Adres" Grid.Row="2" Grid.Column="1" VerticalAlignment="Top" Margin="75, 0, 0, 0" Foreground="White"/>
-            <TextBox x:Name="ChangeAddressTextBox" Grid.Row="2" Width="200" Height="30" Grid.Column="1" Margin="0, 0, 100, 0" Text="Adres"/>
+            <TextBox x:Name="ChangeAddressTextBox" Grid.Row="2" Width="200" Height="30" Grid.Column="1" Margin="0, 0, 100, 0"/>
 
             <Label  Content="*Telefoonnummer" Grid.Row="3" VerticalAlignment="Top" HorizontalAlignment="Center" Foreground="White"/>
-            <TextBox x:Name="ChangePhoneNumberTextBox" Grid.Row="3" Width="200" Height="30" Grid.Column="0" Margin="100, 0, 0, 0" Text="Telefoon"/>
+            <TextBox x:Name="ChangePhoneNumberTextBox" Grid.Row="3" Width="200" Height="30" Grid.Column="0" Margin="100, 0, 0, 0" TextChanged="PhoneNumberTextBox_TextChanged"/>
 
             <Label  Content="*Email" Grid.Row="3" Grid.Column="1" VerticalAlignment="Top" Margin="75, 0, 0, 0" Foreground="White"/>
-            <TextBox x:Name="ChangeEmailTextBox" Grid.Row="3" Width="200" Height="30" Grid.Column="1" Margin="0, 0, 100, 0" Text="Email"/>
+            <TextBox x:Name="ChangeEmailTextBox" Grid.Row="3" Width="200" Height="30" Grid.Column="1" Margin="0, 0, 100, 0"/>
 
             <Button Style="{DynamicResource ButtonStyle1Apply}" Foreground="White" FontWeight="Bold" Name="ConfirmEditButton" Content="Bevestigen" Grid.Column="0" Height="35" Width="180" Grid.Row="4" Click="SaveNewGuestInformation"/>
             <Button Style="{DynamicResource ButtonStyle1Cancel}" Foreground="White" FontWeight="Bold" Name="CancelEditButton" Content="Annuleren" Grid.Column="1" Height="35" Width="180" Grid.Row="4" Click="CancelNewGuestInformation"/>
+
+            <TextBlock Name="InputNotification" Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#E3970C"/>
         </Grid>
         
         <Grid.Resources>

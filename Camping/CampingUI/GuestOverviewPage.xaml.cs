@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -91,7 +92,8 @@ namespace CampingUI
             ChangePhoneNumberTextBox.Text = guest.PhoneNumber;
             ChangeGuestInformationGrid.Visibility = Visibility.Visible;
         }
-
+       
+        //Changes guest information and saves it in database
         public void SaveNewGuestInformation(object sender, RoutedEventArgs e)
         {
             guest.FirstName = ChangeFirstNameTextBox.Text;
@@ -114,6 +116,36 @@ namespace CampingUI
         {
             ChangeGuestInformationGrid.Visibility = Visibility.Collapsed;
             GuestDetailsGrid.Visibility = Visibility.Collapsed;
+        }
+
+        //Checks if PostalCode is valid
+        private void PostalCodeTextBox_TextChanged(object sender, RoutedEventArgs e)
+        {
+            if (Regex.IsMatch(ChangePostalCodeTextBox.Text, @"^\d{4}\s?[A-Za-z]{2}$"))
+            {
+                InputNotification.Text = "";
+                ConfirmEditButton.IsEnabled = true;
+            }
+            else
+            {
+                InputNotification.Text = "Voer een geldige postcode in.";
+                ConfirmEditButton.IsEnabled = false;
+            }
+        }
+
+        //Checks if phonenumber is digits
+        private void PhoneNumberTextBox_TextChanged(object sender, RoutedEventArgs e)
+        {
+            if (Regex.IsMatch(ChangePhoneNumberTextBox.Text, @"^\d+$"))
+            {
+                InputNotification.Text = "";
+                ConfirmEditButton.IsEnabled = true;
+            }
+            else
+            {
+                InputNotification.Text = "Het telefoonnummer mag alleen cijfer bevatten";
+                ConfirmEditButton.IsEnabled = false;
+            }
         }
     }
 }
