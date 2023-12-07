@@ -19,10 +19,7 @@ namespace CampingDataAccess
             ConnectionString = connectionString;
         }
 
-        public Place GetGuestFromGuestID(int id)
-        {
-            throw new NotImplementedException();
-        }
+ 
 
 
         public void AddGuest(Guest guest)
