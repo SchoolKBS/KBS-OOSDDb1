@@ -30,7 +30,7 @@ namespace CampingUI
 
         private Camping _camping { get; set; }
 
-        public ReservationsOverviewWindow(Camping camping, SqliteRepository campingRepository)
+        public ReservationsOverviewWindow(Camping camping, CampingRepository campingRepository)
         {
             InitializeComponent();
             _camping = camping;
@@ -208,7 +208,7 @@ namespace CampingUI
                     {
                         // User clicked Yes, so delete the reservation
                         _camping.Reservations.Remove(reservationToDelete);
-                        _camping.CampingRepository.RemoveReservation(reservationToDelete);
+                        _camping.CampingRepository.CampingReservationRepository.RemoveReservation(reservationToDelete);
 
                         // Refresh the ListView
                         LoadReservationList();

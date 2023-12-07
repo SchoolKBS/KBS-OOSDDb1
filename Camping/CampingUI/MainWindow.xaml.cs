@@ -21,17 +21,18 @@ namespace CampingUI
     public partial class MainWindow : Window
     {
 
-        public SqliteRepository CampingRepository { get; private set; }
+        public CampingRepository CampingRepository { get; private set; }
         public Camping Camping { get; private set; }
         public MainWindow()
         {
             InitializeComponent();
-            Main.Navigate(new MainPage());
-            this.CampingRepository = new SqliteRepository();
+            this.CampingRepository = new CampingRepository();
             
             //CampingRepository.AddDummyData();
 
             this.Camping = new Camping(CampingRepository);
+
+            Main.Navigate(new MainPage(Camping));
 
         }
 
@@ -39,13 +40,13 @@ namespace CampingUI
         private void HomeButton_Click(object sender, RoutedEventArgs e)
         {
             // Navigate back to the main screen or set the desired page
-            Main.Navigate(new MainPage()); // Replace MainPage with the appropriate page class for your main screen
+            Main.Navigate(new MainPage(Camping)); // Replace MainPage with the appropriate page class for your main screen
         }
 
         //Function (EventHandler) to open the reservations page
         private void ReservationsButton_Click(object sender, RoutedEventArgs e)
         {
-            Camping.Reservations = Camping.CampingRepository.GetReservations();
+            Camping.Reservations = Camping.CampingRepository.CampingReservationRepository.GetReservations();
             Main.Content = new ReservationsOverviewWindow(Camping, CampingRepository);
         }
 

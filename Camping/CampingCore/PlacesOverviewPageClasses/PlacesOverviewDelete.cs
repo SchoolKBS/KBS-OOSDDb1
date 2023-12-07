@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace CampingCore.PlacesOverviewPageClasses
 {
-    public  class PlacesOverviewPageDelete
+    public  class PlacesOverviewDelete
     {
         public static void DeletePlace(Camping camping, Place place, DateTime departureDate)
         {
-            camping.CampingRepository.RemoveAllPreviousReservationsByPlace(place, departureDate);
-            camping.CampingRepository.RemovePlace(place);
+            camping.CampingRepository.CampingReservationRepository.RemoveAllPreviousReservationsByPlace(place, departureDate);
+            camping.CampingRepository.CampingPlaceRepository.RemovePlace(place);
         }
     }
 }

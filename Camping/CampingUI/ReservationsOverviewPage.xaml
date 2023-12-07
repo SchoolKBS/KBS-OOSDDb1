@@ -22,6 +22,9 @@ BorderThickness="1,1,1,1" Background="{x:Null}" >
         <!--Grid for the filters and list of reservations-->
 
 
+        <!--Grid for the filters and\\mac\home\documents\github\kbs-oosddb1\camping\campingui\reservationsoverviewpage.xaml.cs
+\\mac\home\documents\github\kbs-oosddb1\camping\campingui\reservationsoverviewpage.xaml
+ list of reservations-->
         <Grid Name="ListGrid">
 
 
