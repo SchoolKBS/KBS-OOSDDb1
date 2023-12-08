@@ -11,6 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -29,16 +30,22 @@ namespace CampingDataAccess
 
         public CampingRepository()
         {
+            CampingPlaceRepository = new CampingPlaceRepository(ConnectionString);
+            CampingMapRepository = new CampingMapRepository(ConnectionString);
+            CampingGuestRepository = new CampingGuestRepository(ConnectionString);
+            CampingReservationRepository = new CampingReservationRepository(ConnectionString);
+            if (!File.Exists("Camping.db")) {
+                CreateDB();
+                AddDummyData();
+            }
+        }
+        public void CreateDB()
+        {
             CreateAreaTable();
             CreateStreetTable();
             CreatePlaceTable();
             CreateGuestTable();
             CreateReservationTable();
-            CampingPlaceRepository = new CampingPlaceRepository(ConnectionString);
-            CampingMapRepository = new CampingMapRepository(ConnectionString);
-            CampingGuestRepository = new CampingGuestRepository(ConnectionString);
-            CampingReservationRepository = new CampingReservationRepository(ConnectionString);
-
         }
         public void CreateGuestTable()
         {
@@ -68,11 +75,11 @@ namespace CampingDataAccess
             string sql = "CREATE TABLE IF NOT EXISTS Area (" +
                 "AreaID INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "Name VARCHAR(255)," +
-                "Power TINYINT NOT NULL," +
+                "Power BOOLEAN NOT NULL," +
                 "SurfaceArea INT NOT NULL," +
                 "PricePerNightPerPerson DECIMAL(18,2) NOT NULL," +
                 "AmountOfPeople INT NOT NULL," +
-                "Dogs TINYINT NOT NULL," +
+                "Dogs BOOLEAN NOT NULL," +
                 "Xcord1 INT NOT NULL," +
                 "Ycord1 INT NOT NULL," +
                 "Xcord2 INT NOT NULL," +
@@ -94,11 +101,11 @@ namespace CampingDataAccess
                 "StreetID INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "AreaID INTEGER NOT NULL," +
                 "Name VARCHAR(255), " +
-                "Power TINYINT NOT NULL," +
+                "Power BOOLEAN NOT NULL," +
                 "SurfaceArea INT NOT NULL," +
                 "PricePerNightPerPerson DECIMAL(18,2) NOT NULL," +
                 "AmountOfPeople INT NOT NULL," +
-                "Dogs TINYINT NOT NULL," +
+                "Dogs BOOLEAN NOT NULL," +
                 "Xcord1 INT NOT NULL," +
                 "Ycord1 INT NOT NULL," +
                 "Xcord2 INT NOT NULL," +
@@ -120,11 +127,11 @@ namespace CampingDataAccess
             string sql = "CREATE TABLE IF NOT EXISTS Place (" +
                 "PlaceID INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "StreetID INTEGER NOT NULL, " +
-                "Power TINYINT NOT NULL," +
+                "Power BOOLEAN NOT NULL," +
                 "SurfaceArea INT NOT NULL," +
                 "PricePerNightPerPerson DECIMAL(18,2) NOT NULL," +
                 "AmountOfPeople INT NOT NULL," +
-                "Dogs TINYINT NOT NULL," +
+                "Dogs BOOLEAN NOT NULL," +
                 "Xcord INT NOT NULL," +
                 "Ycord INT NOT NULL," +
                 "FOREIGN KEY(StreetID) REFERENCES Street(StreetID)" +
@@ -148,7 +155,7 @@ namespace CampingDataAccess
                 "PlaceID INTEGER NOT NULL," +
                 "GuestID INTEGER NOT NULL," +
                 "AmountOfPeople INT NOT NULL," +
-                "IsPaid TINYINT NOT NULL," +
+                "IsPaid BOOLEAN NOT NULL," +
                 "Price FLOAT NOT NULL," +
                 "FOREIGN KEY(PlaceID) REFERENCES Place(PlaceID)," +
                 "FOREIGN KEY(GuestID) REFERENCES Guest(GuestID)" +
@@ -165,53 +172,75 @@ namespace CampingDataAccess
         }
         public void AddDummyDataArea()
         {
-            string sql = "INSERT INTO Area (Power, SurfaceArea, PricePerNightPerPerson, AmountOfPeople, Dogs, Xcord1, Ycord1, Xcord2, Ycord2) VALUES (@Power, @SurfaceArea, @PricePerNightPerPerson, @AmountOfPeople, @Dogs, @Xcord1, @Ycord1, @Xcord2, @Ycord2);";
-
+            string sql = "INSERT INTO Area (Power, SurfaceArea, PricePerNightPerPerson, AmountOfPeople, Dogs, Xcord1, Ycord1, Xcord2, Ycord2) " +
+                "                   VALUES (@Power, @SurfaceArea, @PricePerNightPerPerson, @AmountOfPeople, @Dogs, @Xcord1, @Ycord1, @Xcord2, @Ycord2);";
+            List<ArrayList> list = new List<ArrayList>(){
+                new ArrayList(){0,11,11,11,0,0,0,500,375},
+                new ArrayList(){0,13,13,13,1,500,0,500,375},
+                new ArrayList(){1,14,14,14,1,0,375,500,375},
+                new ArrayList(){1,12,12,12,0,500,375,500,375}
+                };
             using (var connection = new SqliteConnection(ConnectionString))
             {
                 connection.Open();
-                for (int i = 1; i <= 4; i++)
+                foreach (var item in list)
                 {
                     using (var command = new SqliteCommand(sql, connection))
                     {
                         command.Prepare();
-                        command.Parameters.AddWithValue("@Power", i % 2 == 0);
-                        command.Parameters.AddWithValue("@SurfaceArea", i);
-                        command.Parameters.AddWithValue("@PricePerNightPerPerson", i);
-                        command.Parameters.AddWithValue("@AmountOfPeople", i);
-                        command.Parameters.AddWithValue("@Dogs", i > 2);
-                        command.Parameters.AddWithValue("@Xcord1", (i % 2) * 100);
-                        command.Parameters.AddWithValue("@Ycord1", (i / 2) * 100);
-                        command.Parameters.AddWithValue("@Xcord2", ((i % 2) * 100) + 100);
-                        command.Parameters.AddWithValue("@Ycord2", ((i / 2) * 100) + 100);
+                        command.Parameters.AddWithValue("@Power", item[0]);
+                        command.Parameters.AddWithValue("@SurfaceArea", item[1]);
+                        command.Parameters.AddWithValue("@PricePerNightPerPerson", item[2]);
+                        command.Parameters.AddWithValue("@AmountOfPeople", item[3]);
+                        command.Parameters.AddWithValue("@Dogs", item[4]);
+                        command.Parameters.AddWithValue("@Xcord1", item[5]);
+                        command.Parameters.AddWithValue("@Ycord1", item[6]);
+                        command.Parameters.AddWithValue("@Xcord2", item[7]);
+                        command.Parameters.AddWithValue("@Ycord2", item[8]);
                         command.ExecuteNonQuery();
                     }
                 }
+                
                 connection.Close();
             }
         }
         public void AddDummyDataStreet()
         {
             string sql = "INSERT INTO Street (AreaID, Power, SurfaceArea, PricePerNightPerPerson, AmountOfPeople, Dogs, Xcord1, Ycord1, Xcord2, Ycord2) VALUES (@AreaID, @Power, @SurfaceArea, @PricePerNightPerPerson, @AmountOfPeople, @Dogs, @Xcord1, @Ycord1, @Xcord2, @Ycord2);";
-
+            List<ArrayList> list = new List<ArrayList>() {
+                new ArrayList(){1,0,15,15,15,1,0,50,100,10},
+                new ArrayList(){1,0,15,15,15,1,100,50,10,200},
+                new ArrayList(){1,0,15,15,15,1,100,100,200,10},
+                new ArrayList(){1,0,15,15,15,1,100,100,10,200},
+                new ArrayList(){1,0,15,15,15,1,200,100,200,10},
+                new ArrayList(){1,0,15,15,15,1,400,100,10,200},
+                new ArrayList(){1,0,15,15,15,1,400,100,200,10},
+                new ArrayList(){1,0,15,15,15,1,400,300,10,300},
+                new ArrayList(){2,0,15,15,15,1,0,100,200,10},
+                new ArrayList(){2,0,15,15,15,1,100,100,10,600},
+                new ArrayList(){4,0,15,15,15,1,0,50,200,10},
+                new ArrayList(){4,0,15,15,15,1,100,0,10,200},
+                new ArrayList(){3,0,15,15,15,1,300,50,200,10},
+                new ArrayList(){3,0,15,15,15,1,400,0,10,200},
+            };
             using (var connection = new SqliteConnection(ConnectionString))
             {
                 connection.Open();
-                for (int i = 1; i <= 4; i++)
+                foreach (var item in list)
                 {
                     using (var command = new SqliteCommand(sql, connection))
                     {
                         command.Prepare();
-                        command.Parameters.AddWithValue("@AreaID", 1);
-                        command.Parameters.AddWithValue("@Power", i % 2 == 0);
-                        command.Parameters.AddWithValue("@SurfaceArea", i);
-                        command.Parameters.AddWithValue("@PricePerNightPerPerson", i);
-                        command.Parameters.AddWithValue("@AmountOfPeople", i);
-                        command.Parameters.AddWithValue("@Dogs", i > 2);
-                        command.Parameters.AddWithValue("@Xcord1", 0);
-                        command.Parameters.AddWithValue("@Ycord1", (i) * 20);
-                        command.Parameters.AddWithValue("@Xcord2", 60);
-                        command.Parameters.AddWithValue("@Ycord2", (i) * 20);
+                        command.Parameters.AddWithValue("@AreaID", item[0]);
+                        command.Parameters.AddWithValue("@Power", item[1]);
+                        command.Parameters.AddWithValue("@SurfaceArea", item[2]);
+                        command.Parameters.AddWithValue("@PricePerNightPerPerson", item[3]);
+                        command.Parameters.AddWithValue("@AmountOfPeople", item[4]);
+                        command.Parameters.AddWithValue("@Dogs", item[5]);
+                        command.Parameters.AddWithValue("@Xcord1", item[6]);
+                        command.Parameters.AddWithValue("@Ycord1", item[7]);
+                        command.Parameters.AddWithValue("@Xcord2", item[8]);
+                        command.Parameters.AddWithValue("@Ycord2", item[9]);
                         command.ExecuteNonQuery();
                     }
                 }
@@ -289,8 +318,8 @@ namespace CampingDataAccess
         }
         public void AddDummyData()
         {
-            //AddDummyDataArea();
-            //AddDummyDataStreet();
+            AddDummyDataArea();
+            AddDummyDataStreet();
             AddDummyDataPlaces();
             List<Place> places = CampingPlaceRepository.GetPlaces();
             List<string> firstNames = MakeFirstNamesList();
