@@ -330,18 +330,7 @@ namespace CampingUI
             PlaceInfo.Visibility = Visibility.Visible;
             if (!AddPlaceBool)
             {
-                SelectedPlace = place.PlaceID;
-
-                PlacePlaceID.Text = place.PlaceID.ToString();
-
-                PlaceHasPower.IsChecked = place.Power;
-                PlaceHasDogs.IsChecked = place.Dogs;
-
-                PlaceSurfaceArea.Text = place.SurfaceArea.ToString();
-                PlacePricePerNight.Text = place.PricePerNightPerPerson.ToString();
-                PlacePersons.Text = place.AmountOfPeople.ToString();
-                PlaceStreetComboBox.SelectedItem = Camping.CampingRepository.CampingMapRepository.GetStreetByStreetID(place).Name;
-
+                /*                SetPlaceDataOnFields(place);
                 AddPlaceButton.Content = "Aanpassen";
                 PlaceHasPower.IsEnabled = false;
                 PlaceHasDogs.IsEnabled = false;
@@ -351,8 +340,10 @@ namespace CampingUI
                 PlaceStreetComboBox.IsEnabled = false;
                 PlacePlaceID.IsEnabled = false;
                 AddPlaceButton.Visibility = Visibility.Collapsed;
-
-                _editPlaceBool = true;
+                _editPlaceBool = true;*/
+                PlaceInfo.Visibility = Visibility.Collapsed;
+                field.Children.Clear();
+                GenerateAreas();
             }
             else
             {
@@ -366,7 +357,7 @@ namespace CampingUI
                 foreach(Street street in Camping.CampingRepository.CampingMapRepository.GetStreets())
                 {
                     PlaceStreetComboBox.Items.Add(street.Name);
-                }
+                } 
                 AddPlaceButton.Content = "Toevoegen";
                 _editPlaceBool = false;
                 PlacePlaceID.IsEnabled = true;
@@ -380,6 +371,18 @@ namespace CampingUI
 
             }
                 
+        }
+
+        private void SetPlaceDataOnFields(Place place)
+        {
+            SelectedPlace = place.PlaceID;
+            PlacePlaceID.Text = place.PlaceID.ToString();
+            PlaceHasPower.IsChecked = place.Power;
+            PlaceHasDogs.IsChecked = place.Dogs;
+            PlaceSurfaceArea.Text = place.SurfaceArea.ToString();
+            PlacePricePerNight.Text = place.PricePerNightPerPerson.ToString();
+            PlacePersons.Text = place.AmountOfPeople.ToString();
+            PlaceStreetComboBox.Text = Camping.CampingRepository.CampingMapRepository.GetStreetByStreetID(place).Name;
         }
 
         static Color ChangeColorOpacity(Color color, double opacity)
@@ -465,7 +468,11 @@ namespace CampingUI
         public void HandleCancelAddPlace_Click(Object sender, RoutedEventArgs e)
         {
             PlaceInfo.Visibility = Visibility.Collapsed;
-
+            StaticUIMethods.ResetTextboxBorder(PlaceSurfaceArea);
+            StaticUIMethods.ResetTextboxBorder(PlacePersons);
+            StaticUIMethods.ResetTextboxBorder(PlacePricePerNight);
+            StaticUIMethods.ResetTextboxBorder(PlacePlaceID);
+            ResetComboBoxBorder(PlaceStreetComboBox);
             field.Children.Clear();
             GenerateAreas();
         }
