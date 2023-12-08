@@ -96,23 +96,23 @@ namespace CampingUI
             }
 
 
-
-            // Filter by Number of People
-            if (int.TryParse(PersonCountTextBoxx.Text, out int personCount) && personCount >= 0)
+            // Filter by ReservationID
+            if (int.TryParse(ReservationIdBox.Text, out int reservatieID) && reservatieID >= 0)
             {
-                PersonCountTextBoxx.Background = Brushes.White;
-                filteredReservations = filteredReservations.Where(reservation => reservation.AmountOfPeople == personCount);
+                ReservationIdBox.Background = Brushes.White;
+                filteredReservations = filteredReservations.Where(reservation => reservation.ReservationID == reservatieID);
             }
-            else if (PersonCountTextBoxx.Text == string.Empty)
+            else if (ReservationIdBox.Text == string.Empty)
             {
-                PersonCountTextBoxx.Background = Brushes.White;
+                ReservationIdBox.Background = Brushes.White;
 
             }
             else
             {
-                PersonCountTextBoxx.Text = string.Empty;
-                PersonCountTextBoxx.Background = Brushes.Red;
+                ReservationIdBox.Text = string.Empty;
+                ReservationIdBox.Background = Brushes.Red;
             }
+
 
             // Filter by Place Number
             if (int.TryParse(PlaceNumerBox.Text, out int placeNumber) && placeNumber >= 0)
@@ -173,14 +173,14 @@ namespace CampingUI
             // Clear filter criteria
             ArrivalDatePickerr.SelectedDate = null;
             DepartureDatePickerr.SelectedDate = null;
-            PersonCountTextBoxx.Text = string.Empty;
             PlaceNumerBox.Text = string.Empty;
             GuestNameBox.Text = string.Empty;
+            ReservationIdBox.Text = string.Empty;
             GuestNameBox.Background = Brushes.White;
             ArrivalDatePickerr.Background = Brushes.White;
             DepartureDatePickerr.Background = Brushes.White;
             PlaceNumerBox.Background = Brushes.White;
-            PersonCountTextBoxx.Background = Brushes.White;
+            ReservationIdBox.Background = Brushes.White;
 
 
             // Reload the original data without filters
