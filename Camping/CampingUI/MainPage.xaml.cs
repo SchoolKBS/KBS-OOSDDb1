@@ -186,7 +186,7 @@ namespace CampingUI
                     rotate = new RotateTransform(90, 0, 0);
                 }
 
-                Canvas canvasStreet = new Canvas
+                Grid canvasStreet = new Grid
                 {
                     Width = coordinates[2],
                     Height = coordinates[3],
@@ -203,15 +203,20 @@ namespace CampingUI
                     LayoutTransform = rotate,
                     HorizontalAlignment = HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Center,
+                    FontSize = 10,
                 };
 
-                double left = ((canvasStreet.Width - textBlock.ActualWidth) / 2) - 6.25;
-                double top = ((canvasStreet.Height - textBlock.ActualHeight) / 2) - 10;
-
-                Canvas.SetLeft(textBlock, left);
-                Canvas.SetTop(textBlock, top);
-
                 canvasStreet.Children.Add(textBlock);
+
+                canvasStreet.MouseEnter += (sender, e) =>
+                {
+                    canvasStreet.Background = Brushes.Gray; // Change the background color on hover
+                };
+
+                canvasStreet.MouseLeave += (sender, e) =>
+                {
+                    canvasStreet.Background = Brushes.Black;
+                };
 
 
 
