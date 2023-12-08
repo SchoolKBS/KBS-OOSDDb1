@@ -13,6 +13,6 @@ namespace CampingCore.CampingRepositories
         public void RemoveReservation(Reservation reservation);
         public void AddReservation(Reservation reservation);
 
-        public List<Guest> GetGuestFromGuestID(int id);
+        public Guest GetGuestFromGuestID(int id);
     }
 }

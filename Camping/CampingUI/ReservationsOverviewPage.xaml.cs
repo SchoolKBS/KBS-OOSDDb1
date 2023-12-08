@@ -219,5 +219,34 @@ namespace CampingUI
             }
 
         }
+
+        private void ReservationList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ReservationsListView.SelectedItems.Count > 0)
+            {
+                Reservation reservation = (Reservation)ReservationsListView.SelectedItems[0];
+                SetReservationLables(reservation);
+                ReservationOverviewGrid.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                ReservationOverviewGrid.Visibility = Visibility.Collapsed;
+            }
+        }
+        private void SetReservationLables(Reservation reservation)
+        {
+            nrLabel.Content = "Reservering: " + reservation.ReservationID.ToString();
+            Guest guest = _camping.CampingRepository.CampingReservationRepository.GetGuestFromGuestID(reservation.GuestID);
+            GuestLabel.Content = $"Guest: {guest}";
+            ArrivalDateLabel.Content = $"Aankomstdatum: {reservation.ArrivalDate.ToString("dd MMMM yyyy")}";
+            DepartureDateLabel.Content = $"Vertrekdatum: {reservation.DepartureDate.ToString("dd MMMM yyyy")}";
+            PlaceIDLabel.Content = $"Plaatsnummer: {reservation.PlaceID}";
+            AmountOfPeopleLabel.Content = $"Aantal personnen: {reservation.AmountOfPeople}";
+            string Paid;
+            if (reservation.IsPaid) Paid = "Ja";
+            else Paid = "Nee";
+            IsPaidLabel.Content = $"Is betaald: {Paid}";
+            PriceLabel.Content = $"Prijs: {String.Format("{0:0.00}", reservation.Price)}";
+        }
     }
 }

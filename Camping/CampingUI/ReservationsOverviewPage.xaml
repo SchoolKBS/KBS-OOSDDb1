@@ -173,9 +173,6 @@
             </Setter>
         </Style>
     </Page.Resources>
-
-
-
     <!--Grid for leftside bar and the reservations overview-->
     <!--Grid for leftside bar and the place overview-->
     <Grid Name ="OverviewGrid">
@@ -251,8 +248,6 @@
 
             </Grid>
         </Border>
-
-
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*" MinWidth="0"/>
@@ -286,7 +281,7 @@
                     </Grid.RowDefinitions>
                     <!-- Show the places from the camping in a list in a grid view and sort them.  -->
 
-                    <ListView  Background="Transparent" Grid.Row="1" Name="ReservationsListView" Margin="0" BorderThickness="0">
+                    <ListView  Background="Transparent" Grid.Row="1" Name="ReservationsListView" Margin="0" BorderThickness="0" SelectionChanged="ReservationList_SelectionChanged">
                         <ListView.Resources>
                             <Style TargetType="GridViewColumnHeader">
                                 <Setter Property="Background" Value="#667CA0"/>
@@ -309,20 +304,49 @@
                                         <GridViewColumnHeader Foreground="White" FontSize="14" Tag="Place">Plaatsnummer</GridViewColumnHeader>
                                     </GridViewColumn.Header>
                                 </GridViewColumn>
-                          
+
                                 <GridViewColumn Width="100" DisplayMemberBinding="{Binding GuestName }">
                                     <GridViewColumn.Header>
                                         <GridViewColumnHeader Foreground="White" FontSize="14" Tag="GuestName">Gastnaam</GridViewColumnHeader>
                                     </GridViewColumn.Header>
                                 </GridViewColumn>
-        
+
                             </GridView>
                         </ListView.View>
                     </ListView>
+                </Grid>
+            </Border>
+            <Border Grid.Column="1" Margin="25,25,25,25" Padding="15" Background="#334A6E" CornerRadius="25">
+                <Grid Grid.Column="1" Name="ReservationOverviewGrid" Visibility="Collapsed">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="4*"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
 
+                    <Grid x:Name="UpperGrid" Grid.Row="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="3*"/>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Row="0" Margin="0,0,0,0" Name="nrLabel" FontSize="25" FontWeight="Bold" Content=""/>
+                        <Label Grid.Row="1" Margin="0,0,0,0" Name="GuestLabel" FontSize="16"/>
+                        <Label Grid.Row="2" Margin="0,0,0,0" Name="ArrivalDateLabel" FontSize="16"/>
+                        <Label Grid.Row="3" Margin="0,0,0,0" Name="DepartureDateLabel" FontSize="16"/>
+                        <Label Grid.Row="4" Margin="0,0,0,0" Name="PlaceIDLabel" FontSize="16"/>
+                        <Label Grid.Row="5" Margin="0,0,0,0" Name="AmountOfPeopleLabel" FontSize="16"/>
+                        <Label Grid.Row="6" Margin="0,0,0,0" Name="IsPaidLabel" FontSize="16"/>
+                        <Label Grid.Row="7" Margin="0,0,0,0" Name="PriceLabel" FontSize="16"/>
+                    </Grid>
                 </Grid>
             </Border>
         </Grid>
-    </Grid> 
+    </Grid>
 </Page>
 

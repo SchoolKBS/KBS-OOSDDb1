@@ -1,6 +1,7 @@
 ﻿using CampingCore;
 using CampingCore.NewFolder;
 using Microsoft.Data.Sqlite;
+using MySqlX.XDevAPI.Common;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -125,5 +126,4 @@ namespace CampingDataAccess
             return result;
         }
     }
-
 }

@@ -48,9 +48,8 @@ namespace CampingDataAccess
                                     if (columnName == "GuestID")
                                     {
                                         // Fetch guest name using GetGuestFromGuestID method
-                                        List<Guest> Name = GetGuestFromGuestID(Convert.ToInt32(colmnValue));
-                                        string FirstName = Name.Where(g => g != null).Select(g => g.FirstName).FirstOrDefault();
-                                        Properties.Add(FirstName);
+                                        Guest guest = GetGuestFromGuestID(Convert.ToInt32(colmnValue));
+                                        Properties.Add(guest.FirstName);
                                         Properties.Add(Convert.ChangeType(colmnValue, property.PropertyType));
 
                                     }
@@ -66,9 +65,9 @@ namespace CampingDataAccess
             }
             return result;
         }
-        public List<Guest> GetGuestFromGuestID(int id)
+        public Guest GetGuestFromGuestID(int id)
         {
-            List<Guest> result = new List<Guest>();
+            Guest result = new Guest();
 
             string sql = "SELECT * FROM Guest WHERE GuestID = @GuestID";
 
@@ -77,6 +76,7 @@ namespace CampingDataAccess
                 connection.Open();
                 using (var command = new SqliteCommand(sql, connection))
                 {
+                    command.Prepare();
                     command.Parameters.AddWithValue("@GuestID", id);
 
                     using (var reader = command.ExecuteReader())
@@ -96,7 +96,7 @@ namespace CampingDataAccess
                                     Properties.Add(Convert.ChangeType(colmnValue, property.PropertyType));
                                 }
                             }
-                            result.Add(new Guest(Properties));
+                            result = new Guest(Properties);
                         }
                     }
                 }
@@ -112,6 +112,7 @@ namespace CampingDataAccess
                 connection.Open();
                 using (var command = new SqliteCommand(sql, connection))
                 {
+                    command.Prepare();
                     command.Parameters.AddWithValue("@PlaceID", place.PlaceID);
                     command.Parameters.AddWithValue("@DepartureDate", departureDate);
                     command.ExecuteNonQuery();

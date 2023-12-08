@@ -11,6 +11,5 @@ namespace CampingCore.NewFolder
         public void AddGuest(Guest guest);
         public List<Guest> GetGuests();
         public int GetLastGuestID();
-        
     }
 }

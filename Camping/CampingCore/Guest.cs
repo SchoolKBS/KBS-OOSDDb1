@@ -35,6 +35,10 @@ namespace CampingCore
         {
 
         }
+        public Guest()
+        {
+
+        }
         public Guest(ArrayList properties)
         {
             GuestID = (int)properties[0];
@@ -46,6 +50,16 @@ namespace CampingCore
             City = (string)properties[6];
             Address = (string)properties[7];
             PostalCode = (string)properties[8];
+        }
+        public override string ToString()
+        {
+            string name = FirstName;
+            if (!string.IsNullOrEmpty(Infix))
+            {
+                name += " " + Infix;
+            }
+            name += " " + LastName;
+            return name;
         }
     }
 }
