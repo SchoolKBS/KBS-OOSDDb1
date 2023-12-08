@@ -41,7 +41,6 @@ namespace CampingUI
             if (_camping.Reservations.Count() > 0)
             {
                 LoadReservationList();
-                PriceCheckBox.Content = "Geen Voorkeur";
 
             }
         }

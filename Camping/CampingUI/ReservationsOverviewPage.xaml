@@ -232,7 +232,7 @@
                 <!-- Third filter for Price -->
                 <StackPanel Grid.Column="5" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Label FontSize="14" Content="Is betaald? " HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Calibri" FontWeight="Bold"/>
-                    <CheckBox HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsThreeState="true" x:Name="PriceCheckBox" MinWidth="75" Height="30" Click="PriceCheckBox_Checked"/>
+                    <CheckBox HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Geen Voorkeur" IsThreeState="true" x:Name="PriceCheckBox" MinWidth="75" Height="30" Click="PriceCheckBox_Checked"/>
                 </StackPanel>
 
                 <!-- Third filter for place number -->
