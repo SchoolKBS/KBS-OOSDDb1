@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -40,6 +41,8 @@ namespace CampingUI
             if (_camping.Reservations.Count() > 0)
             {
                 LoadReservationList();
+                PriceCheckBox.Content = "Geen Voorkeur";
+
             }
         }
 
@@ -48,6 +51,29 @@ namespace CampingUI
         {
             ReservationsListView.ItemsSource = _camping.Reservations.Where(reservation => reservation.DepartureDate >= DateTime.Now.Date).OrderBy(reservation => reservation.ArrivalDate).ThenBy(reservation => reservation.PlaceID); //Takes reservations
         }
+
+        private void PriceCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            bool? isPaid = PriceCheckBox.IsChecked;
+
+            if (isPaid == true)
+            {
+                PriceCheckBox.Content = "Wel Betaald";
+
+            }
+            else if (isPaid == false)
+            {
+                PriceCheckBox.Content = "Geen Voorkeur";
+
+            }
+            else if (isPaid == null)
+            {
+                PriceCheckBox.Content = "Niet Betaald";
+
+            }
+        }
+          
+
 
 
         // Funcion for the application of all filters
@@ -74,6 +100,23 @@ namespace CampingUI
                 }
             }
 
+            bool? isPaid = PriceCheckBox.IsChecked;
+            if (isPaid.HasValue)
+            {
+                if (isPaid == true)
+                {
+                    filteredReservations = filteredReservations.Where(reservation => reservation.IsPaid == true);
+                    PriceCheckBox.Content = "Wel Betaald";
+
+                }
+            }
+            else
+            {
+
+                filteredReservations = filteredReservations.Where(reservation => reservation.IsPaid == false);
+            }
+            
+
             // Filter by Departure Date
             DateTime? departureDate = DepartureDatePickerr.SelectedDate;
             if (departureDate.HasValue)
@@ -94,6 +137,8 @@ namespace CampingUI
 
                 }
             }
+
+            
 
 
             // Filter by ReservationID
