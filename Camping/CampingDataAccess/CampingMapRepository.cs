@@ -158,5 +158,39 @@ namespace CampingDataAccess
                 return area;
             }
         }
+        public Street GetSteetByStreetName(string streetName)
+        {
+            string sql = "SELECT * FROM Street WHERE Name = @Name";
+            Street street = null;
+            using (var connection = new SqliteConnection(ConnectionString))
+            {
+                connection.Open();
+                using (var cmd = new SqliteCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue("@Name", streetName);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            ArrayList Properties = new ArrayList();
+                            for (int i = 0; i < reader.FieldCount; i++)
+                            {
+                                string columnName = reader.GetName(i);
+                                Type columnType = reader.GetFieldType(i);
+                                object colmnValue = reader.GetValue(i);
+
+                                PropertyInfo property = typeof(Street).GetProperty(columnName);
+                                if (property != null)
+                                {
+                                    Properties.Add(Convert.ChangeType(colmnValue, property.PropertyType));
+                                }
+                            }
+                            street = new Street(Properties);
+                        }
+                    }
+                }
+                return street;
+            }
+        }
     }
 }

@@ -12,7 +12,7 @@ namespace CampingCore.CampingRepositories
         public void RemovePlace(Place place);
         public void AddPlace(Place place);
         public Place GetPlaceFromPlaceID(int id);
-        public void UpdatePlaceData(Place place, bool power, int surfaceArea, double pricePerNightPerPerson, int amountOfPeople, bool dogs);
+        public void UpdatePlaceData(int placeID, int streetID, bool power, int surfaceArea, double pricePerNightPerPerson, int amountOfPeople, bool dogs);
 
     }
 }

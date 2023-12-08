@@ -36,8 +36,6 @@ namespace CampingUI
             Main.Navigate(new MainPage(Camping));
 
         }
-
-
         private void HomeButton_Click(object sender, RoutedEventArgs e)
         {
             // Navigate back to the main screen or set the desired page
