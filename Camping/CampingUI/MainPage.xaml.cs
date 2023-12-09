@@ -367,6 +367,7 @@ namespace CampingUI
                 PlaceStreetComboBox.SelectedItem = null;
                 PlaceHasDogs.IsChecked = false;
                 PlaceHasPower.IsChecked = false;
+                PlaceStreetComboBox.Items.Clear();
                 foreach(Street street in Camping.CampingRepository.CampingMapRepository.GetStreets())
                 {
                     PlaceStreetComboBox.Items.Add(street.Name);
@@ -380,6 +381,7 @@ namespace CampingUI
                 PlacePricePerNight.IsEnabled = true;
                 PlacePersons.IsEnabled = true;
                 PlaceStreetComboBox.IsEnabled = true;
+                ExtendStreetPlaceButton.IsEnabled = false;
                 AddPlaceButton.Visibility = Visibility.Visible;
 
             }
@@ -543,6 +545,7 @@ namespace CampingUI
         private void PlaceStreetComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ComboBox combobox = (ComboBox)sender;
+            ExtendStreetPlaceButton.IsEnabled = true;
             if (PlaceStreetBorder.BorderBrush.Equals(Brushes.Red))
             {
                 ResetComboBoxBorder(combobox);
@@ -558,6 +561,16 @@ namespace CampingUI
         {
             PlaceStreetBorder.BorderBrush = Brushes.White;
             PlaceStreetBorder.BorderThickness = new Thickness(1, 1, 1, 1);
+        }
+
+        private void ExtendStreetPlaceButton_Click(object sender, RoutedEventArgs e)
+        {
+            Street street = Camping.CampingRepository.CampingMapRepository.GetSteetByStreetName(PlaceStreetComboBox.Text);
+            PlaceHasDogs.IsChecked = street.Dogs;
+            PlaceHasPower.IsChecked = street.Power;
+            PlacePersons.Text = street.AmountOfPeople.ToString();
+            PlaceSurfaceArea.Text = street.SurfaceArea.ToString();
+            PlacePricePerNight.Text = street.PricePerNightPerPerson.ToString();
         }
 
         private void GetAddSurfaceArea()

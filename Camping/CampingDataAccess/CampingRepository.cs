@@ -209,16 +209,16 @@ namespace CampingDataAccess
             string sql = "INSERT INTO Street (AreaID, Name, Power, SurfaceArea, PricePerNightPerPerson, AmountOfPeople, Dogs, Xcord1, Ycord1, Xcord2, Ycord2)" +
                                     " VALUES (@AreaID, @Name, @Power, @SurfaceArea, @PricePerNightPerPerson, @AmountOfPeople, @Dogs, @Xcord1, @Ycord1, @Xcord2, @Ycord2);";
             List<ArrayList> list = new List<ArrayList>() {
-                new ArrayList(){1,"Kalverstraat", 0,15,15,15,1,0,50,100,10},
-                new ArrayList(){1,"Leidsestraat", 0,15,15,15,1,100,50,10,200},
-                new ArrayList(){1,"Coolsingel", 0,15,15,15,1,100,100,400,10},
-                new ArrayList(){1,"A. Kerkhof", 0,15,15,15,1,400,100,10,275},
-                new ArrayList(){2,"Tielemansstraat", 0,15,15,15,1,0,100,200,10},
-                new ArrayList(){2,"Barteljorisstraat", 0,15,15,15,1,100,100,10,275},
-                new ArrayList(){4,"Houtstraat", 0,15,15,15,1,0,50,200,10},
-                new ArrayList(){4,"Jac P. Thijsselaan", 0,15,15,15,1,100,0,10,200},
-                new ArrayList(){3,"Gorterstraat", 0,15,15,15,1,300,50,200,10},
-                new ArrayList(){3,"Weeverstraat", 0,15,15,15,1,400,0,10,200},
+                new ArrayList(){1,"Kalverstraat", 1,21,21,21,1,0,50,100,10},
+                new ArrayList(){1,"Leidsestraat", 0,22,22,22,0,100,50,10,200},
+                new ArrayList(){1,"Coolsingel", 1,23,23,23,1,100,100,400,10},
+                new ArrayList(){1,"A. Kerkhof", 0,24,24,24,0,400,100,10,275},
+                new ArrayList(){2,"Tielemansstraat", 1,25,25,25,1,0,100,200,10},
+                new ArrayList(){2,"Barteljorisstraat", 0,26,26,26,0,100,100,10,275},
+                new ArrayList(){4,"Houtstraat", 1,27,27,27,1,0,50,200,10},
+                new ArrayList(){4,"Jac P. Thijsselaan", 0,28,28,28,0,100,0,10,200},
+                new ArrayList(){3,"Gorterstraat", 1,29,29,29,1,300,50,200,10},
+                new ArrayList(){3,"Weeverstraat", 0,30,30,30,0,400,0,10,200},
             };
             using (var connection = new SqliteConnection(ConnectionString))
             {
@@ -249,22 +249,34 @@ namespace CampingDataAccess
 
             string sql = "INSERT INTO Place (PlaceID, StreetID, Power, SurfaceArea, PricePerNightPerPerson, AmountOfPeople, Dogs, Xcord, Ycord) VALUES (@PlaceID, @StreetID, @Power, @SurfaceArea, @PricePerNightPerPerson, @AmountOfPeople, @Dogs, @Xcord, @Ycord);";
 
+            List<ArrayList> list = new List<ArrayList>() {
+                new ArrayList(){1,1,0,1,1,1,0,10,10},
+                new ArrayList(){2,1,1,2,2,2,1,50,10},
+                new ArrayList(){3,2,0,3,3,3,0,65,65},
+                new ArrayList(){4,2,1,4,4,4,1,65,105},
+                new ArrayList(){5,2,0,5,5,5,0,65,145},
+                new ArrayList(){6,3,1,6,6,6,1,120,65},
+                new ArrayList(){7,3,0,7,7,7,0,160,65},
+                new ArrayList(){8,3,1,8,8,8,1,200,65},
+                new ArrayList(){9,4,0,9,9,9,0,360,125},
+                new ArrayList(){10,4,1,10,10,10,1,360,165},
+            };
             using (var connection = new SqliteConnection(ConnectionString))
             {
                 connection.Open();
-                for (int i = 1; i <= 10; i++)
+                foreach(var item in list)
                 {
                     using (var command = new SqliteCommand(sql, connection))
                     {
-                        command.Parameters.AddWithValue("PlaceID", i);
-                        command.Parameters.AddWithValue("StreetID", (i / 3) + 1);
-                        command.Parameters.AddWithValue("Power", i % 2 == 0);
-                        command.Parameters.AddWithValue("SurfaceArea", i);
-                        command.Parameters.AddWithValue("PricePerNightPerPerson", i);
-                        command.Parameters.AddWithValue("AmountOfPeople", i);
-                        command.Parameters.AddWithValue("Dogs", i % 2 == 0);
-                        command.Parameters.AddWithValue("Xcord", i * 10);
-                        command.Parameters.AddWithValue("Ycord", i * 10);
+                        command.Parameters.AddWithValue("PlaceID", item[0]);
+                        command.Parameters.AddWithValue("StreetID", item[1]);
+                        command.Parameters.AddWithValue("Power", item[2]);
+                        command.Parameters.AddWithValue("SurfaceArea", item[3]);
+                        command.Parameters.AddWithValue("PricePerNightPerPerson", item[4]);
+                        command.Parameters.AddWithValue("AmountOfPeople", item[5]);
+                        command.Parameters.AddWithValue("Dogs", item[6]);
+                        command.Parameters.AddWithValue("Xcord", item[7]);
+                        command.Parameters.AddWithValue("Ycord", item[8]);
                         command.ExecuteNonQuery();
                     }
                 }
