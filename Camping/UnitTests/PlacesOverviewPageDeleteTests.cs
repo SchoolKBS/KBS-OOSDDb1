@@ -1,6 +1,7 @@
 ﻿using CampingCore;
 using CampingCore.CampingRepositories;
 using CampingCore.PlacesOverviewPageClasses;
+using CampingDataAccess;
 using Microsoft.IdentityModel.Abstractions;
 using Moq;
 using System;
@@ -18,12 +19,12 @@ namespace UnitTests
         [Test]
         public void DeletePlace_places_DeletesPlaceAndReservations()
         {
-            var mock = new Mock<ICampingRepository>();
-            Camping camping = new Camping(mock.Object);
+            var campingRepositoryMock = TestSupportClass.MockIcampingRepository();
+            Camping camping = new Camping(campingRepositoryMock.Object);
             Place place = new Place(1, true, 1, true, 1, 1, 1, 1, 1);
             PlacesOverviewDelete.DeletePlace(camping, place, DateTime.Now.Date);
-            mock.Verify(p => p.CampingPlaceRepository.RemovePlace(place), Times.Once());
-            mock.Verify(p => p.CampingReservationRepository.RemoveAllPreviousReservationsByPlace(place, DateTime.Now.Date), Times.Once());
+            campingRepositoryMock.Verify(p => p.CampingPlaceRepository.RemovePlace(place), Times.Once());
+            campingRepositoryMock.Verify(p => p.CampingReservationRepository.RemoveAllPreviousReservationsByPlace(place, DateTime.Now.Date), Times.Once());
         }
     }
 }

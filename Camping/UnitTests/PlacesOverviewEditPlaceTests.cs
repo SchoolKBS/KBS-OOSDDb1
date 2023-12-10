@@ -1,5 +1,7 @@
-﻿using CampingCore;
-using CampingCore.CampingRepositories;
+﻿using CampingCore.CampingRepositories;
+using CampingCore.PlacesOverviewPageClasses;
+using CampingCore;
+using CampingDataAccess;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -12,15 +14,14 @@ namespace UnitTests
     public class PlacesOverviewEditPlaceTests
     {
         [Test]
-        public void test1()
+        public void EditPlace_places_EditsPlace()
         {
-            var mock = new Mock<ICampingRepository>();
-            Camping camping = new Camping(mock.Object);
-            List<Place> places = PlacesOverviewPageFilterTests.CreatePlaces();
-            Place place = places.First();
-            camping.CampingRepository.CampingPlaceRepository.UpdatePlaceData(place, false, 11, 11, 11, false);
-            mock.Verify(p => p.CampingPlaceRepository.UpdatePlaceData(place, false, 11, 11, 11, false), Times.Once());
-        }
+            var campingRepositoryMock = TestSupportClass.MockIcampingRepository();
+            Camping camping = new Camping(campingRepositoryMock.Object);
 
+            camping.CampingRepository.CampingPlaceRepository.UpdatePlaceData(1, 11, false, 11, 11, 11, false);
+            camping.UpdatePlace(1, 11, false, 11, 11, 11, false);
+            campingRepositoryMock.Verify(p => p.CampingPlaceRepository.UpdatePlaceData(1, 11, false, 11, 11, 11, false));
+        }
     }
 }
