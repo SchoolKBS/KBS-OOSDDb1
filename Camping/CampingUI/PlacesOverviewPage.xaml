@@ -410,8 +410,8 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Button Style="{DynamicResource ButtonStyle1Apply}" Foreground="White" FontWeight="Bold" Name="ConfirmEditButton" Content="Bevestigen" Grid.Column="2" Height="35" Width="180" Click="EditPlaceConfirmButton_Click"/>
-                    <Button Style="{DynamicResource ButtonStyle1Cancel}" Foreground="White" FontWeight="Bold" Name="CancelEditButton" Content="Annuleren" Grid.Column="0" Height="35" Width="180" Click="CancelEditButton_Click"/>
+                    <Button Style="{DynamicResource ButtonStyle1Apply}" Foreground="White" FontWeight="Bold" Name="ConfirmEditButton" Content="Bevestigen" Grid.Column="0" Height="35" Width="180" Click="EditPlaceConfirmButton_Click"/>
+                    <Button Style="{DynamicResource ButtonStyle1Cancel}" Foreground="White" FontWeight="Bold" Name="CancelEditButton" Content="Annuleren" Grid.Column="2" Height="35" Width="180" Click="CancelEditButton_Click"/>
                     <TextBlock Grid.Row="13" Grid.Column="1" HorizontalAlignment="Center" x:Name="AddPlaceMessage"/>
                 </Grid>
             </Grid>

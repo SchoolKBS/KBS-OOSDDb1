@@ -91,16 +91,17 @@ namespace CampingDataAccess
         public Place GetPlaceFromPlaceID(int id)
         {
             Place place = null;
-            string sql = "SELECT * FROM Place WHERE PlaceID = @PlaceID";
+            string sql = "SELECT * FROM Place WHERE PlaceID = @PlaceID;";
 
             using (var connection = new SqliteConnection(ConnectionString))
             {
                 connection.Open();
                 using (var command = new SqliteCommand(sql, connection))
                 {
+                    command.Parameters.AddWithValue("PlaceID", id);
                     using (var reader = command.ExecuteReader())
                     {
-                        command.Parameters.AddWithValue("PlaceID", id);
+
                         while (reader.Read())
                         {
                             ArrayList Properties = new ArrayList();
