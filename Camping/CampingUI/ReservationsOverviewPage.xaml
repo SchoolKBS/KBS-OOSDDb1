@@ -325,7 +325,7 @@
 
                     <Grid x:Name="UpperGrid" Grid.Row="0">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1.5*"/>
                             <RowDefinition Height="1*"/>
                             <RowDefinition Height="1*"/>
                             <RowDefinition Height="1*"/>
@@ -344,8 +344,73 @@
                         <Label Grid.Row="6" Margin="0,0,0,0" Name="IsPaidLabel" FontSize="16"/>
                         <Label Grid.Row="7" Margin="0,0,0,0" Name="PriceLabel" FontSize="16"/>
                     </Grid>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Style="{DynamicResource ButtonStyle1Edit}" Foreground="White" FontWeight="Bold" Grid.Column="0" Name="EditReservationButton" Content="Reservering aanpassen" Margin="20" Height="50" Width="200" Click="EditReservation_Click" />
+                        <Button Style="{DynamicResource ButtonStyle1Cancel}" Foreground="White" FontWeight="Bold" Grid.Column="2" Name="DeleteReservationButton" Content="Reservering verwijderen" Margin="20" Height="50" Width="200" Click="DeleteButton_Click" />
+                    </Grid>
                 </Grid>
             </Border>
+            <Grid Name="ReservationEditGrid" Grid.Column="1" Visibility="Collapsed">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                <Label Content="" HorizontalAlignment="Center" FontSize="30" FontWeight="Bold" Name="ReservationIDLabelEdit" Margin="0,30,0,0"/>
+                <Grid Grid.Row="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <!--ArrivalDate, DepartureDate, PlaceID, People, IsPaid, Price -->
+                    <Label Grid.Column="0" Grid.Row="1" FontSize="16" Content="Aankomstdatum" Width="150" />
+                    <DatePicker Grid.Column="0" Grid.Row="1" FontSize="16" Height="30" Width="150" x:Name="ArrivalDatePicker" SelectedDateChanged="DataChanged"/>
+                    
+                    <Label Grid.Column="1" Grid.Row="1" FontSize="16" Content="Vertrekdatum" Width="150" />
+                    <DatePicker Grid.Column="1" Grid.Row="1" FontSize="16" Height="30" Width="150" x:Name="DepartureDatePicker" SelectedDateChanged="DataChanged"/>
+
+                    <Label Grid.Column="0" Grid.Row="2" FontSize="16" Content="Aantal personen" Width="150"/>
+                    <TextBox Grid.Column="0" Grid.Row="2" FontSize="16" Height="30" Width="150" x:Name="AmountOfPeopleTextBox" TextChanged="AmountOfPeople_Changed"/>
+
+                    <Label Grid.Column="1" Grid.Row="2" FontSize="16" Content="Plaats" Width="150"/>
+                    <ComboBox Grid.Column="1" Grid.Row="2" FontSize="16" Height="30" Width="150" x:Name="PlaceDropDown" SelectionChanged="PlaceDropDown_SelectionChanged"/>
+
+
+                    <Grid Grid.Column="0" Grid.Row="3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" FontSize="16" Content="Is betaald" HorizontalAlignment="Right"/>
+                        <CheckBox Grid.Column="1" x:Name="IsPaidCheckBox" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" Height="15"/>
+                    </Grid>
+                    <Label Grid.Column="1" Grid.Row="3" FontSize="16" Content="Prijs" Width="150" x:Name="PriceEditLabel"/>
+
+                </Grid>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Style="{DynamicResource ButtonStyle1Apply}" Foreground="White" FontWeight="Bold" Name="ConfirmEditButton" Content="Bevestigen" Grid.Column="0" Height="35" Width="180" Click="EditReservationConfirmButton_Click"/>
+                    <Button Style="{DynamicResource ButtonStyle1Cancel}" Foreground="White" FontWeight="Bold" Name="CancelEditButton" Content="Annuleren" Grid.Column="2" Height="35" Width="180" Click="CancelReservationButton_Click"/>
+                    <TextBlock Grid.Row="13" Grid.Column="1" HorizontalAlignment="Center" x:Name="AddPlaceMessage"/>
+                </Grid>
+            </Grid>
         </Grid>
     </Grid>
 </Page>
