@@ -54,6 +54,12 @@ namespace CampingUI
 
             Main.Content = new PlacesOverviewPage(Camping, CampingRepository);
         }
+
+        private void GuestOverviewButton_Click(Object sender, RoutedEventArgs e)
+        {
+            Main.Content = new GuestOverviewPage(Camping);
+        }
+
         private void MinimizeButton_Click(object sender, RoutedEventArgs e)
         {
             WindowState = WindowState.Minimized;
