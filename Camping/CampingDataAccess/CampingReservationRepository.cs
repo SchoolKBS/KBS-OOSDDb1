@@ -140,7 +140,7 @@ namespace CampingDataAccess
         {
             string sql =
                 "INSERT INTO Reservation (ArrivalDate, DepartureDate, PlaceID, GuestID, AmountOfPeople, IsPaid, Price)" +
-                "VALUES (@stDate, @enDate, @plID, @emID, @guID, @AmountOfPeople, @IsPaid, @Price)";
+                "VALUES (@stDate, @enDate, @plID, @guID, @AmountOfPeople, @IsPaid, @Price)";
             using (var connection = new SqliteConnection(ConnectionString))
             {
                 connection.Open();
