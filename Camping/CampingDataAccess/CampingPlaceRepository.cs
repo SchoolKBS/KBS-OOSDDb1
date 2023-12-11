@@ -63,7 +63,8 @@ namespace CampingDataAccess
                 connection.Open();
                 using (var cmd = new SqliteCommand(sql, connection))
                 {
-                    cmd.Parameters.AddWithValue("PlaceID", place.PlaceID);
+                    cmd.Prepare();
+                    cmd.Parameters.AddWithValue("@PlaceID", place.PlaceID);
                     cmd.ExecuteNonQuery();
                 }
                 connection.Close();
@@ -78,6 +79,7 @@ namespace CampingDataAccess
                 connection.Open();
                 using (var command = new SqliteCommand(sql, connection))
                 {
+                    command.Prepare();
                     command.Parameters.AddWithValue("@PlaceID", place.PlaceID);
                     command.Parameters.AddWithValue("@StreetID", place.StreetID);
                     command.Parameters.AddWithValue("@Power", place.Power);
@@ -87,7 +89,6 @@ namespace CampingDataAccess
                     command.Parameters.AddWithValue("@Dogs", place.Dogs);
                     command.Parameters.AddWithValue("@Xcord", place.Xcord);
                     command.Parameters.AddWithValue("@Ycord", place.Ycord);
-                    command.Prepare();
                     command.ExecuteNonQuery();
                 }
                 connection.Close();
@@ -103,7 +104,8 @@ namespace CampingDataAccess
                 connection.Open();
                 using (var command = new SqliteCommand(sql, connection))
                 {
-                    command.Parameters.AddWithValue("PlaceID", id);
+                    command.Prepare();
+                    command.Parameters.AddWithValue("@PlaceID", id);
                     using (var reader = command.ExecuteReader())
                     {
 
@@ -138,6 +140,7 @@ namespace CampingDataAccess
                 connection.Open();
                 using (var command = new SqliteCommand(sql, connection))
                 {
+                    command.Prepare();
                     command.Parameters.AddWithValue("@PlaceID", placeID);
                     command.Parameters.AddWithValue("@StreetID", streetID);
                     command.Parameters.AddWithValue("@Power", power);
@@ -145,7 +148,6 @@ namespace CampingDataAccess
                     command.Parameters.AddWithValue("@PricePerNightPerPerson", pricePerNightPerPerson);
                     command.Parameters.AddWithValue("@AmountOfPeople", amountOfPeople);
                     command.Parameters.AddWithValue("@Dogs", dogs);
-                    command.Prepare();
                     command.ExecuteNonQuery();
                 }
                 connection.Close();

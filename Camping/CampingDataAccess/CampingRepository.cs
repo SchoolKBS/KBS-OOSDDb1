@@ -283,25 +283,39 @@ namespace CampingDataAccess
                 connection.Close();
             }
         }
-        public void AddDummyDataGuests(string firstName, string lastName, string infix, string email, string city, string address, int i)
+        public void AddDummyDataGuests()
         {
             string sql = "INSERT INTO Guest (FirstName, LastName, Infix, Email, PhoneNumber, City, Address, PostalCode) VALUES (@FirstName, @LastName, @Infix, @Email, @PhoneNumber, @City, @Address, @PostalCode);";
-
+            List<ArrayList> list = new List<ArrayList>() {
+                new ArrayList(){"Jan", "Jansen", "", "janjansen@gmail.com", "0612345678", "Zwolle", "Zwollestraat 3", "1111 AA"},
+                new ArrayList(){"Ties", "Tiessen", "", "tiestiessen@gmail.com", "0612345678", "Zwolle", "Zwollestraat 3", "1111 AB"},
+                new ArrayList(){"Jens", "Jenssen", "", "jensjenssen@gmail.com", "0612345678", "Zwolle", "Zwollestraat 3", "1111 AC"},
+                new ArrayList(){"Aidin", "Aidinsen", "", "aidinaidinsen@gmail.com", "0612345678", "Zwolle", "Zwollestraat 3", "1111 AD"},
+                new ArrayList(){"Hannelore", "Hanneloresen", "", "hannelorehanneloresen@gmail.com", "0612345678", "Zwolle", "Zwollestraat 3", "1111 AE"},
+                new ArrayList(){"Joren", "Jorensen", "", "jorenjorensen@gmail.com", "0612345678", "Zwolle", "Zwollestraat 3", "1111 AF" },
+                new ArrayList(){"Sam", "Samsen", "", "samsamsen@gmail.com", "0612345678", "Zwolle", "Zwollestraat 3", "1111 AG"},
+                new ArrayList(){"Bas", "Bassen", "", "basbassen@gmail.com", "0612345678", "Zwolle", "Zwollestraat 3", "1111 AH"},
+                new ArrayList(){"Tim", "Timsen", "", "timtimsen@gmail.com", "0612345678", "Zwolle", "Zwollestraat 3", "1111 AI"},
+                new ArrayList(){"Wietze", "Wietzesen", "", "wietzewitzsen@gmail.com", "0612345678", "Zwolle", "Zwollestraat 3", "1111 AJ"},
+            };
             using (var connection = new SqliteConnection(ConnectionString))
             {
                 connection.Open();
-                using (var command = new SqliteCommand(sql, connection))
+                foreach (var item in list)
                 {
-                    command.Prepare();
-                    command.Parameters.AddWithValue("@FirstName", firstName);
-                    command.Parameters.AddWithValue("@LastName", lastName);
-                    command.Parameters.AddWithValue("@Infix", infix);
-                    command.Parameters.AddWithValue("@Email", email);
-                    command.Parameters.AddWithValue("@PhoneNumber", i);
-                    command.Parameters.AddWithValue("@City", city);
-                    command.Parameters.AddWithValue("@Address", address);
-                    command.Parameters.AddWithValue("@PostalCode", i);
-                    command.ExecuteNonQuery();
+                    using (var command = new SqliteCommand(sql, connection))
+                    {
+                        command.Prepare();
+                        command.Parameters.AddWithValue("@FirstName", item[0]);
+                        command.Parameters.AddWithValue("@LastName", item[1]);
+                        command.Parameters.AddWithValue("@Infix", item[2]);
+                        command.Parameters.AddWithValue("@Email", item[3]);
+                        command.Parameters.AddWithValue("@PhoneNumber", item[4]);
+                        command.Parameters.AddWithValue("@City", item[5]);
+                        command.Parameters.AddWithValue("@Address", item[6]);
+                        command.Parameters.AddWithValue("@PostalCode", item[7]);
+                        command.ExecuteNonQuery();
+                    }
                 }
                 connection.Close();
             }
@@ -333,13 +347,7 @@ namespace CampingDataAccess
             AddDummyDataStreet();
             AddDummyDataPlaces();
             List<Place> places = CampingPlaceRepository.GetPlaces();
-            List<string> firstNames = MakeFirstNamesList();
-            List<string> lastNames = MakeFirstNamesList();
-            List<string> infixes = MakeFirstNamesList();
-            for (int i = 0; i < firstNames.Count; i++)
-            {
-                AddDummyDataGuests(firstNames[i], lastNames[i], "", "ditisemailadresnummer" + i + "@gmail.com", "stad" + i, "adres" + i, i);
-            }
+            AddDummyDataGuests();
             List<Guest> guests = CampingGuestRepository.GetGuests();
             for (int i = 1; i <= guests.Count; i++)
             {
@@ -347,36 +355,7 @@ namespace CampingDataAccess
             }
         }
 
-        private List<string> MakeFirstNamesList()
-        {
-            List<string> firstNames = new List<string>();
-            firstNames.Add("Jan");
-            firstNames.Add("Piet");
-            firstNames.Add("Hannelore");
-            firstNames.Add("Jens");
-            firstNames.Add("Ties");
-            firstNames.Add("Aidin");
-            firstNames.Add("Teun");
-            firstNames.Add("Bas");
-            firstNames.Add("Joren");
-            firstNames.Add("Sam");
-            return firstNames;
-        }
-        private List<string> MakeLastNameList()
-        {
-            List<string> firstNames = new List<string>();
-            firstNames.Add("Jansen");
-            firstNames.Add("Pietson");
-            firstNames.Add("Baarssen");
-            firstNames.Add("Bouma");
-            firstNames.Add("Greve");
-            firstNames.Add("Bos");
-            firstNames.Add("Kleij");
-            firstNames.Add("Luwental");
-            firstNames.Add("Boerma");
-            firstNames.Add("Harke");
-            return firstNames;
-        }
+
 
 
 
