@@ -200,9 +200,9 @@
         <Border Grid.Column="1" Grid.Row="1" Margin="25,25,25,0" Padding="5" Background="#334A6E" CornerRadius="25">
             <Grid x:Name="FilterPlacesGrid">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="4*"/>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
@@ -221,9 +221,9 @@
                 </StackPanel>
 
                 <!-- Buttons to apply or remove filters -->
-                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Button Style="{DynamicResource ButtonStyle1Apply}" Foreground="White" FontWeight="Bold" Margin="5,0,10,0" Content="Zoeken" Click="FilterOnGuestName_Click" Padding="10, 0, 10, 0" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                    <Button Style="{DynamicResource ButtonStyle1Cancel}" Foreground="White" FontWeight="Bold" Margin="10,0,0,0" Content="Filters verwijderen" Click="RemoveFilters_Click" Padding="10, 0, 10, 0" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Width="320">
+                    <Button Style="{DynamicResource ButtonStyle1Apply}" Foreground="White" FontWeight="Bold" Margin="5,0,10,0" Content="Zoeken" Click="FilterOnGuestName_Click" Padding="10, 0, 10, 0" Height="40" Width="80" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Button Style="{DynamicResource ButtonStyle1Cancel}" Foreground="White" FontWeight="Bold" Margin="10,0,0,0" Content="Filters verwijderen" Click="RemoveFilters_Click" Padding="10, 0, 10, 0" Height="40" Width="140" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 </StackPanel>
             </Grid>
         </Border>
