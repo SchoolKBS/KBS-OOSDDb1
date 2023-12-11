@@ -354,7 +354,7 @@ namespace CampingUI
             ArrivalDatePicker.BlackoutDates.AddDatesInPast();
         }*/
 
-        // Sets the possible DepartureDates in the DepartureDatePicker
+        // Sets the possible DepartureDates in the DepartureDatePicker.
         private void ShowAvailableDatesDeparture()
         {
             if (ArrivalDatePicker.SelectedDate != null)
