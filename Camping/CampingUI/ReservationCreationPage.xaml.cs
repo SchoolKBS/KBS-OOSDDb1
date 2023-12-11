@@ -73,7 +73,7 @@ namespace CampingUI
             DepartureDatePicker.BorderThickness = new Thickness(1, 1, 1, 1);
             this.DepartureDatePicker.Text = DepartureDatePicker.SelectedDate.ToString();
             Price = CalcPrice();
-            PriceLabel.Content = Price.ToString() + "$";
+            PriceLabel.Content = Price.ToString() + "€";
         }
         //Calcultes the price for the reservation based on the input fields PeopleCountText and the datepickers. Returns last (correct) price if input is incorrect
         private double CalcPrice()

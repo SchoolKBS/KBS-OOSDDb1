@@ -63,5 +63,12 @@ namespace CampingCore
         {
             return "Plaats: " + PlaceID;
         }
+        public override bool Equals(object? obj)
+        {
+            if (obj == null) return false;
+            if (!(obj is Place)) return false;
+            Place that = (Place)obj;
+            return that.PlaceID == PlaceID;
+        }
     }
 }

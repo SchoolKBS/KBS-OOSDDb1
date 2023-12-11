@@ -159,5 +159,27 @@ namespace CampingDataAccess
                 connection.Close();
             }
         }
+
+        public void UpdateReservation(Reservation reservation)
+        {
+            string sql = "UPDATE Reservation SET ArrivalDate = @ArrivalDate, DepartureDate = @DepartureDate, PlaceID = @PlaceID, AmountOfPeople = @AmountOfPeople, IsPaid = @IsPaid, Price = @Price WHERE ReservationID = @ReservationID;";
+            using(var connection = new SqliteConnection(ConnectionString))
+            { 
+                connection.Open();
+                using (var command = new SqliteCommand(sql, connection))
+                {
+                    command.Prepare();
+                    command.Parameters.AddWithValue("@ArrivalDate", reservation.ArrivalDate);
+                    command.Parameters.AddWithValue("@DepartureDate", reservation.DepartureDate);
+                    command.Parameters.AddWithValue("@PlaceID", reservation.PlaceID);
+                    command.Parameters.AddWithValue("@AmountOfPeople", reservation.AmountOfPeople);
+                    command.Parameters.AddWithValue("@IsPaid", reservation.IsPaid);
+                    command.Parameters.AddWithValue("@Price", reservation.Price);
+                    command.Parameters.AddWithValue("ReservationID", reservation.ReservationID);
+                    command.ExecuteNonQuery();
+                }
+                
+            }
+        }
     }
 }
