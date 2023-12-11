@@ -234,7 +234,7 @@ namespace CampingUI
             if (ReservationsListView.SelectedItems.Count > 0)
             {
                 Reservation reservation = (Reservation)ReservationsListView.SelectedItems[0];
-                SetReservationLables(reservation);
+                SetReservationLabels(reservation);
                 OpenReservationOverview();
             }
             else
@@ -242,15 +242,15 @@ namespace CampingUI
                 ReservationOverviewGrid.Visibility = Visibility.Collapsed;
             }
         }
-        private void SetReservationLables(Reservation reservation)
+        private void SetReservationLabels(Reservation reservation)
         {
             nrLabel.Content = "Reservering: " + reservation.ReservationID.ToString();
             Guest guest = _camping.CampingRepository.CampingReservationRepository.GetGuestFromGuestID(reservation.GuestID);
-            GuestLabel.Content = $"Guest: {guest}";
+            GuestLabel.Content = $"Gast: {guest}";
             ArrivalDateLabel.Content = $"Aankomstdatum: {reservation.ArrivalDate.ToString("dd MMMM yyyy")}";
             DepartureDateLabel.Content = $"Vertrekdatum: {reservation.DepartureDate.ToString("dd MMMM yyyy")}";
             PlaceIDLabel.Content = $"Plaatsnummer: {reservation.PlaceID}";
-            AmountOfPeopleLabel.Content = $"Aantal personnen: {reservation.AmountOfPeople}";
+            AmountOfPeopleLabel.Content = $"Aantal personen: {reservation.AmountOfPeople}";
             string Paid;
             if (reservation.IsPaid) Paid = "Ja";
             else Paid = "Nee";
@@ -277,7 +277,7 @@ namespace CampingUI
                 LoadReservationList();
                 ReservationsListView.SelectedItem = ReservationsListView.Items.IndexOf(_reservation);
                 _reservation = (Reservation)ReservationsListView.SelectedItem;
-                SetReservationLables(_reservation);
+                SetReservationLabels(_reservation);
             }
 
         }
@@ -398,17 +398,14 @@ namespace CampingUI
         }
         private bool CheckPlace()
         {
-            if(PlaceDropDown.SelectedItem != null)
-            {
-                return true;
-            }
+            if(PlaceDropDown.SelectedItem != null) return true;
             PlaceDropDown.BorderBrush = Brushes.Red;
             PlaceDropDown.BorderThickness = new Thickness(2);
             return false;
         }
         private bool CheckAmountOfPeople()
         {
-            if(int.TryParse(AmountOfPeopleTextBox.Text, out int numb))
+            if(int.TryParse(AmountOfPeopleTextBox.Text, out int numb) && numb > 0)
             {
                 AmountOfPeopleTextBox.BorderBrush = null;
                 return true;

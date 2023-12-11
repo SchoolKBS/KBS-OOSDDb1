@@ -292,16 +292,16 @@
                         </ListView.Resources>
                         <ListView.View>
                             <GridView>
-                                <GridViewColumn Width="140" DisplayMemberBinding="{Binding ReservationID}">
+                                <GridViewColumn Width="100" DisplayMemberBinding="{Binding ReservationID}">
                                     <GridViewColumn.Header>
-                                        <GridViewColumnHeader Foreground="White" FontSize="14" Tag="ReservationNumber">Reservatienummer</GridViewColumnHeader>
+                                        <GridViewColumnHeader Foreground="White" FontSize="14" Tag="ReservationNumber">Reservatienr</GridViewColumnHeader>
                                     </GridViewColumn.Header>
                                 </GridViewColumn>
 
 
-                                <GridViewColumn Width="110" DisplayMemberBinding="{Binding PlaceID}">
+                                <GridViewColumn Width="90" DisplayMemberBinding="{Binding PlaceID}">
                                     <GridViewColumn.Header>
-                                        <GridViewColumnHeader Foreground="White" FontSize="14" Tag="Place">Plaatsnummer</GridViewColumnHeader>
+                                        <GridViewColumnHeader Foreground="White" FontSize="14" Tag="Place">Plaatsnr</GridViewColumnHeader>
                                     </GridViewColumn.Header>
                                 </GridViewColumn>
 
