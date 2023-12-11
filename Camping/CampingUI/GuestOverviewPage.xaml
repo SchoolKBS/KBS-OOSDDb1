@@ -401,10 +401,12 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
-                            <Button Style="{DynamicResource ButtonStyle1Cancel}" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="White" FontWeight="Bold" Name="CancelEditButton" Content="Annuleren" Grid.Column="0" Height="40" Width="180"  Click="CancelNewGuestInformation"/>
-                            <Button Style="{DynamicResource ButtonStyle1Apply}" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="White" FontWeight="Bold" Name="ConfirmEditButton" Content="Bevestigen" Grid.Column="1" Height="40" Width="180" Click="SaveNewGuestInformation"/>
+                            <Button Style="{DynamicResource ButtonStyle1Cancel}" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="White" FontWeight="Bold" Name="CancelEditButton" Content="Annuleren" Grid.Column="3" Height="40" Width="180"  Click="CancelNewGuestInformation"/>
+                            <Button Style="{DynamicResource ButtonStyle1Apply}" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="White" FontWeight="Bold" Name="ConfirmEditButton" Content="Bevestigen" Grid.Column="0" Height="40" Width="180" Click="SaveNewGuestInformation"/>
                         </Grid>
 
                         <TextBlock Name="InputNotification" Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#E3970C"/>
