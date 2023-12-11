@@ -4,6 +4,7 @@ using Microsoft.Data.Sqlite;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -70,19 +71,23 @@ namespace CampingDataAccess
         }
         public void AddPlace(Place place)
         {
-            string sql = "INSERT INTO Place (PlaceID, StreetID, Power, SurfaceArea, PricePerNightPerPerson, AmountOfPeople, Dogs, Xcord, Ycord) VALUES (@PlaceID, @StreetID @Power, @SurfaceArea, @PricePerNightPerPerson, @AmountOfPeople, @Dogs, @Xcord, @Ycord);";
+            string sql = "INSERT INTO Place (PlaceID, StreetID, Power, SurfaceArea, PricePerNightPerPerson, AmountOfPeople, Dogs, Xcord, Ycord) VALUES (@PlaceID, @StreetID, @Power, @SurfaceArea, @PricePerNightPerPerson, @AmountOfPeople, @Dogs, @Xcord, @Ycord);";
 
             using (var connection = new SqliteConnection(ConnectionString))
             {
                 connection.Open();
                 using (var command = new SqliteCommand(sql, connection))
                 {
-                    command.Parameters.AddWithValue("PlaceID", place.PlaceID);
-                    command.Parameters.AddWithValue("Power", place.Power);
-                    command.Parameters.AddWithValue("SurfaceArea", place.SurfaceArea);
-                    command.Parameters.AddWithValue("PricePerNightPerPerson", place.PricePerNightPerPerson);
-                    command.Parameters.AddWithValue("AmountOfPeople", place.AmountOfPeople);
-
+                    command.Parameters.AddWithValue("@PlaceID", place.PlaceID);
+                    command.Parameters.AddWithValue("@StreetID", place.StreetID);
+                    command.Parameters.AddWithValue("@Power", place.Power);
+                    command.Parameters.AddWithValue("@SurfaceArea", place.SurfaceArea);
+                    command.Parameters.AddWithValue("@PricePerNightPerPerson", place.PricePerNightPerPerson);
+                    command.Parameters.AddWithValue("@AmountOfPeople", place.AmountOfPeople);
+                    command.Parameters.AddWithValue("@Dogs", place.Dogs);
+                    command.Parameters.AddWithValue("@Xcord", place.Xcord);
+                    command.Parameters.AddWithValue("@Ycord", place.Ycord);
+                    command.Prepare();
                     command.ExecuteNonQuery();
                 }
                 connection.Close();
@@ -124,16 +129,17 @@ namespace CampingDataAccess
             }
             return place;
         }
-        public void UpdatePlaceData(Place place, bool power, int surfaceArea, double pricePerNightPerPerson, int amountOfPeople, bool dogs)
+        public void UpdatePlaceData(int placeID, int streetID,  bool power, int surfaceArea, double pricePerNightPerPerson, int amountOfPeople, bool dogs)
         {
-            string sql = "UPDATE place SET Power = @Power, SurfaceArea = @SurfaceArea, PricePerNightPerPerson = @PricePerNightPerPerson, AmountOfPeople = @AmountOfPeople, Dogs = @Dogs WHERE PlaceID = @PlaceID;";
+            string sql = "UPDATE place SET StreetID = @StreetID, Power = @Power, SurfaceArea = @SurfaceArea, PricePerNightPerPerson = @PricePerNightPerPerson, AmountOfPeople = @AmountOfPeople, Dogs = @Dogs WHERE PlaceID = @PlaceID;";
 
             using (var connection = new SqliteConnection(ConnectionString))
             {
                 connection.Open();
                 using (var command = new SqliteCommand(sql, connection))
                 {
-                    command.Parameters.AddWithValue("@PlaceID", place.PlaceID);
+                    command.Parameters.AddWithValue("@PlaceID", placeID);
+                    command.Parameters.AddWithValue("@StreetID", streetID);
                     command.Parameters.AddWithValue("@Power", power);
                     command.Parameters.AddWithValue("@SurfaceArea", surfaceArea);
                     command.Parameters.AddWithValue("@PricePerNightPerPerson", pricePerNightPerPerson);

@@ -255,7 +255,7 @@ namespace CampingUI
             if (reservation.IsPaid) Paid = "Ja";
             else Paid = "Nee";
             IsPaidLabel.Content = $"Is betaald: {Paid}";
-            PriceLabel.Content = $"Prijs: {String.Format("{0:0.00}", reservation.Price)}";
+            PriceLabel.Content = $"Prijs: {String.Format("{0:0.00}", reservation.Price)}€";
         }
 
         private void EditReservation_Click(object sender, RoutedEventArgs e)
@@ -281,7 +281,6 @@ namespace CampingUI
             }
 
         }
-
         private void CancelReservationButton_Click(object sender, RoutedEventArgs e)
         {
             ReservationEditGrid.Visibility = Visibility.Collapsed;
@@ -299,18 +298,29 @@ namespace CampingUI
         }
         private void SetEditFields()
         {
-
             ArrivalDatePicker.SelectedDate = _reservation.ArrivalDate;
             DepartureDatePicker.SelectedDate = _reservation.DepartureDate;
-            setDatePickers();
+            if(CheckIfReservationIsInPast()) SetDatePickers();
             AmountOfPeopleTextBox.Text = _reservation.AmountOfPeople.ToString();
             IsPaidCheckBox.IsChecked = _reservation.IsPaid;
             SetDropDown();
-            PriceEditLabel.Content = $"Prijs: {String.Format("{0:0.00}", _reservation.Price)}$";
+            PriceEditLabel.Content = $"Prijs: {String.Format("{0:0.00}", _reservation.Price)}€";
         }
-        private void setDatePickers()
+        private bool CheckIfReservationIsInPast()
         {
-/*            ShowAvailableDatesArrival();*/
+            bool enabled = true;
+            if (ArrivalDatePicker.SelectedDate < DateTime.Now.Date && DepartureDatePicker.SelectedDate < DateTime.Now.Date) {
+                enabled = false;
+            }
+            ArrivalDatePicker.IsEnabled = enabled;
+            DepartureDatePicker.IsEnabled = enabled;
+            AmountOfPeopleTextBox.IsEnabled = enabled;
+            PlaceDropDown.IsEnabled = enabled;
+            return enabled;
+        }
+        private void SetDatePickers()
+        {
+            ShowAvailableDatesArrival();
             ShowAvailableDatesDeparture();
         }
         private void SetDropDown()
@@ -329,6 +339,8 @@ namespace CampingUI
             }
             int index = PlaceDropDown.Items.IndexOf(currentPlace);
             if (index >= 0) PlaceDropDown.SelectedItem = PlaceDropDown.Items[index];
+            if (!ArrivalDatePicker.IsEnabled) PlaceDropDown.IsEnabled = false;
+            else PlaceDropDown.IsEnabled = true;
         }
         private bool CheckDateOfPlace(Place place)
         {
@@ -347,12 +359,22 @@ namespace CampingUI
             }
             return result;
         }
-/*        private void ShowAvailableDatesArrival()
+        private void ShowAvailableDatesArrival()
         {
-            ArrivalDatePicker.BlackoutDates.Clear();
-            ArrivalDatePicker.DisplayDateStart = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
-            ArrivalDatePicker.BlackoutDates.AddDatesInPast();
-        }*/
+            if (ArrivalDatePicker.SelectedDate >= DateTime.Today.Date)
+            {
+                ArrivalDatePicker.IsEnabled = true;
+                ArrivalDatePicker.BlackoutDates.Clear();
+                ArrivalDatePicker.DisplayDateStart = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+                ArrivalDatePicker.BlackoutDates.AddDatesInPast();
+            }
+            else
+            {
+                ArrivalDatePicker.BlackoutDates.Clear();
+                ArrivalDatePicker.DisplayDateStart = DateTime.MinValue;
+                ArrivalDatePicker.IsEnabled = false;
+            }
+        }
 
         // Sets the possible DepartureDates in the DepartureDatePicker.
         private void ShowAvailableDatesDeparture()
@@ -363,7 +385,8 @@ namespace CampingUI
                 DepartureDatePicker.BlackoutDates.Clear();
                 DateTime arrivalDate = (DateTime)ArrivalDatePicker.SelectedDate;
                 DepartureDatePicker.DisplayDateStart = new DateTime(arrivalDate.Year, arrivalDate.Month, 1);
-                DepartureDatePicker.BlackoutDates.Add(new CalendarDateRange(DepartureDatePicker.DisplayDateStart.Value, arrivalDate));
+                if(arrivalDate < DateTime.Now.Date) DepartureDatePicker.BlackoutDates.Add(new CalendarDateRange(DepartureDatePicker.DisplayDateStart.Value, DateTime.Now.Date));
+                else DepartureDatePicker.BlackoutDates.Add(new CalendarDateRange(DepartureDatePicker.DisplayDateStart.Value, arrivalDate));
             }
         }
         private bool CheckData()
@@ -410,6 +433,7 @@ namespace CampingUI
 
         private void DataChanged(object sender, SelectionChangedEventArgs e)
         {
+            SetDatePickers();
             SetDropDown();
             SetPrice();
         }
@@ -432,11 +456,11 @@ namespace CampingUI
                 Place place = (Place)PlaceDropDown.SelectedItem;
                 int peopleCount = int.Parse(AmountOfPeopleTextBox.Text);
                 double price = place.PricePerNightPerPerson * peopleCount * ((DateTime)DepartureDatePicker.SelectedDate - (DateTime)ArrivalDatePicker.SelectedDate).Days;
-                PriceEditLabel.Content = $"Prijs: {String.Format("{0:0.00}", price)}";
+                PriceEditLabel.Content = $"Prijs: {String.Format("{0:0.00}", price)}€";
             }
             else
             {
-                PriceEditLabel.Content = $"Prijs: --$";
+                PriceEditLabel.Content = $"Prijs: --€";
             }
         }
 

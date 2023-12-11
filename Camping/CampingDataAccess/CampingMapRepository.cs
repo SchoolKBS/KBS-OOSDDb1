@@ -54,7 +54,6 @@ namespace CampingDataAccess
                 return result;
             }
         }
-
         public List<Area> GetAreas()
         {
 
@@ -91,7 +90,6 @@ namespace CampingDataAccess
             }
             return result;
         }
-
         public Street GetStreetByStreetID(Place place)
         {
             string sql = "SELECT * FROM Street WHERE StreetID = @StreetID";
@@ -102,6 +100,74 @@ namespace CampingDataAccess
                 using (var cmd = new SqliteCommand(sql, connection))
                 {
                     cmd.Parameters.AddWithValue("@StreetID", place.StreetID);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            ArrayList Properties = new ArrayList();
+                            for (int i = 0; i < reader.FieldCount; i++)
+                            {
+                                string columnName = reader.GetName(i);
+                                Type columnType = reader.GetFieldType(i);
+                                object colmnValue = reader.GetValue(i);
+
+                                PropertyInfo property = typeof(Street).GetProperty(columnName);
+                                if (property != null)
+                                {
+                                    Properties.Add(Convert.ChangeType(colmnValue, property.PropertyType));
+                                }
+                            }
+                            street = new Street(Properties);
+                        }
+                    }
+                }
+                return street;
+            }
+        }
+        public Area GetAreaByAreaID(Street street)
+        {
+            string sql = "SELECT * FROM Area WHERE AreaID = @AreaID";
+            Area area = null;
+            using (var connection = new SqliteConnection(ConnectionString))
+            {
+                connection.Open();
+                using (var cmd = new SqliteCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue("@AreaID", street.AreaID);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            ArrayList Properties = new ArrayList();
+                            for (int i = 0; i < reader.FieldCount; i++)
+                            {
+                                string columnName = reader.GetName(i);
+                                Type columnType = reader.GetFieldType(i);
+                                object colmnValue = reader.GetValue(i);
+
+                                PropertyInfo property = typeof(Area).GetProperty(columnName);
+                                if (property != null)
+                                {
+                                    Properties.Add(Convert.ChangeType(colmnValue, property.PropertyType));
+                                }
+                            }
+                            area = new Area(Properties);
+                        }
+                    }
+                }
+                return area;
+            }
+        }
+        public Street GetSteetByStreetName(string streetName)
+        {
+            string sql = "SELECT * FROM Street WHERE Name = @Name";
+            Street street = null;
+            using (var connection = new SqliteConnection(ConnectionString))
+            {
+                connection.Open();
+                using (var cmd = new SqliteCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue("@Name", streetName);
                     using (var reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
