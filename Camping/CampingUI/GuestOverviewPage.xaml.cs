@@ -47,6 +47,10 @@ namespace CampingUI
             } else if(!string.IsNullOrEmpty(FirstName) && !string.IsNullOrEmpty(LastName))
             {
                 GuestOverviewItemsControl.ItemsSource = sql.GetGuestsByFirstAndLastName(FirstName, LastName);
+
+            } else if(string.IsNullOrEmpty(FirstName) && string.IsNullOrEmpty(LastName))
+            {
+                GuestOverviewItemsControl.ItemsSource = sql.GetGuests();
             }
         }
 
