@@ -118,136 +118,302 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style x:Key="FocusVisual2">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" StrokeDashArray="1 2" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" SnapsToDevicePixels="true" StrokeThickness="1"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="Button.Static.Background2" Color="#FBA70E"/>
+        <SolidColorBrush x:Key="Button.Static.Border2" Color="#FF707070"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Background2" Color="#E3970C"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Border2" Color="#FF3C7FB1"/>
+        <SolidColorBrush x:Key="Button.Pressed.Background2" Color="#DC920C"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border2" Color="#FF2C628B"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background2" Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border2" Color="#FFADB2B5"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground2" Color="#FF838383"/>
+        <Style x:Key="ButtonStyle1Edit" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual2}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background2}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border2}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="8" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background2}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border2}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background2}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border2}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background2}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border2}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground2}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Page.Resources>
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*"/>
-            <ColumnDefinition Width="7*"/>
-        </Grid.ColumnDefinitions>
-
-        <Border Grid.Column="0" Margin="25" Padding="15" Background="#334A6E" CornerRadius="25"/>
-        <Border Grid.Column="2" Margin="25" Padding="15" Background="#334A6E" CornerRadius="25"/>
-
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition  Height="1*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="8*"/>
-            </Grid.RowDefinitions>
-
-            <TextBlock Grid.ColumnSpan="2" Grid.Row="1" Text="Overzicht gasten" Foreground="White" FontSize="20" HorizontalAlignment="Center"/>
-
-            <Label Content="Voornaam" HorizontalAlignment="Center" FontSize="10" Foreground="White" Grid.Row="2"/>
-            <Label Content="Achternaam" Grid.ColumnSpan="2" HorizontalAlignment="Center" FontSize="10" Foreground="White" Grid.Row="2"/>
-
-            <TextBox x:Name="GuestFirstNameTextBox" Grid.Row="2" Height="20" Width="100" Margin="40, 0, 0, 0" HorizontalAlignment="Left"></TextBox>
-            <TextBox x:Name="GuestLastNameTextBox" Grid.Row="2" Grid.ColumnSpan="2" Height="20" Width="100"  HorizontalAlignment="Center"></TextBox>
-            <Button Grid.Column="1" Grid.Row="2" Height="20" Width="80" Content="zoeken" HorizontalAlignment="Center" Click="FilterOnGuestName_Click"/>
-
-
-            <ListView Grid.ColumnSpan="2" Width="310" Height="400" Grid.Row="3" ItemsSource="{Binding Guest}" Name="GuestOverviewItemsControl" SelectionChanged="GuestSelectionChanged" Background="#334A6E" Margin="5" BorderThickness="0,0,0,0">
-
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Width="80" DisplayMemberBinding="{Binding GuestID}">
-                            <GridViewColumn.Header>
-                                <GridViewColumnHeader Tag="GuestID">Gast ID</GridViewColumnHeader>
-                            </GridViewColumn.Header>
-                        </GridViewColumn>
-                        <GridViewColumn Width="110" DisplayMemberBinding="{Binding FirstName}">
-                            <GridViewColumn.Header>
-                                <GridViewColumnHeader Tag="FirstName">Voornaam</GridViewColumnHeader>
-                            </GridViewColumn.Header>
-                        </GridViewColumn>
-                        <GridViewColumn Width="110" DisplayMemberBinding="{Binding LastName}">
-                            <GridViewColumn.Header>
-                                <GridViewColumnHeader Tag="LastName">Achternaam</GridViewColumnHeader>
-                            </GridViewColumn.Header>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-        </Grid>
-
-        <Grid x:Name="GuestDetailsGrid" Grid.Column="2" Visibility="Collapsed">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="0.8*"/>
-                <RowDefinition Height="0.8*"/>
-                <RowDefinition Height="0.8*"/>
-                <RowDefinition Height="0.8*"/>
-                <RowDefinition Height="0.8*"/>
-                <RowDefinition Height="0.8*"/>
-                <RowDefinition Height="3*"/>
-            </Grid.RowDefinitions>
-
-            <TextBlock Name="GuestIdTextblock" Grid.Row="1" HorizontalAlignment="Center" Foreground="White" FontWeight="Bold" FontSize="25"/>
-            <TextBlock x:Name="GuestFullNameTextBlock" Grid.Row="2" HorizontalAlignment="Center" Foreground="White" FontWeight="DemiBold" FontSize="20"/>
-            <TextBlock x:Name="GuestCityTextBlock" Grid.Row="3" HorizontalAlignment="Center" Foreground="White" FontWeight="DemiBold" FontSize="20"/>
-            <TextBlock x:Name="GuestAddressTextBlock" Grid.Row="4" HorizontalAlignment="Center" Foreground="White" FontWeight="DemiBold" FontSize="20"/>
-            <TextBlock x:Name="GuestPostalCodeTextBlock" Grid.Row="5" HorizontalAlignment="Center" Foreground="White" FontWeight="DemiBold" FontSize="20"/>
-            <TextBlock x:Name="GuestEmailTextBlock" Grid.Row="6" HorizontalAlignment="Center" Foreground="White" FontWeight="DemiBold" FontSize="20"/>
-            <TextBlock x:Name="GuestPhoneNumberTextBlock" Grid.Row="7" HorizontalAlignment="Center" Foreground="White" FontWeight="DemiBold" FontSize="20"/>
-            <Button Grid.Row="8" Height="40" Width="150" Content="gegevens wijzigen" HorizontalAlignment="Center" Click="ChangeGuestInformation"/>
-        </Grid>
-
-        <Grid x:Name="ChangeGuestInformationGrid" Grid.Column="2" Visibility="Collapsed">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="0.8*"/>
-                <RowDefinition Height="0.8*"/>
-                <RowDefinition Height="0.8*"/>
-                <RowDefinition Height="3*"/>
-            </Grid.RowDefinitions>
-
-            <Label  Content="*Voornaam" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="-30, 0, 0, 0" Foreground="White"/>
-            <TextBox x:Name="ChangeFirstNameTextBox" Grid.Row="1" Width="200" Height="30" Grid.Column="0" Margin="100, 0, 0, 0" />
-
-            <Label  Content="Tussenvoegsel" Grid.ColumnSpan="2" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Center" Foreground="White"/>
-            <TextBox x:Name="ChangeInfixTextBox" Grid.Row="1" Width="100" Height="30" Grid.ColumnSpan="2"/>
-
-            <Label  Content="*Achternaam" Grid.Row="1" Grid.Column="1" VerticalAlignment="Top" Margin="75, 0, 0, 0" Foreground="White"/>
-            <TextBox x:Name="ChangeLastNameTextBox" Grid.Row="1" Width="200" Height="30" Grid.Column="1" Margin="0, 0, 100, 0" />
-
-            <Label  Content="*Woonplaats" Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="-30, 0, 0, 0" Foreground="White"/>
-            <TextBox x:Name="ChangeCityTextBox" Grid.Row="2" Width="200" Height="30" Grid.Column="0" Margin="100, 0, 0, 0"/>
-
-            <Label  Content="*Postcode" Grid.ColumnSpan="2" Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0, 0, 35, 0" Foreground="White"/>
-            <TextBox x:Name="ChangePostalCodeTextBox" Grid.Row="2" Width="100" Height="30" Grid.ColumnSpan="2" TextChanged="PostalCodeTextBox_TextChanged"/>
-
-            <Label  Content="*Adres" Grid.Row="2" Grid.Column="1" VerticalAlignment="Top" Margin="75, 0, 0, 0" Foreground="White"/>
-            <TextBox x:Name="ChangeAddressTextBox" Grid.Row="2" Width="200" Height="30" Grid.Column="1" Margin="0, 0, 100, 0"/>
-
-            <Label  Content="*Telefoonnummer" Grid.Row="3" VerticalAlignment="Top" HorizontalAlignment="Center" Foreground="White"/>
-            <TextBox x:Name="ChangePhoneNumberTextBox" Grid.Row="3" Width="200" Height="30" Grid.Column="0" Margin="100, 0, 0, 0" TextChanged="PhoneNumberTextBox_TextChanged"/>
-
-            <Label  Content="*Email" Grid.Row="3" Grid.Column="1" VerticalAlignment="Top" Margin="75, 0, 0, 0" Foreground="White"/>
-            <TextBox x:Name="ChangeEmailTextBox" Grid.Row="3" Width="200" Height="30" Grid.Column="1" Margin="0, 0, 100, 0"/>
-
-            <Button Style="{DynamicResource ButtonStyle1Apply}" Foreground="White" FontWeight="Bold" Name="ConfirmEditButton" Content="Bevestigen" Grid.Column="0" Height="35" Width="180" Grid.Row="4" Click="SaveNewGuestInformation"/>
-            <Button Style="{DynamicResource ButtonStyle1Cancel}" Foreground="White" FontWeight="Bold" Name="CancelEditButton" Content="Annuleren" Grid.Column="1" Height="35" Width="180" Grid.Row="4" Click="CancelNewGuestInformation"/>
-
-            <TextBlock Name="InputNotification" Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#E3970C"/>
-        </Grid>
-        
+    <!--Grid for leftside bar and the place overview-->
+    <Grid Name ="OverviewGrid">
+        <Grid.RowDefinitions>
+            <!-- First row with a fixed height of 70 -->
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="100"/>
+            <!-- Second row takes up the rest of the height -->
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
         <Grid.Resources>
-            <Style TargetType="ListViewItem">
-                <Style.Triggers>
-                    <Trigger Property="ItemsControl.AlternationIndex"  Value="0">
-                        <Setter Property="Background" Value="#153260" />
-                    </Trigger>
-                </Style.Triggers>
+            <Style TargetType="Label">
+                <Setter Property="Foreground" Value="White"/>
+            </Style>
+            <Style TargetType="RadioButton">
+                <Setter Property="Foreground" Value="White"/>
+            </Style>
+            <Style TargetType="CheckBox">
                 <Setter Property="Foreground" Value="White"/>
             </Style>
         </Grid.Resources>
+        <Border Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Margin="25,25,25,0" Background="#11284D" Grid.RowSpan="2">
+            <TextBlock FontSize="25" FontWeight="Bold" Foreground="white" Text="Gasten"></TextBlock>
+        </Border>
+        <Border Grid.Column="1" Grid.Row="1" Margin="25,25,25,0" Padding="5" Background="#334A6E" CornerRadius="25">
+            <Grid x:Name="FilterPlacesGrid">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Label FontSize="14" Content="Voornaam: " HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Calibri" FontWeight="Bold"/>
+                    <TextBox HorizontalContentAlignment="Center" VerticalContentAlignment="Center" x:Name="GuestFirstNameTextBox" MinWidth="75" Height="30"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Label FontSize="14" Content="Achternaam: " HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Calibri" FontWeight="Bold"/>
+                    <TextBox HorizontalContentAlignment="Center" VerticalContentAlignment="Center" x:Name="GuestLastNameTextBox" MinWidth="75" Height="30"/>
+                </StackPanel>
+
+                <!-- Buttons to apply or remove filters -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Button Style="{DynamicResource ButtonStyle1Apply}" Foreground="White" FontWeight="Bold" Margin="5,0,10,0" Content="Zoeken" Click="FilterOnGuestName_Click" Padding="10, 0, 10, 0" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Button Style="{DynamicResource ButtonStyle1Cancel}" Foreground="White" FontWeight="Bold" Margin="10,0,0,0" Content="Filters verwijderen" Click="RemoveFilters_Click" Padding="10, 0, 10, 0" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*" MinWidth="0"/>
+                <ColumnDefinition Width="7*" MinWidth="0"/>
+            </Grid.ColumnDefinitions>
+            <!-- Content in the first row -->
+            <!--<Border Grid.Column="1" Grid.Row="0" Margin="25,25,25,0" Background="#11284D" Grid.RowSpan="2"/>-->
+            <Border Grid.Column="0" Margin="25,25,25,25" Padding="15" Background="#334A6E" CornerRadius="25">
+                <!--Grid for the filters and list of places-->
+                <Grid Name="ListGrid" Grid.Row="1">
+                    <Grid.Resources>
+                        <Style TargetType="ListViewItem">
+                            <Style.Triggers>
+                                <Trigger Property="ItemsControl.AlternationIndex"  Value="0">
+                                    <Setter Property="Background" Value="#667CA0" />
+                                </Trigger>
+                            </Style.Triggers>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="FontSize" Value="16"/>
+                            <Setter Property="Height" Value="30"/>
+                            <Setter Property="Padding" Value="5"/>
+                        </Style>
+                    </Grid.Resources>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <!-- Adjust as needed -->
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <!--<RowDefinition Height="Auto"/>-->
+                        <!-- Adjust as needed -->
+                    </Grid.RowDefinitions>
+                    <!-- Show the places from the camping in a list in a grid view and sort them.  -->
+
+                    <ListView Background="Transparent" Grid.Row="1" Name="GuestOverviewItemsControl" SelectionChanged="GuestSelectionChanged" Margin="0" BorderThickness="0">
+                        <ListView.Resources>
+                            <Style TargetType="GridViewColumnHeader">
+                                <Setter Property="Background" Value="#667CA0"/>
+                                <Setter Property="BorderBrush" Value="Transparent"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="Height" Value="30"/>
+                            </Style>
+                        </ListView.Resources>
+                        <ListView.View>
+                            <GridView AllowsColumnReorder="False">
+                                <GridViewColumn DisplayMemberBinding="{Binding GuestID}" Width="50">
+                                    <GridViewColumn.Header>
+                                        <GridViewColumnHeader Foreground="White" FontSize="14" Tag="PlaceID">Gast ID</GridViewColumnHeader>
+                                    </GridViewColumn.Header>
+                                </GridViewColumn>
+                                <GridViewColumn DisplayMemberBinding="{Binding FirstName}">
+                                    <GridViewColumn.Header>
+                                        <GridViewColumnHeader Foreground="White" FontSize="14" Tag="Price">Voornaam</GridViewColumnHeader>
+                                    </GridViewColumn.Header>
+                                </GridViewColumn>
+                                <GridViewColumn DisplayMemberBinding="{Binding LastName}">
+                                    <GridViewColumn.Header>
+                                        <GridViewColumnHeader Foreground="White" FontSize="14" Tag="AmountOfPeople">Achternaam</GridViewColumnHeader>
+                                    </GridViewColumn.Header>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+
+
+                    <!--Button to add place-->
+                    <!--<Button Grid.Row="2" Content="Nieuwe plaats toevoegen" Click="AddPlaceButton_Click" Height="Auto"/>-->
+                </Grid>
+            </Border>
+
+            <Border Grid.Column="1" Margin="25,25,25,25" Padding="15" Background="#334A6E" CornerRadius="25">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Column="0" Name="GuestDetailsGrid" Visibility="Collapsed">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="3*"/>
+                        </Grid.RowDefinitions>
+
+
+                        <TextBlock Name="GuestIdTextblock" Grid.Row="0" Foreground="White" FontWeight="Bold" FontSize="25"/>
+                        <TextBlock x:Name="GuestFullNameTextBlock" Grid.Row="1" Foreground="White" FontWeight="DemiBold" FontSize="20"/>
+                        <TextBlock x:Name="GuestCityTextBlock" Grid.Row="2" Foreground="White" FontWeight="DemiBold" FontSize="20"/>
+                        <TextBlock x:Name="GuestAddressTextBlock" Grid.Row="3" Foreground="White" FontWeight="DemiBold" FontSize="20"/>
+                        <TextBlock x:Name="GuestPostalCodeTextBlock" Grid.Row="4" Foreground="White" FontWeight="DemiBold" FontSize="20"/>
+                        <TextBlock x:Name="GuestEmailTextBlock" Grid.Row="5" Foreground="White" FontWeight="DemiBold" FontSize="20"/>
+                        <TextBlock x:Name="GuestPhoneNumberTextBlock" Grid.Row="6" Foreground="White" FontWeight="DemiBold" FontSize="20"/>
+                        <Button Style="{DynamicResource ButtonStyle1Edit}" Foreground="White" FontWeight="Bold" Grid.Row="8" Height="50" Width="200" Content="Aanpassen gegevens" Click="ChangeGuestInformation"/>
+                    </Grid>
+
+                    <Grid x:Name="ChangeGuestInformationGrid" Grid.Column="0" Visibility="Collapsed">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <Label FontSize="16"  Content="Voornaam*" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White"/>
+                                <TextBox FontSize="16"  x:Name="ChangeFirstNameTextBox" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" Height="30" Margin="10, 0, 0, 0" />
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1">
+                                <Label FontSize="16"  Content="Tussenvoegsel*" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White"/>
+                                <TextBox FontSize="16"  x:Name="ChangeInfixTextBox" VerticalAlignment="Center" HorizontalAlignment="Left" Width="100" Height="30" Margin="10, 0, 0, 0"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2">
+                                <Label FontSize="16"  Content="Achternaam*" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White"/>
+                                <TextBox FontSize="16"  x:Name="ChangeLastNameTextBox" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" Height="30" Margin="10, 0, 0, 0" />
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <Label FontSize="16"  Content="Woonplaats*" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White"/>
+                                <TextBox FontSize="16"  x:Name="ChangeCityTextBox" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" Height="30" Margin="10, 0, 0, 0" />
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1">
+                                <Label FontSize="16"  Content="Postcode*" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White"/>
+                                <TextBox FontSize="16"  x:Name="ChangePostalCodeTextBox" VerticalAlignment="Center" HorizontalAlignment="Left" Width="100" Height="30" Margin="10, 0, 0, 0" TextChanged="PostalCodeTextBox_TextChanged"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2">
+                                <Label FontSize="16"  Content="Adres*" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White"/>
+                                <TextBox FontSize="16"  x:Name="ChangeAddressTextBox" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" Height="30" Margin="10, 0, 0, 0"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <Label FontSize="16"  Content="Telefoonnummer*" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White"/>
+                                <TextBox FontSize="16"  x:Name="ChangePhoneNumberTextBox" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" Height="30" Margin="10, 0, 0, 0" TextChanged="PhoneNumberTextBox_TextChanged"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2">
+                                <Label FontSize="16"  Content="ChangeEmailTextBox*" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White"/>
+                                <TextBox FontSize="16" x:Name="ChangeEmailTextBox" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" Height="30" Margin="10, 0, 0, 0"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid Grid.Row="3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Button Style="{DynamicResource ButtonStyle1Cancel}" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="White" FontWeight="Bold" Name="CancelEditButton" Content="Annuleren" Grid.Column="0" Height="40" Width="180"  Click="CancelNewGuestInformation"/>
+                            <Button Style="{DynamicResource ButtonStyle1Apply}" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="White" FontWeight="Bold" Name="ConfirmEditButton" Content="Bevestigen" Grid.Column="1" Height="40" Width="180" Click="SaveNewGuestInformation"/>
+                        </Grid>
+
+                        <TextBlock Name="InputNotification" Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#E3970C"/>
+
+                    </Grid>
+
+                </Grid>
+            </Border>
+        </Grid>
     </Grid>
+
 </Page>

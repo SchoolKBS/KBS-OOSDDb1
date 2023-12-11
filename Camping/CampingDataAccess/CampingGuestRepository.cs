@@ -127,6 +127,141 @@ namespace CampingDataAccess
             }
             return result;
         }
-    }
 
+        public List<Guest> GetGuestsByFirstAndLastName(string FirstName, string LastName)
+        {
+            List<Guest> guests = new List<Guest>();
+            string sql = "SELECT * FROM Guest WHERE FirstName = @FirstName AND LastName = @LastName";
+
+            using (var connection = new SqliteConnection(ConnectionString))
+            {
+                connection.Open();
+                using (var command = new SqliteCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@FirstName", FirstName);
+                    command.Parameters.AddWithValue("@LastName", LastName);
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            ArrayList Properties = new ArrayList();
+                            for (int i = 0; i < reader.FieldCount; i++)
+                            {
+                                string columnName = reader.GetName(i);
+                                Type columnType = reader.GetFieldType(i);
+                                object colmnValue = reader.GetValue(i);
+
+                                PropertyInfo property = typeof(Guest).GetProperty(columnName);
+                                if (property != null)
+                                {
+                                    Properties.Add(Convert.ChangeType(colmnValue, property.PropertyType));
+                                }
+                            }
+                            guests.Add(new Guest(Properties));
+                        }
+                    }
+                }
+            }
+            return guests;
+        }
+
+        public List<Guest> GetGuestsByFirstName(string FirstName)
+        {
+            List<Guest> guests = new List<Guest>();
+            string sql = "SELECT * FROM Guest WHERE FirstName = @FirstName";
+
+            using (var connection = new SqliteConnection(ConnectionString))
+            {
+                connection.Open();
+                using (var command = new SqliteCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@FirstName", FirstName);
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            ArrayList Properties = new ArrayList();
+                            for (int i = 0; i < reader.FieldCount; i++)
+                            {
+                                string columnName = reader.GetName(i);
+                                Type columnType = reader.GetFieldType(i);
+                                object colmnValue = reader.GetValue(i);
+
+                                PropertyInfo property = typeof(Guest).GetProperty(columnName);
+                                if (property != null)
+                                {
+                                    Properties.Add(Convert.ChangeType(colmnValue, property.PropertyType));
+                                }
+                            }
+                            guests.Add(new Guest(Properties));
+                        }
+                    }
+                }
+            }
+            return guests;
+        }
+
+        public List<Guest> GetGuestsByLastName(string LastName)
+        {
+            List<Guest> guests = new List<Guest>();
+            string sql = "SELECT * FROM Guest WHERE LastName = @LastName";
+
+            using (var connection = new SqliteConnection(ConnectionString))
+            {
+                connection.Open();
+                using (var command = new SqliteCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@LastName", LastName);
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            ArrayList Properties = new ArrayList();
+                            for (int i = 0; i < reader.FieldCount; i++)
+                            {
+                                string columnName = reader.GetName(i);
+                                Type columnType = reader.GetFieldType(i);
+                                object colmnValue = reader.GetValue(i);
+
+                                PropertyInfo property = typeof(Guest).GetProperty(columnName);
+                                if (property != null)
+                                {
+                                    Properties.Add(Convert.ChangeType(colmnValue, property.PropertyType));
+                                }
+                            }
+                            guests.Add(new Guest(Properties));
+                        }
+                    }
+                }
+            }
+            return guests;
+        }
+
+        public void UpdateGuest(Guest guest)
+        {
+            string sql = "UPDATE Guest SET FirstName = @FirstName, LastName = @LastName, Infix = @Infix, Email = @Email, PhoneNumber = @PhoneNumber, City = @City, Address = @Address, PostalCode = @PostalCode WHERE GuestId = @GuestId;";
+            using (var connection = new SqliteConnection(ConnectionString))
+            {
+                connection.Open();
+                using (var command = new SqliteCommand(sql, connection))
+                {
+                    command.Prepare();
+                    command.Parameters.AddWithValue("@GuestId", guest.GuestID);
+                    command.Parameters.AddWithValue("@FirstName", guest.FirstName);
+                    command.Parameters.AddWithValue("@LastName", guest.LastName);
+                    command.Parameters.AddWithValue("@Infix", guest.Infix);
+                    command.Parameters.AddWithValue("@Email", guest.Email);
+                    command.Parameters.AddWithValue("@PhoneNumber", guest.PhoneNumber);
+                    command.Parameters.AddWithValue("@City", guest.City);
+                    command.Parameters.AddWithValue("@Address", guest.Address);
+                    command.Parameters.AddWithValue("@PostalCode", guest.PostalCode);
+                    command.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+        }
+    }
 }

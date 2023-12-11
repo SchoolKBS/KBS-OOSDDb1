@@ -20,14 +20,16 @@ namespace CampingUI
 {
     public partial class GuestOverviewPage : Page
     {
-        SqliteRepository sql = new SqliteRepository();
+        public Camping Camping { get; set; }
         Guest guest;
-        public GuestOverviewPage()
+        public GuestOverviewPage(Camping camping)
         {
             InitializeComponent();
 
+            this.Camping = camping;
+
             //Get all guests from database
-            GuestOverviewItemsControl.ItemsSource = sql.GetGuests();
+            GuestOverviewItemsControl.ItemsSource = camping.CampingRepository.CampingGuestRepository.GetGuests();
         }
 
         public void FilterOnGuestName_Click(object sender, RoutedEventArgs e)
@@ -38,20 +40,28 @@ namespace CampingUI
             //Checks which fields are used to search a guest
             if(string.IsNullOrEmpty(FirstName) && !string.IsNullOrEmpty(LastName))
             {
-                GuestOverviewItemsControl.ItemsSource = sql.GetGuestsByLastName(LastName);
+                GuestOverviewItemsControl.ItemsSource = Camping.CampingRepository.CampingGuestRepository.GetGuestsByLastName(LastName);
 
             } else if (!string.IsNullOrEmpty(FirstName) && string.IsNullOrEmpty(LastName))
             {
-                GuestOverviewItemsControl.ItemsSource = sql.GetGuestsByFirstName(FirstName);
+                GuestOverviewItemsControl.ItemsSource = Camping.CampingRepository.CampingGuestRepository.GetGuestsByFirstName(FirstName);
 
             } else if(!string.IsNullOrEmpty(FirstName) && !string.IsNullOrEmpty(LastName))
             {
-                GuestOverviewItemsControl.ItemsSource = sql.GetGuestsByFirstAndLastName(FirstName, LastName);
+                GuestOverviewItemsControl.ItemsSource = Camping.CampingRepository.CampingGuestRepository.GetGuestsByFirstAndLastName(FirstName, LastName);
 
             } else if(string.IsNullOrEmpty(FirstName) && string.IsNullOrEmpty(LastName))
             {
-                GuestOverviewItemsControl.ItemsSource = sql.GetGuests();
+                GuestOverviewItemsControl.ItemsSource = Camping.CampingRepository.CampingGuestRepository.GetGuests();
             }
+        }
+
+        public void RemoveFilters_Click(object sender, RoutedEventArgs e)
+        {
+            GuestFirstNameTextBox.Text = "";
+            GuestLastNameTextBox.Text = "";
+
+            GuestOverviewItemsControl.ItemsSource = Camping.CampingRepository.CampingGuestRepository.GetGuests();
         }
 
         public void GuestSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -108,18 +118,20 @@ namespace CampingUI
             guest.Address = ChangeAddressTextBox.Text;
             guest.Email = ChangeEmailTextBox.Text;
             guest.PhoneNumber = ChangePhoneNumberTextBox.Text;
-           
 
-            sql.UpdateGuest(guest);
-            GuestOverviewItemsControl.ItemsSource = sql.GetGuests();
+
+            Camping.CampingRepository.CampingGuestRepository.UpdateGuest(guest);
+            GuestOverviewItemsControl.ItemsSource = Camping.CampingRepository.CampingGuestRepository.GetGuests();
             ChangeGuestInformationGrid.Visibility = Visibility.Collapsed;
             GuestDetailsGrid.Visibility = Visibility.Collapsed;
+
+            GuestOverviewItemsControl.ItemsSource = Camping.CampingRepository.CampingGuestRepository.GetGuests();
         }
 
         public void CancelNewGuestInformation(object sender, RoutedEventArgs e)
         {
             ChangeGuestInformationGrid.Visibility = Visibility.Collapsed;
-            GuestDetailsGrid.Visibility = Visibility.Collapsed;
+            GuestDetailsGrid.Visibility = Visibility.Visible;
         }
 
         //Checks if PostalCode is valid

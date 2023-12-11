@@ -100,7 +100,7 @@
                     <Button.Template>
                         <ControlTemplate TargetType="{x:Type Button}">
                             <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
-                                <TextBlock Text="Overzicht gasten" TextDecorations="None" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock Text="Gasten" TextDecorations="None" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
                         </ControlTemplate>
                     </Button.Template>
