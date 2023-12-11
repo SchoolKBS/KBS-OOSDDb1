@@ -12,7 +12,7 @@ namespace CampingCore.CampingRepositories
         public void RemoveAllPreviousReservationsByPlace(Place place, DateTime departureDate);
         public void RemoveReservation(Reservation reservation);
         public void AddReservation(Reservation reservation);
-
         public Guest GetGuestFromGuestID(int id);
+        public void UpdateReservation(Reservation reservation);
     }
 }

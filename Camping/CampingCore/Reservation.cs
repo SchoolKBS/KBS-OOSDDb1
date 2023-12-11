@@ -61,6 +61,13 @@ namespace CampingCore
             return "Reservering: " + ReservationID + " Plaats: " + PlaceID + " Aankomstdatum: " + ArrivalDate.ToShortDateString() + " - Vertrekdatum " + DepartureDate.ToShortDateString();
 
         }
+        public override bool Equals(object? obj)
+        {
+            if(obj == null) return false;
+            if(obj.GetType() != this.GetType()) return false;
+            Reservation other = (Reservation)obj;
+            return other.ReservationID == ReservationID;
+        }
 
     }
 }
