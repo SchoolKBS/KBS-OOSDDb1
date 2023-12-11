@@ -7,153 +7,371 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ReservationCreationPage">
-
-    <Grid Background="LightGray">
-        <Grid Background="White" HorizontalAlignment="Center" VerticalAlignment="Center" Width="600" Height="500">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="200"/>
-                <RowDefinition Height="200"/>
-                <RowDefinition Height="auto"/>
-            </Grid.RowDefinitions>
-            <!--Grid for the reservation information-->
-            <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
+    
+    <Page.Resources>
+        <Style x:Key="FocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" StrokeDashArray="1 2" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" SnapsToDevicePixels="true" StrokeThickness="1"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="Button.Static.Background" Color="#529341"/>
+        <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#3d6d30"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
+        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#437835"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+        <Style x:Key="ButtonStyle1Apply" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" CornerRadius="8" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="FocusVisual1">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" StrokeDashArray="1 2" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" SnapsToDevicePixels="true" StrokeThickness="1"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="Button.Static.Background1" Color="#C00C00"/>
+        <SolidColorBrush x:Key="Button.Static.Border1" Color="#FF707070"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Background1" Color="#970900"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Border1" Color="#FF3C7FB1"/>
+        <SolidColorBrush x:Key="Button.Pressed.Background1" Color="#A60A00"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border1" Color="#FF2C628B"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background1" Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border1" Color="#FFADB2B5"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground1" Color="#FF838383"/>
+        <Style x:Key="ButtonStyle1Cancel" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual1}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background1}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border1}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" CornerRadius="8" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background1}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border1}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background1}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border1}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background1}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border1}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground1}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="FocusVisual2">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" StrokeDashArray="1 2" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" SnapsToDevicePixels="true" StrokeThickness="1"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="Button.Static.Background2" Color="#FBA70E"/>
+        <SolidColorBrush x:Key="Button.Static.Border2" Color="#FF707070"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Background2" Color="#E3970C"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Border2" Color="#FF3C7FB1"/>
+        <SolidColorBrush x:Key="Button.Pressed.Background2" Color="#DC920C"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border2" Color="#FF2C628B"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background2" Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border2" Color="#FFADB2B5"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground2" Color="#FF838383"/>
+        <Style x:Key="ButtonStyle1Edit" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual2}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background2}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border2}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="8" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background2}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border2}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background2}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border2}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background2}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border2}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground2}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+    <Grid Background="#11284D">
+        <Grid.Resources>
+            <Style TargetType="Label">
+                <Setter Property="Foreground" Value="White"/>
+            </Style>
+            <Style TargetType="RadioButton">
+                <Setter Property="Foreground" Value="White"/>
+            </Style>
+            <Style TargetType="CheckBox">
+                <Setter Property="Foreground" Value="White" />
+            </Style>
+        </Grid.Resources>
+        <Border Background="#334A6E" CornerRadius="25" Width="800" Height="700" Padding="20">
+            <!--Hele grid-->
+            <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="2*"/>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="75"/>
+                    <RowDefinition Height="0.6*"/>
+                    <RowDefinition Height="0.2*"/>
                     <RowDefinition Height="1*"/>
                     <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
-                <!-- Datepicker for the reservation -->
-                <Label Grid.Row="1" Grid.Column="0" Content="Aankomsttijd" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,20,0"/>
-                <Label Grid.Row="2" Grid.Column="0" Content="Vertrektijd" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,20,0"/>
-                <DatePicker Name="ArrivalDatePicker" Grid.Row="1" Grid.Column="1" Height="25" Width="160" VerticalAlignment="Center" HorizontalAlignment="Left" SelectedDateChanged="ArrivalDatePicker_DateChanged"/>
-                <DatePicker Name="DepartureDatePicker" Grid.Row="2" Grid.Column="1" Height="25" Width="160" VerticalAlignment="Center" HorizontalAlignment="Left" SelectedDateChanged="DepartureDatePicker_DateChanged"/>
-                <!-- People Count input -->
-                <Label Grid.Row="3" Grid.Column="0" Content="Aantal Personen" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,20,0"/>
-                <TextBox x:Name="PeopleCountText" Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" Height="25" Width="160" HorizontalAlignment="Left" TextChanged="PeopleCountText_Changed"/>
-                <!-- Price fields -->
-                <Grid Grid.Row="4" Grid.Column="0" Margin="0,0,20,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <Label Grid.Column="0" Content="Prijs:" HorizontalAlignment="Right"/>
-                    <TextBox Grid.Column="1" x:Name="PriceTB" IsReadOnly="True"/>
+                <Label FontSize="25" Grid.Row="0" FontWeight="Bold" Content="Aanmaken reservering"></Label>
+                <!--Grid voor datums en totaal prijs -->
+                <Grid Grid.Row="2">
+                    <Border BorderBrush="White" BorderThickness="2" Height="1"/>
                 </Grid>
-                <Grid Grid.Row="4" Grid.Column="1">
+                <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="25"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Label Grid.Column="0" Content="Is betaald" HorizontalAlignment="Right"/>
-                    <CheckBox Grid.Column="1" x:Name="IsPaidCB" VerticalAlignment="Center"/>
-                </Grid>
-            </Grid>
-            <!--Grid for the Guest information-->
-            <Grid Grid.Row="1">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <!-- Firstname Grid -->
-                    <Grid Grid.Row="0" Grid.Column="0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="Voornaam*" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                        <TextBox x:Name="FirstNameTB" Grid.Column="1" Margin="5" TextChanged="Input_Changed"/>
+                    <!--Grid voor datums people count-->
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <!-- Voor de Aankomst tijd -->
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" FontWeight="Bold" FontSize="16" Content="Aankomsttijd" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <DatePicker Background="White" Name="ArrivalDatePicker" Margin="5" Grid.Column="1" Height="30" SelectedDateChanged="ArrivalDatePicker_DateChanged"/>
+                        </Grid>
+                        <!-- Voor de Vertrek tijd-->
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" FontWeight="Bold" FontSize="16" Content="Vertrektijd" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <DatePicker Background="White" Name="DepartureDatePicker" Margin="5" Grid.Column="1" Height="30" SelectedDateChanged="DepartureDatePicker_DateChanged"/>
+                        </Grid>
+                        <!-- Voor de aantal personen -->
+                        <Grid Grid.Row="2">
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" FontWeight="Bold" FontSize="16" Content="Aantal Personen" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                            <TextBox x:Name="PeopleCountText" Height="30" Margin="5" Grid.Column="1" TextChanged="PeopleCountText_Changed"/>
+                        </Grid>
                     </Grid>
-                    <!-- Infix Grid -->
-                    <Grid Grid.Row="0" Grid.Column="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="Tussenvoegsel" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                        <TextBox x:Name="InfixTB" Grid.Column="1" Margin="5"/>
-                    </Grid>
-                    <!-- Lastname Grid -->
-                    <Grid Grid.Row="1" Grid.Column="0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="Achternaam*" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                        <TextBox x:Name="LastnameTB" Grid.Column="1" Margin="5" TextChanged="Input_Changed"/>
-                    </Grid>
-                    <!-- Postalcode Grid -->
-                    <Grid Grid.Row="2" Grid.Column="0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="Postcode" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                        <TextBox x:Name="PostalCodeTB" Grid.Column="1" Margin="5"/>
-                    </Grid>
-                    <!-- City Grid -->
-                    <Grid Grid.Row="2" Grid.Column="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="Stad" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                        <TextBox x:Name="CityTB" Grid.Column="1" Margin="5"/>
-                    </Grid>
-                    <!-- Address Grid -->
-                    <Grid Grid.Row="3" Grid.Column="0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="Adres" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                        <TextBox x:Name="AddressTB" Grid.Column="1" Margin="5"/>
-                    </Grid>
-                    <!-- Phone number Grid -->
-                    <Grid Grid.Row="4" Grid.Column="0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="Telefoonnummer*" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                        <TextBox x:Name="PhoneNumberTB" Grid.Column="1" Margin="5" TextChanged="Input_Changed"/>
-                    </Grid>
-                    <!-- Email Grid -->
-                    <Grid Grid.Row="4" Grid.Column="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="Email" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                        <TextBox x:Name="EmailTB" Grid.Column="1" Margin="5"/>
+                    <!--Grid vooor de prijs en of die is betaald of niet-->
+                    <Grid Grid.Column="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <!-- Voor de prijs die wordt berekent -->
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label FontWeight="Bold" FontSize="16" Grid.Column="0" Content="Prijs:" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <Label Grid.Column="1" FontSize="16" FontWeight="Bold" Height="35" Width="160" x:Name="PriceLabel" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        </Grid>
+                        <!-- Voor of die betaald is-->
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="160"/>
+                            </Grid.ColumnDefinitions>
+                            <Label FontWeight="Bold" FontSize="16" Grid.Column="0" Content="Is betaald" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <CheckBox Grid.Column="1" Margin="5" x:Name="IsPaidCB" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        </Grid>
                     </Grid>
                 </Grid>
+                <!--Grid for the Guest information-->
+                <Grid Grid.Row="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="25"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" FontWeight="Bold" FontSize="16" Content="Voornaam*" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBox x:Name="FirstNameTB" Grid.Column="1" Height="30" FontSize="14" Margin="5" TextChanged="Input_Changed"/>
+                        </Grid>
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" FontWeight="Bold" FontSize="16"  Content="Tussenvoegsel" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBox x:Name="InfixTB" Grid.Column="1" Margin="5" Height="30" FontSize="14"/>
+                        </Grid>
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" FontWeight="Bold" FontSize="16" Content="Achternaam*" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBox x:Name="LastnameTB" Grid.Column="1" Margin="5" Height="30" TextChanged="Input_Changed" FontSize="14"/>
+                        </Grid>
+                        <Grid Grid.Row="3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" FontWeight="Bold" FontSize="16" Content="Telefoonnummer*" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <TextBox x:Name="PhoneNumberTB" Grid.Column="1" Margin="5" Height="30" TextChanged="Input_Changed" FontSize="14"/>
+                        </Grid>
+                        <Grid Grid.Row="4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" FontWeight="Bold" FontSize="16" Content="Email" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBox x:Name="EmailTB" Grid.Column="1" Margin="5" Height="30" FontSize="14"/>
+                        </Grid>
+                    </Grid>
+                    <Grid Grid.Column="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" FontWeight="Bold" FontSize="16" Content="Adres" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBox x:Name="AddressTB" Grid.Column="1" Margin="5" Height="30" FontSize="14"/>
+                        </Grid>
+                        <!-- City Grid -->
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" FontWeight="Bold" FontSize="16" Content="Stad" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBox x:Name="CityTB" Grid.Column="1" Margin="5" Height="30" FontSize="14"/>
+                        </Grid>
+                        <!-- Address Grid -->
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" FontWeight="Bold" FontSize="16" Content="Postcode" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBox x:Name="PostalCodeTB" Grid.Column="1" Margin="5" Height="30" FontSize="14"/>
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Grid Grid.Row="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Style="{DynamicResource ButtonStyle1Apply}" Foreground="White" FontWeight="Bold" Grid.Column="0" Name="AcceptReservationCreationBtn" Content="Accept" Height="40" Margin="40,0,40,0" Click="AcceptReservation_Click"/>
+                    <Button Style="{DynamicResource ButtonStyle1Cancel}" Foreground="White" FontWeight="Bold" Grid.Column="1" Name="CancelReservationCreationBtn" Content="Cancel" Height="40" Margin="40,0,40,0" Click="CancelReservation_Click"/>
+                </Grid>
             </Grid>
-            <!-- Accept and cancel buttons -->
-            <Grid Grid.Row="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Name="AcceptReservationCreationBtn" Content="Accept" Height="40" Margin="40,0,40,0" Click="AcceptReservation_Click"/>
-                <Button Grid.Column="1" Name="CancelReservationCreationBtn" Content="Cancel" Height="40" Margin="40,0,40,0" Click="CancelReservation_Click"/>
-            </Grid>
-        </Grid>
+        </Border>
     </Grid>
 </Page>

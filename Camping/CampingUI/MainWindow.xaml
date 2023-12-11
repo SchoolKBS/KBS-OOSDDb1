@@ -48,7 +48,6 @@
                         <Style TargetType="Button">
                             <Style.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Foreground" Value="Orange"/>
                                     <Setter Property="TextBlock.TextDecorations" Value="Underline"/>
                                     <Setter Property="Cursor" Value="Hand"/>
                                 </Trigger>
@@ -69,7 +68,6 @@
                         <Style TargetType="Button">
                             <Style.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Foreground" Value="Orange"/>
                                     <Setter Property="TextBlock.TextDecorations" Value="Underline"/>
                                     <Setter Property="Cursor" Value="Hand"/>
                                 </Trigger>
@@ -90,7 +88,6 @@
                         <Style TargetType="Button">
                             <Style.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Foreground" Value="Orange"/>
                                     <Setter Property="TextBlock.TextDecorations" Value="Underline"/>
                                     <Setter Property="Cursor" Value="Hand"/>
                                 </Trigger>
@@ -134,11 +131,11 @@
                     </Style>
                 </StackPanel.Style>
 
-                <Button Width="30" Height="30" Click="MinimizeButton_Click" Margin="0, 0, 10, 0" Background="Orange" BorderBrush="Transparent" FontSize="20" Foreground="White" BorderThickness="0">
+                <Button Width="30" Height="30" Click="MinimizeButton_Click" Margin="0, 0, 10, 0" Background="#FBA70E" BorderBrush="Transparent" FontSize="20" Foreground="White" BorderThickness="0">
                     <Button.Template>
                         <ControlTemplate TargetType="{x:Type Button}">
                             <Grid>
-                                <Ellipse Fill="Orange"/>
+                                <Ellipse Fill="#FBA70E"/>
                                 <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Grid>
                         </ControlTemplate>
@@ -148,11 +145,11 @@
                     </Button.Content>
                 </Button>
 
-                <Button Width="30" Height="30" Click="CloseButton_Click" Margin="10, 0, 0, 0" Background="Red" BorderBrush="Transparent" FontSize="20" Foreground="White" BorderThickness="0">
+                <Button Width="30" Height="30" Click="CloseButton_Click" Margin="10, 0, 0, 0" Background="#C00C00" BorderBrush="Transparent" FontSize="20" Foreground="White" BorderThickness="0">
                     <Button.Template>
                         <ControlTemplate TargetType="{x:Type Button}">
                             <Grid>
-                                <Ellipse Fill="Red"/>
+                                <Ellipse Fill="#C00C00"/>
                                 <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Grid>
                         </ControlTemplate>

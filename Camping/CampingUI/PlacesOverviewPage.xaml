@@ -6,168 +6,415 @@
         xmlns:local="clr-namespace:CampingUI"
         mc:Ignorable="d"
         Title="PlacesOverviewPage">
+    <Page.Resources>
+        <Style x:Key="FocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" StrokeDashArray="1 2" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" SnapsToDevicePixels="true" StrokeThickness="1"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="Button.Static.Background" Color="#529341"/>
+        <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#3d6d30"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
+        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#437835"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+        <Style x:Key="ButtonStyle1Apply" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" CornerRadius="8" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="FocusVisual1">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" StrokeDashArray="1 2" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" SnapsToDevicePixels="true" StrokeThickness="1"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="Button.Static.Background1" Color="#C00C00"/>
+        <SolidColorBrush x:Key="Button.Static.Border1" Color="#FF707070"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Background1" Color="#970900"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Border1" Color="#FF3C7FB1"/>
+        <SolidColorBrush x:Key="Button.Pressed.Background1" Color="#A60A00"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border1" Color="#FF2C628B"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background1" Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border1" Color="#FFADB2B5"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground1" Color="#FF838383"/>
+        <Style x:Key="ButtonStyle1Cancel" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual1}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background1}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border1}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" CornerRadius="8" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background1}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border1}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background1}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border1}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background1}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border1}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground1}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="FocusVisual2">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" StrokeDashArray="1 2" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" SnapsToDevicePixels="true" StrokeThickness="1"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="Button.Static.Background2" Color="#FBA70E"/>
+        <SolidColorBrush x:Key="Button.Static.Border2" Color="#FF707070"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Background2" Color="#E3970C"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Border2" Color="#FF3C7FB1"/>
+        <SolidColorBrush x:Key="Button.Pressed.Background2" Color="#DC920C"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border2" Color="#FF2C628B"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background2" Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border2" Color="#FFADB2B5"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground2" Color="#FF838383"/>
+        <Style x:Key="ButtonStyle1Edit" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual2}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background2}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border2}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="8" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background2}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border2}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background2}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border2}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background2}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border2}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground2}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
     <!--Grid for leftside bar and the place overview-->
-    <Grid Name ="OverviewGrid">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*"/>
-            <ColumnDefinition Width="7*"/>
-        </Grid.ColumnDefinitions>
-        <Border Grid.Column="1" Grid.RowSpan="1" BorderBrush="Black" 
-        BorderThickness="1,1,1,1" Background="{x:Null}" >
-        </Border>
-        <!--Grid for the filters and list of places-->
-        <Grid Name="ListGrid">
+        <Grid Name ="OverviewGrid">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <!-- Adjust as needed -->
+                <!-- First row with a fixed height of 70 -->
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="100"/>
+                <!-- Second row takes up the rest of the height -->
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <!-- Adjust as needed -->
             </Grid.RowDefinitions>
-            <Border Grid.Column="1" Grid.RowSpan="1" BorderBrush="Black" 
-                    BorderThickness="1, 1, 1, 1" Background="{x:Null}"/>
+            <Grid.Resources>
+                <Style TargetType="Label">
+                    <Setter Property="Foreground" Value="White"/>
+                </Style>
+                <Style TargetType="RadioButton">
+                    <Setter Property="Foreground" Value="White"/>
+                </Style>
+                <Style TargetType="CheckBox">
+                    <Setter Property="Foreground" Value="White"/>
+                </Style>
+            </Grid.Resources>
+            <Border Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Margin="25,25,25,0" Background="#11284D" Grid.RowSpan="2">
+                <TextBlock FontSize="25" FontWeight="Bold" Foreground="white" Text="Plaatsen"></TextBlock>
+            </Border>
+            <Border Grid.Column="1" Grid.Row="1" Margin="25,25,25,0" Padding="5" Background="#334A6E" CornerRadius="25">
+                <Grid x:Name="FilterPlacesGrid">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="1.5*"/>
+                    </Grid.ColumnDefinitions>
 
-            <!-- First filter for arrive filter  -->
-            <Label Grid.Row="0" Content="Aankomstdatum" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontFamily="Calibri" FontWeight="Bold"/>
-            <Label Grid.Row="0" Content="Vertrekdatum" HorizontalAlignment="Left" Margin="120,10,0,0" VerticalAlignment="Top" FontFamily="Calibri" FontWeight="Bold"/>
-            <DatePicker Name="ArrivalDatePicker" Tag="-2" Grid.Row="0" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
-            <DatePicker Name="DepartureDatePicker" Tag="-1" Grid.Row="0" HorizontalAlignment="Left" Margin="120,40,0,0" VerticalAlignment="Top" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
+                    <!-- Aankomstdatum -->
+                    <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Label FontSize="14" Content="Aankomstdatum: " HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Calibri" FontWeight="Bold"/>
+                        <DatePicker HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="White" Height="30" Name="ArrivalDatePicker" Tag="-2" SelectedDateChanged="DatePicker_SelectedDateChanged" />
+                    </StackPanel>
 
-            <!-- Second filter for power  -->
-            <RadioButton Name="PowerRadioButton1" Grid.Row="0" Content="Wel stroom" HorizontalAlignment="Left" Margin="10,75,0,0" VerticalAlignment="Top" Checked="PowerRadioButton_Selected" FontFamily="Calibri" FontWeight="Bold"/>
-            <RadioButton Name="PowerRadioButton2" Grid.Row="0" Content="Geen stroom" HorizontalAlignment="Left" Margin="120,75,0,0" VerticalAlignment="Top" Checked="PowerRadioButton_Selected" FontFamily="Calibri" FontWeight="Bold"/>
-            <RadioButton Name="PowerRadioButton3" Grid.Row="0" Content="Geen voorkeur" HorizontalAlignment="Left" Margin="240,75,0,0" VerticalAlignment="Top" Checked="PowerRadioButton_Selected" IsChecked="True" FontFamily="Calibri" FontWeight="Bold"/>
+                    <!-- Vertrekdatum -->
+                    <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Label FontSize="14" Content="Vertrekdatum: " HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Calibri" FontWeight="Bold"/>
+                        <DatePicker HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="White" Height="30" Name="DepartureDatePicker" Tag="-1" SelectedDateChanged="DatePicker_SelectedDateChanged" />
+                    </StackPanel>
 
-            <!-- Third filter for amount of people  -->
-            <Label Content="Aantal personen" HorizontalAlignment="Left" Margin="10,100,0,0" VerticalAlignment="Top" FontFamily="Calibri" FontWeight="Bold"/>
-            <TextBox x:Name="PersonCountTextBox" HorizontalAlignment="Left" Margin="120,105,0,0" VerticalAlignment="Top" Width="60" Height="20" TextChanged="TextBox_Changed"/>
+                    <StackPanel Grid.Column="2" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <!-- Geen voorkeur (Stroom) -->
+                        <Label FontSize="14" Content="Heeft stroom: " HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Calibri" FontWeight="Bold"/>
+                        <CheckBox FontSize="14" Height="30" VerticalContentAlignment="Center" Name="PowerCheckBoxFilter" Content="Geen voorkeur (stroom)"  IsThreeState="true" HorizontalAlignment="Center" VerticalAlignment="Center" Click="PowerCheckBox_Checked" FontFamily="Calibri" FontWeight="Bold"/>
+                    </StackPanel>
 
-            <!-- Fourth filter for max price -->
-            <Label Content="Max prijs" HorizontalAlignment="Left" Margin="10,135,0,0" VerticalAlignment="Top" FontFamily="Calibri" FontWeight="Bold"/>
-            <TextBox x:Name="MaxPriceRangeTextBox" HorizontalAlignment="Left" Margin="120,140,0,0" VerticalAlignment="Top" Width="60" Height="20" TextChanged="TextBox_Changed"/>
+                    <StackPanel Grid.Column="3" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <!-- Geen voorkeur (Honden) -->
+                        <Label FontSize="14" Content="Honden toegestaan: " HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Calibri" FontWeight="Bold"/>
+                        <CheckBox FontSize="14" Height="30" VerticalContentAlignment="Center" Name="DogCheckBoxFilter" Content="Geen voorkeur (hond)"  IsThreeState="true" HorizontalAlignment="Center" VerticalAlignment="Center" Click="DogsCheckBox_Checked" FontFamily="Calibri" FontWeight="Bold"/>
+                    </StackPanel>
+                    <!-- Aantal personen -->
+                    <StackPanel Grid.Column="4" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Label FontSize="14" Content="Aantal personen: " HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Calibri" FontWeight="Bold"/>
+                        <TextBox HorizontalContentAlignment="Center" VerticalContentAlignment="Center" x:Name="AmountOfPeopleTextBox" MinWidth="75" Height="30" TextChanged="TextBox_Changed"/>
+                    </StackPanel>
 
-            <!-- Buttons to apply or remove the filters -->
-            <Button Content="Pas filters toe" Margin="10,175,0,25" Click="ApplyFilters_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80"/>
-            <Button Content="Verwijder filters" Margin="120,175,0,25" Click="RemoveFilters_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="90"/>
+                    <!-- Max prijs -->
+                    <StackPanel Grid.Column="5" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Label FontSize="14" Content="Max prijs: " HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Calibri" FontWeight="Bold"/>
+                        <TextBox HorizontalContentAlignment="Center" VerticalContentAlignment="Center" x:Name="MaxPriceRangeTextBox" MinWidth="75" Height="30" TextChanged="TextBox_Changed"/>
+                    </StackPanel>
 
-            <!-- Show the places from the camping in a list in a grid view and sort them.  -->
-            <ListView Grid.Row="1" Name="PlacesListView" SelectionChanged="PlacesListView_SelectionChanged">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Width="90" DisplayMemberBinding="{Binding PlaceNumber}">
-                            <GridViewColumn.Header>
-                                <GridViewColumnHeader Tag="Placenumber" Click="SetSorterColumn_Click">Plaatsnummer</GridViewColumnHeader>
-                            </GridViewColumn.Header>
-                        </GridViewColumn>
-                        <GridViewColumn Width="60" DisplayMemberBinding="{Binding PricePerNight}">
-                            <GridViewColumn.Header>
-                                <GridViewColumnHeader Tag="Price" Click="SetSorterColumn_Click">Prijs ($)</GridViewColumnHeader>
-                            </GridViewColumn.Header>
-                        </GridViewColumn>
-                        <GridViewColumn Width="120" DisplayMemberBinding="{Binding PersonCount}">
-                            <GridViewColumn.Header>
-                                <GridViewColumnHeader Tag="PersonCount" Click="SetSorterColumn_Click">Aantal personen</GridViewColumnHeader>
-                            </GridViewColumn.Header>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-            <!--Button to add place-->
-            <Button Grid.Row="2" Content="Nieuwe plaats toevoegen" Click="AddPlaceButton_Click" Height="Auto"/>
-        </Grid>
-        <!--Grid for the overview of the selected place-->
-        <Grid Grid.Column="1" Name="PlaceOverviewGrid" Visibility="Collapsed">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="4*"/>
-                <RowDefinition Height="1*"/>
-            </Grid.RowDefinitions>
-            <!--Grid for place info-->
-            <Grid Grid.Row="0" Name="UpperGrid">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="4*"/>
-                    <ColumnDefinition Width="2*"/>
-                </Grid.ColumnDefinitions>
-                <Grid Grid.Column="0" Name="InfoGrid">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="3*"/>
-                    </Grid.RowDefinitions>
-                    <Label Grid.Row="0" Name="nrLabel" FontSize="30" FontWeight="Bold" Content=""></Label>
-                    <Label Grid.Row="1" Name="areaLabel" FontSize="20" Content=""></Label>
-                    <Label Grid.Row="2" Name="nrPeopleLabel" FontSize="20" Content=""></Label>
-                    <Label Grid.Row="3" Name="electricityLabel" FontSize="20" Content=""></Label>
-                    <Label Grid.Row="4" Name="priceLabel" FontSize="20" Content=""></Label>
-                    <Label Grid.Row="5" Name="descriptionLabel" FontSize="20" Content=""></Label>
+                    <!-- Buttons to apply or remove filters -->
+                    <StackPanel Grid.Column="6" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Button Style="{DynamicResource ButtonStyle1Apply}" Foreground="White" FontWeight="Bold" Margin="0,0,5,0" Content="Filters toepassen" Click="ApplyFilters_Click" Height="40" Padding="7, 0, 7, 0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <Button Style="{DynamicResource ButtonStyle1Cancel}" Foreground="White" FontWeight="Bold" Margin="5,0,0,0" Content="Filters verwijderen" Click="RemoveFilters_Click" Padding="7, 0, 7, 0" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    </StackPanel>
                 </Grid>
-                <Viewbox Grid.Column="1" Margin="10">
-                    <Calendar x:Name="ReservationCalender" Width="auto"></Calendar>
-                </Viewbox>
-            </Grid>
-            <!--Grid for button -->
-            <Grid Grid.Row="1">
+            </Border>
+            <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="3*" MinWidth="0"/>
+                    <ColumnDefinition Width="7*" MinWidth="0"/>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Name="NewReservationButton" Content="Nieuwe Resevering Maken" Margin="20" Height="50" Click="NewReservation_Click"/>
-                <Button Grid.Column="2" Name="DeletePlaceButton" Content="Verwijder plaats" Margin="20" Height="50" Click="DeletePlaceButton_Click"/>
+                <!-- Content in the first row -->
+                <!--<Border Grid.Column="1" Grid.Row="0" Margin="25,25,25,0" Background="#11284D" Grid.RowSpan="2"/>-->
+                <Border Grid.Column="0" Margin="25,25,25,25" Padding="15" Background="#334A6E" CornerRadius="25">
+                    <!--Grid for the filters and list of places-->
+                    <Grid Name="ListGrid" Grid.Row="1">
+                        <Grid.Resources>
+                            <Style TargetType="ListViewItem">
+                                <Style.Triggers>
+                                    <Trigger Property="ItemsControl.AlternationIndex"  Value="0">
+                                        <Setter Property="Background" Value="#667CA0" />
+                                    </Trigger>
+                                </Style.Triggers>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="FontSize" Value="16"/>
+                                <Setter Property="Height" Value="30"/>
+                                <Setter Property="Padding" Value="5"/>
+                            </Style>
+                        </Grid.Resources>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <!-- Adjust as needed -->
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                            <!--<RowDefinition Height="Auto"/>-->
+                            <!-- Adjust as needed -->
+                        </Grid.RowDefinitions>
+                        <!-- Show the places from the camping in a list in a grid view and sort them.  -->
+
+                        <ListView Background="Transparent" Grid.Row="1" Name="PlacesListView" SelectionChanged="PlacesListView_SelectionChanged" Margin="0" BorderThickness="0">
+                            <ListView.Resources>
+                                <Style TargetType="GridViewColumnHeader">
+                                    <Setter Property="Background" Value="#667CA0"/>
+                                    <Setter Property="BorderBrush" Value="Transparent"/>
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                    <Setter Property="Height" Value="30"/>
+                                </Style>
+                            </ListView.Resources>
+                            <ListView.View>
+                                <GridView AllowsColumnReorder="False">
+                                    <GridViewColumn DisplayMemberBinding="{Binding PlaceID}" Width="100">
+                                        <GridViewColumn.Header>
+                                            <GridViewColumnHeader Foreground="White" FontSize="14" Tag="PlaceID" Click="SetSorterColumn_Click">Plaatsnummer</GridViewColumnHeader>
+                                        </GridViewColumn.Header>
+                                    </GridViewColumn>
+                                    <GridViewColumn DisplayMemberBinding="{Binding PricePerNightPerPerson}" Width="60">
+                                        <GridViewColumn.Header>
+                                            <GridViewColumnHeader Foreground="White" FontSize="14" Tag="Price" Click="SetSorterColumn_Click">Prijs</GridViewColumnHeader>
+                                        </GridViewColumn.Header>
+                                    </GridViewColumn>
+                                    <GridViewColumn DisplayMemberBinding="{Binding AmountOfPeople}" Width="130">
+                                        <GridViewColumn.Header>
+                                            <GridViewColumnHeader Foreground="White" FontSize="14" Tag="AmountOfPeople" Click="SetSorterColumn_Click">Aantal personen</GridViewColumnHeader>
+                                        </GridViewColumn.Header>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+
+
+                        <!--Button to add place-->
+                        <!--<Button Grid.Row="2" Content="Nieuwe plaats toevoegen" Click="AddPlaceButton_Click" Height="Auto"/>-->
+                    </Grid>
+                </Border>
+                <Border Grid.Column="1" Margin="25,25,25,25" Padding="15" Background="#334A6E" CornerRadius="25">
+                    <!--Grid for the overview of the selected place-->
+                    <Grid Grid.Column="1" Name="PlaceOverviewGrid" Visibility="Collapsed" Grid.Row="3">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="4*"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
+
+                        <!--Grid for place info-->
+                        <Grid Grid.Row="0" Name="UpperGrid">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="4*"/>
+                                <ColumnDefinition Width="2*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0" Name="InfoGrid">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="3*"/>
+                                </Grid.RowDefinitions>
+                                <Label Grid.Row="0" Margin="0,0,0,0" Name="nrLabel" FontSize="25" FontWeight="Bold" Content=""></Label>
+                                <Label Grid.Row="1" Margin="0,0,0,0" Name="areaLabel" FontSize="16" Content=""></Label>
+                                <Label Grid.Row="2" Margin="0,0,0,0" Name="amountOfPeopleLabel" FontSize="16" Content=""></Label>
+                                <Label Grid.Row="3" Margin="0,0,0,0" Name="powerLabel" FontSize="16" Content=""></Label>
+                                <Label Grid.Row="4" Margin="0,0,0,0" Name="dogsLabel" FontSize="16" Content=""></Label>
+                                <Label Grid.Row="5" Margin="0,0,0,0" Name="priceLabel" FontSize="16" Content=""></Label>
+                            </Grid>
+                            <Viewbox Grid.Column="1" Margin="10">
+                                <Calendar x:Name="ReservationCalender" Width="auto" Height="auto" ></Calendar>
+                            </Viewbox>
+                        </Grid>
+                        <!--Grid for button -->
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <Button Style="{DynamicResource ButtonStyle1Apply}" Foreground="White" FontWeight="Bold" Grid.Column="0" Name="NewReservationButton" Content="Nieuwe resevering maken" Margin="20" Height="50" Width="200" Click="NewReservation_Click"/>
+                            <Button Style="{DynamicResource ButtonStyle1Edit}" Foreground="White" FontWeight="Bold" Grid.Column="1" Name="EditPlaceButton" Content="Plaats aanpassen" Margin="20" Height="50" Width="200" Click="EditPlaceButton_Click"/>
+                            <Button Style="{DynamicResource ButtonStyle1Cancel}" Foreground="White" FontWeight="Bold" Grid.Column="2" Name="DeletePlaceButton" Content="Verwijder plaats" Margin="20" Height="50" Width="200" Click="DeletePlaceButton_Click"/>
+                        </Grid>
+                    </Grid>
+                </Border>
+                <Grid Grid.Column="1" Name="EditPlaceGrid" Visibility="Collapsed" Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="4*"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <Label Content="" HorizontalAlignment="Center" FontSize="30" FontWeight="Bold" Name="PlaceIDLabelEdit" Margin="0,30,0,0"/>
+                    <Grid Grid.Row="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!--Power, Dog, Price, Person, SurfaceArea-->
+
+                        <!--<Label Grid.Column="0" Grid.Row="0" FontSize="16" HorizontalAlignment="Left" Margin="170,76,0,0" VerticalAlignment="Top" Name="PowerEditLabel"/>-->
+                        <CheckBox Name="PowerEditCheckBox" Grid.Column="0" Grid.Row="0" IsThreeState="True" HorizontalAlignment="Left" Margin="150,65,0,0" Height="15" Click="PowerEditCheckBox_Click"/>
+
+                        <!--<Label Grid.Column="1" Grid.Row="0" FontSize="16" HorizontalAlignment="Left" Margin="140,76,0,0" VerticalAlignment="Top" Name="DogsAllowedEditLabel"/>-->
+                        <CheckBox Name="DogsEditCheckBox" Grid.Column="1" Grid.Row="0" IsThreeState="True" HorizontalAlignment="Left" Margin="120,65,0,0" Height="15" Click="DogsEditCheckBox_Click"/>
+
+                        <Label Grid.Column="0" Grid.Row="1" FontSize="16" Content="Aantal personen" Width="150" />
+                        <TextBox Grid.Column="0" Grid.Row="1" FontSize="16" Height="30" Width="150" x:Name="AmountOfPeopleEditTextBox" TextChanged="TextBox_Changed"/>
+                        <Button Style="{DynamicResource ButtonStyle1Edit}" Foreground="White" FontWeight="Bold" Content="Overerven" FontSize="14" Name="AmountOfPeopleExtendButton" Click="EditExtendButton_Click" Grid.Column="0" Grid.Row="1" Height="30" Width="80" HorizontalAlignment="Left" Margin="60,0,0,0"/>
+
+                        <Label Grid.Column="1" Grid.Row="1" FontSize="16" Content="Oppervlakte" Width="150" />
+                        <TextBox Grid.Column="1" Grid.Row="1" FontSize="16" Height="30" Width="150" x:Name="SurfaceAreaEditTextBox" TextChanged="TextBox_Changed"/>
+                        <Button Style="{DynamicResource ButtonStyle1Edit}" Foreground="White" FontWeight="Bold" Content="Overerven" FontSize="14" Name="SurfaceAreaExtendButton" Click="EditExtendButton_Click" Grid.Column="1" Grid.Row="1" Height="30" Width="80" HorizontalAlignment="Left" Margin="60,0,0,0"/>
+
+                        <Label Grid.Column="0" Grid.Row="2" FontSize="16" Content="Prijs per nacht per persoon" HorizontalContentAlignment="Center"/>
+                        <TextBox Grid.Column="0" Grid.Row="2" FontSize="16" Height="30" Width="150" x:Name="PricePerNightPerPersonEditTextBox" TextChanged="TextBox_Changed" HorizontalAlignment="Center"/>
+                        <Button Style="{DynamicResource ButtonStyle1Edit}" Foreground="White" FontWeight="Bold" Padding="5,0,5,0" Content="Overerven" FontSize="14" Name="PricePerNightPerPersonExtendButton" Click="EditExtendButton_Click" Grid.Column="0" Grid.Row="2" Height="30" Width="80" HorizontalAlignment="Left" Margin="60,0,0,0"/>
+                    </Grid>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Style="{DynamicResource ButtonStyle1Apply}" Foreground="White" FontWeight="Bold" Name="ConfirmEditButton" Content="Bevestigen" Grid.Column="2" Height="35" Width="180" Click="EditPlaceConfirmButton_Click"/>
+                        <Button Style="{DynamicResource ButtonStyle1Cancel}" Foreground="White" FontWeight="Bold" Name="CancelEditButton" Content="Annuleren" Grid.Column="0" Height="35" Width="180" Click="CancelEditButton_Click"/>
+                        <TextBlock Grid.Row="13" Grid.Column="1" HorizontalAlignment="Center" x:Name="AddPlaceMessage"/>
+                    </Grid>
+                </Grid>
             </Grid>
         </Grid>
-        <Grid Grid.Column="1" Name="AddPlaceGrid" Visibility="Collapsed">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="0.8*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="0.8*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="0.8*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="0.8*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="0.8*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="0.8*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="2*"/>
-                <RowDefinition Height="2*"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/> 
-                <ColumnDefinition Width="1*"/>
-            </Grid.ColumnDefinitions>
-
-            <Label Grid.Column="1" Grid.Row="0" Content="*Plaatsnummer" Width="150" />
-            <TextBox Grid.Column="1" Grid.Row="1" Height="30" Width="150" x:Name="PlaceNumber"/>
-
-            <Label Grid.Column="1" Grid.Row="2" Content="*M2" Width="150" VerticalAlignment="Bottom"/>
-            <TextBox Grid.Column="1" Grid.Row="3" Height="30" Width="150" x:Name="SurfaceArea"/>
-
-            <Label Grid.Column="1" Grid.Row="4" Content="*Stroom" Width="150" VerticalAlignment="Bottom"/>
-            <ComboBox Grid.Column="1" Grid.Row="5" Height="30" Width="150" x:Name="HasElectricity">
-                <ComboBoxItem Content="Ja"/>
-                <ComboBoxItem Content="Nee"/>
-            </ComboBox>
-
-
-            <Label Grid.Column="1" Grid.Row="6" Content="*Aantal personen" Width="150" VerticalAlignment="Bottom"/>
-            <TextBox Grid.Column="1" Grid.Row="7" Height="30" Width="150" x:Name="NumberOfPeople"/>
-
-            <Label Grid.Column="1" Grid.Row="8" Content="*Prijs per nacht" Width="150" VerticalAlignment="Bottom"/>
-            <TextBox Grid.Column="1" Grid.Row="9" Height="30" Width="150" x:Name="PricePerPersonPerNight"/>
-
-            <Label Grid.Column="1" Grid.Row="10" Content="Beschrijving" Width="150" VerticalAlignment="Bottom"/>
-            <TextBox Grid.Column="1" Grid.Row="11" Height="30" Width="150" x:Name="PlaceDescription"/>
-
-            <Button Grid.Row="12" Grid.Column="1" Height="35" Width="180" Click="AddPlaceOnClick">Plaats toevoegen</Button>
-
-            <TextBlock Grid.Row="13" Grid.Column="1" HorizontalAlignment="Center" x:Name="AddPlaceMessage"/>
-            
-        </Grid>
-    </Grid>
 </Page>

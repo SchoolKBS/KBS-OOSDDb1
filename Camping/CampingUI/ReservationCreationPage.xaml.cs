@@ -41,7 +41,7 @@ namespace CampingUI
         public void SetKnownInformation()
         {
             _place = (Place)_page.PlacesListView.SelectedItem;
-            if (_page.FilterAplied)
+            if (_page.FilterApplied)
             {
                 if(_page.ArrivalDatePicker.SelectedDate != null) ArrivalDatePicker.SelectedDate = _page.ArrivalDatePicker.SelectedDate.Value;
                 if (_page.DepartureDatePicker.SelectedDate != null)
@@ -49,14 +49,19 @@ namespace CampingUI
                     DepartureDatePicker.IsEnabled = true;
                     DepartureDatePicker.SelectedDate = _page.DepartureDatePicker.SelectedDate.Value;
                 }
-                if(_page.PersonCount > 0)PeopleCountText.Text = _page.PersonCount.ToString();
+                if(_page.AmountOfPeople > 0)PeopleCountText.Text = _page.AmountOfPeople.ToString();
             }
         }
         // Event for when arrival date is changed, This enables deparutre date and calls ShowAvailableDatesDeparture()
         private void ArrivalDatePicker_DateChanged(object sender, SelectionChangedEventArgs e)
         {
-            ArrivalDatePicker.Background = null;
             DepartureDatePicker.SelectedDate = null;
+            ArrivalDatePicker.BorderBrush = Brushes.White;
+            DepartureDatePicker.BorderBrush = Brushes.White;
+            ArrivalDatePicker.BorderThickness = new Thickness(1,1,1,1);
+            DepartureDatePicker.BorderThickness = new Thickness(1,1,1,1);
+
+
             this.ArrivalDatePicker.Text = ArrivalDatePicker.SelectedDate.ToString();
             ShowAvailableDatesDeparture();
 
@@ -64,10 +69,11 @@ namespace CampingUI
         // Sets Backgroud back to null if date is changed
         private void DepartureDatePicker_DateChanged(object sender, SelectionChangedEventArgs e)
         {
-            DepartureDatePicker.Background = null;
+            DepartureDatePicker.BorderBrush = Brushes.White;
+            DepartureDatePicker.BorderThickness = new Thickness(1, 1, 1, 1);
             this.DepartureDatePicker.Text = DepartureDatePicker.SelectedDate.ToString();
             Price = CalcPrice();
-            PriceTB.Text = Price.ToString() + "$";
+            PriceLabel.Content = Price.ToString() + "$";
         }
         //Calcultes the price for the reservation based on the input fields PeopleCountText and the datepickers. Returns last (correct) price if input is incorrect
         private double CalcPrice()
@@ -76,13 +82,16 @@ namespace CampingUI
             if (TextToInt.GetType() == typeof(int) && TextToInt > 0 && TextToInt <= _place.AmountOfPeople && ArrivalDatePicker.SelectedDate.HasValue && DepartureDatePicker.SelectedDate.HasValue)
             {
                 int dayscount = (int) DepartureDatePicker.SelectedDate.Value.Subtract(ArrivalDatePicker.SelectedDate.Value).TotalDays;
-                PeopleCountText.Background = null;
+                PeopleCountText.BorderBrush = Brushes.White;
+                PeopleCountText.BorderThickness = new Thickness(1,1,1,1);
+                
                 return _place.PricePerNightPerPerson * TextToInt * dayscount;
             }
             else
             {
-                PeopleCountText.Background = Brushes.Red;
-                return Price;
+                PeopleCountText.BorderBrush = Brushes.Red;
+                PeopleCountText.BorderThickness = new Thickness(3, 3, 3, 3);
+                return 0;
             }
         }
         // A method that calls the different Check methods to see if a reservation can be made
@@ -99,11 +108,13 @@ namespace CampingUI
         {
             if (!ArrivalDatePicker.SelectedDate.HasValue)
             {
-                ArrivalDatePicker.Background = Brushes.Red;
+                ArrivalDatePicker.BorderBrush = Brushes.Red;
+                ArrivalDatePicker.BorderThickness = new Thickness(3, 3, 3, 3);
             }
             if (!DepartureDatePicker.SelectedDate.HasValue)
             {
-                DepartureDatePicker.Background = Brushes.Red;
+                DepartureDatePicker.BorderBrush = Brushes.Red;
+                DepartureDatePicker.BorderThickness = new Thickness(3, 3, 3, 3);
             }
             return ArrivalDatePicker.SelectedDate.HasValue && DepartureDatePicker.SelectedDate.HasValue;
         }
@@ -111,27 +122,45 @@ namespace CampingUI
         public bool CheckPeopleCount()
         {
             bool result = int.TryParse(PeopleCountText.Text, out int number);
-            if (!result) PeopleCountText.Background = Brushes.Red;
-            else if(number > _place.AmountOfPeople)
+            if (!result)
             {
-                result = false;
-                PeopleCountText.Background = Brushes.Red;
+                PeopleCountText.BorderBrush = Brushes.Red;
+                PeopleCountText.BorderThickness = new Thickness(3, 3, 3, 3);
+            }
+            else if (number > _place.AmountOfPeople)
+            {
+                result = false;;
+                PeopleCountText.BorderBrush = Brushes.Red;
+                PeopleCountText.BorderThickness = new Thickness(3, 3, 3,3);
             }
             return result;
         }
         // Checks if the First name, Last name, and phonenumber are filled in
         public bool CheckGuestInputFields()
         {
-            if (FirstNameTB.Text.IsNullOrEmpty()) FirstNameTB.Background = Brushes.Red;
-            if (LastnameTB.Text.IsNullOrEmpty()) LastnameTB.Background = Brushes.Red;
-            if (PhoneNumberTB.Text.IsNullOrEmpty()) PhoneNumberTB.Background = Brushes.Red;
-            return !FirstNameTB.Text.IsNullOrEmpty() && !LastnameTB.Text.IsNullOrEmpty() && !PhoneNumberTB.Text.IsNullOrEmpty();
+            if (FirstNameTB.Text.IsNullOrEmpty())
+            {
+                FirstNameTB.BorderBrush = Brushes.Red;
+                FirstNameTB.BorderThickness = new Thickness(3, 3, 3, 3);
+            }
+            if (LastnameTB.Text.IsNullOrEmpty())
+            {
+                LastnameTB.BorderBrush = Brushes.Red;
+                LastnameTB.BorderThickness = new Thickness(3, 3, 3, 3);
+            }
+            if (PhoneNumberTB.Text.IsNullOrEmpty())
+            {
+                PhoneNumberTB.BorderBrush = Brushes.Red;
+                PhoneNumberTB.BorderThickness = new Thickness(3, 3, 3, 3);
+            }
+                return !FirstNameTB.Text.IsNullOrEmpty() && !LastnameTB.Text.IsNullOrEmpty() && !PhoneNumberTB.Text.IsNullOrEmpty();
         }
         // Changes the PriceTV each time a different people count was entered
         private void PeopleCountText_Changed(object sender, TextChangedEventArgs e)
         {
             Price = CalcPrice();
-            PriceTB.Text = Price.ToString() + "$";
+            PriceLabel.Content = Price.ToString() + "$";
+
         }
         // Sets the possible Arrivaldates in the ArrivalDatePicker
         private void ShowAvailableDatesArrival()
@@ -176,11 +205,11 @@ namespace CampingUI
             if (CheckValues())
             {
                 Guest guest = new Guest(FirstNameTB.Text, InfixTB.Text, LastnameTB.Text, AddressTB.Text, CityTB.Text, EmailTB.Text, PhoneNumberTB.Text, PostalCodeTB.Text);
-                _camping.CampingRepository.AddGuest(guest);
+                _camping.CampingRepository.CampingGuestRepository.AddGuest(guest);
                 //Database db = new Database();
                 //db.AddGuestToDatabase(guest);
-                _camping.CampingRepository.AddReservation(new Reservation(0, (DateTime)ArrivalDatePicker.SelectedDate, (DateTime)DepartureDatePicker.SelectedDate, _place.PlaceID, _camping.CampingRepository.GetLastGuestID(), int.Parse(PeopleCountText.Text), IsPaidCB.IsChecked.Value, Price));
-                NavigationService.Navigate(new PlacesOverviewPage(_camping, (SqliteRepository)_camping.CampingRepository));
+                _camping.CampingRepository.CampingReservationRepository.AddReservation(new Reservation(0, (DateTime)ArrivalDatePicker.SelectedDate, (DateTime)DepartureDatePicker.SelectedDate, _place.PlaceID, _camping.CampingRepository.CampingGuestRepository.GetLastGuestID(), int.Parse(PeopleCountText.Text), IsPaidCB.IsChecked.Value, Price));
+                NavigationService.Navigate(new PlacesOverviewPage(_camping, (CampingRepository)_camping.CampingRepository));
             }
         }
         // Changes the background of textbox back to normal if its value was changed
@@ -188,7 +217,12 @@ namespace CampingUI
         {
             if(sender.GetType() == typeof(TextBox)) {
                 TextBox textbox = (TextBox)sender;
-                textbox.Background = null;
+                if (textbox.BorderBrush.Equals(Brushes.Red))
+                {
+                    textbox.BorderThickness = new Thickness(1, 1, 1, 1);
+                    textbox.BorderBrush = Brushes.White;
+                }
+
             }
         }
     }
