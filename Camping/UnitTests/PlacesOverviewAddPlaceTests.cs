@@ -11,8 +11,7 @@ namespace UnitTests
         public void AddValidPlace()
         {
             Place place = new Place(12, true, 10, true, 10, 2, 25, 1, 1);
-            var mock = new Mock<ICampingRepository>();
-            Camping camping = new Camping(mock.Object);
+            Camping camping = new Camping(TestSupportClass.MockIcampingRepository().Object);
             camping.Places.Add(place);
 
             Assert.IsTrue(camping.Places.Contains(place));
