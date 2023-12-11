@@ -362,7 +362,7 @@ namespace CampingUI
             Place place = (Place)PlacesListView.SelectedItem;
             if (!_wrongInput)
             {
-                Camping.CampingRepository.CampingPlaceRepository.UpdatePlaceData(place.PlaceID, place.StreetID, _hasPowerEdit, _surfaceAreaEdit, _pricePerNightPerPersonEdit, _amountOfPeopleEdit, _dogsAllowedEdit);
+                Camping.UpdatePlace(place.PlaceID, place.StreetID, _hasPowerEdit, _surfaceAreaEdit, _pricePerNightPerPersonEdit, _amountOfPeopleEdit, _dogsAllowedEdit);
                 EditPlaceGrid.Visibility = Visibility.Collapsed;
                 PlaceOverviewGrid.Visibility = Visibility.Visible;
                 ReloadScreenDataPlaces();

@@ -84,8 +84,6 @@ namespace CampingUI
                 plattegrond.ScaleY = scaleY;
             }
         }
-
-
         public void GenerateAreas()
         {
             Areas = Camping.CampingRepository.CampingMapRepository.GetAreas();
@@ -387,7 +385,6 @@ namespace CampingUI
             }
                 
         }
-
         private void SetPlaceDataOnFields(Place place)
         {
             SelectedPlace = place.PlaceID;
@@ -399,12 +396,10 @@ namespace CampingUI
             PlacePersons.Text = place.AmountOfPeople.ToString();
             PlaceStreetComboBox.Text = Camping.CampingRepository.CampingMapRepository.GetStreetByStreetID(place).Name;
         }
-
         static Color ChangeColorOpacity(Color color, double opacity)
         {
             return Color.FromArgb((byte)(opacity * 255), color.R, color.G, color.B);
         }
-
         public Brush GenerateRandomBrush(List<Color> colors)
         {
             
@@ -418,7 +413,6 @@ namespace CampingUI
             SolidColorBrush brush = new SolidColorBrush(selectedColor);
             return brush;
         }
-
         private void field_MouseDown(object sender, MouseButtonEventArgs e)
         {
             field.Children.Clear();
@@ -511,7 +505,6 @@ namespace CampingUI
                 WrongInput = true;
             }
         }
-
         //Function (EventHandler) that resets the background of a textbox if the filters are reset
         private void TextBox_Changed(object sender, TextChangedEventArgs e)
         {
@@ -522,7 +515,6 @@ namespace CampingUI
                 WrongInput = false;
             }
         }
-
         private int GetAddTextBox(TextBox textbox, int editNumber)
         {
             int number;
@@ -535,12 +527,10 @@ namespace CampingUI
             }
             return editNumber;
         }
-
         private void GetAddAmountOfPeople()
         {
             _placePersons = GetAddTextBox(PlacePersons, _placePersons);
         }
-
         private void PlaceStreetComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ComboBox combobox = (ComboBox)sender;
@@ -561,7 +551,6 @@ namespace CampingUI
             PlaceStreetBorder.BorderBrush = Brushes.White;
             PlaceStreetBorder.BorderThickness = new Thickness(1, 1, 1, 1);
         }
-
         private void ExtendStreetPlaceButton_Click(object sender, RoutedEventArgs e)
         {
             Street street = Camping.CampingRepository.CampingMapRepository.GetSteetByStreetName(PlaceStreetComboBox.Text);
@@ -571,7 +560,6 @@ namespace CampingUI
             PlaceSurfaceArea.Text = street.SurfaceArea.ToString();
             PlacePricePerNight.Text = street.PricePerNightPerPerson.ToString();
         }
-
         private void GetAddSurfaceArea()
         {
             _placeSurfaceArea = GetAddTextBox(PlaceSurfaceArea, _placePersons);

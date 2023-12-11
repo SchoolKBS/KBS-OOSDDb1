@@ -1,6 +1,8 @@
 using CampingCore;
+using CampingCore.CampingRepositories;
 using CampingCore.PlacesOverviewPageClasses;
 using CampingDataAccess;
+using Moq;
 using System.Numerics;
 
 namespace UnitTests
@@ -10,12 +12,8 @@ namespace UnitTests
         [Test]
         public void GetFilteredListOnPower_places_returnsList()
         {
-            CampingRepository campingRepository = new CampingRepository();
-            Camping camping = new Camping(campingRepository);
-            List<Place> listToCheck = CreatePlaces();
+            Camping camping = new Camping(TestSupportClass.MockIcampingRepository().Object);
             IEnumerable<Place> places = new List<Place>();
-            camping.Places = listToCheck;
-            places = listToCheck;
             places = PlacesOverviewFilter.GetFilteredListOnPower(true, camping.Places, camping);
             Assert.That(places.Count(), Is.EqualTo(5));
         }
@@ -23,36 +21,25 @@ namespace UnitTests
         [Test]
         public void GetFilteredListOnAmountOfPeople_places_returnsList()
         {
-            CampingRepository campingRepository = new CampingRepository();
-            Camping camping = new Camping(campingRepository);
-            List <Place> listToCheck = CreatePlaces();
+            Camping camping = new Camping(TestSupportClass.MockIcampingRepository().Object);
             IEnumerable<Place> places = new List<Place>();
-            camping.Places = listToCheck;
-            places = listToCheck;
             places = PlacesOverviewFilter.GetFilteredListOnAmountOfPeople(6, camping.Places, camping);
             Assert.That(places.Count(), Is.EqualTo(5));
         }
         [Test]
         public void GetFilteredListOnPrice_places_returnsList()
         {
-            CampingRepository campingRepository = new CampingRepository();
-            Camping camping = new Camping(campingRepository);
-            List<Place> listToCheck = CreatePlaces();
+            Camping camping = new Camping(TestSupportClass.MockIcampingRepository().Object);
             IEnumerable<Place> places = new List<Place>();
-            camping.Places = listToCheck;
-            places = listToCheck;
             places = PlacesOverviewFilter.GetFilteredListOnPrice(5.5, camping.Places, camping);
             Assert.That(places.Count(), Is.EqualTo(5));
         }
 
         [Test]
         public void GetFilteredListOnDates_places_returnsList()
-        { 
-            CampingRepository campingRepository = new CampingRepository();
-            Camping camping = new Camping(campingRepository);
-            List<Place> listToCheck = CreatePlaces();
+        {
+            Camping camping = new Camping(TestSupportClass.MockIcampingRepository().Object);
             IEnumerable<Place> places = new List<Place>();
-            camping.Places = listToCheck;
             places = PlacesOverviewFilter.GetFilteredListOnDate(false, DateTime.Now.Date.AddDays(1), DateTime.Now.Date.AddDays(5), camping.Places, camping);
             Assert.That(places.Count(), Is.EqualTo(5));
         }
@@ -60,27 +47,11 @@ namespace UnitTests
         [Test]
         public void GetAvailablePlacesBetweenDates_places_returnsList()
         {
-            CampingRepository campingRepository = new CampingRepository();
-            Camping camping = new Camping(campingRepository);
-            List<Place> listToCheck = CreatePlaces();
+            Camping camping = new Camping(TestSupportClass.MockIcampingRepository().Object);
+
             IEnumerable<Place> places = new List<Place>();
-            camping.Places = listToCheck;
-            places = listToCheck;
             places = PlacesOverviewFilter.GetAvailablePlacesBetweenDates(DateTime.Now.Date.AddDays(1), DateTime.Now.Date.AddDays(5), camping);
             Assert.That(places.Count(), Is.EqualTo(5));
-        }
-        public static List<Place> CreatePlaces()
-        {
-            List<Place> listToCheck = new List<Place>();
-            for (int i = 1; i <= 5; i++)
-            {
-                listToCheck.Add(new Place(i, true, i, true, i, i, i, i, i));
-            }
-            for (int i = 6; i <= 10; i++)
-            {
-                listToCheck.Add(new Place(i, false, i, false, i, i, i, i, i));
-            }
-            return listToCheck;
         }
     }
 }
