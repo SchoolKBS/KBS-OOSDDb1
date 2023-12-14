@@ -30,7 +30,7 @@
                 <!-- Image to the left of the title -->
                 <Image Source="/CampingUI;component/logo.png" Width="50" Height="40" VerticalAlignment="Center"/>
                 <!-- Title to stay on the left -->
-                <TextBlock FontSize="18" Text="Camping Administration Applicatie" Foreground="White" Margin="10,10,0,0" />
+                <TextBlock FontSize="18" Text="Camping Administratie Applicatie" Foreground="White" Margin="10,10,0,0" />
             </StackPanel>
             
             <!-- Centered stack panel for buttons -->

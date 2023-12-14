@@ -152,15 +152,30 @@ namespace CampingUI
         //Checks if phonenumber is digits
         private void PhoneNumberTextBox_TextChanged(object sender, RoutedEventArgs e)
         {
-            if (Regex.IsMatch(ChangePhoneNumberTextBox.Text, @"^\d+$"))
+            if (Regex.IsMatch(ChangePhoneNumberTextBox.Text, @"^\d+$") && !string.IsNullOrEmpty(ChangePhoneNumberTextBox.Text))
             {
                 InputNotification.Text = "";
                 ConfirmEditButton.IsEnabled = true;
             }
             else
             {
-                InputNotification.Text = "Het telefoonnummer mag alleen cijfer bevatten";
+                InputNotification.Text = "Het telefoonnummer is niet geldig";
                 ConfirmEditButton.IsEnabled = false;
+            }
+        }
+
+        private void NameTextBox_TextChanged(object sender, RoutedEventArgs e)
+        {
+            if(string.IsNullOrEmpty(ChangeFirstNameTextBox.Text) || string.IsNullOrEmpty(ChangeLastNameTextBox.Text))
+            {
+                InputNotification.Text = "Voer een voornaam en achternaam in";
+                ConfirmEditButton.IsEnabled = false;
+
+            }
+            else
+            {
+                InputNotification.Text = "";
+                ConfirmEditButton.IsEnabled = true;
             }
         }
     }

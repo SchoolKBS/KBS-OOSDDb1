@@ -342,17 +342,17 @@
 
                             <StackPanel Grid.Column="0">
                                 <Label FontSize="16"  Content="Voornaam*" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White"/>
-                                <TextBox FontSize="16"  x:Name="ChangeFirstNameTextBox" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" Height="30" Margin="10, 0, 0, 0" />
+                                <TextBox FontSize="16"  x:Name="ChangeFirstNameTextBox" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" Height="30" Margin="10, 0, 0, 0" TextChanged="NameTextBox_TextChanged"/>
                             </StackPanel>
 
                             <StackPanel Grid.Column="1">
-                                <Label FontSize="16"  Content="Tussenvoegsel*" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White"/>
+                                <Label FontSize="16"  Content="Tussenvoegsel" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White"/>
                                 <TextBox FontSize="16"  x:Name="ChangeInfixTextBox" VerticalAlignment="Center" HorizontalAlignment="Left" Width="100" Height="30" Margin="10, 0, 0, 0"/>
                             </StackPanel>
 
                             <StackPanel Grid.Column="2">
                                 <Label FontSize="16"  Content="Achternaam*" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White"/>
-                                <TextBox FontSize="16"  x:Name="ChangeLastNameTextBox" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" Height="30" Margin="10, 0, 0, 0" />
+                                <TextBox FontSize="16"  x:Name="ChangeLastNameTextBox" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" Height="30" Margin="10, 0, 0, 0" TextChanged="NameTextBox_TextChanged"/>
                             </StackPanel>
                         </Grid>
 
@@ -364,17 +364,17 @@
                             </Grid.ColumnDefinitions>
 
                             <StackPanel Grid.Column="0">
-                                <Label FontSize="16"  Content="Woonplaats*" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White"/>
+                                <Label FontSize="16"  Content="Woonplaats" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White"/>
                                 <TextBox FontSize="16"  x:Name="ChangeCityTextBox" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" Height="30" Margin="10, 0, 0, 0" />
                             </StackPanel>
 
                             <StackPanel Grid.Column="1">
-                                <Label FontSize="16"  Content="Postcode*" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White"/>
+                                <Label FontSize="16"  Content="Postcode" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White"/>
                                 <TextBox FontSize="16"  x:Name="ChangePostalCodeTextBox" VerticalAlignment="Center" HorizontalAlignment="Left" Width="100" Height="30" Margin="10, 0, 0, 0" TextChanged="PostalCodeTextBox_TextChanged"/>
                             </StackPanel>
 
                             <StackPanel Grid.Column="2">
-                                <Label FontSize="16"  Content="Adres*" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White"/>
+                                <Label FontSize="16"  Content="Adres" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White"/>
                                 <TextBox FontSize="16"  x:Name="ChangeAddressTextBox" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" Height="30" Margin="10, 0, 0, 0"/>
                             </StackPanel>
                         </Grid>
@@ -392,7 +392,7 @@
                             </StackPanel>
 
                             <StackPanel Grid.Column="2">
-                                <Label FontSize="16"  Content="ChangeEmailTextBox*" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White"/>
+                                <Label FontSize="16"  Content="Email" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White"/>
                                 <TextBox FontSize="16" x:Name="ChangeEmailTextBox" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" Height="30" Margin="10, 0, 0, 0"/>
                             </StackPanel>
                         </Grid>
