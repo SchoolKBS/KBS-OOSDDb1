@@ -31,7 +31,7 @@ namespace CampingUI
     {
         private Camping _camping;
         private IEnumerable<Place> _placesSortedAndOrFiltered;
-        private bool? _hasPower, _dogsAllowed;
+        private bool? _hasPower = null, _dogsAllowed = null;
         private int _amountOfPeople = 0;
         private DateTime _arrivalDate, _departureDate;
         private bool _isSortedAscending = true;
@@ -94,18 +94,19 @@ namespace CampingUI
         }
         private void PowerCheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            _hasPower = FilterAfterCheckboxChanged(PowerCheckBoxFilter, _hasPower, "stroom");
+            _hasPower = FilterAfterCheckboxChanged(PowerCheckBoxFilter, "stroom");
+            Filter(_arrivalDate, _departureDate, _amountOfPeople, _maxPriceRange, _hasPower, _dogsAllowed);
         }
         private void DogsCheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            _dogsAllowed = FilterAfterCheckboxChanged(DogCheckBoxFilter, _dogsAllowed, "hond");
+            _dogsAllowed = FilterAfterCheckboxChanged(DogCheckBoxFilter, "hond");
+            Filter(_arrivalDate, _departureDate, _amountOfPeople, _maxPriceRange, _hasPower, _dogsAllowed);
         }
-        private bool? FilterAfterCheckboxChanged(CheckBox checkbox, bool? attributeboolean, string inputstring)
+        private bool? FilterAfterCheckboxChanged(CheckBox checkbox, string inputstring)
         {
-            attributeboolean = CheckBoxChecked(checkbox, inputstring);
+            bool? attributeboolean = CheckBoxChecked(checkbox, inputstring);
             SetFilterVariables();
             ResetListViewForFilter();
-            Filter(_arrivalDate, _departureDate, _amountOfPeople, _maxPriceRange, _hasPower, _dogsAllowed);
             return attributeboolean;
         }
         private void RemoveFilters_Click(object sender, RoutedEventArgs e)
@@ -172,6 +173,7 @@ namespace CampingUI
             }
             else if (checkbox.IsChecked == false)
             {
+
                 checkbox.Content = "Geen " + content;
                 editbool = false;
             }
@@ -431,7 +433,7 @@ namespace CampingUI
                 editBool = true;
                 checkBox.Content = "Wel " + content;
             }
-            else if (checkBox.IsChecked == null)
+            else if (checkBox.IsChecked == false)
             {
                 editBool = false;
                 checkBox.Content = "Geen " + content;

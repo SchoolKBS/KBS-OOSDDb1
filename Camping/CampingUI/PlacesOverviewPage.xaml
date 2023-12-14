@@ -223,13 +223,13 @@
                     <StackPanel Grid.Column="2" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
                         <!-- Geen voorkeur (Stroom) -->
                         <Label FontSize="14" Content="Heeft stroom: " HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Calibri" FontWeight="Bold"/>
-                        <CheckBox FontSize="14" Height="30" VerticalContentAlignment="Center" Name="PowerCheckBoxFilter" Content="Geen voorkeur (stroom)"  IsThreeState="true" HorizontalAlignment="Center" VerticalAlignment="Center" Click="PowerCheckBox_Checked" FontFamily="Calibri" FontWeight="Bold" IsChecked="{x:Null}"/>
+                    <CheckBox FontSize="14" Height="30" VerticalContentAlignment="Center" Name="PowerCheckBoxFilter" Content="Geen voorkeur (stroom)" IsChecked="{x:Null}" IsThreeState="true" HorizontalAlignment="Center" VerticalAlignment="Center" Click="PowerCheckBox_Checked" FontFamily="Calibri" FontWeight="Bold"/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="3" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
                         <!-- Geen voorkeur (Honden) -->
                         <Label FontSize="14" Content="Honden toegestaan: " HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Calibri" FontWeight="Bold"/>
-                        <CheckBox FontSize="14" Height="30" VerticalContentAlignment="Center" Name="DogCheckBoxFilter" Content="Geen voorkeur (hond)"  IsThreeState="true" HorizontalAlignment="Center" VerticalAlignment="Center" Click="DogsCheckBox_Checked" FontFamily="Calibri" FontWeight="Bold" IsChecked="{x:Null}"/>
+                    <CheckBox FontSize="14" Height="30" VerticalContentAlignment="Center" Name="DogCheckBoxFilter" Content="Geen voorkeur (hond)"  IsChecked="{x:Null}" IsThreeState="true" HorizontalAlignment="Center" VerticalAlignment="Center" Click="DogsCheckBox_Checked" FontFamily="Calibri" FontWeight="Bold"/>
                     </StackPanel>
                     <!-- Aantal personen -->
                     <StackPanel Grid.Column="4" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
