@@ -505,13 +505,19 @@ namespace CampingUI
             Area area = null;
             if (!string.IsNullOrEmpty(comboBox.Text))
             {
-                area = _camping.CampingRepository.CampingMapRepository.GetAreaByAreaName(PlaceAreaComboBox.SelectedItem.ToString());
+                if (PlaceAreaComboBox.SelectedItem != null)
+                {
+                    area = _camping.CampingRepository.CampingMapRepository.GetAreaByAreaName(PlaceAreaComboBox.SelectedItem.ToString());
+                }
             }
 
             Street street = null;
             if (!string.IsNullOrEmpty(comboBox.Text))
             {
-                street = _camping.CampingRepository.CampingMapRepository.GetStreetByStreetName(PlaceStreetComboBox.SelectedItem.ToString());
+                if (PlaceStreetComboBox.SelectedItem != null)
+                {
+                    street = _camping.CampingRepository.CampingMapRepository.GetStreetByStreetName(PlaceStreetComboBox.SelectedItem.ToString());
+                }
             }
 
             if (street != null || area != null)
