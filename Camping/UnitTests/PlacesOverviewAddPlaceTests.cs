@@ -10,7 +10,7 @@ namespace UnitTests
         [Test]
         public void AddValidPlace()
         {
-            Place place = new Place(12, true, 10, true, 10, 2, 25, 1, 1);
+            Place place = new Place(12, true, 10, 10, true, 10, 2, 25, 1, 1);
             Camping camping = new Camping(TestSupportClass.MockIcampingRepository().Object);
             camping.Places.Add(place);
 
@@ -23,7 +23,7 @@ namespace UnitTests
         {
             Assert.Throws<FormatException>(() =>
             {
-                Place place = new Place(12, true, int.Parse("jaapstraat"), true, 10, 10, 10, 10, 10);
+                Place place = new Place(12, true, int.Parse("jaapstraat"), 10, true, 10, 10, 10, 10, 10);
         });
         }
     }
