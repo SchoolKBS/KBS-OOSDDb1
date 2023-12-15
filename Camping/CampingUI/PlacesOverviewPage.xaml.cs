@@ -222,22 +222,6 @@ namespace CampingUI
 
 
 
-        public Camping GetCamping()
-        {
-            return _camping;
-        }
-        public int GetCampingAmountOfPeople()
-        {
-            return _amountOfPeople;
-        }
-        public bool GetFilterApplied()
-        {
-            return _filterApplied;
-        }
-
-
-
-
 
 
 
@@ -490,6 +474,19 @@ namespace CampingUI
 
             OpenPlaceOverview();
             _wrongInput = false;
+        }
+
+        public Camping GetCamping()
+        {
+            return _camping;
+        }
+        public int GetCampingAmountOfPeople()
+        {
+            return _amountOfPeople;
+        }
+        public bool GetFilterApplied()
+        {
+            return _filterApplied;
         }
     }
 }
