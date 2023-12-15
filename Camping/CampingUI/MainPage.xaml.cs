@@ -117,18 +117,18 @@ namespace CampingUI
                         //Name = "Canvas_" + area.AreaID.ToString(),
                     };
 
-                    Canvas.SetTop(border, coordinates[1]);  // Ycord1 to place from top.
+                    Canvas.SetTop(border, coordinates[1]);  // YCord1 to place from top.
                     Canvas.SetLeft(border, coordinates[0]); // XCord1 to place from left.
                     Canvas.SetZIndex(border, -1);
                     field.Children.Add(border);
 
 
                     // Generate streets that belong to the area.
-                    GenerateStreetsPerArea(canvasArea, area);
+                    // GenerateStreetsPerArea(canvasArea, area);
                 }
             }
         }
-        private void GenerateStreetsPerArea(Canvas canvasArea, Area area)
+/*        private void GenerateStreetsPerArea(Canvas canvasArea, Area area)
         {
             Streets = Camping.CampingRepository.CampingMapRepository.GetStreets();
 
@@ -144,7 +144,7 @@ namespace CampingUI
                     }
                 }
             }
-        }
+        }*/
         public void GenerateStreet(Canvas canvasArea, Street street)
         {
             if (street != null)
@@ -226,7 +226,7 @@ namespace CampingUI
                     Canvas.SetZIndex(canvasStreet, Canvas.GetZIndex(canvasStreet) - 1);
                 };
 
-                Canvas.SetTop(canvasStreet, coordinates[1]);  // Ycord1 to place from top.
+                Canvas.SetTop(canvasStreet, coordinates[1]);  // YCord1 to place from top.
                 Canvas.SetLeft(canvasStreet, coordinates[0]); // XCord1 to place from left.
 
                 canvasArea.Children.Add(canvasStreet);
@@ -269,7 +269,7 @@ namespace CampingUI
             border.Child = canvasPlace;
             Canvas.SetZIndex(canvasPlace, 100);
 
-            Canvas.SetTop(border, coordinates[1]);  // Ycord1 to place from top.
+            Canvas.SetTop(border, coordinates[1]);  // YCord1 to place from top.
             Canvas.SetLeft(border, coordinates[0]); // XCord1 to place from left.
 
             // Add the Border to the main canvas
@@ -424,18 +424,18 @@ namespace CampingUI
             List<Place> places = Camping.CampingRepository.CampingPlaceRepository.GetPlaces();
             foreach(Place place in places)
             {
-                place.Xcord -= 15;
-                place.Ycord -= 15;
+                place.XCord -= 15;
+                place.YCord -= 15;
             }
             XPressed = (int)Math.Round(p.X) - 15;
             YPressed = (int)Math.Round(p.Y) - 15;
-            List<Area> PlaceWithinAreas = areas.Where(i => i.Xcord1 <= (XPressed - 15))
-                                               .Where(i => i.Xcord1 + i.Xcord2 >= (XPressed + 45))
-                                               .Where(i => i.Ycord1 <= (YPressed - 15))
-                                               .Where(i => i.Ycord1 + i.Ycord2 >= (YPressed + 45))
+            List<Area> PlaceWithinAreas = areas.Where(i => i.XCord1 <= (XPressed - 15))
+                                               .Where(i => i.XCord1 + i.Width >= (XPressed + 45))
+                                               .Where(i => i.YCord1 <= (YPressed - 15))
+                                               .Where(i => i.YCord1 + i.Height >= (YPressed + 45))
                                                .ToList();
-            List<Place> placesNotInNewPlaceBorder = places.Where(i => i.Xcord >= (XPressed-45) && i.Xcord <= (XPressed+45))
-                                                          .Where(i => i.Ycord >= (YPressed-45) && i.Ycord <= (YPressed+45))
+            List<Place> placesNotInNewPlaceBorder = places.Where(i => i.XCord >= (XPressed-45) && i.XCord <= (XPressed+45))
+                                                          .Where(i => i.YCord >= (YPressed-45) && i.YCord <= (YPressed+45))
                                                           .ToList();
             if (PlaceWithinAreas.Count == 1 && placesNotInNewPlaceBorder.Count == 0)  
             {

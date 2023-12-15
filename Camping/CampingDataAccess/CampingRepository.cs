@@ -44,6 +44,7 @@ namespace CampingDataAccess
             CreateAreaTable();
             CreateStreetTable();
             CreatePlaceTable();
+            CreatePlaceExtendsTable();
             CreateGuestTable();
             CreateReservationTable();
         }
@@ -75,15 +76,16 @@ namespace CampingDataAccess
             string sql = "CREATE TABLE IF NOT EXISTS Area (" +
                 "AreaID INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "Name VARCHAR(255)," +
+                "Color INT(9) NOT NULL," +
                 "Power BOOLEAN NOT NULL," +
-                "SurfaceArea INT NOT NULL," +
-                "PricePerNightPerPerson DECIMAL(18,2) NOT NULL," +
-                "AmountOfPeople INT NOT NULL," +
                 "Dogs BOOLEAN NOT NULL," +
-                "Xcord1 INT NOT NULL," +
-                "Ycord1 INT NOT NULL," +
-                "Xcord2 INT NOT NULL," +
-                "Ycord2 INT NOT NULL" +
+                "SurfaceArea INT NOT NULL," +
+                "PricePerNightPerPerson FLOAT NOT NULL," +
+                "AmountOfPeople INT NOT NULL," +
+                "XCord1 INT NOT NULL," +
+                "YCord1 INT NOT NULL," +
+                "Width INT NOT NULL," +
+                "Height INT NOT NULL" +
                 ");";
             using (var connection = new SqliteConnection(ConnectionString))
             {
@@ -99,18 +101,16 @@ namespace CampingDataAccess
         {
             string sql = "CREATE TABLE IF NOT EXISTS Street (" +
                 "StreetID INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "AreaID INTEGER NOT NULL," +
                 "Name VARCHAR(255), " +
                 "Power BOOLEAN NOT NULL," +
-                "SurfaceArea INT NOT NULL," +
-                "PricePerNightPerPerson DECIMAL(18,2) NOT NULL," +
-                "AmountOfPeople INT NOT NULL," +
                 "Dogs BOOLEAN NOT NULL," +
-                "Xcord1 INT NOT NULL," +
-                "Ycord1 INT NOT NULL," +
-                "Xcord2 INT NOT NULL," +
-                "Ycord2 INT NOT NULL," +
-                "FOREIGN KEY(AreaID) REFERENCES Area(AreaID)" +
+                "SurfaceArea INT NOT NULL," +
+                "PricePerNightPerPerson FLOAT NOT NULL," +
+                "AmountOfPeople INT NOT NULL," +
+                "XCord1 INT NOT NULL," +
+                "YCord1 INT NOT NULL," +
+                "XCord2 INT NOT NULL," +
+                "YCord2 INT NOT NULL" +
                 ");";
             using (var connection = new SqliteConnection(ConnectionString))
             {
@@ -127,15 +127,38 @@ namespace CampingDataAccess
             string sql = "CREATE TABLE IF NOT EXISTS Place (" +
                 "PlaceID INTEGER PRIMARY KEY," +
                 "StreetID INTEGER NOT NULL, " +
+                "AreaID INTEGER NOT NULL, " +
                 "Power BOOLEAN NOT NULL," +
-                "SurfaceArea INT NOT NULL," +
-                "PricePerNightPerPerson DECIMAL(18,2) NOT NULL," +
-                "AmountOfPeople INT NOT NULL," +
                 "Dogs BOOLEAN NOT NULL," +
-                "Xcord INT NOT NULL," +
-                "Ycord INT NOT NULL," +
-                "FOREIGN KEY(StreetID) REFERENCES Street(StreetID)" +
+                "SurfaceArea INT NOT NULL," +
+                "PricePerNightPerPerson FLOAT NOT NULL," +
+                "AmountOfPeople INT NOT NULL, " +
+                "XCord INT NOT NULL, " +
+                "YCord INT NOT NULL, " +
+                "FOREIGN KEY(StreetID) REFERENCES Street(StreetID), " +
+                "FOREIGN KEY(AreaID) REFERENCES Area(AreaID) " +
                 ");";
+            using (var connection = new SqliteConnection(ConnectionString))
+            {
+                connection.Open();
+                using (var cmd = new SqliteCommand(sql, connection))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+        }
+        public void CreatePlaceExtendsTable()
+        {
+            string sql = "CREATE TABLE IF NOT EXISTS Place_Extends (" +
+                            "PlaceID INTEGER PRIMARY KEY, " +
+                            "Power BOOLEAN, " +
+                            "Dogs BOOLEAN, " +
+                            "SurfaceArea BOOLEAN, " +
+                            "PricePerNightPerPerson BOOLEAN, " +
+                            "AmountOfPeople BOOLEAN, " +
+                            "FOREIGN KEY(PlaceID) REFERENCES Place(PlaceID) " +
+                            ");";
             using (var connection = new SqliteConnection(ConnectionString))
             {
                 connection.Open();
@@ -150,14 +173,14 @@ namespace CampingDataAccess
         {
             string sql = "CREATE TABLE IF NOT EXISTS Reservation (" +
                 "ReservationID INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "ArrivalDate DATE NOT NULL," +
-                "DepartureDate DATE NOT NULL," +
                 "PlaceID INTEGER NOT NULL," +
                 "GuestID INTEGER NOT NULL," +
+                "ArrivalDate DATE NOT NULL," +
+                "DepartureDate DATE NOT NULL," +
                 "AmountOfPeople INT NOT NULL," +
                 "IsPaid BOOLEAN NOT NULL," +
                 "Price FLOAT NOT NULL," +
-                "FOREIGN KEY(PlaceID) REFERENCES Place(PlaceID)," +
+                "FOREIGN KEY(PlaceID) REFERENCES Place(PlaceID), " +
                 "FOREIGN KEY(GuestID) REFERENCES Guest(GuestID)" +
                 ");";
             using (var connection = new SqliteConnection(ConnectionString))
@@ -172,13 +195,13 @@ namespace CampingDataAccess
         }
         public void AddDummyDataArea()
         {
-            string sql = "INSERT INTO Area (Power, SurfaceArea, PricePerNightPerPerson, AmountOfPeople, Dogs, Xcord1, Ycord1, Xcord2, Ycord2) " +
-                "                   VALUES (@Power, @SurfaceArea, @PricePerNightPerPerson, @AmountOfPeople, @Dogs, @Xcord1, @Ycord1, @Xcord2, @Ycord2);";
+            string sql = "INSERT INTO Area (Name, Color, Power, Dogs, SurfaceArea, PricePerNightPerPerson, AmountOfPeople, XCord1, YCord1, Width, Height) " +
+                "                   VALUES (@Name, @Color, @Power, @Dogs, @SurfaceArea, @PricePerNightPerPerson, @AmountOfPeople, @XCord1, @YCord1, @Width, @Height);";
             List<ArrayList> list = new List<ArrayList>(){
-                new ArrayList(){0,11,11,11,0,0,0,500,375},
-                new ArrayList(){0,13,13,13,1,500,0,500,375},
-                new ArrayList(){1,14,14,14,1,0,375,500,375},
-                new ArrayList(){1,12,12,12,0,500,375,500,375}
+                new ArrayList(){"Zwolle", 255000000, 0,11,11,11,0,0,0,500,375},
+                new ArrayList(){"Meppel",000255000, 0,13,13,13,1,500,0,500,375},
+                new ArrayList(){"Warnsveld", 255000255, 1,14,14,14,1,0,375,500,375},
+                new ArrayList(){"Nijkerk", 000255255, 1,12,12,12,0,500,375,500,375}
                 };
             using (var connection = new SqliteConnection(ConnectionString))
             {
@@ -188,15 +211,17 @@ namespace CampingDataAccess
                     using (var command = new SqliteCommand(sql, connection))
                     {
                         command.Prepare();
-                        command.Parameters.AddWithValue("@Power", item[0]);
-                        command.Parameters.AddWithValue("@SurfaceArea", item[1]);
-                        command.Parameters.AddWithValue("@PricePerNightPerPerson", item[2]);
-                        command.Parameters.AddWithValue("@AmountOfPeople", item[3]);
-                        command.Parameters.AddWithValue("@Dogs", item[4]);
-                        command.Parameters.AddWithValue("@Xcord1", item[5]);
-                        command.Parameters.AddWithValue("@Ycord1", item[6]);
-                        command.Parameters.AddWithValue("@Xcord2", item[7]);
-                        command.Parameters.AddWithValue("@Ycord2", item[8]);
+                        command.Parameters.AddWithValue("@Name", item[0]);
+                        command.Parameters.AddWithValue("@Color", item[1]);
+                        command.Parameters.AddWithValue("@Power", item[2]);
+                        command.Parameters.AddWithValue("@Dogs", item[3]);
+                        command.Parameters.AddWithValue("@SurfaceArea", item[4]);
+                        command.Parameters.AddWithValue("@PricePerNightPerPerson", item[5]);
+                        command.Parameters.AddWithValue("@AmountOfPeople", item[6]);
+                        command.Parameters.AddWithValue("@XCord1", item[7]);
+                        command.Parameters.AddWithValue("@YCord1", item[8]);
+                        command.Parameters.AddWithValue("@Width", item[9]);
+                        command.Parameters.AddWithValue("@Height", item[10]);
                         command.ExecuteNonQuery();
                     }
                 }
@@ -206,19 +231,19 @@ namespace CampingDataAccess
         }
         public void AddDummyDataStreet()
         {
-            string sql = "INSERT INTO Street (AreaID, Name, Power, SurfaceArea, PricePerNightPerPerson, AmountOfPeople, Dogs, Xcord1, Ycord1, Xcord2, Ycord2)" +
-                                    " VALUES (@AreaID, @Name, @Power, @SurfaceArea, @PricePerNightPerPerson, @AmountOfPeople, @Dogs, @Xcord1, @Ycord1, @Xcord2, @Ycord2);";
+            string sql = "INSERT INTO Street (Name, Power, Dogs, SurfaceArea, PricePerNightPerPerson, AmountOfPeople, XCord1, YCord1, XCord2, YCord2)" +
+                                    " VALUES (@Name, @Power, @Dogs, @SurfaceArea, @PricePerNightPerPerson, @AmountOfPeople, @XCord1, @YCord1, @XCord2, @YCord2);";
             List<ArrayList> list = new List<ArrayList>() {
-                new ArrayList(){1,"Kalverstraat", 1,21,21,21,1,0,50,100,10},
-                new ArrayList(){1,"Leidsestraat", 0,22,22,22,0,100,50,10,200},
-                new ArrayList(){1,"Coolsingel", 1,23,23,23,1,100,100,400,10},
-                new ArrayList(){1,"A. Kerkhof", 0,24,24,24,0,400,100,10,275},
-                new ArrayList(){2,"Tielemansstraat", 1,25,25,25,1,0,100,200,10},
-                new ArrayList(){2,"Barteljorisstraat", 0,26,26,26,0,100,100,10,275},
-                new ArrayList(){4,"Houtstraat", 1,27,27,27,1,0,50,200,10},
-                new ArrayList(){4,"Jac P. Thijsselaan", 0,28,28,28,0,100,0,10,200},
-                new ArrayList(){3,"Gorterstraat", 1,29,29,29,1,300,50,200,10},
-                new ArrayList(){3,"Weeverstraat", 0,30,30,30,0,400,0,10,200},
+                new ArrayList(){"Kalverstraat", 1,1,21,21,21,0,50,100,10},
+                new ArrayList(){"Leidsestraat", 0,0,22,22,22,0,100,50,10,200},
+                new ArrayList(){"Coolsingel", 1,1,23,23,23,100,100,400,10},
+                new ArrayList(){"A. Kerkhof", 0,0,24,24,24,400,100,10,275},
+                new ArrayList(){"Tielemansstraat",  1,1,25,25,25,500,100,200,10},
+                new ArrayList(){"Barteljorisstraat", 0,0,26,26,26,600,100,10,275},
+                new ArrayList(){"Houtstraat", 1,1,27,27,27,500,425,200,10},
+                new ArrayList(){"Jac P. Thijsselaan", 0,0,28,28,28,600,375,10,200},
+                new ArrayList(){"Gorterstraat", 1,1,29,29,29,300,425,200,10},
+                new ArrayList(){"Weeverstraat", 0,0,30,30,30,400,375,10,200},
             };
             using (var connection = new SqliteConnection(ConnectionString))
             {
@@ -228,17 +253,16 @@ namespace CampingDataAccess
                     using (var command = new SqliteCommand(sql, connection))
                     {
                         command.Prepare();
-                        command.Parameters.AddWithValue("@AreaID", item[0]);
-                        command.Parameters.AddWithValue("@Name", item[1]);
-                        command.Parameters.AddWithValue("@Power", item[2]);
+                        command.Parameters.AddWithValue("@Name", item[0]);
+                        command.Parameters.AddWithValue("@Power", item[1]);
+                        command.Parameters.AddWithValue("@Dogs", item[2]);
                         command.Parameters.AddWithValue("@SurfaceArea", item[3]);
                         command.Parameters.AddWithValue("@PricePerNightPerPerson", item[4]);
                         command.Parameters.AddWithValue("@AmountOfPeople", item[5]);
-                        command.Parameters.AddWithValue("@Dogs", item[6]);
-                        command.Parameters.AddWithValue("@Xcord1", item[7]);
-                        command.Parameters.AddWithValue("@Ycord1", item[8]);
-                        command.Parameters.AddWithValue("@Xcord2", item[9]);
-                        command.Parameters.AddWithValue("@Ycord2", item[10]);
+                        command.Parameters.AddWithValue("@XCord1", item[6]);
+                        command.Parameters.AddWithValue("@YCord1", item[7]);
+                        command.Parameters.AddWithValue("@XCord2", item[8]);
+                        command.Parameters.AddWithValue("@YCord2", item[9]);
                         command.ExecuteNonQuery();
                     }
                 }
@@ -247,19 +271,20 @@ namespace CampingDataAccess
         public void AddDummyDataPlaces()
         {
 
-            string sql = "INSERT INTO Place (PlaceID, StreetID, Power, SurfaceArea, PricePerNightPerPerson, AmountOfPeople, Dogs, Xcord, Ycord) VALUES (@PlaceID, @StreetID, @Power, @SurfaceArea, @PricePerNightPerPerson, @AmountOfPeople, @Dogs, @Xcord, @Ycord);";
+            string sql = "INSERT INTO Place (PlaceID, StreetID, AreaID, Power, Dogs, SurfaceArea, PricePerNightPerPerson, AmountOfPeople, XCord, YCord) " +
+                                    "VALUES (@PlaceID, @StreetID, @AreaID, @Power, @Dogs, @SurfaceArea, @PricePerNightPerPerson, @AmountOfPeople, @XCord, @YCord);";
 
             List<ArrayList> list = new List<ArrayList>() {
-                new ArrayList(){1,1,0,1,1,1,0,10,10},
-                new ArrayList(){2,1,1,2,2,2,1,50,10},
-                new ArrayList(){3,2,0,3,3,3,0,65,65},
-                new ArrayList(){4,2,1,4,4,4,1,65,105},
-                new ArrayList(){5,2,0,5,5,5,0,65,145},
-                new ArrayList(){6,3,1,6,6,6,1,120,65},
-                new ArrayList(){7,3,0,7,7,7,0,160,65},
-                new ArrayList(){8,3,1,8,8,8,1,200,65},
-                new ArrayList(){9,4,0,9,9,9,0,360,125},
-                new ArrayList(){10,4,1,10,10,10,1,360,165},
+                new ArrayList(){1,1,1,0,0,1,1,1,10,10},
+                new ArrayList(){2,1,1,1,1,2,2,2,50,10},
+                new ArrayList(){3,2,1,0,0,3,3,3,65,65},
+                new ArrayList(){4,2,1,1,1,4,4,4,65,105},
+                new ArrayList(){5,2,1,0,0,5,5,5,65,145},
+                new ArrayList(){6,3,1,1,1,6,6,6,120,65},
+                new ArrayList(){7,3,1,0,0,7,7,7,160,65},
+                new ArrayList(){8,3,1,1,1,8,8,8,200,65},
+                new ArrayList(){9,4,1,0,0,9,9,9,360,125},
+                new ArrayList(){10,4,1,1,1,10,10,10,360,165},
             };
             using (var connection = new SqliteConnection(ConnectionString))
             {
@@ -268,15 +293,16 @@ namespace CampingDataAccess
                 {
                     using (var command = new SqliteCommand(sql, connection))
                     {
-                        command.Parameters.AddWithValue("PlaceID", item[0]);
-                        command.Parameters.AddWithValue("StreetID", item[1]);
-                        command.Parameters.AddWithValue("Power", item[2]);
-                        command.Parameters.AddWithValue("SurfaceArea", item[3]);
-                        command.Parameters.AddWithValue("PricePerNightPerPerson", item[4]);
-                        command.Parameters.AddWithValue("AmountOfPeople", item[5]);
-                        command.Parameters.AddWithValue("Dogs", item[6]);
-                        command.Parameters.AddWithValue("Xcord", item[7]);
-                        command.Parameters.AddWithValue("Ycord", item[8]);
+                        command.Parameters.AddWithValue("@PlaceID", item[0]);
+                        command.Parameters.AddWithValue("@StreetID", item[1]);
+                        command.Parameters.AddWithValue("@AreaID", item[2]);
+                        command.Parameters.AddWithValue("@Power", item[3]);
+                        command.Parameters.AddWithValue("@Dogs", item[4]);
+                        command.Parameters.AddWithValue("@SurfaceArea", item[5]);
+                        command.Parameters.AddWithValue("@PricePerNightPerPerson", item[6]);
+                        command.Parameters.AddWithValue("@AmountOfPeople", item[7]);
+                        command.Parameters.AddWithValue("@XCord", item[8]);
+                        command.Parameters.AddWithValue("@YCord", item[9]);
                         command.ExecuteNonQuery();
                     }
                 }
@@ -322,21 +348,41 @@ namespace CampingDataAccess
         }
         public void AddDummyDataReservations(int placeID, int i)
         {
-            string sql = "INSERT INTO Reservation (ArrivalDate, DepartureDate, PlaceID, GuestID, AmountOfPeople, IsPaid, Price) VALUES ( @ArrivalDate, @DepartureDate, @PlaceID, @GuestID, @AmountOfPeople, @IsPaid, @Price);";
+            string sql = "INSERT INTO Reservation (PlaceID, GuestID, ArrivalDate, DepartureDate, AmountOfPeople, IsPaid, Price)" +
+                                         " VALUES (@PlaceID, @GuestID, @ArrivalDate, @DepartureDate, @AmountOfPeople, @IsPaid, @Price);";
 
             using (var connection = new SqliteConnection(ConnectionString))
             {
                 connection.Open();
                 using (var command = new SqliteCommand(sql, connection))
                 {
-                    command.Parameters.AddWithValue("@ArrivalDate", DateTime.Now.Date.AddDays(i));
-                    command.Parameters.AddWithValue("@DepartureDate", DateTime.Now.Date.AddDays(i + 10));
                     command.Parameters.AddWithValue("@PlaceID", placeID);
                     command.Parameters.AddWithValue("@GuestID", i);
+                    command.Parameters.AddWithValue("@ArrivalDate", DateTime.Now.Date.AddDays(i));
+                    command.Parameters.AddWithValue("@DepartureDate", DateTime.Now.Date.AddDays(i + 10));
                     command.Parameters.AddWithValue("@AmountOfPeople", i);
                     command.Parameters.AddWithValue("@IsPaid", i % 2 == 0);
                     command.Parameters.AddWithValue("@Price", i);
                     command.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+        }
+        public void AddDummyDataPlaceExtends()
+        {
+            string sql = "INSERT INTO Place_Extends (PlaceID)" +
+                                           " VALUES (@PlaceID);";
+            using (var connection = new SqliteConnection(ConnectionString))
+            {
+                connection.Open();
+                for (int i = 1; i<=10;i++)
+                {
+                    using (var command = new SqliteCommand(sql, connection))
+                    {
+                        command.Prepare();
+                        command.Parameters.AddWithValue("@PlaceID", i);
+                        command.ExecuteNonQuery();
+                    }
                 }
                 connection.Close();
             }
@@ -346,6 +392,7 @@ namespace CampingDataAccess
             AddDummyDataArea();
             AddDummyDataStreet();
             AddDummyDataPlaces();
+            AddDummyDataPlaceExtends();
             List<Place> places = CampingPlaceRepository.GetPlaces();
             AddDummyDataGuests();
             List<Guest> guests = CampingGuestRepository.GetGuests();
@@ -353,6 +400,7 @@ namespace CampingDataAccess
             {
                 AddDummyDataReservations(places[i - 1].PlaceID, i);
             }
+
         }
 
 
