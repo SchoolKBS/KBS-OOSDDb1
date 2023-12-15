@@ -44,11 +44,11 @@ namespace CampingCore
         public Reservation(ArrayList properties)
         {
             ReservationID = (int)properties[0];
-            ArrivalDate = (DateTime)properties[1];
-            DepartureDate = (DateTime)properties[2];
-            PlaceID = (int)properties[3];
-            GuestName = (string)properties[4];
-            GuestID = (int)properties[5];
+            PlaceID = (int)properties[1];
+            GuestName = (string)properties[2];
+            GuestID = (int)properties[3];
+            ArrivalDate = (DateTime)properties[4];
+            DepartureDate = (DateTime)properties[5];
             AmountOfPeople = (int)properties[6]; 
             IsPaid = (bool)properties[7];
             Price = (double)properties[8];

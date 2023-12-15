@@ -423,6 +423,7 @@ namespace CampingUI
         // Sets the possible DepartureDates in the DepartureDatePicker.
         private void ShowAvailableDatesDeparture()
         {
+            if(ArrivalDatePicker.SelectedDate >= DepartureDatePicker.SelectedDate) { DepartureDatePicker.SelectedDate = null; }
             if (ArrivalDatePicker.SelectedDate != null)
             {
                 DepartureDatePicker.DisplayDateEnd = null;
@@ -438,6 +439,7 @@ namespace CampingUI
             bool result = true;
             if(!CheckAmountOfPeople()) result = false;
             if(!CheckPlace()) result = false;
+            if(DepartureDatePicker.SelectedDate == null) result = false;
             return result;
         }
         private bool CheckPlace()
