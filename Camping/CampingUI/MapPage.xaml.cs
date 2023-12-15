@@ -437,7 +437,6 @@ namespace CampingUI
             ComboBox combobox = (ComboBox)sender;
             Border border = PlaceAreaBorder;
             if (combobox.Name.Equals(PlaceStreetComboBox.Name)) border = PlaceStreetBorder;
-
             if (combobox.BorderBrush.Equals(Brushes.Red))
             {
                 ResetComboBoxBorder(border);
@@ -454,7 +453,9 @@ namespace CampingUI
                     {
                         if (component is ComboBox com)
                         {
-                            HandleExtending(com);
+                            if(com.Name != PlaceStreetComboBox.Name && com.Name != PlaceAreaComboBox.Name) {
+                                HandleExtending(com);
+                            }
                         }
                     }
                 }
@@ -502,15 +503,15 @@ namespace CampingUI
         public void HandleExtending(ComboBox comboBox)
         {
             Area area = null;
-            if (!string.IsNullOrEmpty(PlaceAreaComboBox.Text))
+            if (!string.IsNullOrEmpty(comboBox.Text))
             {
-                area = _camping.CampingRepository.CampingMapRepository.GetAreaByAreaName(PlaceAreaComboBox.Text);
+                area = _camping.CampingRepository.CampingMapRepository.GetAreaByAreaName(PlaceAreaComboBox.SelectedItem.ToString());
             }
 
             Street street = null;
-            if (!string.IsNullOrEmpty(PlaceStreetComboBox.Text))
+            if (!string.IsNullOrEmpty(comboBox.Text))
             {
-                street = _camping.CampingRepository.CampingMapRepository.GetStreetByStreetName(PlaceStreetComboBox.Text);
+                street = _camping.CampingRepository.CampingMapRepository.GetStreetByStreetName(PlaceStreetComboBox.SelectedItem.ToString());
             }
 
             if (street != null || area != null)
