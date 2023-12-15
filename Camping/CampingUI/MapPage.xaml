@@ -260,7 +260,7 @@
                         </Grid.ColumnDefinitions>
 
                         <Label Name="PlaceHasPowerLabel" Content="Stroom:" Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <ComboBox Grid.Column="1" Height="40" Width="125" HorizontalAlignment="Right" Name="PlacePowerComboBox">
+                        <ComboBox Grid.Column="1" Height="40" Width="125" HorizontalAlignment="Right" Name="PlacePowerComboBox" SelectionChanged="HandleExtendChange">
                             <ComboBoxItem Tag="Street">Overerven straat</ComboBoxItem>
                             <ComboBoxItem Tag="Area">Overerven gebied</ComboBoxItem>
                             <ComboBoxItem Tag="Own" IsSelected="True">Eigen invoer</ComboBoxItem>
@@ -280,7 +280,7 @@
                         </Grid.ColumnDefinitions>
 
                         <Label Name="PlaceHasDogsLabel" Content="Honden: " Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <ComboBox Grid.Column="1" Height="40" Width="125" HorizontalAlignment="Right" Name="PlaceDogsComboBox">
+                        <ComboBox Grid.Column="1" Height="40" Width="125" HorizontalAlignment="Right" Name="PlaceDogsComboBox" SelectionChanged="HandleExtendChange">
                             <ComboBoxItem Tag="Street">Overerven straat</ComboBoxItem>
                             <ComboBoxItem Tag="Area">Overerven gebied</ComboBoxItem>
                             <ComboBoxItem Tag="Own" IsSelected="True">Eigen invoer</ComboBoxItem>
@@ -300,7 +300,7 @@
                         </Grid.ColumnDefinitions>
 
                         <Label Name="PlaceSurfaceAreaLabel" Content="Oppervlakte: " Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <ComboBox Grid.Column="1" Height="40" Width="125" HorizontalAlignment="Right" Name="PlaceSurfaceAreaComboBox">
+                        <ComboBox Grid.Column="1" Height="40" Width="125" HorizontalAlignment="Right" Name="PlaceSurfaceAreaComboBox" SelectionChanged="HandleExtendChange">
                             <ComboBoxItem Tag="Street">Overerven straat</ComboBoxItem>
                             <ComboBoxItem Tag="Area">Overerven gebied</ComboBoxItem>
                             <ComboBoxItem Tag="Own" IsSelected="True">Eigen invoer</ComboBoxItem>
@@ -318,7 +318,7 @@
                         </Grid.ColumnDefinitions>
 
                         <Label Name="PlacePricePerNightLabel" Content="Prijs p/nacht: "  Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <ComboBox Grid.Column="1" Height="40" Width="125" HorizontalAlignment="Right" Name="PlacePricePerNightPerPersonComboBox">
+                        <ComboBox Grid.Column="1" Height="40" Width="125" HorizontalAlignment="Right" Name="PlacePricePerNightPerPersonComboBox" SelectionChanged="HandleExtendChange">
                             <ComboBoxItem Tag="Street">Overerven straat</ComboBoxItem>
                             <ComboBoxItem Tag="Area">Overerven gebied</ComboBoxItem>
                             <ComboBoxItem Tag="Own" IsSelected="True">Eigen invoer</ComboBoxItem>
@@ -336,7 +336,7 @@
                         </Grid.ColumnDefinitions>
 
                         <Label Name="PlacePersonsLabel" Content="Personen aantal: " Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <ComboBox Grid.Column="1" Height="40" Width="125" HorizontalAlignment="Right" Name="PlacePersonsComboBox">
+                        <ComboBox Grid.Column="1" Height="40" Width="125" HorizontalAlignment="Right" Name="PlacePersonsComboBox" SelectionChanged="HandleExtendChange">
                             <ComboBoxItem Tag="Street">Overerven straat</ComboBoxItem>
                             <ComboBoxItem Tag="Area">Overerven gebied</ComboBoxItem>
                             <ComboBoxItem Tag="Own" IsSelected="True">Eigen invoer</ComboBoxItem>

@@ -238,7 +238,6 @@ namespace CampingUI
                 AddPlaceButton.Content = "Toevoegen";
                 _editPlaceBool = false;
                 AddPlaceButton.Visibility = Visibility.Visible;
-
             }
                 
         }
@@ -341,7 +340,7 @@ namespace CampingUI
                 bool hasDogs = false;
                 if (PlaceHasDogs.IsChecked == true)
                     hasDogs = true;
-                Street street = _camping.CampingRepository.CampingMapRepository.GetSteetByStreetName(PlaceStreetComboBox.SelectedItem.ToString());
+                Street street = _camping.CampingRepository.CampingMapRepository.GetStreetByStreetName(PlaceStreetComboBox.SelectedItem.ToString());
                 Area area = _camping.CampingRepository.CampingMapRepository.GetAreaByAreaName(PlaceAreaComboBox.SelectedItem.ToString());
                 Place place = new Place(_placePlaceID, hasPower, street.StreetID, area.AreaID, hasDogs, _placeSurfaceArea, _placePersons, _placePricePerNight, _xPressed, _yPressed);
                 if (_editPlaceBool)
@@ -419,7 +418,7 @@ namespace CampingUI
         {
             if(PlaceStreetComboBox.SelectedItem != null)
             {
-                Street street = _camping.CampingRepository.CampingMapRepository.GetSteetByStreetName(PlaceStreetComboBox.SelectedItem.ToString());
+                Street street = _camping.CampingRepository.CampingMapRepository.GetStreetByStreetName(PlaceStreetComboBox.SelectedItem.ToString());
                 _placeStreetID = street.StreetID;
             }
             else
@@ -477,9 +476,21 @@ namespace CampingUI
                 ResetComboBoxBorder(border);
                 _wrongInput = false;
             }
-            if(PlaceStreetComboBox.SelectedItem != null && PlaceAreaComboBox .SelectedItem != null)
+            if (PlaceStreetComboBox.SelectedItem != null && PlaceAreaComboBox.SelectedItem != null)
             {
                 EnableExtendComboBoxes(true);
+
+                foreach (Grid grid in PlaceInfo.Children)
+                {
+
+                    foreach (var component in grid.Children)
+                    {
+                        if (component is ComboBox com)
+                        {
+                            HandleExtending(com);
+                        }
+                    }
+                }
             }
             else
             {
@@ -510,12 +521,133 @@ namespace CampingUI
 
         private void ExtendStreetPlaceButton_Click(object sender, RoutedEventArgs e)
         {
-            Street street = _camping.CampingRepository.CampingMapRepository.GetSteetByStreetName(PlaceStreetComboBox.Text);
+            Street street = _camping.CampingRepository.CampingMapRepository.GetStreetByStreetName(PlaceStreetComboBox.Text);
             PlaceHasDogs.IsChecked = street.Dogs;
             PlaceHasPower.IsChecked = street.Power;
             PlacePersons.Text = street.AmountOfPeople.ToString();
             PlaceSurfaceArea.Text = street.SurfaceArea.ToString();
             PlacePricePerNight.Text = street.PricePerNightPerPerson.ToString();
+        }
+
+        private void HandleExtendChange(object sender, RoutedEventArgs e)
+        {
+            ComboBox comboBox = (ComboBox)sender;
+            HandleExtending(comboBox);
+        }
+
+        public void HandleExtending(ComboBox comboBox)
+        {
+            Area area = null;
+
+            if (!string.IsNullOrEmpty(PlaceAreaComboBox.Text))
+            {
+                area = _camping.CampingRepository.CampingMapRepository.GetAreaByAreaName(PlaceAreaComboBox.Text);
+            }
+
+            Street street = null;
+            if (!string.IsNullOrEmpty(PlaceStreetComboBox.Text))
+            {
+                street = _camping.CampingRepository.CampingMapRepository.GetStreetByStreetName(PlaceStreetComboBox.Text);
+            }
+
+            if (street != null || area != null)
+            {
+                foreach (Grid grid in PlaceInfo.Children)
+                {
+
+                    foreach (var component in grid.Children)
+                    {
+                        if (component is TextBox textbox)
+                        {
+                            if (comboBox.Name.Contains("SurfaceArea") && textbox.Name.Contains("SurfaceArea"))
+                            {
+                                if (comboBox.SelectedIndex == 0)
+                                {
+                                    textbox.Text = street.SurfaceArea.ToString();
+                                }
+                                if (comboBox.SelectedIndex == 1)
+                                {
+                                    textbox.Text = area.SurfaceArea.ToString();
+                                }
+                                textbox.IsEnabled = false;
+                                if (comboBox.SelectedIndex == 2)
+                                {
+                                    textbox.IsEnabled = true;
+                                }
+                            }
+                            if (comboBox.Name.Contains("PricePerNight") && textbox.Name.Contains("PricePerNight"))
+                            {
+                                if (comboBox.SelectedIndex == 0)
+                                {
+                                    textbox.Text = street.PricePerNightPerPerson.ToString();
+                                }
+                                if (comboBox.SelectedIndex == 1)
+                                {
+                                    textbox.Text = area.PricePerNightPerPerson.ToString();
+                                }
+                                textbox.IsEnabled = false;
+                                if (comboBox.SelectedIndex == 2)
+                                {
+                                    textbox.IsEnabled = true;
+                                }
+                            }
+                            if (comboBox.Name.Contains("Persons") && textbox.Name.Contains("Persons"))
+                            {
+                                if (comboBox.SelectedIndex == 0)
+                                {
+                                    textbox.Text = street.AmountOfPeople.ToString();
+                                }
+                                if (comboBox.SelectedIndex == 1)
+                                {
+                                    textbox.Text = area.AmountOfPeople.ToString();
+                                }
+                                textbox.IsEnabled = false;
+                                if (comboBox.SelectedIndex == 2)
+                                {
+                                    textbox.IsEnabled = true;
+                                }
+                            }
+                        }
+
+                        if (component is CheckBox checkbox)
+                        {
+                            if (comboBox.Name.Contains("Power") && checkbox.Name.Contains("Power"))
+                            {
+
+                                if (comboBox.SelectedIndex == 0)
+                                {
+                                    checkbox.IsChecked = street.Power;
+                                }
+                                if (comboBox.SelectedIndex == 1)
+                                {
+                                    checkbox.IsChecked = area.Power;
+                                }
+                                checkbox.IsEnabled = false;
+                                if (comboBox.SelectedIndex == 2)
+                                {
+                                    checkbox.IsEnabled = true;
+                                }
+                            }
+                            if (comboBox.Name.Contains("Dogs") && checkbox.Name.Contains("Dogs"))
+                            {
+                                if (comboBox.SelectedIndex == 0)
+                                {
+                                    checkbox.IsChecked = street.Dogs;
+                                }
+                                if (comboBox.SelectedIndex == 1)
+                                {
+                                    checkbox.IsChecked = area.Dogs;
+                                }
+                                checkbox.IsEnabled = false;
+                                if (comboBox.SelectedIndex == 2)
+                                {
+                                    checkbox.IsEnabled = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
