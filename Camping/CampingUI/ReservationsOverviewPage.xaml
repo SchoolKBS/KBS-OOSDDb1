@@ -213,20 +213,20 @@
                 <!-- Aankomstdatum -->
                 <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Label FontSize="14" Content="Aankomstdatum: " HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Calibri" FontWeight="Bold"/>
-                    <DatePicker HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="White" Height="30" Name="ArrivalDatePickerr" Tag="-2"  />
+                    <DatePicker  LostFocus ="Filter_Filled"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="White" Height="30" Name="ArrivalDatePickerr" Tag="-2"  />
                 </StackPanel>
 
                 <!-- Vertrekdatum -->
                 <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Label FontSize="14" Content="Vertrekdatum: " HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Calibri" FontWeight="Bold"/>
-                    <DatePicker HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="White" Height="30" Name="DepartureDatePickerr" Tag="-1"  />
+                    <DatePicker LostFocus ="Filter_Filled"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="White" Height="30" Name="DepartureDatePickerr" Tag="-1"  />
                 </StackPanel>
 
 
                 <!-- Third filter for Reservation ID -->
                 <StackPanel Grid.Column="3" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Label FontSize="14" Content="Reservatie Nummer: " HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Calibri" FontWeight="Bold"/>
-                    <TextBox HorizontalContentAlignment="Center" VerticalContentAlignment="Center" x:Name="ReservationIdBox" MinWidth="75" Height="30" />
+                    <Label FontSize="14" Content="Reserverings Nummer: " HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Calibri" FontWeight="Bold"/>
+                    <TextBox KeyDown ="Texbox_Keydown"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" x:Name="ReservationIdBox" MinWidth="75" Height="30" />
                 </StackPanel>
 
                 <!-- Third filter for Price -->
@@ -238,17 +238,16 @@
                 <!-- Third filter for place number -->
                 <StackPanel Grid.Column="4" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Label FontSize="14" Content="Plek: " HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Calibri" FontWeight="Bold"/>
-                    <TextBox HorizontalContentAlignment="Center" VerticalContentAlignment="Center" x:Name="PlaceNumerBox" MinWidth="75" Height="30" />
+                    <TextBox KeyDown ="Texbox_Keydown"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" x:Name="PlaceNumerBox" MinWidth="75" Height="30" />
                 </StackPanel>
                 <!-- Fourth filter for Guest  -->
                 <StackPanel Grid.Column="2" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Label FontSize="14" Content="Gast Naam: " HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Calibri" FontWeight="Bold"/>
-                    <TextBox HorizontalContentAlignment="Center" VerticalContentAlignment="Center" x:Name="GuestNameBox" MinWidth="120" Height="30" />
+                    <TextBox KeyDown ="Texbox_Keydown" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" x:Name="GuestNameBox" MinWidth="120" Height="30" />
                 </StackPanel>
 
                 <!-- Buttons to apply or remove the filters -->
                 <StackPanel Grid.Column="6" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Button Style="{DynamicResource ButtonStyle1Apply}" Foreground="White" FontWeight="Bold" Margin="0,0,5,0" Content="Filters toepassen" Click="ApplyFilters_Clickk" Height="40" Padding="7, 0, 7, 0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     <Button Style="{DynamicResource ButtonStyle1Cancel}" Foreground="White" FontWeight="Bold" Margin="5,0,0,0" Content="Filters verwijderen" Click="RemoveFilters_Clickk" Padding="7, 0, 7, 0" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 </StackPanel>
 
@@ -342,12 +341,24 @@
                             <RowDefinition Height="3*"/>
                         </Grid.RowDefinitions>
                         <Label Grid.Row="0" Margin="0,0,0,0" Name="nrLabel" FontSize="25" FontWeight="Bold" Content=""/>
+
                         <Label Grid.Row="1" Margin="0,0,0,0" Name="GuestLabel" FontSize="16"/>
+
                         <Label Grid.Row="2" Margin="0,0,0,0" Name="ArrivalDateLabel" FontSize="16"/>
+                        <DatePicker Grid.Row="2" Height="30" Width="150"  Margin="0,0,0,0" Name="ArrivalDateBox" FontSize="16" Visibility="Collapsed" SelectedDateChanged="DataChanged"/>
+
                         <Label Grid.Row="3" Margin="0,0,0,0" Name="DepartureDateLabel" FontSize="16"/>
+                        <DatePicker Grid.Row="3" Height="30" Width="150"  Margin="0,0,0,0" Name="DepartureDateBox" FontSize="16" Visibility="Collapsed" SelectedDateChanged="DataChanged"/>
+
                         <Label Grid.Row="4" Margin="0,0,0,0" Name="PlaceIDLabel" FontSize="16"/>
+                        <ComboBox Grid.Column="4" Grid.Row="4" FontSize="16" Height="30" Width="150" x:Name="PlaceDropDown"  SelectionChanged="PlaceDropDown_SelectionChanged"/>
+
                         <Label Grid.Row="5" Margin="0,0,0,0" Name="AmountOfPeopleLabel" FontSize="16"/>
+                        <TextBox Grid.Row="5" Height="30" Width="150"  Margin="0,0,0,0" Name="AmountOfPeopleBox" FontSize="16" Visibility="Collapsed" TextChanged="AmountOfPeople_Changed"/>
+
                         <Label Grid.Row="6" Margin="0,0,0,0" Name="IsPaidLabel" FontSize="16"/>
+                        <CheckBox Grid.Row="6" Height="30" Width="150"  Margin="0,0,0,0" Name="IsPaidBox" FontSize="16" Visibility="Collapsed"/>
+
                         <Label Grid.Row="7" Margin="0,0,0,0" Name="PriceLabel" FontSize="16"/>
                     </Grid>
                     <Grid Grid.Row="1">
@@ -357,66 +368,13 @@
                             <ColumnDefinition Width="1*"/>
                         </Grid.ColumnDefinitions>
                         <Button Style="{DynamicResource ButtonStyle1Edit}" Foreground="White" FontWeight="Bold" Grid.Column="0" Name="EditReservationButton" Content="Reservering aanpassen" Margin="20" Height="50" Width="200" Click="EditReservation_Click" />
+                        <Button Style="{DynamicResource ButtonStyle1Edit}" Foreground="White" FontWeight="Bold" Grid.Column="0" Name="EditReservationButtonConfirm" Content="Reservering Opslaan" Margin="20" Height="50" Width="200" Click="EditReservationButton_Click" Visibility="Collapsed"/>
+
+                        <Button Style="{DynamicResource ButtonStyle1Cancel}" Foreground="White" FontWeight="Bold" Name="CancelEditButton" Content="Annuleren" Grid.Column="2" Height="50" Width="200" Click="CancelReservationButton_Click" Visibility="Collapsed"/>
                         <Button Style="{DynamicResource ButtonStyle1Cancel}" Foreground="White" FontWeight="Bold" Grid.Column="2" Name="DeleteReservationButton" Content="Reservering verwijderen" Margin="20" Height="50" Width="200" Click="DeleteButton_Click" />
                     </Grid>
                 </Grid>
             </Border>
-            <Grid Name="ReservationEditGrid" Grid.Column="1" Visibility="Collapsed">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="4*"/>
-                    <RowDefinition Height="1*"/>
-                </Grid.RowDefinitions>
-                <Label Content="" HorizontalAlignment="Center" FontSize="30" FontWeight="Bold" Name="ReservationIDLabelEdit" Margin="0,30,0,0"/>
-                <Grid Grid.Row="0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="2*"/>
-                        <RowDefinition Height="2*"/>
-                        <RowDefinition Height="2*"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    
-                    <!--ArrivalDate, DepartureDate, PlaceID, People, IsPaid, Price -->
-                    <Label Grid.Column="0" Grid.Row="1" FontSize="16" Content="Aankomstdatum" Width="150" />
-                    <DatePicker Grid.Column="0" Grid.Row="1" FontSize="16" Height="30" Width="150" x:Name="ArrivalDatePicker" SelectedDateChanged="DataChanged"/>
-                    
-                    <Label Grid.Column="1" Grid.Row="1" FontSize="16" Content="Vertrekdatum" Width="150" />
-                    <DatePicker Grid.Column="1" Grid.Row="1" FontSize="16" Height="30" Width="150" x:Name="DepartureDatePicker" SelectedDateChanged="DataChanged"/>
-
-                    <Label Grid.Column="0" Grid.Row="2" FontSize="16" Content="Aantal personen" Width="150"/>
-                    <TextBox Grid.Column="0" Grid.Row="2" FontSize="16" Height="30" Width="150" x:Name="AmountOfPeopleTextBox" TextChanged="AmountOfPeople_Changed"/>
-
-                    <Label Grid.Column="1" Grid.Row="2" FontSize="16" Content="Plaats" Width="150"/>
-                    <ComboBox Grid.Column="1" Grid.Row="2" FontSize="16" Height="30" Width="150" x:Name="PlaceDropDown" SelectionChanged="PlaceDropDown_SelectionChanged"/>
-
-
-                    <Grid Grid.Column="0" Grid.Row="3">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" FontSize="16" Content="Is betaald" HorizontalAlignment="Right"/>
-                        <CheckBox Grid.Column="1" x:Name="IsPaidCheckBox" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" Height="15"/>
-                    </Grid>
-                    <Label Grid.Column="1" Grid.Row="3" FontSize="16" Content="Prijs" Width="150" x:Name="PriceEditLabel"/>
-
-                </Grid>
-                <Grid Grid.Row="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Button Style="{DynamicResource ButtonStyle1Apply}" Foreground="White" FontWeight="Bold" Name="ConfirmEditButton" Content="Bevestigen" Grid.Column="0" Height="35" Width="180" Click="EditReservationConfirmButton_Click"/>
-                    <Button Style="{DynamicResource ButtonStyle1Cancel}" Foreground="White" FontWeight="Bold" Name="CancelEditButton" Content="Annuleren" Grid.Column="2" Height="35" Width="180" Click="CancelReservationButton_Click"/>
-                    <TextBlock Grid.Row="13" Grid.Column="1" HorizontalAlignment="Center" x:Name="AddPlaceMessage"/>
-                </Grid>
-            </Grid>
         </Grid>
     </Grid>
 </Page>
