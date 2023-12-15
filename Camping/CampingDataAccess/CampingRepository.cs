@@ -76,7 +76,7 @@ namespace CampingDataAccess
             string sql = "CREATE TABLE IF NOT EXISTS Area (" +
                 "AreaID INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "Name VARCHAR(255)," +
-                "Color INT(9) NOT NULL," +
+                "Color VARCHAR(9) NOT NULL," +
                 "Power BOOLEAN NOT NULL," +
                 "Dogs BOOLEAN NOT NULL," +
                 "SurfaceArea INT NOT NULL," +
@@ -198,10 +198,10 @@ namespace CampingDataAccess
             string sql = "INSERT INTO Area (Name, Color, Power, Dogs, SurfaceArea, PricePerNightPerPerson, AmountOfPeople, XCord1, YCord1, Width, Height) " +
                 "                   VALUES (@Name, @Color, @Power, @Dogs, @SurfaceArea, @PricePerNightPerPerson, @AmountOfPeople, @XCord1, @YCord1, @Width, @Height);";
             List<ArrayList> list = new List<ArrayList>(){
-                new ArrayList(){"Zwolle", 255000000, 0,11,11,11,0,0,0,500,375},
-                new ArrayList(){"Meppel",000255000, 0,13,13,13,1,500,0,500,375},
-                new ArrayList(){"Warnsveld", 255000255, 1,14,14,14,1,0,375,500,375},
-                new ArrayList(){"Nijkerk", 000255255, 1,12,12,12,0,500,375,500,375}
+                new ArrayList(){"Zwolle", "255000000", 0,11,11,11,0,0,0,500,375},
+                new ArrayList(){"Meppel", "000255000", 0,13,13,13,1,500,0,500,375},
+                new ArrayList(){"Warnsveld", "255000255", 1,14,14,14,1,0,375,500,375},
+                new ArrayList(){"Nijkerk", "000255255", 1,12,12,12,0,500,375,500,375}
                 };
             using (var connection = new SqliteConnection(ConnectionString))
             {

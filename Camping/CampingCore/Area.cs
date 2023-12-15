@@ -11,7 +11,7 @@ namespace CampingCore
     {
         public int AreaID { get; set; }
         public string Name { get; set; }
-        public int Color {  get; set; }
+        public string Color {  get; set; }
         public bool Power { get; set; }
         public bool Dogs { get; set; }
         public int SurfaceArea { get; set; }
@@ -26,7 +26,7 @@ namespace CampingCore
         {
             AreaID = (int)properties[0];
             Name = (string)properties[1];
-            Color = (int)properties[2];
+            Color = (string)properties[2];
             Power = (bool)properties[3];
             Dogs = (bool)properties[4];
             SurfaceArea = (int)properties[5];
@@ -47,6 +47,5 @@ namespace CampingCore
         {
             return base.ToString();
         }
-
     }
 }

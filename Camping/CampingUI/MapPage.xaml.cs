@@ -1,5 +1,7 @@
 ﻿using CampingCore;
 using CampingDataAccess;
+using CampingUI.GenerateComponentsMap;
+using CampingUI.NewFolder;
 using Org.BouncyCastle.Crypto.Operators;
 using System;
 using System.Collections.Generic;
@@ -23,14 +25,14 @@ namespace CampingUI
     /// </summary>
     public partial class MainPage : Page
     {
-        public Camping Camping { get; set; }
-        public List<Area> Areas { get; set; }
-        public List<Street> Streets { get; set; }
-        public List<Place> Places { get; set; }
-        public int XPressed {  get; set; }
-        public int YPressed { get; set; }
-        public bool WrongInput { get; set; }
-        public int SelectedPlace {  get; set; }
+        private Camping _camping;
+        private List<Area> _areas;
+        private List<Place> _places;
+        private List<Street> _streets;
+        private int _xPressed;
+        private int _yPressed;
+        private bool _wrongInput;
+        private int SelectedPlace;
         private int _placeSurfaceArea, _placePersons, _placePlaceID, _placeStreetID;
         private double _placePricePerNight;
         private Canvas previousSelectedCanvas;
@@ -39,14 +41,12 @@ namespace CampingUI
         public MainPage(Camping camping)
         {
             InitializeComponent();
-            // Calculate scale percentages based on screen size
             double screenWidth = SystemParameters.PrimaryScreenWidth;
             double screenHeight = SystemParameters.PrimaryScreenHeight;
 
-            double desiredWidth = 1000;  // Replace with your desired canvas width
-            double desiredHeight = 750;  // Replace with your desired canvas height
+            double desiredWidth = 1000;  
+            double desiredHeight = 750;  
 
-            // Calculate scaling factors while maintaining the aspect ratio
             double aspectRatio = desiredWidth / desiredHeight;
             double screenAspectRatio = screenWidth / screenHeight;
 
@@ -55,27 +55,21 @@ namespace CampingUI
 
             if (screenAspectRatio > aspectRatio)
             {
-                // Screen is wider, scale based on width
                 scaleX = screenWidth / desiredWidth / 1.75;
                 scaleY = scaleX;
             }
             else
             {
-                // Screen is taller, scale based on height
                 scaleY = screenHeight / desiredHeight / 1.75;
                 scaleX = scaleY;
             }
-
             ApplyScaleTransform(scaleX, scaleY);
-
-            Camping = camping;
-
+            _camping = camping;
             DataContext = this;
 
             // Generate areas with their streets (and later places)
-            GenerateAreas();
+            GenerateMap();
         }
-
         private void ApplyScaleTransform(double scaleX, double scaleY)
         {
             if (field.FindName("plattegrond") is ScaleTransform plattegrond)
@@ -84,177 +78,58 @@ namespace CampingUI
                 plattegrond.ScaleY = scaleY;
             }
         }
+        public void GenerateMap()
+        {
+            GenerateAreas();
+            GenerateStreets();
+            GeneratePlaces();
+        }
         public void GenerateAreas()
         {
-            Areas = Camping.CampingRepository.CampingMapRepository.GetAreas();
-            List<Color> availableColors = new List<Color>
+            _areas = _camping.CampingRepository.CampingMapRepository.GetAreas();
+
+            if (_areas.Count() > 0)
             {
-            ChangeColorOpacity(Colors.Red, 0.5),
-            ChangeColorOpacity(Colors.ForestGreen, 0.5),
-            ChangeColorOpacity(Colors.CornflowerBlue, 0.5),
-            ChangeColorOpacity(Colors.Yellow, 0.5)
-            };
-
-            if (Areas.Count() > 0)
-            {
-                foreach (var area in Areas)
-                {
-                    var coordinates = area.GetAreaPositions();
-
-                    Canvas canvasArea = new Canvas
-                    {
-                        Width = coordinates[2],
-                        Height = coordinates[3],
-                        Background = GenerateRandomBrush(availableColors),
-                        Name = "Canvas_" + area.AreaID.ToString(),
-                    };
-
-                    Border border = new Border
-                    {
-                        BorderBrush = Brushes.Black, // Set the color of the border
-                        BorderThickness = new Thickness(1), // Set the thickness of the border
-                        Child = canvasArea,
-                        //Name = "Canvas_" + area.AreaID.ToString(),
-                    };
-
-                    Canvas.SetTop(border, coordinates[1]);  // YCord1 to place from top.
-                    Canvas.SetLeft(border, coordinates[0]); // XCord1 to place from left.
-                    Canvas.SetZIndex(border, -1);
-                    field.Children.Add(border);
-
-
-                    // Generate streets that belong to the area.
-                    // GenerateStreetsPerArea(canvasArea, area);
+                foreach (var area in _areas)
+                { 
+                    field.Children.Add(MapPageArea.GenerateArea(area));
                 }
             }
         }
-/*        private void GenerateStreetsPerArea(Canvas canvasArea, Area area)
+        public void GenerateStreets()
         {
-            Streets = Camping.CampingRepository.CampingMapRepository.GetStreets();
-
-            if (Streets.Count() > 0) {
-                var areaStreets = Streets.Where(street => street.AreaID == area.AreaID);
-
-                if(areaStreets.Count() > 0)
-                {
-                    foreach (var street in areaStreets)
-                    {
-                        GenerateStreet(canvasArea, street);
-                        GeneratePlacesPerStreet(street);
-                    }
-                }
-            }
-        }*/
-        public void GenerateStreet(Canvas canvasArea, Street street)
-        {
-            if (street != null)
+            _streets = _camping.CampingRepository.CampingMapRepository.GetStreets();
+            if (_streets.Count() > 0)
             {
-                var coordinates = street.GetStreetPositions();
-
-                // A street cannot exist outside the area in width.
-                if ((coordinates[0] + coordinates[2]) > canvasArea.Width)
+                foreach (Street street in _streets)
                 {
-                    coordinates[2] = ((int)canvasArea.Width - coordinates[0]);
+                    field.Children.Add(MapPageStreet.GenerateStreet(street));
                 }
-
-                // A street cannot exist outside the area in height.
-                if ((coordinates[1] + coordinates[3]) > canvasArea.Height)
-                {
-                    coordinates[3] = ((int)canvasArea.Height - coordinates[1]);
-                }
-                // Cannot be set outside the area.
-                if (coordinates[0] < 0)
-                {
-                    coordinates[0] = 0;
-                }
-
-                // Cannot be set outside the area.
-                if (coordinates[1] < 0)
-                {
-                    coordinates[1] = 0;
-                }
-
-                RotateTransform rotate;
-                if (coordinates[2] > coordinates[3])
-                {
-                    rotate = new RotateTransform(0, 0, 0);
-                }
-                else
-                {
-                    rotate = new RotateTransform(90, 0, 0);
-                }
-                Grid canvasStreet = new Grid
-                {
-                    Width = coordinates[2],
-                    Height = coordinates[3],
-                    Background = Brushes.Black,
-                    Name = "Street_" + street.StreetID.ToString(),
-                    HorizontalAlignment = HorizontalAlignment.Center,
-                    VerticalAlignment = VerticalAlignment.Center,
-                };
-
-                TextBlock textBlock = new TextBlock
-                {
-                    Text = "",
-                    Foreground = Brushes.White,
-                    LayoutTransform = rotate,
-                    HorizontalAlignment = HorizontalAlignment.Center,
-                    VerticalAlignment = VerticalAlignment.Center,
-                    FontSize = 10,
-                };
-
-                // Set the TextBlock as the Tag of the Grid
-                canvasStreet.Tag = textBlock;
-
-                canvasStreet.Children.Add(textBlock);
-
-                canvasStreet.MouseEnter += (sender, e) =>
-                {
-                    canvasStreet.Background = Brushes.DarkCyan; // Change the background color on hover
-                    TextBlock streetName = (TextBlock)((Grid)sender).Tag;
-                    streetName.Text = street.Name;
-
-                    Canvas.SetZIndex(canvasStreet, Canvas.GetZIndex(canvasStreet) + 1);
-                };
-
-                canvasStreet.MouseLeave += (sender, e) =>
-                {
-                    canvasStreet.Background = Brushes.Black;
-                    TextBlock streetName = (TextBlock)((Grid)sender).Tag;
-                    streetName.Text = "";
-
-                    Canvas.SetZIndex(canvasStreet, Canvas.GetZIndex(canvasStreet) - 1);
-                };
-
-                Canvas.SetTop(canvasStreet, coordinates[1]);  // YCord1 to place from top.
-                Canvas.SetLeft(canvasStreet, coordinates[0]); // XCord1 to place from left.
-
-                canvasArea.Children.Add(canvasStreet);
             }
         }
-        public void GeneratePlacesPerStreet(Street street)
+
+
+
+        public void GeneratePlaces()
         {
-            Places = Camping.CampingRepository.CampingPlaceRepository.GetPlaces();
-            if (street != null && Places.Count() > 0)
+            _places = _camping.CampingRepository.CampingPlaceRepository.GetPlaces();
+            if (_places.Count() > 0)
             {
-                foreach (var place in Places)
+                foreach(Place place  in _places)
                 {
-                    if (place.StreetID == street.StreetID)
-                    {
-                        GeneratePlace(place, Brushes.Black, true);
-                    }
-                }
+                    GeneratePlace(place, Brushes.Black, true);
+                }     
             }
+
         }
         public void GeneratePlace(Place place, SolidColorBrush brush, bool AddPlaceBool)
         {
             var coordinates = place.GetPlacePositions();
 
-            // Create a Border to wrap the Canvas
             Border border = new Border
             {
-                BorderBrush = Brushes.White, // Set the border color
-                BorderThickness = new Thickness(1), // Set the border thickness
+                BorderBrush = Brushes.White, 
+                BorderThickness = new Thickness(1), 
             };
 
             Canvas canvasPlace = new Canvas
@@ -265,17 +140,14 @@ namespace CampingUI
                 Name = "Place_" + place.PlaceID.ToString(),
             };
 
-            // Add the Canvas to the Border
             border.Child = canvasPlace;
             Canvas.SetZIndex(canvasPlace, 100);
 
-            Canvas.SetTop(border, coordinates[1]);  // YCord1 to place from top.
-            Canvas.SetLeft(border, coordinates[0]); // XCord1 to place from left.
+            Canvas.SetTop(border, coordinates[1]); 
+            Canvas.SetLeft(border, coordinates[0]); 
 
-            // Add the Border to the main canvas
             field.Children.Add(border);
 
-            // Add PlaceID as text in the center of the Canvas
             if (AddPlaceBool)
             {
                 TextBlock textBlock = new TextBlock
@@ -354,7 +226,7 @@ namespace CampingUI
                 _editPlaceBool = true;*/
                 PlaceInfo.Visibility = Visibility.Collapsed;
                 field.Children.Clear();
-                GenerateAreas();
+                GenerateMap();
             }
             else
             {
@@ -366,7 +238,7 @@ namespace CampingUI
                 PlaceHasDogs.IsChecked = false;
                 PlaceHasPower.IsChecked = false;
                 PlaceStreetComboBox.Items.Clear();
-                foreach(Street street in Camping.CampingRepository.CampingMapRepository.GetStreets())
+                foreach(Street street in _camping.CampingRepository.CampingMapRepository.GetStreets())
                 {
                     PlaceStreetComboBox.Items.Add(street.Name);
                 } 
@@ -394,55 +266,38 @@ namespace CampingUI
             PlaceSurfaceArea.Text = place.SurfaceArea.ToString();
             PlacePricePerNight.Text = place.PricePerNightPerPerson.ToString();
             PlacePersons.Text = place.AmountOfPeople.ToString();
-            PlaceStreetComboBox.Text = Camping.CampingRepository.CampingMapRepository.GetStreetByStreetID(place).Name;
-        }
-        static Color ChangeColorOpacity(Color color, double opacity)
-        {
-            return Color.FromArgb((byte)(opacity * 255), color.R, color.G, color.B);
-        }
-        public Brush GenerateRandomBrush(List<Color> colors)
-        {
-            
-            if (colors.Count == 0)
-            {
-                throw new InvalidOperationException("No more colors available.");
-            }
-            Color selectedColor = colors[0];
-            colors.RemoveAt(0);
-
-            SolidColorBrush brush = new SolidColorBrush(selectedColor);
-            return brush;
+            PlaceStreetComboBox.Text = _camping.CampingRepository.CampingMapRepository.GetStreetByStreetID(place).Name;
         }
         private void field_MouseDown(object sender, MouseButtonEventArgs e)
         {
             field.Children.Clear();
-            GenerateAreas();
+            GenerateMap();
 
             Point p = Mouse.GetPosition(field);
-            List<Area> areas = Camping.CampingRepository.CampingMapRepository.GetAreas();
-            List<Street> streets = Camping.CampingRepository.CampingMapRepository.GetStreets();
-            List<Place> places = Camping.CampingRepository.CampingPlaceRepository.GetPlaces();
+            List<Area> areas = _camping.CampingRepository.CampingMapRepository.GetAreas();
+            List<Street> streets = _camping.CampingRepository.CampingMapRepository.GetStreets();
+            List<Place> places = _camping.CampingRepository.CampingPlaceRepository.GetPlaces();
             foreach(Place place in places)
             {
                 place.XCord -= 15;
                 place.YCord -= 15;
             }
-            XPressed = (int)Math.Round(p.X) - 15;
-            YPressed = (int)Math.Round(p.Y) - 15;
-            List<Area> PlaceWithinAreas = areas.Where(i => i.XCord1 <= (XPressed - 15))
-                                               .Where(i => i.XCord1 + i.Width >= (XPressed + 45))
-                                               .Where(i => i.YCord1 <= (YPressed - 15))
-                                               .Where(i => i.YCord1 + i.Height >= (YPressed + 45))
+            _xPressed = (int)Math.Round(p.X) - 15;
+            _yPressed = (int)Math.Round(p.Y) - 15;
+            List<Area> PlaceWithinAreas = areas.Where(i => i.XCord1 <= (_xPressed - 15))
+                                               .Where(i => i.XCord1 + i.Width >= (_xPressed + 45))
+                                               .Where(i => i.YCord1 <= (_yPressed - 15))
+                                               .Where(i => i.YCord1 + i.Height >= (_yPressed + 45))
                                                .ToList();
-            List<Place> placesNotInNewPlaceBorder = places.Where(i => i.XCord >= (XPressed-45) && i.XCord <= (XPressed+45))
-                                                          .Where(i => i.YCord >= (YPressed-45) && i.YCord <= (YPressed+45))
+            List<Place> placesNotInNewPlaceBorder = places.Where(i => i.XCord >= (_xPressed-45) && i.XCord <= (_xPressed+45))
+                                                          .Where(i => i.YCord >= (_yPressed-45) && i.YCord <= (_yPressed+45))
                                                           .ToList();
             if (PlaceWithinAreas.Count == 1 && placesNotInNewPlaceBorder.Count == 0)  
             {
-                Camping.Places = Camping.CampingRepository.CampingPlaceRepository.GetPlaces();
-                int i = Camping.Places.Last().PlaceID + 1;
+                _camping.Places = _camping.CampingRepository.CampingPlaceRepository.GetPlaces();
+                int i = _camping.Places.Last().PlaceID + 1;
 
-                Place place = new Place(0, false, 1, false, 0, 0, 0, XPressed, YPressed);
+                Place place = new Place(0, false, 1, false, 0, 0, 0, _xPressed, _yPressed);
                 GeneratePlace(place, Brushes.Gray, false);
                 HandlePlaceClick(place, true);
             }
@@ -450,7 +305,7 @@ namespace CampingUI
         public void HandleAddPlace_Click(Object sender, RoutedEventArgs e)
         {
             GetAddValues();
-            if (!WrongInput)
+            if (!_wrongInput)
             {
                 bool hasPower = false;
                 if(PlaceHasPower.IsChecked == true)
@@ -458,18 +313,18 @@ namespace CampingUI
                 bool hasDogs = false;
                 if (PlaceHasDogs.IsChecked == true)
                     hasDogs = true;
-                Street street = Camping.CampingRepository.CampingMapRepository.GetSteetByStreetName(PlaceStreetComboBox.SelectedItem.ToString());
-                Place place = new Place(_placePlaceID, hasPower, street.StreetID, hasDogs, _placeSurfaceArea, _placePersons, _placePricePerNight, XPressed, YPressed);
+                Street street = _camping.CampingRepository.CampingMapRepository.GetSteetByStreetName(PlaceStreetComboBox.SelectedItem.ToString());
+                Place place = new Place(_placePlaceID, hasPower, street.StreetID, hasDogs, _placeSurfaceArea, _placePersons, _placePricePerNight, _xPressed, _yPressed);
                 if (_editPlaceBool)
-                    Camping.CampingRepository.CampingPlaceRepository.UpdatePlaceData(place.PlaceID, street.StreetID, hasPower, _placeSurfaceArea, _placePricePerNight, _placePersons, hasDogs);
+                    _camping.CampingRepository.CampingPlaceRepository.UpdatePlaceData(place.PlaceID, street.StreetID, hasPower, _placeSurfaceArea, _placePricePerNight, _placePersons, hasDogs);
                 else
                 {
-                    Camping.CampingRepository.CampingPlaceRepository.AddPlace(place);
-                    Camping.CampingRepository.CampingPlaceRepository.GetPlaces(); 
+                    _camping.CampingRepository.CampingPlaceRepository.AddPlace(place);
+                    _camping.CampingRepository.CampingPlaceRepository.GetPlaces(); 
                 }
                 PlaceInfo.Visibility = Visibility.Collapsed;
                 field.Children.Clear();
-                GenerateAreas();
+                GenerateMap();
             }
 
         }
@@ -482,7 +337,7 @@ namespace CampingUI
             StaticUIMethods.ResetTextboxBorder(PlacePlaceID);
             ResetComboBoxBorder(PlaceStreetComboBox);
             field.Children.Clear();
-            GenerateAreas();
+            GenerateMap();
         }
         private void GetAddValues()
         {
@@ -496,13 +351,13 @@ namespace CampingUI
         {
             if(PlaceStreetComboBox.SelectedItem != null)
             {
-                Street street = Camping.CampingRepository.CampingMapRepository.GetSteetByStreetName(PlaceStreetComboBox.SelectedItem.ToString());
+                Street street = _camping.CampingRepository.CampingMapRepository.GetSteetByStreetName(PlaceStreetComboBox.SelectedItem.ToString());
                 _placeStreetID = street.StreetID;
             }
             else
             {
                 SetErrorComboBoxBorder(PlaceStreetComboBox);
-                WrongInput = true;
+                _wrongInput = true;
             }
         }
         //Function (EventHandler) that resets the background of a textbox if the filters are reset
@@ -512,7 +367,7 @@ namespace CampingUI
             if (textbox.BorderBrush.Equals(Brushes.Red))
             {
                 StaticUIMethods.ResetTextboxBorder(textbox);
-                WrongInput = false;
+                _wrongInput = false;
             }
         }
         private int GetAddTextBox(TextBox textbox, int editNumber)
@@ -523,7 +378,7 @@ namespace CampingUI
             else
             {
                 StaticUIMethods.SetErrorTextboxBorder(textbox);
-                WrongInput = true;
+                _wrongInput = true;
             }
             return editNumber;
         }
@@ -538,7 +393,7 @@ namespace CampingUI
             if (PlaceStreetBorder.BorderBrush.Equals(Brushes.Red))
             {
                 ResetComboBoxBorder(combobox);
-                WrongInput = false;
+                _wrongInput = false;
             }
         }
         public void SetErrorComboBoxBorder(ComboBox comboBox)
@@ -553,7 +408,7 @@ namespace CampingUI
         }
         private void ExtendStreetPlaceButton_Click(object sender, RoutedEventArgs e)
         {
-            Street street = Camping.CampingRepository.CampingMapRepository.GetSteetByStreetName(PlaceStreetComboBox.Text);
+            Street street = _camping.CampingRepository.CampingMapRepository.GetSteetByStreetName(PlaceStreetComboBox.Text);
             PlaceHasDogs.IsChecked = street.Dogs;
             PlaceHasPower.IsChecked = street.Power;
             PlacePersons.Text = street.AmountOfPeople.ToString();
@@ -569,11 +424,11 @@ namespace CampingUI
 
             
             _placePlaceID = GetAddTextBox(PlacePlaceID, _placePlaceID);
-            List<Place> places = Camping.Places.Where(i => i.PlaceID == _placePlaceID).ToList();
+            List<Place> places = _camping.Places.Where(i => i.PlaceID == _placePlaceID).ToList();
             if (places.Count > 0 && !_editPlaceBool)
             {
                 StaticUIMethods.SetErrorTextboxBorder(PlacePlaceID);
-                WrongInput = true;
+                _wrongInput = true;
                 _placePlaceID = -1;
             }
 
@@ -586,7 +441,7 @@ namespace CampingUI
             else
             {
                 StaticUIMethods.SetErrorTextboxBorder(PlacePricePerNight);
-                WrongInput = true;
+                _wrongInput = true;
             }
         }
     }
