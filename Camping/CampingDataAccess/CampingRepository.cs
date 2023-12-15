@@ -235,7 +235,7 @@ namespace CampingDataAccess
                                     " VALUES (@Name, @Power, @Dogs, @SurfaceArea, @PricePerNightPerPerson, @AmountOfPeople, @XCord1, @YCord1, @XCord2, @YCord2);";
             List<ArrayList> list = new List<ArrayList>() {
                 new ArrayList(){"Kalverstraat", 1,1,21,21,21,0,50,100,10},
-                new ArrayList(){"Leidsestraat", 0,0,22,22,22,0,100,50,10,200},
+                new ArrayList(){"Leidsestraat", 0,0,22,22,22,100,50,10,200},
                 new ArrayList(){"Coolsingel", 1,1,23,23,23,100,100,400,10},
                 new ArrayList(){"A. Kerkhof", 0,0,24,24,24,400,100,10,275},
                 new ArrayList(){"Tielemansstraat",  1,1,25,25,25,500,100,200,10},
