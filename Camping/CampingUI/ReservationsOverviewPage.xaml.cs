@@ -244,11 +244,11 @@ namespace CampingUI
             PlaceNumerBox.Text = string.Empty;
             GuestNameBox.Text = string.Empty;
             ReservationIdBox.Text = string.Empty;
-            GuestNameBox.Background = Brushes.White;
-            ArrivalDatePickerr.Background = Brushes.White;
-            DepartureDatePickerr.Background = Brushes.White;
-            PlaceNumerBox.Background = Brushes.White;
-            ReservationIdBox.Background = Brushes.White;
+            GuestNameBox.BorderBrush = Brushes.White;
+            ArrivalDatePickerr.BorderBrush = Brushes.White;
+            DepartureDatePickerr.BorderBrush = Brushes.White;
+            PlaceNumerBox.BorderBrush = Brushes.White;
+            ReservationIdBox.BorderBrush = Brushes.White;
             _appliedFilters = false;
 
 
