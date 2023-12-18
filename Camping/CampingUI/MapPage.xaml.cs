@@ -110,58 +110,17 @@ namespace CampingUI
 
 
 
-                TextBlock textBlock = new TextBlock
-                {
-                    Text = "",
-                    Foreground = Brushes.White,
-                    LayoutTransform = rotate,
-                    HorizontalAlignment = HorizontalAlignment.Center,
-                    VerticalAlignment = VerticalAlignment.Center,
-                    FontSize = 10,
-                };
-
-                // Set the TextBlock as the Tag of the Grid
-                canvasStreet.Tag = textBlock;
-
-                canvasStreet.Children.Add(textBlock);
-
-                canvasStreet.MouseEnter += (sender, e) =>
-                {
-                    canvasStreet.Background = Brushes.DarkCyan; // Change the background color on hover
-                    TextBlock streetName = (TextBlock)((Grid)sender).Tag;
-                    streetName.Text = street.Name;
-
-                    Canvas.SetZIndex(canvasStreet, Canvas.GetZIndex(canvasStreet) + 1);
-                };
-
-                canvasStreet.MouseLeave += (sender, e) =>
-                {
-                    canvasStreet.Background = Brushes.Black;
-                    TextBlock streetName = (TextBlock)((Grid)sender).Tag;
-                    streetName.Text = "";
-
-                    Canvas.SetZIndex(canvasStreet, Canvas.GetZIndex(canvasStreet) - 1);
-                };
-
-                Canvas.SetTop(canvasStreet, coordinates[1]);  // Ycord1 to place from top.
-                Canvas.SetLeft(canvasStreet, coordinates[0]); // XCord1 to place from left.
-
-                canvasArea.Children.Add(canvasStreet);
-            }
-        }
-        public void GeneratePlacesPerStreet(Street street)
+        public void GeneratePlaces()
         {
-            Places = Camping.CampingRepository.CampingPlaceRepository.GetPlaces();
-            if (street != null && Places.Count() > 0)
+            _places = _camping.CampingRepository.CampingPlaceRepository.GetPlaces();
+            if (_places.Count() > 0)
             {
-                foreach (var place in Places)
+                foreach(Place place  in _places)
                 {
-                    if (place.StreetID == street.StreetID)
-                    {
-                        GeneratePlace(place, Brushes.Black, true);
-                    }
-                }
+                    GeneratePlace(place, Brushes.Black, true);
+                }     
             }
+
         }
         public void GeneratePlace(Place place, SolidColorBrush brush, bool AddPlaceBool)
         {
@@ -254,22 +213,20 @@ namespace CampingUI
             PlaceInfo.Visibility = Visibility.Visible;
             if (!AddPlaceBool)
             {
-                foreach (Street street in Camping.CampingRepository.CampingMapRepository.GetStreets())
-                {
-                    PlaceStreetComboBox.Items.Add(street.Name);
-                }
-
-                foreach (Area area in Camping.CampingRepository.CampingMapRepository.GetAreas())
-                {
-                    AreaStreetComboBox.Items.Add(area.Name);
-                }
-
-                SetPlaceDataOnFields(place);
+                /*                SetPlaceDataOnFields(place);
                 AddPlaceButton.Content = "Aanpassen";
+                PlaceHasPower.IsEnabled = false;
+                PlaceHasDogs.IsEnabled = false;
+                PlaceSurfaceArea.IsEnabled = false;
+                PlacePricePerNight.IsEnabled = false;
+                PlacePersons.IsEnabled = false;
+                PlaceStreetComboBox.IsEnabled = false;
+                PlacePlaceID.IsEnabled = false;
                 AddPlaceButton.Visibility = Visibility.Collapsed;
-                _editPlaceBool = true;
+                _editPlaceBool = true;*/
+                PlaceInfo.Visibility = Visibility.Collapsed;
                 field.Children.Clear();
-                //GenerateAreas();
+                GenerateMap();
             }
             else
             {
@@ -301,22 +258,15 @@ namespace CampingUI
                 
         }
         private void SetPlaceDataOnFields(Place place)
-{
-    Street AreaID = Camping.CampingRepository.CampingMapRepository.GetStreetByStreetID(place);
-
-    SelectedPlace = place.PlaceID;
-    PlacePlaceID.Text = place.PlaceID.ToString();
-    PlaceHasPower.IsChecked = place.Power;
-    PlaceHasDogs.IsChecked = place.Dogs;
-    PlaceSurfaceArea.Text = place.SurfaceArea.ToString();
-    PlacePricePerNight.Text = place.PricePerNightPerPerson.ToString();
-    PlacePersons.Text = place.AmountOfPeople.ToString();
-    PlaceStreetComboBox.Text = Camping.CampingRepository.CampingMapRepository.GetStreetByStreetID(place).Name;
-    AreaStreetComboBox.Text = Camping.CampingRepository.CampingMapRepository.GetAreaByAreaID(AreaID).Name;
-
-
-        
-    
+        {
+            SelectedPlace = place.PlaceID;
+            PlacePlaceID.Text = place.PlaceID.ToString();
+            PlaceHasPower.IsChecked = place.Power;
+            PlaceHasDogs.IsChecked = place.Dogs;
+            PlaceSurfaceArea.Text = place.SurfaceArea.ToString();
+            PlacePricePerNight.Text = place.PricePerNightPerPerson.ToString();
+            PlacePersons.Text = place.AmountOfPeople.ToString();
+            PlaceStreetComboBox.Text = _camping.CampingRepository.CampingMapRepository.GetStreetByStreetID(place).Name;
         }
         private void field_MouseDown(object sender, MouseButtonEventArgs e)
         {
