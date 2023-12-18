@@ -300,30 +300,20 @@ namespace CampingUI
                     grid.Children.Add(line);
                     grid.Children.Add(label);
 
-                    MessageBox.Show($"Point 1: X{line.X1}, Y{line.Y1}, Point 2: X{line.X2}, Y{line.Y2}");
-                    int deltaY;
-                    int deltaX;
-                    if(line.X1 > line.X2)
-                    {
-                        deltaX = (int)line.X1 - (int)line.X2;
-                    }
-                    else
-                    {
-                        deltaX = (int)line.X2 - (int)line.X1;
-                    }
-                    if (line.Y1 > line.Y2)
-                    {
-                        deltaY = (int)line.Y1 - (int)line.Y2;
-                    }
-                    else
-                    {
-                        deltaY = (int)line.Y2 - (int)line.Y1;
-                    }
-                    MessageBox.Show(Math.Tanh(deltaY/deltaX).ToString());
+                    double deltaY;
+                    double deltaX;
+                    if(line.X1 > line.X2) deltaX = line.X1 - line.X2;
+                    else deltaX = line.X2 - line.X1;
 
+                    if (line.Y1 > line.Y2) deltaY = line.Y1 - line.Y2;
+                    else deltaY = line.Y2 - line.Y1;
+
+                    double degrees = Math.Atan(deltaY/deltaX)*180/Math.PI;
+                    if(degrees < 10) line.Y2 = line.Y1;
+                    if(degrees > 80) line.X2 = line.X1;
+                        
 
                     field.Children.Add(grid);
-                    //Grijze straat laten zien
                     //Aanmaken straat openen
                     // -> straat aanmaken 
                     // -> straat aan database toevoegen
