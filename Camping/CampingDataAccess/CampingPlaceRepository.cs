@@ -72,7 +72,7 @@ namespace CampingDataAccess
         }
         public void AddPlace(Place place)
         {
-            string sql = "INSERT INTO Place (PlaceID, StreetID, Power, SurfaceArea, PricePerNightPerPerson, AmountOfPeople, Dogs, Xcord, Ycord) VALUES (@PlaceID, @StreetID, @Power, @SurfaceArea, @PricePerNightPerPerson, @AmountOfPeople, @Dogs, @Xcord, @Ycord);";
+            string sql = "INSERT INTO Place (PlaceID, StreetID, Power, SurfaceArea, PricePerNightPerPerson, AmountOfPeople, Dogs, XCord, YCord) VALUES (@PlaceID, @StreetID, @Power, @SurfaceArea, @PricePerNightPerPerson, @AmountOfPeople, @Dogs, @XCord, @YCord);";
 
             using (var connection = new SqliteConnection(ConnectionString))
             {
@@ -87,8 +87,8 @@ namespace CampingDataAccess
                     command.Parameters.AddWithValue("@PricePerNightPerPerson", place.PricePerNightPerPerson);
                     command.Parameters.AddWithValue("@AmountOfPeople", place.AmountOfPeople);
                     command.Parameters.AddWithValue("@Dogs", place.Dogs);
-                    command.Parameters.AddWithValue("@Xcord", place.Xcord);
-                    command.Parameters.AddWithValue("@Ycord", place.Ycord);
+                    command.Parameters.AddWithValue("@XCord", place.XCord);
+                    command.Parameters.AddWithValue("@YCord", place.YCord);
                     command.ExecuteNonQuery();
                 }
                 connection.Close();

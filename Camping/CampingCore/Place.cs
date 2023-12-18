@@ -8,24 +8,25 @@ namespace CampingCore
         public int PlaceID { get; set; }
         public bool Power { get; set; }
         public int StreetID { get; set; }
+        public int AreaID { get; set; }
         public bool Dogs { get; set; }
         public int SurfaceArea { get; set; }
         public int AmountOfPeople { get; set; }
         public double PricePerNightPerPerson { get; set; }
-        public int Xcord { get; set; }
-        public int Ycord { get; set; }
+        public int XCord { get; set; }
+        public int YCord { get; set; }
 
-        public Place(int placeID, bool hasPowerbool, int street, bool canHaveDogs, int surfaceArea, int numberOfPeople, double pricePerNightPerPerson, int xCord, int yCord)
+        public Place(int placeID, bool hasPowerbool, int streetID, bool canHaveDogs, int surfaceArea, int numberOfPeople, double pricePerNightPerPerson, int xCord, int yCord)
         {
             this.PlaceID = placeID;
             this.Power = hasPowerbool;
-            this.StreetID = street;
+            this.StreetID = streetID;
             this.SurfaceArea = surfaceArea;
             this.Dogs = canHaveDogs;
             this.AmountOfPeople = numberOfPeople;
             this.PricePerNightPerPerson = pricePerNightPerPerson;
-            this.Xcord = xCord;
-            this.Ycord = yCord;
+            this.XCord = xCord;
+            this.YCord = yCord;
 
         }
  /*       public Place(int placeID, bool hasPower, Street street, int surfaceArea, int numberOfPeople, double pricePerNightPerPerson, int xCord, int yCord) : this(placeID, hasPower, street, street.Dogs, surfaceArea, numberOfPeople, pricePerNightPerPerson, xCord, yCord)
@@ -43,21 +44,22 @@ namespace CampingCore
         public Place(ArrayList properties)
         {
             this.PlaceID = (int) properties[0];
-            this.Power = (bool)properties[2];
             this.StreetID = (int)properties[1];
-            this.SurfaceArea = (int)properties[3];
-            this.PricePerNightPerPerson = (double)properties[4];
-            this.AmountOfPeople = (int)properties[5];
-            this.Dogs = (bool)properties[6];
-            this.Xcord = (int)properties[7];
-            this.Ycord = (int)properties[8];
+            this.AreaID = (int)properties[2];
+            this.Power = (bool)properties[3];
+            this.Dogs = (bool)properties[4];
+            this.SurfaceArea = (int)properties[5];
+            this.PricePerNightPerPerson = (double)properties[6];
+            this.AmountOfPeople = (int)properties[7];
+            this.XCord = (int)properties[8];
+            this.YCord = (int)properties[9];
         }
 
         public int[] GetPlacePositions()
         {
-            // Xcord1 = width
-            // Ycord1 = height
-            return new int[2] { Xcord, Ycord};
+            // XCord1 = width
+            // YCord1 = height
+            return new int[2] { XCord, YCord};
         }
         public override string ToString()
         {

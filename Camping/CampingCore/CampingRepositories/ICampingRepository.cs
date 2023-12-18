@@ -14,10 +14,12 @@ namespace CampingCore.CampingRepositories
         public ICampingReservationRepository CampingReservationRepository { get;  set; }
         public ICampingGuestRepository CampingGuestRepository { get; set; }
         public ICampingMapRepository CampingMapRepository { get; set; }
+        public void CreateDB();
         public void CreateGuestTable();
         public void CreateAreaTable();
         public void CreateStreetTable();
         public void CreatePlaceTable();
+        public void CreatePlaceExtendsTable();
         public void CreateReservationTable();
     }
 }
