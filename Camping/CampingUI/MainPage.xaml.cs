@@ -341,20 +341,22 @@ namespace CampingUI
             PlaceInfo.Visibility = Visibility.Visible;
             if (!AddPlaceBool)
             {
-                /*                SetPlaceDataOnFields(place);
+                foreach (Street street in Camping.CampingRepository.CampingMapRepository.GetStreets())
+                {
+                    PlaceStreetComboBox.Items.Add(street.Name);
+                }
+
+                foreach (Area area in Camping.CampingRepository.CampingMapRepository.GetAreas())
+                {
+                    AreaStreetComboBox.Items.Add(area.Name);
+                }
+
+                SetPlaceDataOnFields(place);
                 AddPlaceButton.Content = "Aanpassen";
-                PlaceHasPower.IsEnabled = false;
-                PlaceHasDogs.IsEnabled = false;
-                PlaceSurfaceArea.IsEnabled = false;
-                PlacePricePerNight.IsEnabled = false;
-                PlacePersons.IsEnabled = false;
-                PlaceStreetComboBox.IsEnabled = false;
-                PlacePlaceID.IsEnabled = false;
                 AddPlaceButton.Visibility = Visibility.Collapsed;
-                _editPlaceBool = true;*/
-                PlaceInfo.Visibility = Visibility.Collapsed;
+                _editPlaceBool = true;
                 field.Children.Clear();
-                GenerateAreas();
+                //GenerateAreas();
             }
             else
             {
@@ -387,6 +389,8 @@ namespace CampingUI
         }
         private void SetPlaceDataOnFields(Place place)
         {
+            Street AreaID = Camping.CampingRepository.CampingMapRepository.GetStreetByStreetID(place);
+
             SelectedPlace = place.PlaceID;
             PlacePlaceID.Text = place.PlaceID.ToString();
             PlaceHasPower.IsChecked = place.Power;
@@ -395,6 +399,9 @@ namespace CampingUI
             PlacePricePerNight.Text = place.PricePerNightPerPerson.ToString();
             PlacePersons.Text = place.AmountOfPeople.ToString();
             PlaceStreetComboBox.Text = Camping.CampingRepository.CampingMapRepository.GetStreetByStreetID(place).Name;
+            AreaStreetComboBox.Text = Camping.CampingRepository.CampingMapRepository.GetAreaByAreaID(AreaID).Name;
+
+
         }
         static Color ChangeColorOpacity(Color color, double opacity)
         {
