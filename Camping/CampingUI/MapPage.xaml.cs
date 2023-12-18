@@ -309,8 +309,8 @@ namespace CampingUI
                     else deltaY = line.Y2 - line.Y1;
 
                     double degrees = Math.Atan(deltaY/deltaX)*180/Math.PI;
-                    if(degrees < 10) line.Y2 = line.Y1;
-                    if(degrees > 80) line.X2 = line.X1;
+                    if(degrees < 5) line.Y2 = line.Y1;
+                    if(degrees > 85) line.X2 = line.X1;
                         
 
                     field.Children.Add(grid);
