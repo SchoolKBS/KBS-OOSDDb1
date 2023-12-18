@@ -30,14 +30,10 @@ namespace CampingUI
         private List<Area> _areas;
         private List<Place> _places;
         private List<Street> _streets;
-        private int _xPressed;
-        private int _yPressed;
-        private bool _wrongInput;
-        private int SelectedPlace;
-        private int _placeSurfaceArea, _placePersons, _placePlaceID, _placeStreetID, _placeAreaID;
+        private int _placeSurfaceArea, _placePersons, _placePlaceID, _placeStreetID, _placeAreaID, SelectedPlace, _yPressed, _xPressed;
         private double _placePricePerNight;
         private Canvas previousSelectedCanvas;
-        private bool _editPlaceBool;
+        private bool _editPlaceBool, _wrongInput;
         private string selectedMapButton = "";
         public MainPage(Camping camping)
         {
@@ -59,47 +55,34 @@ namespace CampingUI
 
         public void GenerateMap()
         {
-            GenerateAreas();
-            GenerateStreets();
-            GeneratePlaces();
+            _areas = _camping.CampingRepository.CampingMapRepository.GetAreas().ToList();
+            _streets = _camping.CampingRepository.CampingMapRepository.GetStreets().ToList();
+            _places = _camping.CampingRepository.CampingPlaceRepository.GetPlaces().ToList();
+            GenerateComponentsMap(_areas);
+            GenerateComponentsMap(_streets);
+            GenerateComponentsMap(_places);
         }
 
-        public void GenerateAreas()
+        public void GenerateComponentsMap<T>(List<T> list)
         {
-            _areas = _camping.CampingRepository.CampingMapRepository.GetAreas();
-
-            if (_areas.Count() > 0)
+            if(list != null && list.Count() > 0)
             {
-                foreach (Area area in _areas)
+                foreach(var comp in list)
                 {
-                    field.Children.Add(MapPageArea.GenerateArea(area));
+                    if(comp is Area)
+                    {
+                        field.Children.Add(MapPageArea.GenerateArea((Area)(object)comp));
+                    }
+                    if (comp is Street)
+                    {
+                        field.Children.Add(MapPageStreet.GenerateStreet((Street)(object)comp));
+                    }
+                    if (comp is Place)
+                    {
+                        GeneratePlace((Place)(object)comp, Brushes.Black, true);
+                    }
                 }
             }
-        }
-
-        public void GenerateStreets()
-        {
-            _streets = _camping.CampingRepository.CampingMapRepository.GetStreets();
-            if (_streets.Count() > 0)
-            {
-                foreach (Street street in _streets)
-                {
-                    field.Children.Add(MapPageStreet.GenerateStreet(street));
-                }
-            }
-        }
-
-        public void GeneratePlaces()
-        {
-            _places = _camping.CampingRepository.CampingPlaceRepository.GetPlaces();
-            if (_places.Count() > 0)
-            {
-                foreach (Place place in _places)
-                {
-                    GeneratePlace(place, Brushes.Black, true);
-                }
-            }
-
         }
 
         public void GeneratePlace(Place place, SolidColorBrush brush, bool AddPlaceBool)
@@ -184,17 +167,6 @@ namespace CampingUI
             PlaceInfo.Visibility = Visibility.Visible;
             if (!AddPlaceBool)
             {
-                /*                SetPlaceDataOnFields(place);
-                AddPlaceButton.Content = "Aanpassen";
-                PlaceHasPower.IsEnabled = false;
-                PlaceHasDogs.IsEnabled = false;
-                PlaceSurfaceArea.IsEnabled = false;
-                PlacePricePerNight.IsEnabled = false;
-                PlacePersons.IsEnabled = false;
-                PlaceStreetComboBox.IsEnabled = false;
-                PlacePlaceID.IsEnabled = false;
-                AddPlaceButton.Visibility = Visibility.Collapsed;
-                _editPlaceBool = true;*/
                 PlaceInfo.Visibility = Visibility.Collapsed;
                 field.Children.Clear();
                 GenerateMap();
@@ -304,14 +276,36 @@ namespace CampingUI
                 Area area = _camping.CampingRepository.CampingMapRepository.GetAreaByAreaName(PlaceAreaComboBox.SelectedItem.ToString());
                 Place place = new Place(_placePlaceID, hasPower, street.StreetID, area.AreaID, hasDogs, _placeSurfaceArea, _placePersons, _placePricePerNight, _xPressed, _yPressed);
                 if (_editPlaceBool)
+                {
                     _camping.CampingRepository.CampingPlaceRepository.UpdatePlaceData(place.PlaceID, street.StreetID, area.AreaID, hasPower, _placeSurfaceArea, _placePricePerNight, _placePersons, hasDogs);
+                    //Update extend table
+                }
                 else
                 {
                     _camping.CampingRepository.CampingPlaceRepository.AddPlace(place);
+                    _camping.CampingRepository.CampingMapRepository.AddExtend(place.PlaceID,
+                                                          GetValueFromExtendComboBox(PlacePowerComboBox),
+                                                          GetValueFromExtendComboBox(PlaceDogsComboBox),
+                                                          GetValueFromExtendComboBox(PlaceSurfaceAreaComboBox),
+                                                          GetValueFromExtendComboBox(PlacePricePerNightPerPersonComboBox),
+                                                          GetValueFromExtendComboBox(PlacePersonsComboBox));
                     _camping.CampingRepository.CampingPlaceRepository.GetPlaces();
                 }
                 HandleCancelAddPlace();
             }
+        }
+        private bool? GetValueFromExtendComboBox(ComboBox combobox)
+        {
+            bool? extendBool = null;
+            if(combobox.SelectedIndex == 0)
+            {
+                extendBool = true;
+            }
+            else if(combobox.SelectedIndex == 1)
+            {
+                extendBool = false;
+            }
+            return extendBool;
         }
 
         public void HandleCancelAddPlace_Click(Object sender, RoutedEventArgs e)
@@ -608,24 +602,27 @@ namespace CampingUI
                                 }
                             }
                             if (comboBox.Name.Contains("Dogs") && checkbox.Name.Contains("Dogs"))
-                            {
-                                if (comboBox.SelectedIndex == 0)
-                                {
-                                    checkbox.IsChecked = street.Dogs;
-                                }
-                                if (comboBox.SelectedIndex == 1)
-                                {
-                                    checkbox.IsChecked = area.Dogs;
-                                }
-                                checkbox.IsEnabled = false;
-                                if (comboBox.SelectedIndex == 2)
-                                {
-                                    checkbox.IsEnabled = true;
-                                }
-                            }
+                                NewMethod(comboBox, area, street, checkbox);
                         }
                     }
                 }
+            }
+        }
+
+        private static void NewMethod(ComboBox comboBox, Area area, Street street, CheckBox checkbox)
+        {
+            if (comboBox.SelectedIndex == 0)
+            {
+                checkbox.IsChecked = street.Dogs;
+            }
+            if (comboBox.SelectedIndex == 1)
+            {
+                checkbox.IsChecked = area.Dogs;
+            }
+            checkbox.IsEnabled = false;
+            if (comboBox.SelectedIndex == 2)
+            {
+                checkbox.IsEnabled = true;
             }
         }
 

@@ -15,5 +15,6 @@ namespace CampingCore.CampingRepositories
         public Area GetAreaByAreaName(string areaName);
 
         public Area GetAreaByAreaID(Place place);
+        public void AddExtend(int placeID, bool? power, bool? dogs, bool? surfaceArea, bool? pricePerNightPerPerson, bool? amountOfPeople);
     }
 }
