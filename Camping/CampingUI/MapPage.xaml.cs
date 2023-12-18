@@ -602,27 +602,24 @@ namespace CampingUI
                                 }
                             }
                             if (comboBox.Name.Contains("Dogs") && checkbox.Name.Contains("Dogs"))
-                                NewMethod(comboBox, area, street, checkbox);
+                            {
+                                if (comboBox.SelectedIndex == 0)
+                                {
+                                    checkbox.IsChecked = street.Dogs;
+                                }
+                                if (comboBox.SelectedIndex == 1)
+                                {
+                                    checkbox.IsChecked = area.Dogs;
+                                }
+                                checkbox.IsEnabled = false;
+                                if (comboBox.SelectedIndex == 2)
+                                {
+                                    checkbox.IsEnabled = true;
+                                }
+                            }
                         }
                     }
                 }
-            }
-        }
-
-        private static void NewMethod(ComboBox comboBox, Area area, Street street, CheckBox checkbox)
-        {
-            if (comboBox.SelectedIndex == 0)
-            {
-                checkbox.IsChecked = street.Dogs;
-            }
-            if (comboBox.SelectedIndex == 1)
-            {
-                checkbox.IsChecked = area.Dogs;
-            }
-            checkbox.IsEnabled = false;
-            if (comboBox.SelectedIndex == 2)
-            {
-                checkbox.IsEnabled = true;
             }
         }
 
