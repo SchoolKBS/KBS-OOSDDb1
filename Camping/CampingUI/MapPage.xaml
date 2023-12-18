@@ -210,7 +210,6 @@
                         <RowDefinition Height="65"/>
                         <RowDefinition Height="65"/>
                         <RowDefinition Height="65"/>
-                        <RowDefinition Height="65"/>
                         <RowDefinition Height="70"/>
                     </Grid.RowDefinitions>
 
@@ -301,27 +300,14 @@
 
                         <Label Name="PlaceStreetLabel" Content="Straat: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                         <Border Name="PlaceStreetBorder" Grid.Column="1" BorderBrush="White" Height="40" Width="150" HorizontalAlignment="Right">
-                            <ComboBox Name="PlaceStreetComboBox" VerticalAlignment="Center" FontSize="16" Width="150" Height="40" HorizontalAlignment="Right" SelectionChanged="PlaceStreetComboBox_SelectionChanged" />
+                            <ComboBox Name="PlaceStreetComboBox" VerticalAlignment="Center" FontSize="16" Width="150" Height="40" HorizontalAlignment="Right" SelectionChanged="PlaceStreetComboBox_SelectionChanged"/>
                         </Border>
                     </Grid>
-
                     <Grid Grid.Row="7" Name="PlaceRow7">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <Label  Content="Gebied: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <Border  Grid.Column="1" BorderBrush="White" Height="40" Width="150" HorizontalAlignment="Right">
-                            <ComboBox Name="AreaStreetComboBox" VerticalAlignment="Center" FontSize="16" Width="150" Height="40" HorizontalAlignment="Right" SelectionChanged="PlaceStreetComboBox_SelectionChanged" />
-                        </Border>
-                    </Grid>
-
-                    <Grid Grid.Row="8" Name="PlaceRow8">
                         <Button Foreground="White" FontWeight="Bold" Style="{DynamicResource ButtonStyle1Edit}" Name="ExtendStreetPlaceButton" Content="Overerven" IsEnabled ="False" Click="ExtendStreetPlaceButton_Click" Height="40" Width="140" HorizontalAlignment="Right"/>
                     </Grid>
 
-                    <Grid Grid.Row="9" IsEnabled="True" VerticalAlignment="Bottom">
+                    <Grid Grid.Row="8" IsEnabled="True" VerticalAlignment="Bottom">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
