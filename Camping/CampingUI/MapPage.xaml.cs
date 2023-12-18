@@ -39,7 +39,7 @@ namespace CampingUI
         private double _placePricePerNight;
         private Canvas previousSelectedCanvas;
         private bool _editPlaceBool;
-        private string selectedMapButton = "";
+        private string selectedMapButton = "View";
         private bool _AddPlace = false;
         private bool _AddStreet = false;
         private Area _SelecterdArea;
@@ -80,10 +80,15 @@ namespace CampingUI
                     Border border = MapPageArea.GenerateArea(area);
                     border.MouseLeftButtonDown += (sender, e) =>
                     {
-                        if (!_AddPlace && !_AddStreet)
+                        if (selectedMapButton == "View")
                         {
                             _SelecterdArea = area;
                             HandleAreaClick();
+                        }
+                        else
+                        {
+                            _SelecterdArea = null;
+                            AreaInfo.Visibility = Visibility.Hidden;
                         }
                     };
                     field.Children.Add(border);
@@ -648,6 +653,7 @@ namespace CampingUI
             // Check if the pressed key is the Escape key
             if (e.Key == Key.Escape)
             {
+
                 if (PlaceInfo.Visibility == Visibility.Visible)
                 {
                     HandleCancelAddPlace();
@@ -657,6 +663,10 @@ namespace CampingUI
                         button.Style = editStyle;
                     }
                     selectedMapButton = "View";
+                }
+                else if(AreaInfo.Visibility == Visibility.Visible)
+                {
+                    AreaInfo.Visibility = Visibility.Hidden;
                 }
             }
         }
