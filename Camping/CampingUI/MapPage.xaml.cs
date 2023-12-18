@@ -648,7 +648,8 @@ namespace CampingUI
             Style editStyle = (Style)button.FindResource("ButtonStyle1Edit");         
             if (button.Style.Equals(editStyle))
             {
-                foreach(Button gridButton in MapGridButtons.Children)
+                HandleCancelAddPlace();
+                foreach (Button gridButton in MapGridButtons.Children)
                 {
                     gridButton.Style = editStyle;
                 }

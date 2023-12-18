@@ -27,12 +27,12 @@ namespace CampingUI.NewFolder
 
             if (screenAspectRatio > aspectRatio)
             {
-                scaleX = screenWidth / desiredWidth / 1.75;
+                scaleX = screenWidth / desiredWidth / 2;
                 scaleY = scaleX;
             }
             else
             {
-                scaleY = screenHeight / desiredHeight / 1.75;
+                scaleY = screenHeight / desiredHeight / 2;
                 scaleX = scaleY;
             }
             ApplyScaleTransform(scaleX, scaleY, field);
