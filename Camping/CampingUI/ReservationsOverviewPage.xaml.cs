@@ -397,7 +397,7 @@ namespace CampingUI
 
         private void EditReservationButton_Click(object sender, RoutedEventArgs e)
         {
-            if (IsValidInput())
+            if (IsValidInput() && IsValidInputPlace())
             {
                 PlaceIDLabel.Content = string.IsNullOrEmpty(PlaceDropDown.Text) ? "Plaatsnummer: Er moet een plaats geselecteerd worden" : "Plaatsnummer:";
 
@@ -437,6 +437,18 @@ namespace CampingUI
 
             AmountOfPeopleBox.BorderBrush = Brushes.Red;
             return false;
+        }
+
+        private bool IsValidInputPlace()
+        {
+            if (PlaceDropDown.Items.Count > 0)
+            {
+                PlaceDropDown.BorderBrush = Brushes.White;
+                return true;
+            }
+            PlaceDropDown.BorderBrush = Brushes.Red;
+            return false;
+
         }
         private void CancelReservationButton_Click(object sender, RoutedEventArgs e)
         {
