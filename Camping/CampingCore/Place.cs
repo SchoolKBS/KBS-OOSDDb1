@@ -16,11 +16,12 @@ namespace CampingCore
         public int XCord { get; set; }
         public int YCord { get; set; }
 
-        public Place(int placeID, bool hasPowerbool, int streetID, bool canHaveDogs, int surfaceArea, int numberOfPeople, double pricePerNightPerPerson, int xCord, int yCord)
+        public Place(int placeID, bool hasPowerbool, int streetID, int areaID, bool canHaveDogs, int surfaceArea, int numberOfPeople, double pricePerNightPerPerson, int xCord, int yCord)
         {
             this.PlaceID = placeID;
             this.Power = hasPowerbool;
             this.StreetID = streetID;
+            this.AreaID = areaID;
             this.SurfaceArea = surfaceArea;
             this.Dogs = canHaveDogs;
             this.AmountOfPeople = numberOfPeople;

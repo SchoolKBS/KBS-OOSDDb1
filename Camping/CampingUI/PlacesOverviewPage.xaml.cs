@@ -248,7 +248,7 @@ namespace CampingUI
         {
             NavigationService.Navigate(new ReservationCreationPage(this));
         }
-        /*private void DeletePlaceButton_Click(object sender, RoutedEventArgs e)
+        private void DeletePlaceButton_Click(object sender, RoutedEventArgs e)
         {
             Place place = (Place)PlacesListView.SelectedItem;
             MessageBoxResult deleteMessageBox = MessageBox.Show("Weet je zeker dat de volgende plaats " + place.PlaceID + " verwijderd wordt?", "Waarschuwing!", MessageBoxButton.YesNo, MessageBoxImage.Question);
@@ -259,7 +259,7 @@ namespace CampingUI
                 ReloadScreenDataPlaces();
             }
 
-        }*/
+        }
         private void OpenPlaceOverview()
         {
             EditPlaceGrid.Visibility = Visibility.Collapsed;
@@ -301,7 +301,7 @@ namespace CampingUI
                 _maxPriceRange = 0;
             MaxPriceRangeTextBox.Text = $"{_maxPriceRange}";
         }
-        /*private void SetDeleteButtonClickableIfNoReservations()
+        private void SetDeleteButtonClickableIfNoReservations()
         {
             Place place = (Place)PlacesListView.SelectedItem;
             List<Reservation> placesReservations = _camping.Reservations.Where(i => i.PlaceID == place.PlaceID)
@@ -309,7 +309,7 @@ namespace CampingUI
             DeletePlaceButton.IsEnabled = true;
             if (placesReservations.Count > 0)
                 DeletePlaceButton.IsEnabled = false;
-        }*/
+        }
         private void PlacesListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (PlacesListView.SelectedItems.Count > 0)
@@ -318,7 +318,7 @@ namespace CampingUI
                 SetLabelsPlaceOverview(place);
                 OpenPlaceOverview();
                 SetReservationsInCalendar(place);
-                //SetDeleteButtonClickableIfNoReservations();
+                SetDeleteButtonClickableIfNoReservations();
             }
             else
             {
@@ -393,7 +393,7 @@ namespace CampingUI
             Place place = (Place)PlacesListView.SelectedItem;
             if (!_wrongInput)
             {
-                _camping.UpdatePlace(place.PlaceID, place.StreetID, _hasPowerEdit, _surfaceAreaEdit, _pricePerNightPerPersonEdit, _amountOfPeopleEdit, _dogsAllowedEdit);
+                _camping.UpdatePlace(place.PlaceID, place.StreetID, place.AreaID, _hasPowerEdit, _surfaceAreaEdit, _pricePerNightPerPersonEdit, _amountOfPeopleEdit, _dogsAllowedEdit);
                 EditPlaceGrid.Visibility = Visibility.Collapsed;
                 PlaceOverviewGrid.Visibility = Visibility.Visible;
                 ReloadScreenDataPlaces();

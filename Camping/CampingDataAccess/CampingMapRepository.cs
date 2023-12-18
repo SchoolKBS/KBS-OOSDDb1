@@ -124,7 +124,7 @@ namespace CampingDataAccess
                 return street;
             }
         }
-        public Street GetSteetByStreetName(string streetName)
+        public Street GetStreetByStreetName(string streetName)
         {
             string sql = "SELECT * FROM Street WHERE Name = @Name";
             Street street = null;
@@ -158,5 +158,75 @@ namespace CampingDataAccess
                 return street;
             }
         }
+        public Area GetAreaByAreaName(string areaName)
+        {
+            string sql = "SELECT * FROM Area WHERE Name = @Name";
+            Area area = null;
+            using (var connection = new SqliteConnection(ConnectionString))
+            {
+                connection.Open();
+                using (var cmd = new SqliteCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue("@Name", areaName);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            ArrayList Properties = new ArrayList();
+                            for (int i = 0; i < reader.FieldCount; i++)
+                            {
+                                string columnName = reader.GetName(i);
+                                Type columnType = reader.GetFieldType(i);
+                                object colmnValue = reader.GetValue(i);
+
+                                PropertyInfo property = typeof(Area).GetProperty(columnName);
+                                if (property != null)
+                                {
+                                    Properties.Add(Convert.ChangeType(colmnValue, property.PropertyType));
+                                }
+                            }
+                            area = new Area(Properties);
+                        }
+                    }
+                }
+                return area;
+            }
+        }
+
+        public Area GetAreaByAreaID(Place place)
+        {
+            string sql = "SELECT * FROM Area WHERE AreaID = @AreaID";
+            Area area = null;
+            using (var connection = new SqliteConnection(ConnectionString))
+            {
+                connection.Open();
+                using (var cmd = new SqliteCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue("@AreaID", place.AreaID);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            ArrayList Properties = new ArrayList();
+                            for (int i = 0; i < reader.FieldCount; i++)
+                            {
+                                string columnName = reader.GetName(i);
+                                Type columnType = reader.GetFieldType(i);
+                                object colmnValue = reader.GetValue(i);
+
+                                PropertyInfo property = typeof(Area).GetProperty(columnName);
+                                if (property != null)
+                                {
+                                    Properties.Add(Convert.ChangeType(colmnValue, property.PropertyType));
+                                }
+                            }
+                            area = new Area(Properties);
+                        }
+                    }
+                }
+                return area;
+            }
+        }
     }
+
 }
