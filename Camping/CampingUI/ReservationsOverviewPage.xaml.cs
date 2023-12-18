@@ -72,14 +72,14 @@ namespace CampingUI
                 {
                     ArrivalDatePickerr.Text = string.Empty;
                     DepartureDatePickerr.Text = string.Empty;
-                    ArrivalDatePickerr.Background = Brushes.Red;
-                    DepartureDatePickerr.Background = Brushes.Red;
+                    StaticUIMethods.SetErrorDatePickerBorder(ArrivalDatePickerr);
+                    StaticUIMethods.SetErrorDatePickerBorder(DepartureDatePickerr);
 
                 }
                 else
                 {
-                    ArrivalDatePickerr.Background = Brushes.White;
-                    DepartureDatePickerr.Background = Brushes.White;
+                    StaticUIMethods.ResetDatePickerBorder(ArrivalDatePickerr);
+                    StaticUIMethods.ResetDatePickerBorder(DepartureDatePickerr);
                     _appliedFilters = true;
                     filteredReservations = filteredReservations.Where(reservation => reservation.ArrivalDate.Date >= arrivalDate.Value.Date);
                 }
@@ -247,12 +247,8 @@ namespace CampingUI
             StaticUIMethods.ResetTextboxBorder(GuestNameBox);
             StaticUIMethods.ResetTextboxBorder(PlaceNumberBox);
             StaticUIMethods.ResetTextboxBorder(ReservationIdBox);
-
-            GuestNameBox.BorderBrush = Brushes.White;
-            ArrivalDatePickerr.BorderBrush = Brushes.White;
-            DepartureDatePickerr.BorderBrush = Brushes.White;
-            PlaceNumberBox.BorderBrush = Brushes.White;
-            ReservationIdBox.BorderBrush = Brushes.White;
+            StaticUIMethods.ResetDatePickerBorder(ArrivalDatePickerr);
+            StaticUIMethods.ResetDatePickerBorder(DepartureDatePickerr);
             _appliedFilters = false;
 
 
