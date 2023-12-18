@@ -219,12 +219,21 @@ namespace CampingUI
                     }
                 }
             }
+            ResetBorders();
         }
 
-
+        private void ResetBorders()
+        {
+            StaticUIMethods.ResetTextboxBorder(PlacePlaceID);
+            StaticUIMethods.ResetTextboxBorder(PlaceSurfaceArea);
+            StaticUIMethods.ResetTextboxBorder(PlacePersons);
+            StaticUIMethods.ResetTextboxBorder(PlacePricePerNight);
+            ResetComboBoxBorder(PlaceAreaBorder);
+            ResetComboBoxBorder(PlaceStreetBorder);
+        }
         private void field_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            field.Children.Clear();
+            field.Children.Clear();           
             GenerateMap();
 
             if (selectedMapButton.Contains("Place"))
@@ -434,7 +443,7 @@ namespace CampingUI
             ComboBox combobox = (ComboBox)sender;
             Border border = PlaceAreaBorder;
             if (combobox.Name.Equals(PlaceStreetComboBox.Name)) border = PlaceStreetBorder;
-            if (combobox.BorderBrush.Equals(Brushes.Red))
+            if (border.BorderBrush.Equals(Brushes.Red))
             {
                 ResetComboBoxBorder(border);
                 _wrongInput = false;
