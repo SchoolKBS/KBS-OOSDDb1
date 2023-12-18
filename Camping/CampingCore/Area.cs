@@ -1,17 +1,29 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace CampingCore
 {
+    public enum AreaColor
+    {
+        Red,
+        Orange, 
+        Yellow,
+        Green,
+        Blue,
+        Purple,
+        Pink,
+        Violet,
+    }
     public class Area
     {
         public int AreaID { get; set; }
         public string Name { get; set; }
-        public string Color {  get; set; }
+        public int Color {  get; set; }
         public bool Power { get; set; }
         public bool Dogs { get; set; }
         public int SurfaceArea { get; set; }
@@ -26,7 +38,7 @@ namespace CampingCore
         {
             AreaID = (int)properties[0];
             Name = (string)properties[1];
-            Color = (string)properties[2];
+            Color = (int)properties[2];
             Power = (bool)properties[3];
             Dogs = (bool)properties[4];
             SurfaceArea = (int)properties[5];

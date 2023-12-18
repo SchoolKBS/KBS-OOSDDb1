@@ -21,7 +21,6 @@ namespace CampingUI
     /// </summary>
     public partial class MainWindow : Window
     {
-
         public CampingRepository CampingRepository { get; private set; }
         public Camping Camping { get; private set; }
         public MainWindow()

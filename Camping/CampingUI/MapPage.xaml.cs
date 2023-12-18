@@ -2,6 +2,7 @@
 using CampingDataAccess;
 using CampingUI.GenerateComponentsMap;
 using CampingUI.NewFolder;
+using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Operators;
 using System;
 using System.Collections.Generic;
@@ -37,6 +38,9 @@ namespace CampingUI
         private double _placePricePerNight;
         private Canvas previousSelectedCanvas;
         private bool _editPlaceBool;
+        private bool _AddPlace = false;
+        private bool _AddStreet = false;
+        private Area _SelecterdArea;
 
         public MainPage(Camping camping)
         {
@@ -91,8 +95,17 @@ namespace CampingUI
             if (_areas.Count() > 0)
             {
                 foreach (var area in _areas)
-                { 
-                    field.Children.Add(MapPageArea.GenerateArea(area));
+                {
+                    Border border = MapPageArea.GenerateArea(area);
+                    border.MouseLeftButtonDown += (sender, e) =>
+                    {
+                        if (!_AddPlace && !_AddStreet)
+                        {
+                            _SelecterdArea = area;
+                            HandleAreaClick();
+                        }
+                    };
+                    field.Children.Add(border);
                 }
             }
         }
@@ -272,12 +285,26 @@ namespace CampingUI
         {
             field.Children.Clear();
             GenerateMap();
+            if(_AddPlace)
+            {
+                CreateNewPlace();
+            }
+            else if (_AddStreet)
+            {
 
+            }
+            else
+            {
+
+            }
+        }
+        public void CreateNewPlace()
+        {
             Point p = Mouse.GetPosition(field);
             List<Area> areas = _camping.CampingRepository.CampingMapRepository.GetAreas();
             List<Street> streets = _camping.CampingRepository.CampingMapRepository.GetStreets();
             List<Place> places = _camping.CampingRepository.CampingPlaceRepository.GetPlaces();
-            foreach(Place place in places)
+            foreach (Place place in places)
             {
                 place.XCord -= 15;
                 place.YCord -= 15;
@@ -289,10 +316,10 @@ namespace CampingUI
                                                .Where(i => i.YCord1 <= (_yPressed - 15))
                                                .Where(i => i.YCord1 + i.Height >= (_yPressed + 45))
                                                .ToList();
-            List<Place> placesNotInNewPlaceBorder = places.Where(i => i.XCord >= (_xPressed-45) && i.XCord <= (_xPressed+45))
-                                                          .Where(i => i.YCord >= (_yPressed-45) && i.YCord <= (_yPressed+45))
+            List<Place> placesNotInNewPlaceBorder = places.Where(i => i.XCord >= (_xPressed - 45) && i.XCord <= (_xPressed + 45))
+                                                          .Where(i => i.YCord >= (_yPressed - 45) && i.YCord <= (_yPressed + 45))
                                                           .ToList();
-            if (PlaceWithinAreas.Count == 1 && placesNotInNewPlaceBorder.Count == 0)  
+            if (PlaceWithinAreas.Count == 1 && placesNotInNewPlaceBorder.Count == 0)
             {
                 _camping.Places = _camping.CampingRepository.CampingPlaceRepository.GetPlaces();
                 int i = _camping.Places.Last().PlaceID + 1;
@@ -442,6 +469,16 @@ namespace CampingUI
             {
                 StaticUIMethods.SetErrorTextboxBorder(PlacePricePerNight);
                 _wrongInput = true;
+            }
+        }
+        private void HandleAreaClick()
+        {
+            if(_SelecterdArea != null)
+            {
+                AreaName.Content = _SelecterdArea.Name;
+                AreaColor.Text = "Kleur";
+                AreaPower.IsChecked = _SelecterdArea.Power;
+                AreaInfo.Visibility = Visibility.Visible;
             }
         }
     }

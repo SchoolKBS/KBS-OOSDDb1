@@ -14,16 +14,13 @@ namespace CampingUI.NewFolder
     {
         public static Border GenerateArea(Area area)
         {
-            byte rColor = byte.Parse(area.Color.Substring(0, 3));
-            byte gColor = byte.Parse(area.Color.Substring(3, 3));
-            byte bColor = byte.Parse(area.Color.Substring(6, 3));
             var coordinates = area.GetAreaPositions();
 
             Canvas canvasArea = new Canvas
             {
                 Width = coordinates[2],
                 Height = coordinates[3],
-                Background = new SolidColorBrush(Color.FromRgb(rColor, gColor, bColor)),
+                Background = new SolidColorBrush(StaticUIMethods.GetColor(area.Color)),
                 Name = "Canvas_" + area.AreaID.ToString(),
             };
 
