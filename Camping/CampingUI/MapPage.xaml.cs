@@ -38,7 +38,7 @@ namespace CampingUI
         private double _placePricePerNight;
         private Canvas previousSelectedCanvas;
         private bool _editPlaceBool;
-
+        private string selectedMapButton = "";
         public MainPage(Camping camping)
         {
             InitializeComponent();
@@ -71,7 +71,7 @@ namespace CampingUI
             if (_areas.Count() > 0)
             {
                 foreach (Area area in _areas)
-                { 
+                {
                     field.Children.Add(MapPageArea.GenerateArea(area));
                 }
             }
@@ -94,10 +94,10 @@ namespace CampingUI
             _places = _camping.CampingRepository.CampingPlaceRepository.GetPlaces();
             if (_places.Count() > 0)
             {
-                foreach(Place place  in _places)
+                foreach (Place place in _places)
                 {
                     GeneratePlace(place, Brushes.Black, true);
-                }     
+                }
             }
 
         }
@@ -108,8 +108,8 @@ namespace CampingUI
 
             Border border = new Border
             {
-                BorderBrush = Brushes.White, 
-                BorderThickness = new Thickness(1), 
+                BorderBrush = Brushes.White,
+                BorderThickness = new Thickness(1),
             };
 
             Canvas canvasPlace = new Canvas
@@ -123,8 +123,8 @@ namespace CampingUI
             border.Child = canvasPlace;
             Canvas.SetZIndex(canvasPlace, 100);
 
-            Canvas.SetTop(border, coordinates[1]); 
-            Canvas.SetLeft(border, coordinates[0]); 
+            Canvas.SetTop(border, coordinates[1]);
+            Canvas.SetLeft(border, coordinates[0]);
 
             field.Children.Add(border);
 
@@ -150,7 +150,7 @@ namespace CampingUI
             Canvas.SetTop(canvasPlace, (border.ActualHeight - canvasPlace.Height) / 2);
             Canvas.SetLeft(canvasPlace, (border.ActualWidth - canvasPlace.Width) / 2);
 
-            if(brush == Brushes.Black)
+            if (brush == Brushes.Black)
             {
                 canvasPlace.MouseEnter += (sender, e) =>
                 {
@@ -206,7 +206,7 @@ namespace CampingUI
                 _editPlaceBool = false;
                 AddPlaceButton.Visibility = Visibility.Visible;
             }
-                
+
         }
 
         private void ResetInputFields()
@@ -255,34 +255,37 @@ namespace CampingUI
             field.Children.Clear();
             GenerateMap();
 
-            Point p = Mouse.GetPosition(field);
-            List<Area> areas = _camping.CampingRepository.CampingMapRepository.GetAreas();
-            List<Street> streets = _camping.CampingRepository.CampingMapRepository.GetStreets();
-            List<Place> places = _camping.CampingRepository.CampingPlaceRepository.GetPlaces();
-            foreach(Place place in places)
+            if (selectedMapButton.Contains("Place"))
             {
-                place.XCord -= 15;
-                place.YCord -= 15;
-            }
-            _xPressed = (int)Math.Round(p.X) - 15;
-            _yPressed = (int)Math.Round(p.Y) - 15;
-            List<Area> PlaceWithinAreas = areas.Where(i => i.XCord1 <= (_xPressed - 15))
-                                               .Where(i => i.XCord1 + i.Width >= (_xPressed + 45))
-                                               .Where(i => i.YCord1 <= (_yPressed - 15))
-                                               .Where(i => i.YCord1 + i.Height >= (_yPressed + 45))
-                                               .ToList();
-            List<Place> placesNotInNewPlaceBorder = places.Where(i => i.XCord >= (_xPressed-45) && i.XCord <= (_xPressed+45))
-                                                          .Where(i => i.YCord >= (_yPressed-45) && i.YCord <= (_yPressed+45))
-                                                          .ToList();
-            if (PlaceWithinAreas.Count == 1 && placesNotInNewPlaceBorder.Count == 0)  
-            {
-                _camping.Places = _camping.CampingRepository.CampingPlaceRepository.GetPlaces();
-                int i = _camping.Places.Last().PlaceID + 1;
+                Point p = Mouse.GetPosition(field);
+                List<Area> areas = _camping.CampingRepository.CampingMapRepository.GetAreas();
+                List<Street> streets = _camping.CampingRepository.CampingMapRepository.GetStreets();
+                List<Place> places = _camping.CampingRepository.CampingPlaceRepository.GetPlaces();
+                foreach (Place place in places)
+                {
+                    place.XCord -= 15;
+                    place.YCord -= 15;
+                }
+                _xPressed = (int)Math.Round(p.X) - 15;
+                _yPressed = (int)Math.Round(p.Y) - 15;
+                List<Area> PlaceWithinAreas = areas.Where(i => i.XCord1 <= (_xPressed - 15))
+                                                   .Where(i => i.XCord1 + i.Width >= (_xPressed + 45))
+                                                   .Where(i => i.YCord1 <= (_yPressed - 15))
+                                                   .Where(i => i.YCord1 + i.Height >= (_yPressed + 45))
+                                                   .ToList();
+                List<Place> placesNotInNewPlaceBorder = places.Where(i => i.XCord >= (_xPressed - 45) && i.XCord <= (_xPressed + 45))
+                                                              .Where(i => i.YCord >= (_yPressed - 45) && i.YCord <= (_yPressed + 45))
+                                                              .ToList();
+                if (PlaceWithinAreas.Count == 1 && placesNotInNewPlaceBorder.Count == 0)
+                {
+                    _camping.Places = _camping.CampingRepository.CampingPlaceRepository.GetPlaces();
+                    int i = _camping.Places.Last().PlaceID + 1;
 
-                Place place = new Place(0, false, 1, 1, false, 0, 0, 0, _xPressed, _yPressed);
-                GeneratePlace(place, Brushes.Gray, false);
-                EnableExtendComboBoxes(false);
-                HandlePlaceClick(place, true);
+                    Place place = new Place(0, false, 1, 1, false, 0, 0, 0, _xPressed, _yPressed);
+                    GeneratePlace(place, Brushes.Gray, false);
+                    EnableExtendComboBoxes(false);
+                    HandlePlaceClick(place, true);
+                }
             }
         }
 
@@ -292,7 +295,7 @@ namespace CampingUI
             if (!_wrongInput)
             {
                 bool hasPower = false;
-                if(PlaceHasPower.IsChecked == true)
+                if (PlaceHasPower.IsChecked == true)
                     hasPower = true;
                 bool hasDogs = false;
                 if (PlaceHasDogs.IsChecked == true)
@@ -305,7 +308,7 @@ namespace CampingUI
                 else
                 {
                     _camping.CampingRepository.CampingPlaceRepository.AddPlace(place);
-                    _camping.CampingRepository.CampingPlaceRepository.GetPlaces(); 
+                    _camping.CampingRepository.CampingPlaceRepository.GetPlaces();
                 }
                 HandleCancelAddPlace();
             }
@@ -383,7 +386,7 @@ namespace CampingUI
 
         private void GetAddStreetID()
         {
-            if(PlaceStreetComboBox.SelectedItem != null)
+            if (PlaceStreetComboBox.SelectedItem != null)
             {
                 Street street = _camping.CampingRepository.CampingMapRepository.GetStreetByStreetName(PlaceStreetComboBox.SelectedItem.ToString());
                 _placeStreetID = street.StreetID;
@@ -453,7 +456,7 @@ namespace CampingUI
                     {
                         if (component is ComboBox com)
                         {
-                            if(com.Name != PlaceStreetComboBox.Name && com.Name != PlaceAreaComboBox.Name) {
+                            if (com.Name != PlaceStreetComboBox.Name && com.Name != PlaceAreaComboBox.Name) {
                                 HandleExtending(com);
                             }
                         }
@@ -468,11 +471,11 @@ namespace CampingUI
 
         private void EnableExtendComboBoxes(bool extend)
         {
-            foreach(Grid grid in PlaceInfo.Children)
+            foreach (Grid grid in PlaceInfo.Children)
             {
-                foreach(var component in grid.Children)
+                foreach (var component in grid.Children)
                 {
-                    if(component is ComboBox comboBox)
+                    if (component is ComboBox comboBox)
                     {
                         if (extend == false) comboBox.Opacity = 0.5;
                         else comboBox.Opacity = 1;
@@ -486,6 +489,12 @@ namespace CampingUI
         {
             border.BorderBrush = Brushes.Red;
             border.BorderThickness = new Thickness(3, 3, 3, 3);
+        }
+
+        private void MakeAreaButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+
         }
 
         public void ResetComboBoxBorder(Border border)
@@ -625,10 +634,39 @@ namespace CampingUI
             // Check if the pressed key is the Escape key
             if (e.Key == Key.Escape)
             {
-                if(PlaceInfo.Visibility == Visibility.Visible)
+                if (PlaceInfo.Visibility == Visibility.Visible)
                 {
                     HandleCancelAddPlace();
+                    foreach(Button button in MapGridButtons.Children)
+                    {
+                        Style editStyle = (Style)button.FindResource("ButtonStyle1Edit");
+                        button.Style = editStyle;
+                    }
+                    selectedMapButton = "View";
                 }
+            }
+        }
+
+        private void MakeMapComponentButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+            Style applyStyle = (Style)button.FindResource("ButtonStyle1Apply");
+            Style editStyle = (Style)button.FindResource("ButtonStyle1Edit");         
+            if (button.Style.Equals(editStyle))
+            {
+                foreach(Button gridButton in MapGridButtons.Children)
+                {
+                    gridButton.Style = editStyle;
+                }
+                button.Style = applyStyle;
+                selectedMapButton = button.Name;
+
+
+            }
+            else
+            {
+                button.Style = editStyle;
+                selectedMapButton = "View";
             }
         }
     }

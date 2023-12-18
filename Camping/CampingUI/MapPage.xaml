@@ -178,18 +178,36 @@
         <Grid.RowDefinitions>
             <!-- First row with a fixed height of 70 -->
             <RowDefinition Height="60"/>
-
+            <RowDefinition Height="100"/>
             <!-- Second row takes up the rest of the height -->
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <!-- Content in the first row -->
-        <Border Grid.Row="0" Grid.ColumnSpan="2" Margin="25,25,25,0" Background="#11284D">
-            <TextBlock FontSize="25" FontWeight="Bold" Foreground="white">Plattegrond</TextBlock>
+        <Border Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Margin="25,25,25,0" Background="#11284D" Grid.RowSpan="2">
+            <TextBlock FontSize="25" FontWeight="Bold" Foreground="white" Text="Plattegrond"></TextBlock>
         </Border>
+        <Border Grid.Row="1" Margin="25,25,25,0" Padding="5" Background="#334A6E" CornerRadius="25">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
 
+                <Grid Grid.Column="0" Name="MapGridButtons" Margin="25, 0, 25, 0" HorizontalAlignment="Left">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Style="{DynamicResource ButtonStyle1Edit}" Height="45" Margin="0, 0, 10, 0" HorizontalAlignment="Center" Grid.Column="0" Padding="20, 0" Foreground="White" FontWeight="Bold" FontSize="16" Name="MakeAreaButton" Click="MakeMapComponentButton_Click">Gebied aanmaken</Button>
+                    <Button Style="{DynamicResource ButtonStyle1Edit}" Height="45" Margin="10, 0, 10, 0" HorizontalAlignment="Center" Grid.Column="1" Padding="20, 0" Foreground="White" FontWeight="Bold" FontSize="16" Name="MakeStreetButton" Click="MakeMapComponentButton_Click">Straat aanmaken</Button>
+                    <Button Style="{DynamicResource ButtonStyle1Edit}" Height="45" Margin="10, 0, 0, 0" HorizontalAlignment="Center" Grid.Column="2" Padding="20, 0" Foreground="White" FontWeight="Bold" FontSize="16" Name="MakePlaceButton" Click="MakeMapComponentButton_Click">Plaats aanmaken</Button>
+                </Grid>
+            </Grid>
+        </Border>
         <!-- Content in the second row -->
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <!-- First column, 30% of the screen width with a 25-margin on the right -->
                 <ColumnDefinition Width="3*" MinWidth="0"/>
