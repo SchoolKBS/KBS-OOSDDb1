@@ -30,16 +30,15 @@ namespace CampingUI
     public partial class PlacesOverviewPage : Page
     {
         private Camping _camping;
-        public Camping Camping { get { return _camping; } }
         private IEnumerable<Place> _placesSortedAndOrFiltered;
-        private bool? _hasPower, _dogsAllowed;
-        public int AmountOfPeople = 0;
+        private bool? _hasPower = null, _dogsAllowed = null;
+        private int _amountOfPeople = 0;
         private DateTime _arrivalDate, _departureDate;
         private bool _isSortedAscending = true;
         private double _maxPriceRange = 0;
         private bool _wrongInput = false;
         private string _headerTag;
-        public bool FilterApplied = false;
+        private bool _filterApplied = false;
         private bool _emptyDates = true;
         private bool _hasPowerEdit, _dogsAllowedEdit;
         private int _surfaceAreaEdit;
@@ -51,18 +50,17 @@ namespace CampingUI
         {
             InitializeComponent();
             _placesOverviewPageFilter = new PlacesOverviewPageFilter();
-            this._camping = camping; // Creates a camping.
+            this._camping = camping; 
             _camping.Places = _camping.CampingRepository.CampingPlaceRepository.GetPlaces();
             if (!_camping.Places.IsNullOrEmpty())
                 _maxPriceRange = _camping.Places.Max(i => i.PricePerNightPerPerson);
-            MaxPriceRangeTextBox.Text = $"{_maxPriceRange}"; //Set the _maxPriceRange as a standard
-            AmountOfPeopleTextBox.Text = $"{AmountOfPeople}"; //Set the text in the textbox to 0
-            _placesSortedAndOrFiltered = _camping.Places; //get all the places to the variable
-            PlacesListView.ItemsSource = _placesSortedAndOrFiltered; // For all items in the ListBox use the camping places.
+            MaxPriceRangeTextBox.Text = $"{_maxPriceRange}"; 
+            AmountOfPeopleTextBox.Text = $"{_amountOfPeople}"; 
+            _placesSortedAndOrFiltered = _camping.Places;
+            PlacesListView.ItemsSource = _placesSortedAndOrFiltered; 
             this._headerTag = "PlaceID";
         }
 
-        //Function (EventHandler) that resets the background of a textbox if the filters are reset
         private void TextBox_Changed(object sender, TextChangedEventArgs e)
         {
             TextBox textbox = (TextBox)sender;
@@ -72,8 +70,15 @@ namespace CampingUI
                 _wrongInput = false;
             }
         }
-
-        //Function (EventHandler) to reset the datepickers to backgroundcolor white incase they were red before
+        private void TextBox_PressedEnter(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Return)
+            {
+                ResetListViewForFilter();
+                SetFilterVariables();
+                Filter(_arrivalDate, _departureDate, _amountOfPeople, _maxPriceRange, _hasPower, _dogsAllowed);
+            }
+        }
         private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
             if (ArrivalDatePicker.BorderBrush.Equals(Brushes.Red) && DepartureDatePicker.BorderBrush.Equals(Brushes.Red))
@@ -82,35 +87,45 @@ namespace CampingUI
                 StaticUIMethods.ResetDatePickerBorder(DepartureDatePicker);
                 _wrongInput = false;
             }
-        }
-
-        // Function (EventHandler) to apply the filters chosen after the "Pas filters toe" button is pressed
-        private void ApplyFilters_Click(object sender, RoutedEventArgs e)
-        {
-            PlacesListView.SelectedItems.Clear();
+            ResetListViewForFilter();
             SetFilterVariables();
-            CloseEditPlacetAndPlaceOverview();
-            _camping.Places = _camping.CampingRepository.CampingPlaceRepository.GetPlaces();
-            if (!_camping.Places.IsNullOrEmpty())
-            {
-                _placesSortedAndOrFiltered = _camping.Places;
-                Filter(_arrivalDate, _departureDate, AmountOfPeople, _maxPriceRange, _hasPower);
-            }
-
+            CloseEditPlacesAndPlaceOverview();
+            Filter(_arrivalDate, _departureDate, _amountOfPeople, _maxPriceRange, _hasPower, _dogsAllowed);
         }
-
-        // Function (EventHandler) to remove all the filters and reset the filters to their default state.
+        private void PowerCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            _hasPower = FilterAfterCheckboxChanged(PowerCheckBoxFilter, "stroom");
+            Filter(_arrivalDate, _departureDate, _amountOfPeople, _maxPriceRange, _hasPower, _dogsAllowed);
+        }
+        private void DogsCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            _dogsAllowed = FilterAfterCheckboxChanged(DogCheckBoxFilter, "hond");
+            Filter(_arrivalDate, _departureDate, _amountOfPeople, _maxPriceRange, _hasPower, _dogsAllowed);
+        }
+        private bool? FilterAfterCheckboxChanged(CheckBox checkbox, string inputstring)
+        {
+            bool? attributeboolean = CheckBoxChecked(checkbox, inputstring);
+            SetFilterVariables();
+            ResetListViewForFilter();
+            return attributeboolean;
+        }
         private void RemoveFilters_Click(object sender, RoutedEventArgs e)
+        {
+            ResetFilters();
+            ResetBackgroundsFilters();
+            CloseEditPlacesAndPlaceOverview();
+        }
+        private void ResetFilters()
         {
             ArrivalDatePicker.SelectedDate = null;
             DepartureDatePicker.SelectedDate = null;
-            DogCheckBoxFilter.IsChecked = false;
             DogCheckBoxFilter.Content = "Geen voorkeur (hond)";
             PowerCheckBoxFilter.Content = "Geen voorkeur (stroom)";
-            PowerCheckBoxFilter.IsChecked = false;
-            AmountOfPeople = 0;
-            _camping.Places = _camping.CampingRepository.CampingPlaceRepository.GetPlaces();
-            CloseEditPlacetAndPlaceOverview();
+            DogCheckBoxFilter.IsChecked = null;
+            PowerCheckBoxFilter.IsChecked = null;
+            _hasPower = null;
+            _dogsAllowed = null;
+            _amountOfPeople = 0;
             if (!_camping.Places.IsNullOrEmpty())
             {
                 _maxPriceRange = _camping.Places.Max(i => i.PricePerNightPerPerson);
@@ -121,15 +136,121 @@ namespace CampingUI
             {
                 _maxPriceRange = 0;
             }
-            AmountOfPeopleTextBox.Text = $"{AmountOfPeople}"; ;
+            AmountOfPeopleTextBox.Text = $"{_amountOfPeople}"; ;
             MaxPriceRangeTextBox.Text = $"{_maxPriceRange}";
-
-            ResetBackgroundsFilters();
             _wrongInput = false;
-            FilterApplied = false;
+            _filterApplied = false;
+        }
+        private void ResetListViewForFilter()
+        {
+            PlacesListView.SelectedItems.Clear();
+            CloseEditPlacesAndPlaceOverview();
+            _placesSortedAndOrFiltered = _camping.Places;
+        }
+        private void Filter(DateTime arrivalDate, DateTime departureDate, int amountOfPeople, double maxPriceRange, bool? hasPower, bool? dogsAllowed)
+        {
+
+            if (!_wrongInput)
+            {
+                _placesSortedAndOrFiltered = PlacesOverviewFilter.GetFilteredListOnPrice(maxPriceRange, _placesSortedAndOrFiltered, _camping);
+                _placesSortedAndOrFiltered = PlacesOverviewFilter.GetFilteredListOnDogs(dogsAllowed, _placesSortedAndOrFiltered, _camping);
+                _placesSortedAndOrFiltered = PlacesOverviewFilter.GetFilteredListOnAmountOfPeople(amountOfPeople, _placesSortedAndOrFiltered, _camping);
+                _placesSortedAndOrFiltered = PlacesOverviewFilter.GetFilteredListOnDate(_emptyDates, arrivalDate, departureDate, _placesSortedAndOrFiltered, _camping);
+                _placesSortedAndOrFiltered = PlacesOverviewFilter.GetFilteredListOnPower(hasPower, _placesSortedAndOrFiltered, _camping);
+                _placesSortedAndOrFiltered = PlacesOverviewSorting.SetSortDuringFiltering(_isSortedAscending, _headerTag, _placesSortedAndOrFiltered);
+                PlacesListView.ItemsSource = _placesSortedAndOrFiltered;
+                _filterApplied = true;
+            }
+
+        }
+        private bool? CheckBoxChecked(CheckBox checkbox, string content)
+        {
+            bool? editbool = null;
+            if (checkbox.IsChecked == true)
+            {
+                checkbox.Content = "Wel " + content;
+                editbool = true;
+            }
+            else if (checkbox.IsChecked == false)
+            {
+
+                checkbox.Content = "Geen " + content;
+                editbool = false;
+            }
+            else
+            {
+                checkbox.Content = "Geen voorkeur (" + content + ")";
+                editbool = null;
+
+            }
+            return editbool;
+        }
+        private void SetFilterVariables()
+        {
+            SetFilterVariableAmountOfPeople();
+            SetFilterVariableDates();
+            SetFilterVariableMaxPriceRange();
+        }
+        private void SetFilterVariableMaxPriceRange()
+        {
+            _placesOverviewPageFilter.SetMaxPriceFromMaxPriceRangeTextBox(MaxPriceRangeTextBox, _maxPriceRange, _wrongInput, _camping);
+            _wrongInput = _placesOverviewPageFilter.WrongInput;
+            _maxPriceRange = _placesOverviewPageFilter.MaxPriceRange;
+        }
+        private void SetFilterVariableDates()
+        {
+            _placesOverviewPageFilter.SetArrivalAndDepartureDates(ArrivalDatePicker, DepartureDatePicker, _wrongInput, _emptyDates);
+            _wrongInput = _placesOverviewPageFilter.WrongInput;
+            _arrivalDate = _placesOverviewPageFilter.ArrivalDate;
+            _departureDate = _placesOverviewPageFilter.DepartureDate;
+            _emptyDates = _placesOverviewPageFilter.EmptyDates;
+        }
+        private void SetFilterVariableAmountOfPeople()
+        {
+            _placesOverviewPageFilter.SetAmountOfPeopleFromAmountOfPeopleTextBox(AmountOfPeopleTextBox, _amountOfPeople, _wrongInput);
+            _wrongInput = _placesOverviewPageFilter.WrongInput;
+            _amountOfPeople = _placesOverviewPageFilter.AmountOfPeople;
+        }
+        private void ResetBackgroundsFilters()
+        {
+            StaticUIMethods.ResetDatePickerBorder(ArrivalDatePicker);
+            StaticUIMethods.ResetDatePickerBorder(DepartureDatePicker);
+            StaticUIMethods.ResetTextboxBorder(MaxPriceRangeTextBox);
+            StaticUIMethods.ResetTextboxBorder(AmountOfPeopleTextBox);
         }
 
-        // Function (EventHandler) to sort the list of places based on the clicked column name and corresponding data
+
+
+
+        public Camping GetCamping()
+        {
+            return _camping;
+        }
+        public int GetCampingAmountOfPeople()
+        {
+            return _amountOfPeople;
+        }
+        public bool GetFilterApplied()
+        {
+            return _filterApplied;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         private void SetSorterColumn_Click(object sender, RoutedEventArgs e)
         {
             if (!_camping.Places.IsNullOrEmpty())
@@ -143,9 +264,7 @@ namespace CampingUI
         {
             NavigationService.Navigate(new ReservationCreationPage(this));
         }
-
-        //Function (EventHandler) that deletes a _place and its reservations from the camping
-        private void DeletePlaceButton_Click(object sender, RoutedEventArgs e)
+        /*private void DeletePlaceButton_Click(object sender, RoutedEventArgs e)
         {
             Place place = (Place)PlacesListView.SelectedItem;
             MessageBoxResult deleteMessageBox = MessageBox.Show("Weet je zeker dat de volgende plaats " + place.PlaceID + " verwijderd wordt?", "Waarschuwing!", MessageBoxButton.YesNo, MessageBoxImage.Question);
@@ -156,15 +275,7 @@ namespace CampingUI
                 ReloadScreenDataPlaces();
             }
 
-        }
-        private void PowerCheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            _hasPower = CheckBoxChecked((CheckBox)sender, "stroom", _dogsAllowed);
-        }
-        private void DogsCheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            _dogsAllowed = CheckBoxChecked((CheckBox)sender, "hond", _dogsAllowed);
-        }
+        }*/
         private void OpenPlaceOverview()
         {
             EditPlaceGrid.Visibility = Visibility.Collapsed;
@@ -175,67 +286,10 @@ namespace CampingUI
             EditPlaceGrid.Visibility = Visibility.Visible;
             PlaceOverviewGrid.Visibility = Visibility.Collapsed;
         }
-        private void CloseEditPlacetAndPlaceOverview()
+        private void CloseEditPlacesAndPlaceOverview()
         {
             EditPlaceGrid.Visibility = Visibility.Collapsed;
             PlaceOverviewGrid.Visibility = Visibility.Collapsed;
-        }
-        private void SetFilterVariables()
-        {
-            _placesOverviewPageFilter.SetAmountOfPeopleFromAmountOfPeopleTextBox(AmountOfPeopleTextBox, AmountOfPeople, _wrongInput);
-            _placesOverviewPageFilter.SetArrivalAndDepartureDates(ArrivalDatePicker, DepartureDatePicker, _wrongInput, _emptyDates);
-            _placesOverviewPageFilter.SetMaxPriceFromMaxPriceRangeTextBox(MaxPriceRangeTextBox, _maxPriceRange, _wrongInput, _camping);
-            AmountOfPeople = _placesOverviewPageFilter.AmountOfPeople;
-            _maxPriceRange = _placesOverviewPageFilter.MaxPriceRange;
-            _emptyDates = _placesOverviewPageFilter.EmptyDates;
-            _wrongInput = _placesOverviewPageFilter.WrongInput;
-            _arrivalDate = _placesOverviewPageFilter.ArrivalDate;
-            _departureDate = _placesOverviewPageFilter.DepartureDate;
-        }
-        private bool? CheckBoxChecked(CheckBox checkbox, string content, bool? editbool)
-        {
-            if (checkbox.IsChecked == true)
-            {
-                checkbox.Content = "Wel " + content;
-                editbool = true;
-            }
-            else if (checkbox.IsChecked == false)
-            {
-                checkbox.Content = "Geen voorkeur (" + content + ")";
-                editbool = null;
-            }
-            else
-            {
-                checkbox.Content = "Geen " + content;
-                editbool = false;
-            }
-            return editbool;
-        }
-
-        // Function to filter the places List based on either or choice on arrival and departure date, amount of people possible on the _place,
-        // The max Price a guest is willing to pay and if it has power or not 
-        private void Filter(DateTime arrivalDate, DateTime departureDate, int amountOfPeople, double maxPriceRange, bool? hasPower)
-        {
-
-            if (!_wrongInput)
-            {
-                _placesSortedAndOrFiltered = PlacesOverviewFilter.GetFilteredListOnPrice(maxPriceRange, _placesSortedAndOrFiltered, _camping);
-                _placesSortedAndOrFiltered = PlacesOverviewFilter.GetFilteredListOnDogs(_dogsAllowed, _placesSortedAndOrFiltered, _camping);
-                _placesSortedAndOrFiltered = PlacesOverviewFilter.GetFilteredListOnAmountOfPeople(amountOfPeople, _placesSortedAndOrFiltered, _camping);
-                _placesSortedAndOrFiltered = PlacesOverviewFilter.GetFilteredListOnDate(_emptyDates, arrivalDate, departureDate, _placesSortedAndOrFiltered, _camping);
-                _placesSortedAndOrFiltered = PlacesOverviewFilter.GetFilteredListOnPower(hasPower, _placesSortedAndOrFiltered, _camping);
-                _placesSortedAndOrFiltered = PlacesOverviewSorting.SetSortDuringFiltering(_isSortedAscending, _headerTag, _placesSortedAndOrFiltered);
-                PlacesListView.ItemsSource = _placesSortedAndOrFiltered;
-                FilterApplied = true;
-            }
-
-        }
-        private void ResetBackgroundsFilters()
-        {
-            StaticUIMethods.ResetDatePickerBorder(ArrivalDatePicker);
-            StaticUIMethods.ResetDatePickerBorder(DepartureDatePicker);
-            StaticUIMethods.ResetTextboxBorder(MaxPriceRangeTextBox);
-            StaticUIMethods.ResetTextboxBorder(AmountOfPeopleTextBox);
         }
         private IEnumerable<Place> SortColumns(string headerTag)
         {
@@ -253,7 +307,7 @@ namespace CampingUI
         {
             _camping.Places = _camping.CampingRepository.CampingPlaceRepository.GetPlaces();
             _placesSortedAndOrFiltered = _camping.Places;
-            CloseEditPlacetAndPlaceOverview();
+            CloseEditPlacesAndPlaceOverview();
             PlacesListView.SelectedItems.Clear();
             PlacesListView.ItemsSource = _placesSortedAndOrFiltered;
 
@@ -263,7 +317,7 @@ namespace CampingUI
                 _maxPriceRange = 0;
             MaxPriceRangeTextBox.Text = $"{_maxPriceRange}";
         }
-        private void SetDeleteButtonClickableIfNoReservations()
+        /*private void SetDeleteButtonClickableIfNoReservations()
         {
             Place place = (Place)PlacesListView.SelectedItem;
             List<Reservation> placesReservations = _camping.Reservations.Where(i => i.PlaceID == place.PlaceID)
@@ -271,8 +325,7 @@ namespace CampingUI
             DeletePlaceButton.IsEnabled = true;
             if (placesReservations.Count > 0)
                 DeletePlaceButton.IsEnabled = false;
-        }
-        // Is used everytime a different _place is selected in the _place list
+        }*/
         private void PlacesListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (PlacesListView.SelectedItems.Count > 0)
@@ -281,7 +334,7 @@ namespace CampingUI
                 SetLabelsPlaceOverview(place);
                 OpenPlaceOverview();
                 SetReservationsInCalendar(place);
-                SetDeleteButtonClickableIfNoReservations();
+                //SetDeleteButtonClickableIfNoReservations();
             }
             else
             {
@@ -314,12 +367,6 @@ namespace CampingUI
             if (place.Dogs) dogsLabel.Content += "Ja";
             else dogsLabel.Content += "Nee";
             priceLabel.Content = "Prijs: " + String.Format("{0:0.00}", place.PricePerNightPerPerson) + "€";
-        }
-
-        private void AddPlaceButton_Click(object sender, RoutedEventArgs e)
-        {
-            OpenEditPlace();
-
         }
         private void EditPlaceButton_Click(object sender, RoutedEventArgs e)
         {
@@ -362,7 +409,7 @@ namespace CampingUI
             Place place = (Place)PlacesListView.SelectedItem;
             if (!_wrongInput)
             {
-                Camping.UpdatePlace(place.PlaceID, place.StreetID, _hasPowerEdit, _surfaceAreaEdit, _pricePerNightPerPersonEdit, _amountOfPeopleEdit, _dogsAllowedEdit);
+                _camping.UpdatePlace(place.PlaceID, place.StreetID, _hasPowerEdit, _surfaceAreaEdit, _pricePerNightPerPersonEdit, _amountOfPeopleEdit, _dogsAllowedEdit);
                 EditPlaceGrid.Visibility = Visibility.Collapsed;
                 PlaceOverviewGrid.Visibility = Visibility.Visible;
                 ReloadScreenDataPlaces();
@@ -386,7 +433,7 @@ namespace CampingUI
                 editBool = true;
                 checkBox.Content = "Wel " + content;
             }
-            else if (checkBox.IsChecked == null)
+            else if (checkBox.IsChecked == false)
             {
                 editBool = false;
                 checkBox.Content = "Geen " + content;

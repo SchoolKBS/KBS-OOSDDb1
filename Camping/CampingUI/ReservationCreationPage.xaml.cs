@@ -31,7 +31,7 @@ namespace CampingUI
         {
             InitializeComponent();
             _page = placesOverviewPage;
-            _camping = _page.Camping;
+            _camping = _page.GetCamping();
             _place = (Place) _page.PlacesListView.SelectedItem;
             ShowAvailableDatesArrival();
             DepartureDatePicker.IsEnabled = false;
@@ -41,7 +41,7 @@ namespace CampingUI
         public void SetKnownInformation()
         {
             _place = (Place)_page.PlacesListView.SelectedItem;
-            if (_page.FilterApplied)
+            if (_page.GetFilterApplied())
             {
                 if(_page.ArrivalDatePicker.SelectedDate != null) ArrivalDatePicker.SelectedDate = _page.ArrivalDatePicker.SelectedDate.Value;
                 if (_page.DepartureDatePicker.SelectedDate != null)
@@ -49,7 +49,7 @@ namespace CampingUI
                     DepartureDatePicker.IsEnabled = true;
                     DepartureDatePicker.SelectedDate = _page.DepartureDatePicker.SelectedDate.Value;
                 }
-                if(_page.AmountOfPeople > 0)PeopleCountText.Text = _page.AmountOfPeople.ToString();
+                if(_page.GetCampingAmountOfPeople() > 0)PeopleCountText.Text = _page.GetCampingAmountOfPeople().ToString();
             }
         }
         // Event for when arrival date is changed, This enables deparutre date and calls ShowAvailableDatesDeparture()

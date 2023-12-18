@@ -17,9 +17,10 @@ namespace CampingUI
         public bool WrongInput, EmptyDates;
         public int AmountOfPeople;
         public double MaxPriceRange;
-        public void SetAmountOfPeopleFromAmountOfPeopleTextBox(TextBox textbox, int number, bool filterBool)
+        public void SetAmountOfPeopleFromAmountOfPeopleTextBox(TextBox textbox, int number, bool wronginput)
         {
             int number1;
+            bool filterBool = wronginput;
             if (!string.IsNullOrEmpty(textbox.Text))
             {
                 if (int.TryParse(textbox.Text, out number1) && number1 >= 0)// Checks if int can be parsed and if number is bigger or equal to 0
@@ -55,7 +56,7 @@ namespace CampingUI
                 else
                 {
                     StaticUIMethods.SetErrorTextboxBorder(textbox);
-                    WrongInput = true;
+                    filterBool = true;
                 }
 
             }
@@ -82,8 +83,8 @@ namespace CampingUI
                 emptyDates = false;
                 if (arrivalDate >= departureDate || arrivalDate.Date < DateTime.Now.Date)
                 {
-                    StaticUIMethods.SetErrorDatePickerBorder(ArrivalDatePicker);
-                    StaticUIMethods.SetErrorDatePickerBorder(DepartureDatePicker);
+                    StaticUIMethods.SetErrorDatePickerBorder(arrivalDatePicker);
+                    StaticUIMethods.SetErrorDatePickerBorder(departureDatePicker);
                     filterBool = true;
                 }
             }
