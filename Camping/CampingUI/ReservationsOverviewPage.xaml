@@ -238,7 +238,7 @@
                 <!-- Third filter for place number -->
                 <StackPanel Grid.Column="4" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Label FontSize="14" Content="Plek: " HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Calibri" FontWeight="Bold"/>
-                    <TextBox KeyDown ="Texbox_Keydown"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" x:Name="PlaceNumerBox" MinWidth="75" Height="30" />
+                    <TextBox KeyDown ="Texbox_Keydown"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" x:Name="PlaceNumberBox" MinWidth="75" Height="30" />
                 </StackPanel>
                 <!-- Fourth filter for Guest  -->
                 <StackPanel Grid.Column="2" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">

@@ -146,21 +146,21 @@ namespace CampingUI
 
 
             // Filter by Place Number
-            if (int.TryParse(PlaceNumerBox.Text, out int placeNumber) && placeNumber >= 0)
+            if (int.TryParse(PlaceNumberBox.Text, out int placeNumber) && placeNumber >= 0)
             {
                 _appliedFilters = true;
-                PlaceNumerBox.Background = Brushes.White;
+                PlaceNumberBox.Background = Brushes.White;
                 filteredReservations = filteredReservations.Where(reservation => reservation.PlaceID == placeNumber);
             }
-            else if (PlaceNumerBox.Text == string.Empty)
+            else if (PlaceNumberBox.Text == string.Empty)
             {
-                PlaceNumerBox.Background = Brushes.White;
+                PlaceNumberBox.Background = Brushes.White;
 
             }
             else 
             {
-                PlaceNumerBox.Text = string.Empty;
-                PlaceNumerBox.Background = Brushes.Red;
+                PlaceNumberBox.Text = string.Empty;
+                PlaceNumberBox.Background = Brushes.Red;
             }
 
                 
@@ -241,13 +241,17 @@ namespace CampingUI
             // Clear filter criteria
             ArrivalDatePickerr.SelectedDate = null;
             DepartureDatePickerr.SelectedDate = null;
-            PlaceNumerBox.Text = string.Empty;
+            PlaceNumberBox.Text = string.Empty;
             GuestNameBox.Text = string.Empty;
             ReservationIdBox.Text = string.Empty;
+            StaticUIMethods.ResetTextboxBorder(GuestNameBox);
+            StaticUIMethods.ResetTextboxBorder(PlaceNumberBox);
+            StaticUIMethods.ResetTextboxBorder(ReservationIdBox);
+
             GuestNameBox.BorderBrush = Brushes.White;
             ArrivalDatePickerr.BorderBrush = Brushes.White;
             DepartureDatePickerr.BorderBrush = Brushes.White;
-            PlaceNumerBox.BorderBrush = Brushes.White;
+            PlaceNumberBox.BorderBrush = Brushes.White;
             ReservationIdBox.BorderBrush = Brushes.White;
             _appliedFilters = false;
 
@@ -447,6 +451,7 @@ namespace CampingUI
                 return true;
             }
             PlaceDropDown.BorderBrush = Brushes.Red;
+
             return false;
 
         }
