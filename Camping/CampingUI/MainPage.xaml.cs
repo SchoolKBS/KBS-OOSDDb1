@@ -353,10 +353,8 @@ namespace CampingUI
 
                 SetPlaceDataOnFields(place);
                 AddPlaceButton.Content = "Aanpassen";
-                AddPlaceButton.Visibility = Visibility.Collapsed;
                 _editPlaceBool = true;
                 field.Children.Clear();
-                //GenerateAreas();
             }
             else
             {
@@ -465,8 +463,10 @@ namespace CampingUI
                 bool hasDogs = false;
                 if (PlaceHasDogs.IsChecked == true)
                     hasDogs = true;
+
                 Street street = Camping.CampingRepository.CampingMapRepository.GetSteetByStreetName(PlaceStreetComboBox.SelectedItem.ToString());
                 Place place = new Place(_placePlaceID, hasPower, street.StreetID, hasDogs, _placeSurfaceArea, _placePersons, _placePricePerNight, XPressed, YPressed);
+
                 if (_editPlaceBool)
                     Camping.CampingRepository.CampingPlaceRepository.UpdatePlaceData(place.PlaceID, street.StreetID, hasPower, _placeSurfaceArea, _placePricePerNight, _placePersons, hasDogs);
                 else
