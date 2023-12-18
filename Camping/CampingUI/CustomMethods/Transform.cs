@@ -25,6 +25,7 @@ namespace CampingUI.NewFolder
             double scaleX = 1.0;
             double scaleY = 1.0;
 
+
             if (screenAspectRatio > aspectRatio)
             {
                 scaleX = screenWidth / desiredWidth / 2;

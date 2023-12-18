@@ -374,7 +374,7 @@
 
 
             <!-- Content in the second column -->
-            <Border Grid.Column="1" Margin="25" Padding="0" Background="#334A6E" CornerRadius="25">
+            <Border Grid.Column="1" Margin="25" Padding="0" Background="#334A6E" CornerRadius="25" Name="FieldBorder">
 
                 <Border
                     BorderThickness="2"
@@ -382,7 +382,7 @@
                     Background="LightGray"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center">
-                    <Canvas Background="white" Width="1000" Height="750" x:Name="field" MouseDown="field_MouseDown">
+                    <Canvas ClipToBounds="true" Background="white" Width="1000" Height="750" x:Name="field" MouseDown="field_MouseDown">
                         <Canvas.LayoutTransform>
                             <ScaleTransform x:Name="plattegrond" />
                         </Canvas.LayoutTransform>

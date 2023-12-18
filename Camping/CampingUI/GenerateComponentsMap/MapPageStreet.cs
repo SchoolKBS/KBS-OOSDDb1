@@ -12,7 +12,7 @@ namespace CampingUI.GenerateComponentsMap
 {
     public class MapPageStreet
     {
-        public static Grid GenerateStreet(Street street)
+        public static Grid GenerateStreet(Street street, SolidColorBrush? color)
         {
             var coordinates = street.GetStreetPositions();
 
@@ -45,7 +45,7 @@ namespace CampingUI.GenerateComponentsMap
 
             canvasStreet.MouseLeave += (sender, e) =>
             {
-                canvasStreet.Background = Brushes.Black;
+                canvasStreet.Background = color;
                 TextBlock streetName = (TextBlock)((Grid)sender).Tag;
                 streetName.Text = "";
 

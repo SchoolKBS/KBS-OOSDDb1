@@ -30,18 +30,7 @@ namespace CampingCore
             this.YCord = yCord;
 
         }
- /*       public Place(int placeID, bool hasPower, Street street, int surfaceArea, int numberOfPeople, double pricePerNightPerPerson, int xCord, int yCord) : this(placeID, hasPower, street, street.Dogs, surfaceArea, numberOfPeople, pricePerNightPerPerson, xCord, yCord)
-        {
 
-        }
-        public Place(int placeID, Street street, bool canHaveDogs, int surfaceArea, int numberOfPeople, double pricePerNightPerPerson, int xCord, int yCord) : this(placeID, street.Power, street, canHaveDogs, surfaceArea, numberOfPeople, pricePerNightPerPerson, xCord, yCord)
-        {
-
-        }
-        public Place(int placeID, Street street, int surfaceArea, int numberOfPeople, double pricePerNightPerPerson, int xCord, int yCord) : this(placeID, street.Power, street, street.Dogs, surfaceArea, numberOfPeople, pricePerNightPerPerson, xCord, yCord)
-        {
-
-        }*/
         public Place(ArrayList properties)
         {
             this.PlaceID = (int) properties[0];
@@ -58,8 +47,6 @@ namespace CampingCore
 
         public int[] GetPlacePositions()
         {
-            // XCord1 = width
-            // YCord1 = height
             return new int[2] { XCord, YCord};
         }
         public override string ToString()

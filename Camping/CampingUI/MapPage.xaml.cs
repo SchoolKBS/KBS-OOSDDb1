@@ -32,9 +32,10 @@ namespace CampingUI
         private List<Street> _streets;
         private int _placeSurfaceArea, _placePersons, _placePlaceID, _placeStreetID, _placeAreaID, SelectedPlace, _yPressed, _xPressed;
         private double _placePricePerNight;
-        private Canvas previousSelectedCanvas;
+        private Canvas _previousSelectedCanvas;
         private bool _editPlaceBool, _wrongInput;
-        private string selectedMapButton = "";
+        private string _selectedMapButton = "";
+        private Point _streetPoint1 = new Point(-1, -1), _streetPoint2;
         public MainPage(Camping camping)
         {
             InitializeComponent();
@@ -75,7 +76,7 @@ namespace CampingUI
                     }
                     if (comp is Street)
                     {
-                        field.Children.Add(MapPageStreet.GenerateStreet((Street)(object)comp));
+                        field.Children.Add(MapPageStreet.GenerateStreet((Street)(object)comp, Brushes.Black));
                     }
                     if (comp is Place)
                     {
@@ -151,13 +152,13 @@ namespace CampingUI
 
             canvasPlace.MouseLeftButtonDown += (sender, e) =>
             {
-                if (previousSelectedCanvas != null)
+                if (_previousSelectedCanvas != null)
                 {
-                    previousSelectedCanvas.Background = Brushes.Black;
+                    _previousSelectedCanvas.Background = Brushes.Black;
                 }
 
                 canvasPlace.Background = Brushes.DarkCyan;
-                previousSelectedCanvas = canvasPlace;
+                _previousSelectedCanvas = canvasPlace;
                 HandlePlaceClick(place, false);
             };
         }
@@ -231,12 +232,12 @@ namespace CampingUI
             ResetComboBoxBorder(PlaceAreaBorder);
             ResetComboBoxBorder(PlaceStreetBorder);
         }
+
         private void field_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            field.Children.Clear();           
+            field.Children.Clear();
             GenerateMap();
-
-            if (selectedMapButton.Contains("Place"))
+            if (_selectedMapButton.Contains("Place"))
             {
                 Point p = Mouse.GetPosition(field);
                 List<Area> areas = _camping.CampingRepository.CampingMapRepository.GetAreas();
@@ -267,6 +268,69 @@ namespace CampingUI
                     EnableExtendComboBoxes(false);
                     HandlePlaceClick(place, true);
                 }
+            }
+            if (_selectedMapButton.Contains("Street"))
+            {
+                Point point = Mouse.GetPosition(field);
+                int xCord = (int)Math.Round(point.X);
+                int yCord = (int)Math.Round(point.Y); 
+                if (_streetPoint1.X == -1 && _streetPoint1.Y == -1) 
+                { 
+                    _streetPoint1 = new Point(xCord, yCord); 
+                }
+                else
+                {
+                    _streetPoint2 = new Point(xCord, yCord);
+
+                    //Street street = new Street(1, "Name", true, true, 1, 1, 1, (int)_streetPoint1.X, (int)_streetPoint1.Y, (int)_streetPoint2.X, (int)_streetPoint2.Y);
+                    //field.Children.Add(MapPageStreet.GenerateStreet(street, Brushes.DarkGray));
+
+
+
+                    Grid grid = new Grid();
+                    Label label = new Label();
+                    label.Content = "Straatnaam";
+                    Line line = new Line();
+                    line.X1 = (int)_streetPoint1.X;
+                    line.Y1 = (int)_streetPoint1.Y;
+                    line.X2 = (int)_streetPoint2.X;
+                    line.Y2 = (int)_streetPoint2.Y;
+                    line.StrokeThickness = 20;
+                    line.Stroke = Brushes.DarkGray;
+                    grid.Children.Add(line);
+                    grid.Children.Add(label);
+
+                    MessageBox.Show($"Point 1: X{line.X1}, Y{line.Y1}, Point 2: X{line.X2}, Y{line.Y2}");
+                    int deltaY;
+                    int deltaX;
+                    if(line.X1 > line.X2)
+                    {
+                        deltaX = (int)line.X1 - (int)line.X2;
+                    }
+                    else
+                    {
+                        deltaX = (int)line.X2 - (int)line.X1;
+                    }
+                    if (line.Y1 > line.Y2)
+                    {
+                        deltaY = (int)line.Y1 - (int)line.Y2;
+                    }
+                    else
+                    {
+                        deltaY = (int)line.Y2 - (int)line.Y1;
+                    }
+                    MessageBox.Show(Math.Tanh(deltaY/deltaX).ToString());
+
+
+                    field.Children.Add(grid);
+                    //Grijze straat laten zien
+                    //Aanmaken straat openen
+                    // -> straat aanmaken 
+                    // -> straat aan database toevoegen
+
+                }
+
+
             }
         }
 
@@ -645,7 +709,7 @@ namespace CampingUI
                         Style editStyle = (Style)button.FindResource("ButtonStyle1Edit");
                         button.Style = editStyle;
                     }
-                    selectedMapButton = "View";
+                    _selectedMapButton = "View";
                 }
             }
         }
@@ -663,14 +727,14 @@ namespace CampingUI
                     gridButton.Style = editStyle;
                 }
                 button.Style = applyStyle;
-                selectedMapButton = button.Name;
+                _selectedMapButton = button.Name;
 
 
             }
             else
             {
                 button.Style = editStyle;
-                selectedMapButton = "View";
+                _selectedMapButton = "View";
             }
         }
     }
