@@ -7,55 +7,77 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace CampingUI.GenerateComponentsMap
 {
     public class MapPageStreet
     {
-        public static Grid GenerateStreet(Street street, SolidColorBrush? color)
+        private static Line _line;
+        private static TextBlock _textblock;
+        public static void GenerateStreet(Street street, SolidColorBrush? color)
         {
             var coordinates = street.GetStreetPositions();
+            double deltaY;
+            double deltaX;
+            double firstX;
+            double firstY;
+            double secondX;
+            double secondY;
 
-            RotateTransform rotate;
-            if (coordinates[2] > coordinates[3])
+            if(street.XCord1 < street.XCord2)
             {
-                rotate = new RotateTransform(0, 0, 0);
-                coordinates[3] = 20;
+                deltaX = street.XCord2 - street.XCord1;
+                firstX = street.XCord1;
+                secondX = street.XCord2;
             }
             else
             {
-                rotate = new RotateTransform(90, 0, 0);
-                coordinates[2] = 20;
+                deltaX = street.XCord1 - street.XCord2;
+                firstX = street.XCord2;
+                secondX = street.XCord1;
             }
-            Grid canvasStreet = CreateCanvasStreet(street, coordinates);
+            if(street.YCord1 > street.YCord2)
+            {
+                deltaY = street.YCord1 - street.YCord2;
+                firstY = street.YCord1;
+                secondY = street.YCord2;
+            }
+            else
+            {
+                deltaY = street.YCord2 - street.YCord1;
+                firstY = street.YCord2;
+                secondY = street.YCord1;
+            }
+           // MessageBox.Show($"{firstX}, {firstY}, {secondX}, {secondY}");
+            double degrees = Math.Atan(deltaY / deltaX) * 180 / Math.PI;
+            if (secondY < firstY && secondX > firstX)
+            {
+                degrees = 360 - (2 * degrees);
+            }
+            RotateTransform rotate = new RotateTransform();
+            rotate.Angle = degrees;
+            Line line = CreateCanvasStreet(street, coordinates);
             TextBlock textBlock = createTextBlock(rotate);
+            Canvas.SetLeft(textBlock, firstX-(deltaX / 2));
+            Canvas.SetTop(textBlock, firstY - (deltaY / 2));
+            SetLine(line);
+            SetTextBlock(textBlock);
 
-            canvasStreet.Tag = textBlock;
-
-            canvasStreet.Children.Add(textBlock);
-
-            canvasStreet.MouseEnter += (sender, e) =>
+            line.MouseEnter += (sender, e) =>
             {
-                canvasStreet.Background = Brushes.DarkCyan;
-                TextBlock streetName = (TextBlock)((Grid)sender).Tag;
-                streetName.Text = street.Name;
-
-                Canvas.SetZIndex(canvasStreet, Canvas.GetZIndex(canvasStreet) + 1);
+                line.Stroke = Brushes.DarkCyan;
+                textBlock.Text = street.Name;
+                Canvas.SetZIndex(line, Canvas.GetZIndex(line) + 1);
+                Canvas.SetZIndex(textBlock, Canvas.GetZIndex(textBlock) + 1);
             };
-
-            canvasStreet.MouseLeave += (sender, e) =>
+            line.MouseLeave += (sender, e) =>
             {
-                canvasStreet.Background = color;
-                TextBlock streetName = (TextBlock)((Grid)sender).Tag;
-                streetName.Text = "";
-
-                Canvas.SetZIndex(canvasStreet, Canvas.GetZIndex(canvasStreet) - 1);
+                line.Stroke = color;
+                textBlock.Text = "";
+                Canvas.SetZIndex(line, Canvas.GetZIndex(line) - 1);
+                Canvas.SetZIndex(textBlock, Canvas.GetZIndex(textBlock) - 1);
             };
-
-            Canvas.SetTop(canvasStreet, coordinates[1]);  // YCord1 to place from top.
-            Canvas.SetLeft(canvasStreet, coordinates[0]); // XCord1 to place from left.
-
-            return canvasStreet;
         }
 
         private static TextBlock createTextBlock(RotateTransform rotate)
@@ -63,26 +85,45 @@ namespace CampingUI.GenerateComponentsMap
             return new TextBlock
             {
                 Text = "",
-                Foreground = Brushes.White,
                 LayoutTransform = rotate,
+                Foreground = Brushes.White,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
                 FontSize = 15,
                 FontWeight = FontWeights.Bold,
+                Focusable = false,
             };
         }
-
-        private static Grid CreateCanvasStreet(Street street, int[] coordinates)
+        private static Line CreateCanvasStreet(Street street, int[] coordinates)
         {
-            return new Grid
+            return new Line
             {
-                Width = coordinates[2],
-                Height = coordinates[3],
-                Background = Brushes.Black,
+                X1 = coordinates[0],
+                Y1 = coordinates[1],
+                X2 = coordinates[2],
+                Y2 = coordinates[3],
+                Stroke = Brushes.Black,
+                StrokeThickness = 15,
                 Name = "Street_" + street.StreetID.ToString(),
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
             };
+        }
+        public static void SetLine(Line line)
+        {
+            _line = line;
+        }
+        public static void SetTextBlock(TextBlock textBlock)
+        {
+            _textblock = textBlock;
+        }
+        public static Line GetLine()
+        {
+            return _line;
+        }
+        public static TextBlock GetTextBlock()
+        {
+            return _textblock;
         }
     }
 }

@@ -217,8 +217,8 @@
             </Grid.ColumnDefinitions>
 
             <!-- Content in the first column -->
-            <Border Grid.Column="0" Margin="25" Padding="15" Background="#334A6E" CornerRadius="25">
-                <Grid Visibility="Hidden" Name="PlaceInfo">
+            <Border Grid.Column="0" Margin="25" Padding="15" Background="#334A6E" CornerRadius="25" Name="PlaceInfo">
+                <Grid Visibility="Hidden"  Name="PlaceInfoGrid">
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition/>
@@ -368,6 +368,105 @@
                         </Grid.ColumnDefinitions>
                         <Button Foreground="White" FontWeight="Bold" Style="{DynamicResource ButtonStyle1Apply}" Name="AddPlaceButton" Content="Aanpassen" Click="HandleAddPlace_Click" Height="40" Width="140" HorizontalAlignment="Left"/>
                         <Button Foreground="White" FontWeight="Bold" Style="{DynamicResource ButtonStyle1Cancel}" Name="CancelAddPlaceButton" Content="Annuleren" Click="HandleCancelAddPlace_Click" Height="40" Width="140" HorizontalAlignment="Right"/>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <!-- Street info  -->
+            <Border Visibility="Hidden" Grid.Column="0" Margin="25" Padding="15" Background="#334A6E" CornerRadius="25" Name="StreetInfo">
+                <Grid Name="StreetInfoGrid">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" Name="StreetRow1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Name="StreetNameLabel" Content="Straatnaam: " Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <TextBox TextChanged="TextBox_Changed" Margin="10, 0, 0, 0" Name="StreetName" VerticalAlignment="Center" FontSize="14" Width="175" Height="40" BorderBrush="Transparent" HorizontalAlignment="Right" Grid.Column="1"/>
+                    </Grid>
+
+                    <!-- Checkbox for power -->
+                    <Grid Grid.Row="1" Name="StreetRow3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Name="StreetHasPowerLabel" Content="Stroom:" Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <CheckBox Name="StreetHasPower" Margin="32, 0, 0, 0" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="1">
+                            <CheckBox.LayoutTransform>
+                                <ScaleTransform ScaleX="2" ScaleY="2" />
+                            </CheckBox.LayoutTransform>
+                        </CheckBox>
+                    </Grid>
+                    <!-- Checkbox for dogs -->
+                    <Grid Grid.Row="2" Name="StreetRow4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Name="StreetHasDogsLabel" Content="Honden: " Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <CheckBox Name="StreetHasDogs" Margin="29, 0, 0, 0" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="1">
+                            <CheckBox.LayoutTransform>
+                                <ScaleTransform ScaleX="2" ScaleY="2" />
+                            </CheckBox.LayoutTransform>
+                        </CheckBox>
+                    </Grid>
+                    <!-- Checkbox for surface area -->
+                    <Grid Grid.Row="3" Name="StreetRow5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Name="StreetSurfaceAreaLabel" Content="Oppervlakte: " Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <TextBox TextChanged="TextBox_Changed" Margin="10, 0, 0, 0" Name="StreetSurfaceArea" VerticalAlignment="Center" FontSize="14" Width="175" Height="40" BorderBrush="Transparent" HorizontalAlignment="Right" Grid.Column="1">
+                        </TextBox>
+                    </Grid>
+
+                    <!-- Checkbox for surface area -->
+                    <Grid Grid.Row="4" Name="StreetRow6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Name="StreetPricePerNightLabel" Content="Prijs p/nacht p/persoon: "  Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <TextBox Name="StreetPricePerNight" Margin="10, 0, 0, 0" VerticalAlignment="Center" FontSize="14" Width="175" Height="40" BorderBrush="Transparent" HorizontalAlignment="Right" Grid.Column="1" TextChanged="TextBox_Changed">
+                        </TextBox>
+                    </Grid>
+
+                    <!-- Checkbox for surface area -->
+                    <Grid Grid.Row="5" Name="StreetRow7">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Name="StreetPersonsLabel" Content="Personen aantal: " Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <TextBox Name="StreetPersons" Margin="10, 0, 0, 0" VerticalAlignment="Center" FontSize="14" Width="175" Height="40" BorderBrush="Transparent" HorizontalAlignment="Right" Grid.Column="1" TextChanged="TextBox_Changed">
+                        </TextBox>
+                    </Grid>
+                    <Grid Grid.Row="8" IsEnabled="True" VerticalAlignment="Bottom" Name="StreetRow8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Foreground="White" FontWeight="Bold" Style="{DynamicResource ButtonStyle1Apply}" Name="AddStreetButton" Content="Toevoegen" Click="HandleAddStreet_Click" Height="40" Width="140" HorizontalAlignment="Left"/>
+                        <Button Foreground="White" FontWeight="Bold" Style="{DynamicResource ButtonStyle1Cancel}" Name="CancelAddStreetButton" Content="Annuleren" Click="HandleCancelAddPlace_Click" Height="40" Width="140" HorizontalAlignment="Right"/>
                     </Grid>
                 </Grid>
             </Border>

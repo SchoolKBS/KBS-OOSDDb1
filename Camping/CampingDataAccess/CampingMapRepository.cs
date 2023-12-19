@@ -239,7 +239,8 @@ namespace CampingDataAccess
                 {
                     command.Prepare();
                     command.Parameters.Add(new SqliteParameter("@PlaceID", placeID));
-                    if (power != null) {
+                    if (power != null)
+                    {
                         command.Parameters.Add(new SqliteParameter("@Power", power));
                     }
                     else
@@ -249,7 +250,7 @@ namespace CampingDataAccess
                     if (dogs != null)
                     {
                         command.Parameters.Add(new SqliteParameter("@Dogs", dogs));
-                    } 
+                    }
                     else
                     {
                         command.Parameters.Add(new SqliteParameter("@Dogs", DBNull.Value));
@@ -257,13 +258,13 @@ namespace CampingDataAccess
                     if (surfaceArea != null)
                     {
                         command.Parameters.Add(new SqliteParameter("@SurfaceArea", surfaceArea));
-                    } 
+                    }
                     else
                     {
                         command.Parameters.Add(new SqliteParameter("@SurfaceArea", DBNull.Value));
                     }
-                        
-                    if(pricePerNightPerPerson != null)
+
+                    if (pricePerNightPerPerson != null)
                     {
                         command.Parameters.Add(new SqliteParameter("@PricePerNightPerPerson", pricePerNightPerPerson));
                     }
@@ -285,6 +286,30 @@ namespace CampingDataAccess
                 connection.Close();
             }
         }
-    }
+        public void AddNewStreet(string name, bool power, bool dogs, int surfaceArea, double pricePerNightPerPerson, int amountOfPeople, int xCord1, int yCord1, int xCord2, int yCord2)
+        {
+            string sql = "INSERT INTO Street (Name, Power, Dogs, SurfaceArea, PricePerNightPerPerson, AmountOfPeople, XCord1, YCord1, XCord2, YCord2) VALUES (@Name, @Power, @Dogs, @SurfaceArea, @PricePerNightPerPerson, @AmountOfPeople, @XCord1, @YCord1, @XCord2, @YCord2);";
 
+            using (var connection = new SqliteConnection(ConnectionString))
+            {
+                connection.Open();
+                using (var command = new SqliteCommand(sql, connection))
+                {
+                    command.Prepare();
+                    command.Parameters.AddWithValue("@Name", name);
+                    command.Parameters.AddWithValue("@Power", power);
+                    command.Parameters.AddWithValue("@Dogs", dogs);
+                    command.Parameters.AddWithValue("@SurfaceArea", surfaceArea);
+                    command.Parameters.AddWithValue("@PricePerNightPerPerson", pricePerNightPerPerson);
+                    command.Parameters.AddWithValue("@AmountOfPeople", amountOfPeople);
+                    command.Parameters.AddWithValue("@XCord1", xCord1);
+                    command.Parameters.AddWithValue("@YCord1", yCord1);
+                    command.Parameters.AddWithValue("@XCord2", xCord2);
+                    command.Parameters.AddWithValue("@YCord2", yCord2);
+                    command.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+        }
+    }
 }
