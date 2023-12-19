@@ -420,7 +420,7 @@
             </Border>
 
             <!-- Content in the second column -->
-            <Border Grid.Column="1" Margin="25" Padding="15" Background="#334A6E" CornerRadius="25">
+            <Border Grid.Column="1" Margin="25" Padding="0" Background="#334A6E" CornerRadius="25">
 
                 <Border
                     BorderThickness="2"
