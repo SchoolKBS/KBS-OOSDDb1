@@ -31,7 +31,7 @@ namespace CampingUI
             datePicker.BorderBrush = Brushes.White;
             datePicker.BorderThickness = new Thickness(1);
         }
-        public static Color GetColor(int ColorValue)
+        public static Color GetColorFromInt(int ColorValue)
         {
             switch (ColorValue)
             {
@@ -53,6 +53,30 @@ namespace CampingUI
                     return System.Windows.Media.Colors.Pink;
                 default:
                     return System.Windows.Media.Colors.Beige;
+            }
+        }        
+        public static string GetColorNameFromInt(int ColorValue)
+        {
+            switch (ColorValue)
+            {
+                case 0:
+                    return "Rood";
+                case 1:
+                    return "Oranje";
+                case 2:
+                    return "Geel";
+                case 3:
+                    return "Groen";
+                case 4:
+                    return "Blauw";
+                case 5:
+                    return "Paars";
+                case 6:
+                    return "Violet";
+                case 7:
+                    return "Roze";
+                default:
+                    return "-";
             }
         }
     }

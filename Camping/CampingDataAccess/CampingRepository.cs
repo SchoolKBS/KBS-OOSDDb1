@@ -198,10 +198,10 @@ namespace CampingDataAccess
             string sql = "INSERT INTO Area (Name, Color, Power, Dogs, SurfaceArea, PricePerNightPerPerson, AmountOfPeople, XCord1, YCord1, Width, Height) " +
                 "                   VALUES (@Name, @Color, @Power, @Dogs, @SurfaceArea, @PricePerNightPerPerson, @AmountOfPeople, @XCord1, @YCord1, @Width, @Height);";
             List<ArrayList> list = new List<ArrayList>(){
-                new ArrayList(){"Zwolle", 0, 0,11,11,11,0,0,0,500,375},
-                new ArrayList(){"Meppel", 2, 0,13,13,13,1,500,0,500,375},
-                new ArrayList(){"Warnsveld", 4, 1,14,14,14,1,0,375,500,375},
-                new ArrayList(){"Nijkerk", 6, 1,12,12,12,0,500,375,500,375}
+                new ArrayList(){"Zwolle", 0, 0,0,11,11,11,0,0,500,375},
+                new ArrayList(){"Meppel", 2, 0,1,13,13,13,500,0,500,375},
+                new ArrayList(){"Warnsveld", 4, 1, 1,14,14,14,0,375,500,375},
+                new ArrayList(){"Nijkerk", 6, 1 ,0,12,12,12,500,375,500,375}
                 };
             using (var connection = new SqliteConnection(ConnectionString))
             {
@@ -400,15 +400,6 @@ namespace CampingDataAccess
             {
                 AddDummyDataReservations(places[i - 1].PlaceID, i);
             }
-
         }
-
-
-
-
-
-
     }
-
-
 }

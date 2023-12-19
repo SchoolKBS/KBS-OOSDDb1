@@ -37,14 +37,16 @@ namespace CampingUI
         private string selectedMapButton = "View";
         private bool _AddPlace = false;
         private bool _AddStreet = false;
-        private Area _SelecterdArea;
+        private List<Border> AreaBorderList;
+        private List<Border> PlaceBorderList;
+        public Area SelectedArea { get; private set; }
 
         private bool _editPlaceBool, _wrongInput;
-        private string selectedMapButton = "";
         public MainPage(Camping camping)
         {
             InitializeComponent();
-
+            AreaBorderList = new List<Border>();
+            PlaceBorderList = new List<Border>();
             _camping = camping;
             new Transform(field); // Transform scale of the map.
             GenerateMap();
@@ -68,63 +70,17 @@ namespace CampingUI
             GenerateComponentsMap(_streets);
             GenerateComponentsMap(_places);
         }
-
         public void GenerateComponentsMap<T>(List<T> list)
         {
-            _areas = _camping.CampingRepository.CampingMapRepository.GetAreas();
-
-            if (_areas.Count() > 0)
-            {
-                foreach (var area in _areas)
-                {
-                    Border border = MapPageArea.GenerateArea(area);
-                    border.MouseLeftButtonDown += (sender, e) =>
-                    {
-                        if (selectedMapButton == "View")
-                        {
-                            _SelecterdArea = area;
-                            HandleAreaClick();
-                        }
-                        else
-                        {
-                            _SelecterdArea = null;
-                            AreaInfo.Visibility = Visibility.Hidden;
-                        }
-                    };
-                    field.Children.Add(border);
-                }
-            }
-        }
-
-        public void GenerateStreets()
-        {
-            _streets = _camping.CampingRepository.CampingMapRepository.GetStreets();
-            if (_streets.Count() > 0)
-            {
-                foreach (Street street in _streets)
-                {
-                    field.Children.Add(MapPageStreet.GenerateStreet(street));
-                }
-            }
-        }
-
-        public void GeneratePlaces()
-        {
-            _places = _camping.CampingRepository.CampingPlaceRepository.GetPlaces();
-            if (_places.Count() > 0)
-            {
-                foreach (Place place in _places)
-                {
-                    GeneratePlace(place, Brushes.Black, true);
-                }
-            }
             if(list != null && list.Count() > 0)
             {
+                
                 foreach(var comp in list)
                 {
-                    if(comp is Area)
+                    if(comp is Area && !comp.Equals(SelectedArea))
                     {
-                        field.Children.Add(MapPageArea.GenerateArea((Area)(object)comp));
+                        AreaBorderList.Add(CreateBorder((Area)(object)comp));
+                        field.Children.Add(AreaBorderList.Last());
                     }
                     if (comp is Street)
                     {
@@ -132,28 +88,64 @@ namespace CampingUI
                     }
                     if (comp is Place)
                     {
-                        GeneratePlace((Place)(object)comp, Brushes.Black, true);
+                        PlaceBorderList.Add(GeneratePlace((Place)(object)comp, Brushes.Black, true));
+                        //GeneratePlace((Place)(object)comp, Brushes.Black, true);
                     }
                 }
             }
         }
-
-        public void GeneratePlace(Place place, SolidColorBrush brush, bool AddPlaceBool)
+        private void ClearAreaSelection()
+        {
+            for(int i =0; i < AreaBorderList.Count; i++)
+            {
+                MapPageArea.DeselectBorder(AreaBorderList[i], _areas[i]);
+            }
+        }
+        private void ClearSelection()
+        {
+            ClearAreaSelection();
+            PlaceBorderList.Clear();
+            AreaBorderList.Clear();
+            PlaceInfo.Visibility = Visibility.Hidden;
+            AreaInfo.Visibility = Visibility.Hidden;
+        }
+        private Border CreateBorder(Area comp)
+        {
+            Border border = MapPageArea.GenerateArea((Area)(object)comp);
+            border.MouseLeftButtonDown += (sender, e) =>
+            {
+                ;
+                if (selectedMapButton == "View")
+                {
+                    SelectedArea = (Area)(object)comp;
+                    ClearAreaSelection();
+                    HandleAreaClick();
+                    border = MapPageArea.SelectBorder(border, comp);
+                }
+                else
+                {
+                    SelectedArea = null;
+                    ClearAreaSelection();
+                }
+            };
+            return border;
+        }
+        public Border GeneratePlace(Place place, SolidColorBrush brush, bool AddPlaceBool)
         {
             var coordinates = place.GetPlacePositions();
 
             Border border = new Border
             {
                 BorderBrush = Brushes.White,
+                Width = 30,
+                Height = 30,
                 BorderThickness = new Thickness(1),
+                Name = "Place_" + place.PlaceID.ToString(),
             };
 
             Canvas canvasPlace = new Canvas
             {
-                Width = 30,
-                Height = 30,
                 Background = brush,
-                Name = "Place_" + place.PlaceID.ToString(),
             };
 
             border.Child = canvasPlace;
@@ -190,12 +182,13 @@ namespace CampingUI
             {
                 canvasPlace.MouseEnter += (sender, e) =>
                 {
+                    if(canvasPlace.Background.ToString() != "#FF018B8B")
                     canvasPlace.Background = Brushes.DarkCyan; // Change the background color on hover
                 };
 
                 canvasPlace.MouseLeave += (sender, e) =>
                 {
-                    if (place.PlaceID != SelectedPlace)
+                    if (place.PlaceID != SelectedPlace && canvasPlace.Background.ToString() != "#FF018B8B")
                     {
                         canvasPlace.Background = Brushes.Black;
                     }
@@ -213,6 +206,7 @@ namespace CampingUI
                 previousSelectedCanvas = canvasPlace;
                 HandlePlaceClick(place, false);
             };
+            return border;
         }
 
         public void HandlePlaceClick(Place place, bool AddPlaceBool)
@@ -220,9 +214,9 @@ namespace CampingUI
             PlaceInfo.Visibility = Visibility.Visible;
             if (!AddPlaceBool)
             {
-                PlaceInfo.Visibility = Visibility.Collapsed;
-                field.Children.Clear();
-                GenerateMap();
+                ClearSelection();
+/*                field.Children.Clear();
+                GenerateMap();*/
             }
             else
             {
@@ -277,9 +271,6 @@ namespace CampingUI
 
         private void field_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            field.Children.Clear();
-            GenerateMap();
-
             if (selectedMapButton.Contains("Place"))
             {
                 Point p = Mouse.GetPosition(field);
@@ -301,16 +292,19 @@ namespace CampingUI
                 List<Place> placesNotInNewPlaceBorder = places.Where(i => i.XCord >= (_xPressed - 45) && i.XCord <= (_xPressed + 45))
                                                               .Where(i => i.YCord >= (_yPressed - 45) && i.YCord <= (_yPressed + 45))
                                                               .ToList();
-                if (PlaceWithinAreas.Count == 1 && placesNotInNewPlaceBorder.Count == 0)
-                {
+/*                if (PlaceWithinAreas.Count == 1 && placesNotInNewPlaceBorder.Count == 0)
+                {*/
+                    field.Children.Clear();
+                    ClearSelection();
+                    GenerateMap();
                     _camping.Places = _camping.CampingRepository.CampingPlaceRepository.GetPlaces();
                     int i = _camping.Places.Last().PlaceID + 1;
 
-                    Place place = new Place(0, false, 1, 1, false, 0, 0, 0, _xPressed, _yPressed);
-                    GeneratePlace(place, Brushes.Gray, false);
+                    Place place1 = new Place(0, false, 1, 1, false, 0, 0, 0, _xPressed, _yPressed);
+                    GeneratePlace(place1, Brushes.Gray, false);
                     EnableExtendComboBoxes(false);
-                    HandlePlaceClick(place, true);
-                }
+                    HandlePlaceClick(place1, true);
+                //}
             }
         }
 
@@ -382,7 +376,7 @@ namespace CampingUI
                     }
                 }
             }
-            PlaceInfo.Visibility = Visibility.Collapsed;
+            ClearSelection();
             field.Children.Clear();
             GenerateMap();
         }
@@ -682,7 +676,7 @@ namespace CampingUI
             if (e.Key == Key.Escape)
             {
 
-                if (PlaceInfo.Visibility == Visibility.Visible)
+                if (selectedMapButton.Contains("Place"))
                 {
                     HandleCancelAddPlace();
                     foreach(Button button in MapGridButtons.Children)
@@ -695,6 +689,8 @@ namespace CampingUI
                 else if(AreaInfo.Visibility == Visibility.Visible)
                 {
                     AreaInfo.Visibility = Visibility.Hidden;
+                    ClearAreaSelection();
+                    ChangePlaceBackground(PlaceBorderList, false);
                 }
             }
         }
@@ -724,12 +720,42 @@ namespace CampingUI
         }
         private void HandleAreaClick()
         {
-            if(_SelecterdArea != null)
+            if(SelectedArea != null)
             {
-                AreaName.Content = _SelecterdArea.Name;
-                AreaColor.Text = "Kleur";
-                AreaPower.IsChecked = _SelecterdArea.Power;
+                AreaName.Content = SelectedArea.Name;
+                AreaColor.Text = StaticUIMethods.GetColorNameFromInt(SelectedArea.Color);
+                AreaPower.IsChecked = SelectedArea.Power;
+                AreaDogs.IsChecked = SelectedArea.Dogs;
+                AreaPlaceSurfaceArea.Content = SelectedArea.SurfaceArea;
+                AreaPrice.Content = SelectedArea.PricePerNightPerPerson;
+                AreaAmountOfPeople.Content = SelectedArea.AmountOfPeople;
+                ChangePlaceBackground(PlaceBorderList, false);
+                ChangePlaceBackground(SelectAreaPlaces(), true);
                 AreaInfo.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                ChangePlaceBackground(PlaceBorderList, false);
+            }
+        }
+        private List<Border> SelectAreaPlaces()
+        {
+            List<Place> places = _places.Where(p => p.AreaID == SelectedArea.AreaID).ToList();
+            List<Border> borders = PlaceBorderList.IntersectBy(places.Select(p => p.PlaceID), b =>
+            {
+                string[] strings = b.Name.Split('_');
+                return int.Parse(strings[1]);
+            }).ToList();
+            return borders;
+        }
+
+        private void ChangePlaceBackground(List<Border> PlaceBorders, bool Select)
+        {
+            foreach(Border PlaceBorder in PlaceBorders)
+            {
+                Canvas child = (Canvas)PlaceBorder.Child;
+                if (Select) child.Background = (Brush)new BrushConverter().ConvertFromString("#FF018B8B");
+                else child.Background = Brushes.Black;
             }
         }
     }
