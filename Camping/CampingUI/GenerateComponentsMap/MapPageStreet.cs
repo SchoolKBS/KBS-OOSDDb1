@@ -25,18 +25,17 @@ namespace CampingUI.GenerateComponentsMap
             double secondX;
             double secondY;
 
-            if(street.XCord1 > street.XCord2)
-            {
-                deltaX = street.XCord1 - street.XCord2;
-                firstX = street.XCord2;
-                secondX = street.XCord1;
-
-            }
-            else
+            if(street.XCord1 < street.XCord2)
             {
                 deltaX = street.XCord2 - street.XCord1;
                 firstX = street.XCord1;
                 secondX = street.XCord2;
+            }
+            else
+            {
+                deltaX = street.XCord1 - street.XCord2;
+                firstX = street.XCord2;
+                secondX = street.XCord1;
             }
             if(street.YCord1 > street.YCord2)
             {
@@ -50,7 +49,7 @@ namespace CampingUI.GenerateComponentsMap
                 firstY = street.YCord2;
                 secondY = street.YCord1;
             }
-
+           // MessageBox.Show($"{firstX}, {firstY}, {secondX}, {secondY}");
             double degrees = Math.Atan(deltaY / deltaX) * 180 / Math.PI;
             if (secondY < firstY && secondX > firstX)
             {
