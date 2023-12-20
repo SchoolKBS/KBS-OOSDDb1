@@ -40,15 +40,15 @@ namespace CampingUI
             //Checks which fields are used to search a guest
             if(string.IsNullOrEmpty(FirstName) && !string.IsNullOrEmpty(LastName))
             {
-                GuestOverviewItemsControl.ItemsSource = Camping.CampingRepository.CampingGuestRepository.GetGuestsByLastName(LastName);
+                GuestOverviewItemsControl.ItemsSource = Camping.CampingRepository.CampingGuestRepository.GetGuests().Where(guest => guest.LastName.Contains(LastName, StringComparison.OrdinalIgnoreCase));
 
             } else if (!string.IsNullOrEmpty(FirstName) && string.IsNullOrEmpty(LastName))
             {
-                GuestOverviewItemsControl.ItemsSource = Camping.CampingRepository.CampingGuestRepository.GetGuestsByFirstName(FirstName);
+                GuestOverviewItemsControl.ItemsSource = Camping.CampingRepository.CampingGuestRepository.GetGuests().Where(guest => guest.FirstName.Contains(FirstName, StringComparison.OrdinalIgnoreCase));
 
             } else if(!string.IsNullOrEmpty(FirstName) && !string.IsNullOrEmpty(LastName))
             {
-                GuestOverviewItemsControl.ItemsSource = Camping.CampingRepository.CampingGuestRepository.GetGuestsByFirstAndLastName(FirstName, LastName);
+                GuestOverviewItemsControl.ItemsSource = Camping.CampingRepository.CampingGuestRepository.GetGuests().Where(guest => guest.FirstName.Contains(FirstName, StringComparison.OrdinalIgnoreCase) && guest.LastName.Contains(LastName, StringComparison.OrdinalIgnoreCase));
 
             } else if(string.IsNullOrEmpty(FirstName) && string.IsNullOrEmpty(LastName))
             {
