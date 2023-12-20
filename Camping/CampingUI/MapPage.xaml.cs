@@ -38,10 +38,12 @@ namespace CampingUI
         private bool _editPlaceBool, _wrongInput;
         private string _selectedMapButton = "";
         private Point _streetPoint1 = new Point(-1, -1), _streetPoint2;
+        private List<Border> PlaceBorderList;
+        private Street _streetSelected;
         public MainPage(Camping camping)
         {
             InitializeComponent();
-
+            PlaceBorderList = new List<Border>();
             _camping = camping;
             new Transform(field); // Transform scale of the map.
             GenerateMap();
@@ -76,15 +78,18 @@ namespace CampingUI
                     if (comp is Street)
                     {
                         MapPageStreet.GenerateStreet((Street)(object)comp, Brushes.Black);
-                        field.Children.Add(MapPageStreet.GetLine());
+                        Line line = MapPageStreet.GetLine();
+                        field.Children.Add(line);
                         field.Children.Add(MapPageStreet.GetTextBlock());
+                        line.MouseDown += (sender, e) => { HandleStreetClick((Street)(object)comp); };
+                        
                     }
-                    if (comp is Place) GeneratePlace((Place)(object)comp, Brushes.Black, true);
+                    if (comp is Place) PlaceBorderList.Add(GeneratePlace((Place)(object)comp, Brushes.Black, true));
                 }
             }
         }
 
-        public void GeneratePlace(Place place, SolidColorBrush brush, bool AddPlaceBool)
+        public Border GeneratePlace(Place place, SolidColorBrush brush, bool AddPlaceBool)
         {
             var coordinates = place.GetPlacePositions();
 
@@ -150,15 +155,20 @@ namespace CampingUI
 
             canvasPlace.MouseLeftButtonDown += (sender, e) =>
             {
-                if (_previousSelectedCanvas != null)
+                if (_selectedMapButton.Contains("View"))
                 {
-                    _previousSelectedCanvas.Background = Brushes.Black;
-                }
 
-                canvasPlace.Background = Brushes.DarkCyan;
-                _previousSelectedCanvas = canvasPlace;
-                HandlePlaceClick(place, false);
+                    if (_previousSelectedCanvas != null)
+                    {
+                        _previousSelectedCanvas.Background = Brushes.Black;
+                    }
+
+                    canvasPlace.Background = Brushes.DarkCyan;
+                    _previousSelectedCanvas = canvasPlace;
+                    HandlePlaceClick(place, false);
+                }
             };
+            return border;
         }
 
         public void HandlePlaceClick(Place place, bool AddPlaceBool)
@@ -179,7 +189,58 @@ namespace CampingUI
                 PlaceInfoGrid.Visibility = Visibility.Visible;
                 AddPlaceButton.Visibility = Visibility.Visible;
             }
+        }
+        public void HandleStreetClick(Street street)
+        {
+            if(_streetSelected != null)
+            {
+                HighLightPlacesStreet(_streetSelected, Brushes.Black);
+            }
+            _streetSelected = street;
+            PlaceInfo.Visibility = Visibility.Hidden;
+            StreetInfo.Visibility = Visibility.Visible;
+            StreetHasDogs.IsChecked = street.Dogs;
+            StreetHasPower.IsChecked = street.Power;
+            StreetPersons.Text = street.AmountOfPeople.ToString();
+            StreetName.Text = street.Name;
+            StreetPricePerNight.Text = street.PricePerNightPerPerson.ToString();
+            StreetSurfaceArea.Text = street.SurfaceArea.ToString();
+            foreach(Grid grid in StreetInfoGrid.Children)
+            {
+                foreach (var comp in grid.Children)
+                {
+                    if (comp is TextBox textbox) textbox.IsEnabled = false;
+                    if (comp is CheckBox checkbox) checkbox.IsEnabled = false;
+                }
+            }
+            HighLightPlacesStreet(street, Brushes.DarkCyan);
+            AddStreetButton.Content = "Aanpassen";
+            //Als annuleren -> onzichtbaar maken en deselecteren
 
+            //Als toevoegen -> Check op alle invoervelden
+            //              -> Update straat gegevens in de database
+            // 
+        }
+
+        private void HighLightPlacesStreet(Street street, SolidColorBrush color)
+        {
+            List<Place> places = _places.Where(p => p.StreetID == street.StreetID).ToList();
+            if (places.Count() > 0)
+            {
+                foreach (var comp in field.Children)
+                {
+                    if (comp is Border placeBlock && placeBlock.Child is Canvas canvas && canvas.Name.Contains("Place_"))
+                    {
+                        foreach (Place placeData in places)
+                        {
+                            if (canvas.Name.Equals("Place_" + placeData.PlaceID.ToString()))
+                            {
+                                canvas.Background = color;
+                            } 
+                        }
+                    }
+                }
+            } 
         }
 
         private void ResetInputFields()
@@ -233,10 +294,10 @@ namespace CampingUI
 
         private void field_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            field.Children.Clear();
-            GenerateMap();
             if (_selectedMapButton.Contains("Place"))
             {
+                field.Children.Clear();
+                GenerateMap();
                 Point p = Mouse.GetPosition(field);
                 List<Area> areas = _camping.CampingRepository.CampingMapRepository.GetAreas();
                 List<Street> streets = _camping.CampingRepository.CampingMapRepository.GetStreets();
@@ -259,7 +320,12 @@ namespace CampingUI
                 if (PlaceWithinAreas.Count == 1 && placesNotInNewPlaceBorder.Count == 0)
                 {
                     _camping.Places = _camping.CampingRepository.CampingPlaceRepository.GetPlaces();
-                    int i = _camping.Places.Last().PlaceID + 1;
+                    int i = 1;
+                    if(_camping.Places.Count > 0)
+                    {
+                        i = _camping.Places.Last().PlaceID + 1;
+                    }
+                   
 
                     Place place = new Place(0, false, 1, 1, false, 0, 0, 0, _xPressed, _yPressed);
                     GeneratePlace(place, Brushes.Gray, false);
@@ -268,7 +334,9 @@ namespace CampingUI
                 }
             }
             if (_selectedMapButton.Contains("Street"))
-            {               
+            {
+                field.Children.Clear();
+                GenerateMap();
                 Point point = Mouse.GetPosition(field);
                 double xCord = Math.Round(point.X);
                 double yCord = Math.Round(point.Y); 
@@ -331,17 +399,44 @@ namespace CampingUI
 
                 }
             }
+            if (_selectedMapButton.Contains("View"))
+            {
+
+            }
         }
         private void HandleAddStreet_Click(Object sender, RoutedEventArgs e)
         {
-            GetAddStreetValues();
-            if (!_wrongInput)
+            if (AddStreetButton.Content.Equals("Aanpassen"))
             {
-                bool hasPower = (bool)StreetHasPower.IsChecked;
-                bool hasDogs = (bool)StreetHasDogs.IsChecked;
-                _camping.CampingRepository.CampingMapRepository.AddNewStreet(_streetName, hasPower, hasDogs, _streetSurfaceArea, _streetPricePerNightPerPerson, _streetPersons, (int)_xCord1, (int)_yCord1, (int)_xCord2, (int)_yCord2);
-                GenerateMap();
-                ResetAfterAddStreet();
+                foreach (Grid grid in StreetInfoGrid.Children)
+                {
+                    foreach (var comp in grid.Children)
+                    {
+                        if (comp is TextBox textbox) textbox.IsEnabled = true;
+                        if (comp is CheckBox checkbox) checkbox.IsEnabled = true;
+                    }
+                }
+                AddStreetButton.Content = "Opslaan";
+            }
+            else
+            {
+                GetAddStreetValues();
+                if (!_wrongInput)
+                {
+                    bool hasPower = (bool)StreetHasPower.IsChecked;
+                    bool hasDogs = (bool)StreetHasDogs.IsChecked;
+                    if (AddStreetButton.Content.Equals("Opslaan"))
+                    {
+                        _camping.CampingRepository.CampingMapRepository.UpdateStreetByStreetID(hasPower, hasDogs, _streetSurfaceArea, _streetPricePerNightPerPerson, _streetPersons, _streetSelected.StreetID);
+                    }
+                    else
+                    {
+                        _camping.CampingRepository.CampingMapRepository.AddNewStreet(_streetName, hasPower, hasDogs, _streetSurfaceArea, _streetPricePerNightPerPerson, _streetPersons, (int)_xCord1, (int)_yCord1, (int)_xCord2, (int)_yCord2);
+                        _streetPoint1 = new Point(-1, -1);
+                    }
+                    GenerateMap();
+                    ResetAfterAddStreet();
+                }
             }
         }
         private void HandleAddStreet()

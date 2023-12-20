@@ -311,5 +311,25 @@ namespace CampingDataAccess
                 connection.Close();
             }
         }
+        public void UpdateStreetByStreetID(bool power, bool dogs, int surfaceArea, double pricePerNightPerPerson, int amountOfPeople, int streetID)
+        {
+            string sql = "UPDATE Street SET Power = @Power, Dogs = @Dogs, SurfaceArea = @SurfaceArea, PricePerNightPerPerson = @PricePerNightPerPerson, AmountOfPeople = @AmountOfPeople WHERE StreetID = @StreetID;";
+            using (var connection = new SqliteConnection(ConnectionString))
+            {
+                connection.Open();
+                using (var command = new SqliteCommand(sql, connection))
+                {
+                    command.Prepare();
+                    command.Parameters.AddWithValue("@Power", power);
+                    command.Parameters.AddWithValue("@Dogs", dogs);
+                    command.Parameters.AddWithValue("@SurfaceArea", surfaceArea);
+                    command.Parameters.AddWithValue("@PricePerNightPerPerson", pricePerNightPerPerson);
+                    command.Parameters.AddWithValue("@AmountOfPeople", amountOfPeople);
+                    command.Parameters.AddWithValue("@StreetID", streetID);
+                    command.ExecuteNonQuery();
+                }
+
+            }
+        }
     }
 }
