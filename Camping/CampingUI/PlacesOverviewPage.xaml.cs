@@ -59,6 +59,8 @@ namespace CampingUI
             _placesSortedAndOrFiltered = _camping.Places;
             PlacesListView.ItemsSource = _placesSortedAndOrFiltered; 
             this._headerTag = "PlaceID";
+            MainPage MapPage = new MainPage(camping);
+            MapPage.GenerateMap();
         }
 
         private void TextBox_Changed(object sender, TextChangedEventArgs e)
