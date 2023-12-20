@@ -122,8 +122,7 @@ namespace CampingUI
             Border border = MapPageArea.GenerateArea((Area)(object)comp);
             border.MouseLeftButtonDown += (sender, e) =>
             {
-                ;
-                if (selectedMapButton == "View")
+                if (_selectedMapButton == "View")
                 {
                     SelectedArea = (Area)(object)comp;
                     ClearAreaSelection();
@@ -223,8 +222,8 @@ namespace CampingUI
 
         public void HandlePlaceClick(Place place, bool AddPlaceBool)
         {
-            PlaceInfo.Visibility = Visibility.Visible;
-            StreetInfo.Visibility = Visibility.Hidden;
+            PlaceInfoGrid.Visibility = Visibility.Visible;
+            StreetInfoGrid.Visibility = Visibility.Hidden;
             if (!AddPlaceBool)
             {
                 ClearSelection();
@@ -914,7 +913,7 @@ namespace CampingUI
             if (e.Key == Key.Escape)
             {
 
-                if (selectedMapButton.Contains("Place"))
+                if (_selectedMapButton.Contains("Place"))
                 {
                     ResetAfterAddPlace();
                    /* foreach(Button button in MapGridButtons.Children)
