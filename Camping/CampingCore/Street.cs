@@ -7,15 +7,10 @@ using System.Threading.Tasks;
 
 namespace CampingCore
 {
-    public class Street
+    public class Street : Facilities
     {
         public int StreetID { get; set; }
         public string Name { get; set; }
-        public bool Power { get; set; }
-        public int SurfaceArea {  get; set; }
-        public double PricePerNightPerPerson { get; set; }
-        public int AmountOfPeople { get; set; }
-        public bool Dogs { get; set; }
         public int XCord1 { get; set; }
         public int YCord1 { get; set; }
         public int XCord2 { get; set; }

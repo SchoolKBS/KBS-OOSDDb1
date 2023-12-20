@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:CampingUI"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="MainPage">
+      Title="Camping Administratie Applicatie">
     <Page.Resources>
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">
@@ -178,18 +178,36 @@
         <Grid.RowDefinitions>
             <!-- First row with a fixed height of 70 -->
             <RowDefinition Height="60"/>
-
+            <RowDefinition Height="100"/>
             <!-- Second row takes up the rest of the height -->
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <!-- Content in the first row -->
-        <Border Grid.Row="0" Grid.ColumnSpan="2" Margin="25,25,25,0" Background="#11284D">
-            <TextBlock FontSize="25" FontWeight="Bold" Foreground="white">Plattegrond</TextBlock>
+        <Border Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Margin="25,25,25,0" Background="#11284D" Grid.RowSpan="2">
+            <TextBlock FontSize="25" FontWeight="Bold" Foreground="white" Text="Plattegrond"></TextBlock>
         </Border>
+        <Border Grid.Row="1" Margin="25,25,25,0" Padding="5" Background="#334A6E" CornerRadius="25">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
 
+                <Grid Grid.Column="0" Name="MapGridButtons" Margin="25, 0, 25, 0" HorizontalAlignment="Left">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Style="{DynamicResource ButtonStyle1Edit}" Height="45" Margin="0, 0, 10, 0" HorizontalAlignment="Center" Grid.Column="0" Padding="20, 0" Foreground="White" FontWeight="Bold" FontSize="16" Name="MakeAreaButton" Click="MakeMapComponentButton_Click">Gebied aanmaken</Button>
+                    <Button Style="{DynamicResource ButtonStyle1Edit}" Height="45" Margin="10, 0, 10, 0" HorizontalAlignment="Center" Grid.Column="1" Padding="20, 0" Foreground="White" FontWeight="Bold" FontSize="16" Name="MakeStreetButton" Click="MakeMapComponentButton_Click">Straat aanmaken</Button>
+                    <Button Style="{DynamicResource ButtonStyle1Edit}" Height="45" Margin="10, 0, 0, 0" HorizontalAlignment="Center" Grid.Column="2" Padding="20, 0" Foreground="White" FontWeight="Bold" FontSize="16" Name="MakePlaceButton" Click="MakeMapComponentButton_Click">Plaats aanmaken</Button>
+                </Grid>
+            </Grid>
+        </Border>
         <!-- Content in the second row -->
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <!-- First column, 30% of the screen width with a 25-margin on the right -->
                 <ColumnDefinition Width="3*" MinWidth="0"/>
@@ -200,126 +218,250 @@
 
             <!-- Content in the first column -->
             <Border Grid.Column="0" Margin="25" Padding="15" Background="#334A6E" CornerRadius="25">
-                <Grid Visibility="Hidden" Name="PlaceInfo">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="65"/>
-                        <RowDefinition Height="65"/>
-                        <RowDefinition Height="65"/>
-                        <RowDefinition Height="65"/>
-                        <RowDefinition Height="65"/>
-                        <RowDefinition Height="65"/>
-                        <RowDefinition Height="65"/>
-                        <RowDefinition Height="65"/>
-                        <RowDefinition Height="70"/>
-                    </Grid.RowDefinitions>
+                <Grid>
+                    <Grid Visibility="Hidden" Name="PlaceInfo">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
 
-                    <!-- Title of the place -->
-                    <Grid Grid.Row="0" Name="PlaceRow0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+                        <!-- Title of the place -->
+                        <Grid Grid.Row="0" Name="PlaceRow0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-                        <Label Name="PlacePlaceIDLabel" Content="Plaatsnummer: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <TextBox TextChanged="TextBox_Changed" Name="PlacePlaceID" VerticalAlignment="Center" FontSize="16" Width="150" Height="40" BorderBrush="Transparent" HorizontalAlignment="Right" Grid.Column="1">
-                        </TextBox>
+                            <Label Name="PlacePlaceIDLabel" Content="Plaatsnummer: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBox TextChanged="TextBox_Changed" Name="PlacePlaceID" VerticalAlignment="Center" FontSize="16" Width="150" Height="40" BorderBrush="Transparent" HorizontalAlignment="Right" Grid.Column="1">
+                            </TextBox>
+                        </Grid>
+
+                        <!-- Checkbox for power -->
+                        <Grid Grid.Row="1" Name="PlaceRow1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Name="PlaceStreetLabel" Content="Straat: " Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+                            <Border Name="PlaceStreetBorder" Grid.Column="1" BorderBrush="White" Height="40" Width="190" HorizontalAlignment="Right">
+                                <ComboBox Name="PlaceStreetComboBox" VerticalAlignment="Center" FontSize="14" Width="190" Height="40" HorizontalAlignment="Right" SelectionChanged="PlaceStreetAreaComboBox_SelectionChanged"/>
+                            </Border>
+                        </Grid>
+
+                        <Grid Grid.Row="2" Name="PlaceRow2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Name="PlaceAreaLabel" Content="Gebied: " Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+                            <Border Name="PlaceAreaBorder" Grid.Column="1" BorderBrush="White" Height="40" Width="190" HorizontalAlignment="Right">
+                                <ComboBox Name="PlaceAreaComboBox" VerticalAlignment="Center" FontSize="14" Width="190" Height="40" HorizontalAlignment="Right" SelectionChanged="PlaceStreetAreaComboBox_SelectionChanged"/>
+                            </Border>
+                        </Grid>
+
+                        <!-- Checkbox for power -->
+                        <Grid Grid.Row="3" Name="PlaceRow3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Name="PlaceHasPowerLabel" Content="Stroom:" Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <ComboBox Grid.Column="1" Height="40" Width="125" HorizontalAlignment="Right" Name="PlacePowerComboBox" SelectionChanged="HandleExtendChange_Click">
+                                <ComboBoxItem Tag="Street">Overerven straat</ComboBoxItem>
+                                <ComboBoxItem Tag="Area">Overerven gebied</ComboBoxItem>
+                                <ComboBoxItem Tag="Own" IsSelected="True">Eigen invoer</ComboBoxItem>
+                            </ComboBox>
+                            <CheckBox IsThreeState="False" Name="PlaceHasPower" Margin="32, 0, 0, 0" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="2">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="2" ScaleY="2" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                        </Grid>
+                        <!-- Checkbox for dogs -->
+                        <Grid Grid.Row="4" Name="PlaceRow4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Name="PlaceHasDogsLabel" Content="Honden: " Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <ComboBox Grid.Column="1" Height="40" Width="125" HorizontalAlignment="Right" Name="PlaceDogsComboBox" SelectionChanged="HandleExtendChange_Click">
+                                <ComboBoxItem Tag="Street">Overerven straat</ComboBoxItem>
+                                <ComboBoxItem Tag="Area">Overerven gebied</ComboBoxItem>
+                                <ComboBoxItem Tag="Own" IsSelected="True">Eigen invoer</ComboBoxItem>
+                            </ComboBox>
+                            <CheckBox IsThreeState="False" Name="PlaceHasDogs" Margin="29, 0, 0, 0" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="2">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="2" ScaleY="2" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                        </Grid>
+                        <!-- Checkbox for surface area -->
+                        <Grid Grid.Row="5" Name="PlaceRow5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Name="PlaceSurfaceAreaLabel" Content="Oppervlakte: " Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <ComboBox Grid.Column="1" Height="40" Width="125" HorizontalAlignment="Right" Name="PlaceSurfaceAreaComboBox" SelectionChanged="HandleExtendChange_Click">
+                                <ComboBoxItem Tag="Street">Overerven straat</ComboBoxItem>
+                                <ComboBoxItem Tag="Area">Overerven gebied</ComboBoxItem>
+                                <ComboBoxItem Tag="Own" IsSelected="True">Eigen invoer</ComboBoxItem>
+                            </ComboBox>
+                            <TextBox TextChanged="TextBox_Changed" Margin="10, 0, 0, 0" Name="PlaceSurfaceArea" VerticalAlignment="Center" FontSize="14" Width="50" Height="40" BorderBrush="Transparent" HorizontalAlignment="Right" Grid.Column="2">
+                            </TextBox>
+                        </Grid>
+
+                        <!-- Checkbox for surface area -->
+                        <Grid Grid.Row="6" Name="PlaceRow6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Name="PlacePricePerNightLabel" Content="Prijs p/nacht: "  Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <ComboBox Grid.Column="1" Height="40" Width="125" HorizontalAlignment="Right" Name="PlacePricePerNightPerPersonComboBox" SelectionChanged="HandleExtendChange_Click">
+                                <ComboBoxItem Tag="Street">Overerven straat</ComboBoxItem>
+                                <ComboBoxItem Tag="Area">Overerven gebied</ComboBoxItem>
+                                <ComboBoxItem Tag="Own" IsSelected="True">Eigen invoer</ComboBoxItem>
+                            </ComboBox>
+                            <TextBox Name="PlacePricePerNight" Margin="10, 0, 0, 0" VerticalAlignment="Center" FontSize="14" Width="50" Height="40" BorderBrush="Transparent" HorizontalAlignment="Right" Grid.Column="2" TextChanged="TextBox_Changed">
+                            </TextBox>
+                        </Grid>
+
+                        <!-- Checkbox for surface area -->
+                        <Grid Grid.Row="7" Name="PlaceRow7">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Name="PlacePersonsLabel" Content="Personen aantal: " Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <ComboBox Grid.Column="1" Height="40" Width="125" HorizontalAlignment="Right" Name="PlacePersonsComboBox" SelectionChanged="HandleExtendChange_Click">
+                                <ComboBoxItem Tag="Street">Overerven straat</ComboBoxItem>
+                                <ComboBoxItem Tag="Area">Overerven gebied</ComboBoxItem>
+                                <ComboBoxItem Tag="Own" IsSelected="True">Eigen invoer</ComboBoxItem>
+                            </ComboBox>
+                            <TextBox Name="PlacePersons" Margin="10, 0, 0, 0" VerticalAlignment="Center" FontSize="14" Width="50" Height="40" BorderBrush="Transparent" HorizontalAlignment="Right" Grid.Column="2" TextChanged="TextBox_Changed">
+                            </TextBox>
+                        </Grid>
+                        <Grid Grid.Row="8" IsEnabled="True" VerticalAlignment="Bottom">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Button Foreground="White" FontWeight="Bold" Style="{DynamicResource ButtonStyle1Apply}" Name="AddPlaceButton" Content="Aanpassen" Click="HandleAddPlace_Click" Height="40" Width="140" HorizontalAlignment="Left"/>
+                            <Button Foreground="White" FontWeight="Bold" Style="{DynamicResource ButtonStyle1Cancel}" Name="CancelAddPlaceButton" Content="Annuleren" Click="HandleCancelAddPlace_Click" Height="40" Width="140" HorizontalAlignment="Right"/>
+                        </Grid>
                     </Grid>
 
-                    <!-- Checkbox for power -->
-                    <Grid Grid.Row="1" Name="PlaceRow1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+                    <Grid Visibility="Hidden" Name="AreaInfo" Grid.Column="0" Grid.Row="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition Height="70"/>
+                            </Grid.RowDefinitions>
 
-                        <Label Name="PlaceHasPowerLabel" Content="Heeft stroom:" Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <Grid Grid.Row="0" Name="AreaRow0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
 
-                        <CheckBox IsThreeState="False" Name="PlaceHasPower" Margin="10, 0, 0, 0" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="1">
-                            <CheckBox.LayoutTransform>
-                                <ScaleTransform ScaleX="2" ScaleY="2" />
-                            </CheckBox.LayoutTransform>
-                        </CheckBox>
-                    </Grid>
-                    <!-- Checkbox for dogs -->
-                    <Grid Grid.Row="2" Name="PlaceRow2">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+                                <Label Name="AreaNameLabel" Content="Gebied: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <Label Name="AreaName" VerticalAlignment="Center" Foreground="White" FontSize="16" Width="150" HorizontalAlignment="Right" Grid.Column="1"/>
 
-                        <Label Name="PlaceHasDogsLabel" Content="Honden toegestaan: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <CheckBox IsThreeState="False" Name="PlaceHasDogs" Margin="10, 0, 0, 0" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="1">
-                            <CheckBox.LayoutTransform>
-                                <ScaleTransform ScaleX="2" ScaleY="2" />
-                            </CheckBox.LayoutTransform>
-                        </CheckBox>
-                    </Grid>
-                    <!-- Checkbox for surface area -->
-                    <Grid Grid.Row="3" Name="PlaceRow3">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+                            </Grid>
 
-                        <Label Name="PlaceSurfaceAreaLabel" Content="Oppervlakte: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <Grid Grid.Row="1" Name="AreaRow1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
 
-                        <TextBox TextChanged="TextBox_Changed" Name="PlaceSurfaceArea" VerticalAlignment="Center" FontSize="16" Width="150" Height="40" BorderBrush="Transparent" HorizontalAlignment="Right" Grid.Column="1">
-                        </TextBox>
-                    </Grid>
+                                <Label Name="AreaColorLabel" Content="Kleur: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <Label Name="AreaColor" VerticalAlignment="Center" Foreground="White" FontSize="16" Width="150" HorizontalAlignment="Right" Grid.Column="1"/>
 
-                    <!-- Checkbox for surface area -->
-                    <Grid Grid.Row="4" Name="PlaceRow4">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+                            </Grid>
+                        <Grid Grid.Row="2" Name="AreaRow2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-                        <Label Name="PlacePricePerNightLabel" Content="Prijs Per nacht: "  Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <Label Name="AreaPowerLabel" Content="Heeft stroom: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <CheckBox Name="AreaPower" VerticalAlignment="Center" IsEnabled="False" HorizontalAlignment="Center" Grid.Column="1"/>
 
-                        <TextBox Name="PlacePricePerNight" VerticalAlignment="Center" FontSize="16" Width="150" Height="40" BorderBrush="Transparent" HorizontalAlignment="Right" Grid.Column="1" TextChanged="TextBox_Changed">
-                        </TextBox>
-                    </Grid>
+                        </Grid>
+                                
+                        <Grid Grid.Row="3" Name="AreaRow3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-                    <!-- Checkbox for surface area -->
-                    <Grid Grid.Row="5" Name="PlaceRow5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+                            <Label Name="AreaDogsLabel" Content="Mag honden: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <CheckBox Name="AreaDogs" VerticalAlignment="Center" IsEnabled="False" HorizontalAlignment="Center" Grid.Column="1"/>
+                        </Grid>
+                                
+                        <Grid Grid.Row="4" Name="AreaRow4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-                        <Label Name="PlacePersonsLabel" Content="Aantal personen: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <Label Name="AreaPlaceSurfaceAreaLabel" Content="Oppervlakte plaats: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <Label Name="AreaPlaceSurfaceArea" VerticalAlignment="Center" Foreground="White" FontSize="16" Width="150" HorizontalAlignment="Right" Grid.Column="1"/>
 
-                        <TextBox Name="PlacePersons" VerticalAlignment="Center" FontSize="16" Width="150" Height="40" BorderBrush="Transparent" HorizontalAlignment="Right" Grid.Column="1" TextChanged="TextBox_Changed">
-                        </TextBox>
-                    </Grid>
-                    <Grid Grid.Row="6" Name="PlaceRow6">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+                        </Grid>                        
+                        <Grid Grid.Row="5" Name="AreaRow5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-                        <Label Name="PlaceStreetLabel" Content="Straat: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <Border Name="PlaceStreetBorder" Grid.Column="1" BorderBrush="White" Height="40" Width="150" HorizontalAlignment="Right">
-                            <ComboBox Name="PlaceStreetComboBox" VerticalAlignment="Center" FontSize="16" Width="150" Height="40" HorizontalAlignment="Right" SelectionChanged="PlaceStreetComboBox_SelectionChanged"/>
-                        </Border>
-                    </Grid>
-                    <Grid Grid.Row="7" Name="PlaceRow7">
-                        <Button Foreground="White" FontWeight="Bold" Style="{DynamicResource ButtonStyle1Edit}" Name="ExtendStreetPlaceButton" Content="Overerven" IsEnabled ="False" Click="ExtendStreetPlaceButton_Click" Height="40" Width="140" HorizontalAlignment="Right"/>
-                    </Grid>
+                            <Label Name="AreaPriceLabel" Content="Prijs plaats: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <Label Name="AreaPrice" VerticalAlignment="Center" Foreground="White" FontSize="16" Width="150" HorizontalAlignment="Right" Grid.Column="1"/>
 
-                    <Grid Grid.Row="8" IsEnabled="True" VerticalAlignment="Bottom">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Button Foreground="White" FontWeight="Bold" Style="{DynamicResource ButtonStyle1Apply}" Name="AddPlaceButton" Content="Aanpassen" Click="HandleAddPlace_Click" Height="40" Width="140" HorizontalAlignment="Left"/>
-                        <Button Foreground="White" FontWeight="Bold" Style="{DynamicResource ButtonStyle1Cancel}" Name="CancelAddPlaceButton" Content="Annuleren" Click="HandleCancelAddPlace_Click" Height="40" Width="140" HorizontalAlignment="Right"/>
+                        </Grid>                        
+                        <Grid Grid.Row="6" Name="AreaRow6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Name="AreaAmountOfPeopleLabel" Content="Aantal personen: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <Label Name="AreaAmountOfPeople" VerticalAlignment="Center" Foreground="White" FontSize="16" Width="150" HorizontalAlignment="Right" Grid.Column="1"/>
+
+                        </Grid>
                     </Grid>
                 </Grid>
             </Border>
 
-
             <!-- Content in the second column -->
-            <Border Grid.Column="1" Margin="25" Padding="15" Background="#334A6E" CornerRadius="25">
+            <Border Grid.Column="1" Margin="25" Padding="0" Background="#334A6E" CornerRadius="25">
 
                 <Border
                     BorderThickness="2"
@@ -333,7 +475,6 @@
                         </Canvas.LayoutTransform>
                     </Canvas>
                 </Border>
-
             </Border>
         </Grid>
     </Grid>

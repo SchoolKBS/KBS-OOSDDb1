@@ -72,7 +72,7 @@ namespace CampingDataAccess
         }
         public void AddPlace(Place place)
         {
-            string sql = "INSERT INTO Place (PlaceID, StreetID, Power, SurfaceArea, PricePerNightPerPerson, AmountOfPeople, Dogs, XCord, YCord) VALUES (@PlaceID, @StreetID, @Power, @SurfaceArea, @PricePerNightPerPerson, @AmountOfPeople, @Dogs, @XCord, @YCord);";
+            string sql = "INSERT INTO Place (PlaceID, StreetID, AreaID, Power, SurfaceArea, PricePerNightPerPerson, AmountOfPeople, Dogs, XCord, YCord) VALUES (@PlaceID, @StreetID, @AreaID, @Power, @SurfaceArea, @PricePerNightPerPerson, @AmountOfPeople, @Dogs, @XCord, @YCord);";
 
             using (var connection = new SqliteConnection(ConnectionString))
             {
@@ -82,6 +82,7 @@ namespace CampingDataAccess
                     command.Prepare();
                     command.Parameters.AddWithValue("@PlaceID", place.PlaceID);
                     command.Parameters.AddWithValue("@StreetID", place.StreetID);
+                    command.Parameters.AddWithValue("@AreaID", place.AreaID);
                     command.Parameters.AddWithValue("@Power", place.Power);
                     command.Parameters.AddWithValue("@SurfaceArea", place.SurfaceArea);
                     command.Parameters.AddWithValue("@PricePerNightPerPerson", place.PricePerNightPerPerson);
@@ -131,9 +132,9 @@ namespace CampingDataAccess
             }
             return place;
         }
-        public void UpdatePlaceData(int placeID, int streetID,  bool power, int surfaceArea, double pricePerNightPerPerson, int amountOfPeople, bool dogs)
+        public void UpdatePlaceData(int placeID, int streetID, int areaID, bool power, int surfaceArea, double pricePerNightPerPerson, int amountOfPeople, bool dogs)
         {
-            string sql = "UPDATE place SET StreetID = @StreetID, Power = @Power, SurfaceArea = @SurfaceArea, PricePerNightPerPerson = @PricePerNightPerPerson, AmountOfPeople = @AmountOfPeople, Dogs = @Dogs WHERE PlaceID = @PlaceID;";
+            string sql = "UPDATE place SET StreetID = @StreetID, AreaID = @AreaID, Power = @Power, SurfaceArea = @SurfaceArea, PricePerNightPerPerson = @PricePerNightPerPerson, AmountOfPeople = @AmountOfPeople, Dogs = @Dogs WHERE PlaceID = @PlaceID;";
 
             using (var connection = new SqliteConnection(ConnectionString))
             {
@@ -143,6 +144,7 @@ namespace CampingDataAccess
                     command.Prepare();
                     command.Parameters.AddWithValue("@PlaceID", placeID);
                     command.Parameters.AddWithValue("@StreetID", streetID);
+                    command.Parameters.AddWithValue("@AreaID", areaID);
                     command.Parameters.AddWithValue("@Power", power);
                     command.Parameters.AddWithValue("@SurfaceArea", surfaceArea);
                     command.Parameters.AddWithValue("@PricePerNightPerPerson", pricePerNightPerPerson);

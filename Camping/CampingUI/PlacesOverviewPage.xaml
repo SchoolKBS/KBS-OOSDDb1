@@ -379,7 +379,7 @@
 
                         <Button Style="{DynamicResource ButtonStyle1Apply}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="White" FontWeight="Bold" Grid.Column="5" Name="NewReservationButton" Content="Nieuwe resevering maken" Margin="20" Height="50" Width="200" Click="NewReservation_Click"/>
                             <!--<Button Style="{DynamicResource ButtonStyle1Edit}" Foreground="White" FontWeight="Bold" Grid.Column="1" Name="EditPlaceButton" Content="Plaats aanpassen" Margin="20" Height="50" Width="200" Click="EditPlaceButton_Click"/>-->
-                            <!--<Button Style="{DynamicResource ButtonStyle1Cancel}" Foreground="White" FontWeight="Bold" Grid.Column="2" Name="DeletePlaceButton" Content="Verwijder plaats" Margin="20" Height="50" Width="200" Click="DeletePlaceButton_Click"/>-->
+                            <Button Style="{DynamicResource ButtonStyle1Cancel}" Foreground="White" FontWeight="Bold" Grid.Column="2" Name="DeletePlaceButton" Content="Verwijder plaats" Margin="20" Height="50" Width="200" Click="DeletePlaceButton_Click"/>
                         </Grid>
                     </Grid>
                 </Border>
