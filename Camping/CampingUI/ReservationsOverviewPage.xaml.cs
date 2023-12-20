@@ -29,6 +29,8 @@ namespace CampingUI
     /// <summary>
     /// Interaction logic for ReservationsOverviewWindow.xaml
     /// </summary>
+   
+
     public partial class ReservationsOverviewWindow : Page
     {
 
@@ -56,34 +58,13 @@ namespace CampingUI
             ReservationsListView.ItemsSource = _camping.Reservations.Where(reservation => reservation.DepartureDate >= DateTime.Now.Date).OrderBy(reservation => reservation.ArrivalDate).ThenBy(reservation => reservation.PlaceID); //Takes reservations
         }
 
-        private void PriceCheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            bool? isPaid = PriceCheckBox.IsChecked;
-
-            if (isPaid == true)
-            {
-                PriceCheckBox.Content = "Wel Betaald";
-
-            }
-            else if (isPaid == false)
-            {
-                PriceCheckBox.Content = "Geen Voorkeur";
-
-            }
-            else if (isPaid == null)
-            {
-                PriceCheckBox.Content = "Niet Betaald";
-
-            }
-        }
-          
-
-
-
+  
+         
         // Funcion for the application of all filters
         public void ApplyFilters()
         {
             IEnumerable<Reservation> filteredReservations = _camping.Reservations;
+
             DateTime? arrivalDate = ArrivalDatePickerr.SelectedDate;
             if (arrivalDate.HasValue)
             {
@@ -91,14 +72,14 @@ namespace CampingUI
                 {
                     ArrivalDatePickerr.Text = string.Empty;
                     DepartureDatePickerr.Text = string.Empty;
-                    ArrivalDatePickerr.Background = Brushes.Red;
-                    DepartureDatePickerr.Background = Brushes.Red;
+                    StaticUIMethods.SetErrorDatePickerBorder(ArrivalDatePickerr);
+                    StaticUIMethods.SetErrorDatePickerBorder(DepartureDatePickerr);
 
                 }
                 else
                 {
-                    ArrivalDatePickerr.Background = Brushes.White;
-                    DepartureDatePickerr.Background = Brushes.White;
+                    StaticUIMethods.ResetDatePickerBorder(ArrivalDatePickerr);
+                    StaticUIMethods.ResetDatePickerBorder(DepartureDatePickerr);
                     _appliedFilters = true;
                     filteredReservations = filteredReservations.Where(reservation => reservation.ArrivalDate.Date >= arrivalDate.Value.Date);
                 }
@@ -165,21 +146,21 @@ namespace CampingUI
 
 
             // Filter by Place Number
-            if (int.TryParse(PlaceNumerBox.Text, out int placeNumber) && placeNumber >= 0)
+            if (int.TryParse(PlaceNumberBox.Text, out int placeNumber) && placeNumber >= 0)
             {
                 _appliedFilters = true;
-                PlaceNumerBox.Background = Brushes.White;
+                PlaceNumberBox.Background = Brushes.White;
                 filteredReservations = filteredReservations.Where(reservation => reservation.PlaceID == placeNumber);
             }
-            else if (PlaceNumerBox.Text == string.Empty)
+            else if (PlaceNumberBox.Text == string.Empty)
             {
-                PlaceNumerBox.Background = Brushes.White;
+                PlaceNumberBox.Background = Brushes.White;
 
             }
             else 
             {
-                PlaceNumerBox.Text = string.Empty;
-                PlaceNumerBox.Background = Brushes.Red;
+                PlaceNumberBox.Text = string.Empty;
+                PlaceNumberBox.Background = Brushes.Red;
             }
 
                 
@@ -210,29 +191,64 @@ namespace CampingUI
                 .OrderBy(reservation => reservation.ArrivalDate)
                 .ThenBy(reservation => reservation.PlaceID);
         }
-       
-        private void ApplyFilters_Clickk(object sender, RoutedEventArgs e)
+
+        private void Filter_Filled(object sender, RoutedEventArgs e)
         {
             ApplyFilters();
         }
+
+        private void Texbox_Keydown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                ApplyFilters();
+            }
+        }
+
+        private void PriceCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            bool? isPaid = PriceCheckBox.IsChecked;
+
+            if (isPaid == true)
+            {
+                ApplyFilters();
+                PriceCheckBox.Content = "Wel Betaald";
+
+            }
+            else if (isPaid == false)
+            {
+                ApplyFilters();
+                PriceCheckBox.Content = "Geen Voorkeur";
+
+            }
+            else if (isPaid == null)
+            {
+                ApplyFilters();
+                PriceCheckBox.Content = "Niet Betaald";
+
+            }
+        }
+
+
 
         private void RemoveFilters_Clickk(object sender, RoutedEventArgs e)
         {
             RemoveFilters();
         }
+
         private void RemoveFilters()
         {
             // Clear filter criteria
             ArrivalDatePickerr.SelectedDate = null;
             DepartureDatePickerr.SelectedDate = null;
-            PlaceNumerBox.Text = string.Empty;
+            PlaceNumberBox.Text = string.Empty;
             GuestNameBox.Text = string.Empty;
             ReservationIdBox.Text = string.Empty;
-            GuestNameBox.Background = Brushes.White;
-            ArrivalDatePickerr.Background = Brushes.White;
-            DepartureDatePickerr.Background = Brushes.White;
-            PlaceNumerBox.Background = Brushes.White;
-            ReservationIdBox.Background = Brushes.White;
+            StaticUIMethods.ResetTextboxBorder(GuestNameBox);
+            StaticUIMethods.ResetTextboxBorder(PlaceNumberBox);
+            StaticUIMethods.ResetTextboxBorder(ReservationIdBox);
+            StaticUIMethods.ResetDatePickerBorder(ArrivalDatePickerr);
+            StaticUIMethods.ResetDatePickerBorder(DepartureDatePickerr);
             _appliedFilters = false;
 
 
@@ -277,6 +293,7 @@ namespace CampingUI
         {
             if (ReservationsListView.SelectedItems.Count > 0)
             {
+                CollapseTextBoxForEditReservation();
                 Reservation reservation = (Reservation)ReservationsListView.SelectedItems[0];
                 SetReservationLabels(reservation);
                 OpenReservationOverview();
@@ -286,6 +303,53 @@ namespace CampingUI
                 ReservationOverviewGrid.Visibility = Visibility.Collapsed;
             }
         }
+
+      
+
+        private void AppearTextBoxForEditReservation()
+        {
+            ArrivalDateBox.Visibility = Visibility.Visible;
+            DepartureDateBox.Visibility = Visibility.Visible;
+            IsPaidBox.Visibility = Visibility.Visible;
+            AmountOfPeopleBox.Visibility = Visibility.Visible;
+            PlaceDropDown.Visibility = Visibility.Visible;
+            CancelEditButton.Visibility = Visibility.Visible;
+            EditReservationButton.Visibility = Visibility.Collapsed;
+            EditReservationButtonConfirm.Visibility = Visibility.Visible;
+              DeleteReservationButton.Visibility = Visibility.Collapsed;
+
+        }
+        private void CollapseTextBoxForEditReservation()
+        {
+
+            DepartureDateBox.BlackoutDates.Clear();
+            ArrivalDateBox.BlackoutDates.Clear();
+            ArrivalDateBox.BorderBrush = Brushes.White;
+            DepartureDateBox.BorderBrush = Brushes.White;
+            AmountOfPeopleBox.BorderBrush = Brushes.White;
+
+            DeleteReservationButton.Visibility = Visibility.Visible;
+            ArrivalDateBox.Visibility = Visibility.Collapsed;
+            DepartureDateBox.Visibility = Visibility.Collapsed;
+            IsPaidBox.Visibility = Visibility.Collapsed;
+            AmountOfPeopleBox.Visibility = Visibility.Collapsed;
+            PlaceDropDown.Visibility = Visibility.Collapsed;
+            CancelEditButton.Visibility = Visibility.Collapsed;
+            EditReservationButton.Visibility = Visibility.Visible;
+            EditReservationButtonConfirm.Visibility = Visibility.Collapsed;
+
+        }
+
+        private void TextEditReservationButtonEditMode()
+        {
+            EditReservationButton.Content = "Reservering Opslaan";
+        }
+        private void TextEditReservationButtonViewingMode()
+        {
+            EditReservationButton.Content = "Reservering Aanpassen";
+        }
+
+      
         private void SetReservationLabels(Reservation reservation)
         {
             nrLabel.Content = "Reservering: " + reservation.ReservationID.ToString();
@@ -300,68 +364,115 @@ namespace CampingUI
             else Paid = "Nee";
             IsPaidLabel.Content = $"Is betaald: {Paid}";
             PriceLabel.Content = $"Prijs: {String.Format("{0:0.00}", reservation.Price)}€";
+            TextEditReservationButtonViewingMode();
         }
+        private void SetEditReservationLabels(Reservation reservation)
+        {
+            Guest guest = _camping.CampingRepository.CampingReservationRepository.GetGuestFromGuestID(reservation.GuestID);
 
+            ArrivalDateLabel.Content = $"Aankomstdatum: ";
+            ArrivalDateBox.SelectedDate = reservation.ArrivalDate;
+            DepartureDateLabel.Content = $"Vertrekdatum: ";
+            DepartureDateBox.SelectedDate = reservation.DepartureDate;
+            if (CheckIfReservationIsInPast()) SetDatePickers();
+            PlaceIDLabel.Content = $"Plaatsnummer: ";
+            PlaceDropDown.Text = $"{reservation.PlaceID}";
+            AmountOfPeopleLabel.Content = $"Aantal personen: ";
+            AmountOfPeopleBox.Text = $"{reservation.AmountOfPeople}";
+            IsPaidLabel.Content = $"Is betaald: ";
+            string Paid;
+
+            IsPaidBox.IsChecked = reservation.IsPaid;
+            SetDropDown();
+
+
+            TextEditReservationButtonEditMode();
+
+        }
         private void EditReservation_Click(object sender, RoutedEventArgs e)
         {
             OpenReservationEdit();
             _reservation = (Reservation)ReservationsListView.SelectedItems[0];
-            ReservationIDLabelEdit.Content = $"Reservering {_reservation.ReservationID}";
-            SetEditFields();
         }
 
-        private void EditReservationConfirmButton_Click(object sender, RoutedEventArgs e)
+        private void EditReservationButton_Click(object sender, RoutedEventArgs e)
         {
-            if (CheckData())
+            if (IsValidInput() && IsValidInputPlace())
             {
-                setReservationData();
-                _camping.CampingRepository.CampingReservationRepository.UpdateReservation(_reservation);
-                ReservationEditGrid.Visibility = Visibility.Collapsed;
-                ReservationOverviewGrid.Visibility = Visibility.Visible;
-                LoadReservationList();
-                ReservationsListView.SelectedItem = ReservationsListView.Items.IndexOf(_reservation);
-                _reservation = (Reservation)ReservationsListView.SelectedItem;
-                SetReservationLabels(_reservation);
+                PlaceIDLabel.Content = string.IsNullOrEmpty(PlaceDropDown.Text) ? "Plaatsnummer: Er moet een plaats geselecteerd worden" : "Plaatsnummer:";
+
+                if (ArrivalDateBox.SelectedDate <= DepartureDateBox.SelectedDate)
+                {
+                    ArrivalDateBox.BorderBrush = Brushes.White;
+                    DepartureDateBox.BorderBrush = Brushes.White;
+
+                    setReservationData();
+                    _camping.CampingRepository.CampingReservationRepository.UpdateReservation(_reservation);
+
+                    ReservationOverviewGrid.Visibility = Visibility.Visible;
+                    LoadReservationList();
+                    ReservationsListView.SelectedItem = ReservationsListView.Items.IndexOf(_reservation);
+
+                    _reservation = (Reservation)ReservationsListView.SelectedItem;
+                    SetReservationLabels(_reservation);
+                    Reservation reservation = (Reservation)ReservationsListView.SelectedItems[0];
+                    SetReservationLabels(reservation);
+                    CollapseTextBoxForEditReservation();
+                }
+                else
+                {
+                    ArrivalDateBox.BorderBrush = Brushes.Red;
+                    DepartureDateBox.BorderBrush = Brushes.Red;
+                }
             }
+        }
+
+        private bool IsValidInput()
+        {
+            if (int.TryParse(AmountOfPeopleBox.Text, out var amountOfPeople) && amountOfPeople > 0)
+            {
+                AmountOfPeopleBox.BorderBrush = Brushes.White;
+                return true;
+            }
+
+            AmountOfPeopleBox.BorderBrush = Brushes.Red;
+            return false;
+        }
+
+        private bool IsValidInputPlace()
+        {
+            if (PlaceDropDown.Items.Count > 0)
+            {
+                PlaceDropDown.BorderBrush = Brushes.White;
+                return true;
+            }
+            PlaceDropDown.BorderBrush = Brushes.Red;
+
+            return false;
 
         }
         private void CancelReservationButton_Click(object sender, RoutedEventArgs e)
         {
-            ReservationEditGrid.Visibility = Visibility.Collapsed;
-            ReservationOverviewGrid.Visibility = Visibility.Visible;
+            CollapseTextBoxForEditReservation();
+            Reservation reservation = (Reservation)ReservationsListView.SelectedItems[0];
+            SetReservationLabels(reservation);
         }
         private void OpenReservationOverview()
         {
             ReservationOverviewGrid.Visibility = Visibility.Visible;
-            ReservationEditGrid.Visibility = Visibility.Collapsed;
         }
         private void OpenReservationEdit()
         {
-            ReservationOverviewGrid.Visibility = Visibility.Collapsed;
-            ReservationEditGrid.Visibility = Visibility.Visible;
-        }
-        private void SetEditFields()
-        {
-            ArrivalDatePicker.SelectedDate = _reservation.ArrivalDate;
-            DepartureDatePicker.SelectedDate = _reservation.DepartureDate;
-            if(CheckIfReservationIsInPast()) SetDatePickers();
-            AmountOfPeopleTextBox.Text = _reservation.AmountOfPeople.ToString();
-            IsPaidCheckBox.IsChecked = _reservation.IsPaid;
-            SetDropDown();
-            PriceEditLabel.Content = $"Prijs: {String.Format("{0:0.00}", _reservation.Price)}€";
-        }
-        private bool CheckIfReservationIsInPast()
-        {
-            bool enabled = true;
-            if (ArrivalDatePicker.SelectedDate < DateTime.Now.Date && DepartureDatePicker.SelectedDate < DateTime.Now.Date) {
-                enabled = false;
+            AppearTextBoxForEditReservation();
+            if (ReservationsListView.SelectedItems.Count > 0)
+            {
+                Reservation reservation = (Reservation)ReservationsListView.SelectedItems[0];
+                SetEditReservationLabels(reservation);
             }
-            ArrivalDatePicker.IsEnabled = enabled;
-            DepartureDatePicker.IsEnabled = enabled;
-            AmountOfPeopleTextBox.IsEnabled = enabled;
-            PlaceDropDown.IsEnabled = enabled;
-            return enabled;
         }
+
+ 
+       
         private void SetDatePickers()
         {
             ShowAvailableDatesArrival();
@@ -369,33 +480,81 @@ namespace CampingUI
         }
         private void SetDropDown()
         {
+            Reservation reservation = (Reservation)ReservationsListView.SelectedItems[0];
             PlaceDropDown.Items.Clear();
             List<Place> list = _camping.CampingRepository.CampingPlaceRepository.GetPlaces();
             list = list.Where(r => CheckDateOfPlace(r)).OrderBy(r => r.PlaceID).ToList();
-            Place currentPlace = _camping.CampingRepository.CampingPlaceRepository.GetPlaceFromPlaceID(_reservation.PlaceID);
-            int.TryParse(AmountOfPeopleTextBox.Text, out int AmountOfPeople);
-            foreach (Place place in list)
-            {
-                if(place.Dogs == currentPlace.Dogs && place.Power == currentPlace.Power && AmountOfPeople <= place.AmountOfPeople)
+            
+                Place currentPlace = _camping.CampingRepository.CampingPlaceRepository.GetPlaceFromPlaceID(reservation.PlaceID);
+                int.TryParse(AmountOfPeopleBox.Text, out int AmountOfPeople);
+                foreach (Place place in list)
                 {
-                    PlaceDropDown.Items.Add(place);
+                    if (place.Dogs == currentPlace.Dogs && place.Power == currentPlace.Power && AmountOfPeople <= place.AmountOfPeople)
+                    {
+                        PlaceDropDown.Items.Add(place);
+                    }
                 }
-            }
-            int index = PlaceDropDown.Items.IndexOf(currentPlace);
-            if (index >= 0) PlaceDropDown.SelectedItem = PlaceDropDown.Items[index];
-            if (!ArrivalDatePicker.IsEnabled) PlaceDropDown.IsEnabled = false;
-            else PlaceDropDown.IsEnabled = true;
+                int index = PlaceDropDown.Items.IndexOf(currentPlace);
+                if (index >= 0) PlaceDropDown.SelectedItem = PlaceDropDown.Items[index];
+                if (!ArrivalDateBox.IsEnabled) PlaceDropDown.IsEnabled = false;
+                else PlaceDropDown.IsEnabled = true;
+            
         }
+        private bool CheckData()
+        {
+            bool result = true;
+            if (!CheckAmountOfPeople()) result = false;
+            if (!CheckPlace()) result = false;
+            return result;
+        }
+        private bool CheckPlace()
+        {
+            if (PlaceDropDown.SelectedItem != null) return true;
+            PlaceDropDown.BorderBrush = Brushes.Red;
+            PlaceDropDown.BorderThickness = new Thickness(2);
+            return false;
+        }
+        private bool CheckAmountOfPeople()
+        {
+            if (int.TryParse(AmountOfPeopleBox.Text, out int numb) && numb > 0)
+            {
+                AmountOfPeopleBox.BorderBrush = null;
+                return true;
+            }
+            else
+            {
+                AmountOfPeopleBox.BorderBrush = Brushes.Red;
+                AmountOfPeopleBox.BorderThickness = new Thickness(2);
+                return false;
+            }
+        }
+        private bool CheckIfReservationIsInPast()
+        {
+            bool enabled = true;
+            if (ArrivalDateBox.SelectedDate < DateTime.Now.Date && DepartureDateBox.SelectedDate < DateTime.Now.Date)
+            {
+                enabled = false;
+            }
+            ArrivalDateBox.IsEnabled = enabled;
+            DepartureDateBox.IsEnabled = enabled;
+            AmountOfPeopleBox.IsEnabled = enabled;
+            PlaceDropDown.IsEnabled = enabled;
+            return enabled;
+        }
+
         private bool CheckDateOfPlace(Place place)
         {
+            string nrLabelText = nrLabel.Content.ToString();
+            nrLabelText = nrLabelText.Replace("Reservering: ", "");
+
             List<Reservation> list = _camping.CampingRepository.CampingReservationRepository.GetReservations();
             list = list.Where(r => r.PlaceID == place.PlaceID).ToList();
             bool result = true;
             foreach (Reservation reservation in list)
             {
-                if (((reservation.ArrivalDate >= ArrivalDatePicker.SelectedDate && reservation.ArrivalDate <= DepartureDatePicker.SelectedDate) ||
-                    (reservation.DepartureDate <= DepartureDatePicker.SelectedDate && reservation.DepartureDate >= ArrivalDatePicker.SelectedDate) ||
-                    (reservation.ArrivalDate <= ArrivalDatePicker.SelectedDate && reservation.DepartureDate >= DepartureDatePicker.SelectedDate)) && reservation.ReservationID != _reservation.ReservationID)
+                if (((reservation.ArrivalDate >= ArrivalDateBox.SelectedDate && reservation.ArrivalDate <= DepartureDateBox.SelectedDate) ||
+                    (reservation.DepartureDate <= DepartureDateBox.SelectedDate && reservation.DepartureDate >= ArrivalDateBox.SelectedDate) ||
+                    (reservation.ArrivalDate <=  ArrivalDateBox.SelectedDate && reservation.DepartureDate >= DepartureDateBox.SelectedDate)) && reservation.ReservationID.ToString() != nrLabelText)
                 {
                     result = false;
                     break;
@@ -405,73 +564,57 @@ namespace CampingUI
         }
         private void ShowAvailableDatesArrival()
         {
-            if (ArrivalDatePicker.SelectedDate >= DateTime.Today.Date)
+            if (ArrivalDateBox.SelectedDate >= DateTime.Today.Date)
             {
-                ArrivalDatePicker.IsEnabled = true;
-                ArrivalDatePicker.BlackoutDates.Clear();
-                ArrivalDatePicker.DisplayDateStart = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
-                ArrivalDatePicker.BlackoutDates.AddDatesInPast();
+                ArrivalDateBox.IsEnabled = true;
+                ArrivalDateBox.BlackoutDates.Clear();
+                ArrivalDateBox.DisplayDateStart = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+                ArrivalDateBox.BlackoutDates.AddDatesInPast();
             }
             else
             {
-                ArrivalDatePicker.BlackoutDates.Clear();
-                ArrivalDatePicker.DisplayDateStart = DateTime.MinValue;
-                ArrivalDatePicker.IsEnabled = false;
+                ArrivalDateBox.BlackoutDates.Clear();
+                ArrivalDateBox.DisplayDateStart = DateTime.MinValue;
+                ArrivalDateBox.IsEnabled = false;
             }
         }
 
         // Sets the possible DepartureDates in the DepartureDatePicker.
         private void ShowAvailableDatesDeparture()
         {
-            if(ArrivalDatePicker.SelectedDate >= DepartureDatePicker.SelectedDate) { DepartureDatePicker.SelectedDate = null; }
-            if (ArrivalDatePicker.SelectedDate != null)
+            if (ArrivalDateBox.SelectedDate != null)
             {
-                DepartureDatePicker.DisplayDateEnd = null;
-                DepartureDatePicker.BlackoutDates.Clear();
-                DateTime arrivalDate = (DateTime)ArrivalDatePicker.SelectedDate;
-                DepartureDatePicker.DisplayDateStart = new DateTime(arrivalDate.Year, arrivalDate.Month, 1);
-                if(arrivalDate < DateTime.Now.Date) DepartureDatePicker.BlackoutDates.Add(new CalendarDateRange(DepartureDatePicker.DisplayDateStart.Value, DateTime.Now.Date));
-                else DepartureDatePicker.BlackoutDates.Add(new CalendarDateRange(DepartureDatePicker.DisplayDateStart.Value, arrivalDate));
-            }
-        }
-        private bool CheckData()
-        {
-            bool result = true;
-            if(!CheckAmountOfPeople()) result = false;
-            if(!CheckPlace()) result = false;
-            if(DepartureDatePicker.SelectedDate == null) result = false;
-            return result;
-        }
-        private bool CheckPlace()
-        {
-            if(PlaceDropDown.SelectedItem != null) return true;
-            PlaceDropDown.BorderBrush = Brushes.Red;
-            PlaceDropDown.BorderThickness = new Thickness(2);
-            return false;
-        }
-        private bool CheckAmountOfPeople()
-        {
-            if(int.TryParse(AmountOfPeopleTextBox.Text, out int numb) && numb > 0)
-            {
-                AmountOfPeopleTextBox.BorderBrush = null;
-                return true;
-            }
-            else
-            {
-                AmountOfPeopleTextBox.BorderBrush = Brushes.Red;
-                AmountOfPeopleTextBox.BorderThickness = new Thickness(2);
-                return false;
+                DepartureDateBox.DisplayDateEnd = null;
+                DepartureDateBox.BlackoutDates.Clear();
+                DateTime arrivalDate = (DateTime)ArrivalDateBox.SelectedDate;
+                DepartureDateBox.DisplayDateStart = new DateTime(arrivalDate.Year, arrivalDate.Month, 1);
+
+                if (arrivalDate < DateTime.Now.Date)
+                {
+                    DepartureDateBox.BlackoutDates.Add(new CalendarDateRange(DepartureDateBox.DisplayDateStart.Value, DateTime.Now.Date));
+                }
+                else
+                {
+                    if (DepartureDateBox.DisplayDateStart != null && arrivalDate > DepartureDateBox.DisplayDateStart)
+                    {
+                     
+                    }
+                    else
+                    {
+                        DepartureDateBox.BlackoutDates.Add(new CalendarDateRange(DepartureDateBox.DisplayDateStart.Value, arrivalDate));
+                    }
+                }
             }
         }
         private void setReservationData()
         {
-            _reservation.ArrivalDate = (DateTime)ArrivalDatePicker.SelectedDate;
-            _reservation.DepartureDate = (DateTime)DepartureDatePicker.SelectedDate;
-            _reservation.AmountOfPeople = int.Parse(AmountOfPeopleTextBox.Text);
+            _reservation.ArrivalDate = (DateTime)ArrivalDateBox.SelectedDate;
+            _reservation.DepartureDate = (DateTime)DepartureDateBox.SelectedDate;
+            _reservation.AmountOfPeople = int.Parse(AmountOfPeopleBox.Text);
             Place place = (Place)PlaceDropDown.SelectedItem;
             _reservation.PlaceID = place.PlaceID;
             _reservation.Price = place.PricePerNightPerPerson * _reservation.AmountOfPeople * (_reservation.DepartureDate - _reservation.ArrivalDate).Days;
-            _reservation.IsPaid = IsPaidCheckBox.IsPressed;
+            _reservation.IsPaid = IsPaidBox.IsChecked.GetValueOrDefault();
         }
 
         private void DataChanged(object sender, SelectionChangedEventArgs e)
@@ -497,13 +640,15 @@ namespace CampingUI
         {
             if (CheckData()) {
                 Place place = (Place)PlaceDropDown.SelectedItem;
-                int peopleCount = int.Parse(AmountOfPeopleTextBox.Text);
-                double price = place.PricePerNightPerPerson * peopleCount * ((DateTime)DepartureDatePicker.SelectedDate - (DateTime)ArrivalDatePicker.SelectedDate).Days;
-                PriceEditLabel.Content = $"Prijs: {String.Format("{0:0.00}", price)}€";
+                int peopleCount = int.Parse(AmountOfPeopleBox.Text);
+                DateTime arrivalDate = (DateTime)ArrivalDateBox.SelectedDate;
+                DateTime departureDate = (DateTime)DepartureDateBox.SelectedDate;
+                double price = place.PricePerNightPerPerson * peopleCount * Math.Abs((departureDate - arrivalDate).Days);
+                PriceLabel.Content = $"Prijs: {String.Format("{0:0.00}", price)}€";
             }
             else
             {
-                PriceEditLabel.Content = $"Prijs: --€";
+                PriceLabel.Content = $"Prijs: --€";
             }
         }
 
