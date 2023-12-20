@@ -178,5 +178,12 @@ namespace CampingUI
                 ConfirmEditButton.IsEnabled = true;
             }
         }
+        private void EnterPressed(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                FilterOnGuestName_Click(sender, e);
+            }
+        }
     }
 }
