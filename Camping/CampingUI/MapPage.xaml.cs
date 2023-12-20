@@ -145,7 +145,7 @@ namespace CampingUI
 
             Canvas canvasPlace = new Canvas
             {
-                Background = brush,
+                Background = brush
             };
 
             border.Child = canvasPlace;
@@ -723,7 +723,7 @@ namespace CampingUI
             if(SelectedArea != null)
             {
                 AreaName.Content = SelectedArea.Name;
-                AreaColor.Text = StaticUIMethods.GetColorNameFromInt(SelectedArea.Color);
+                AreaColor.Content = StaticUIMethods.GetColorNameFromInt(SelectedArea.Color);
                 AreaPower.IsChecked = SelectedArea.Power;
                 AreaDogs.IsChecked = SelectedArea.Dogs;
                 AreaPlaceSurfaceArea.Content = SelectedArea.SurfaceArea;

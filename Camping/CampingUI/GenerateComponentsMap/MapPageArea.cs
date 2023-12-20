@@ -25,7 +25,10 @@ namespace CampingUI.NewFolder
             };
             canvasArea.Children.Add(new TextBlock
             {
-                Text = area.Name
+                Text = area.Name,
+                FontSize = 16,
+                FontWeight = FontWeights.Bold
+
             });
             Border border = new Border
             {

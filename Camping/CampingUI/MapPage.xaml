@@ -402,7 +402,7 @@
                                 </Grid.ColumnDefinitions>
 
                                 <Label Name="AreaColorLabel" Content="Kleur: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                <TextBlock Name="AreaColor" VerticalAlignment="Center" Foreground="White" FontSize="16" Width="150" HorizontalAlignment="Right" Grid.Column="1"/>
+                                <Label Name="AreaColor" VerticalAlignment="Center" Foreground="White" FontSize="16" Width="150" HorizontalAlignment="Right" Grid.Column="1"/>
 
                             </Grid>
                         <Grid Grid.Row="2" Name="AreaRow2">
@@ -412,7 +412,7 @@
                             </Grid.ColumnDefinitions>
 
                             <Label Name="AreaPowerLabel" Content="Heeft stroom: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                            <CheckBox Name="AreaPower" VerticalAlignment="Center" IsEnabled="False" HorizontalAlignment="Right" Grid.Column="1"/>
+                            <CheckBox Name="AreaPower" VerticalAlignment="Center" IsEnabled="False" HorizontalAlignment="Center" Grid.Column="1"/>
 
                         </Grid>
                                 
@@ -423,7 +423,7 @@
                             </Grid.ColumnDefinitions>
 
                             <Label Name="AreaDogsLabel" Content="Mag honden: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                            <CheckBox Name="AreaDogs" VerticalAlignment="Center" IsEnabled="False" HorizontalAlignment="Right" Grid.Column="1"/>
+                            <CheckBox Name="AreaDogs" VerticalAlignment="Center" IsEnabled="False" HorizontalAlignment="Center" Grid.Column="1"/>
                         </Grid>
                                 
                         <Grid Grid.Row="4" Name="AreaRow4">
