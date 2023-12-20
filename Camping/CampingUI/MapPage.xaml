@@ -432,7 +432,7 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
-                            <Label Name="AreaPlaceSurfaceAreaLabel" Content="Oppervlakte van plaats: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <Label Name="AreaPlaceSurfaceAreaLabel" Content="Oppervlakte plaats: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                             <Label Name="AreaPlaceSurfaceArea" VerticalAlignment="Center" Foreground="White" FontSize="16" Width="150" HorizontalAlignment="Right" Grid.Column="1"/>
 
                         </Grid>                        
@@ -442,7 +442,7 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
-                            <Label Name="AreaPriceLabel" Content="Prijs van plaats: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <Label Name="AreaPriceLabel" Content="Prijs plaats: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                             <Label Name="AreaPrice" VerticalAlignment="Center" Foreground="White" FontSize="16" Width="150" HorizontalAlignment="Right" Grid.Column="1"/>
 
                         </Grid>                        
