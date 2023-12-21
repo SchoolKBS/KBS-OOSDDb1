@@ -21,6 +21,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Transform = CampingUI.NewFolder.Transform;
 
 namespace CampingUI
 {
@@ -45,6 +46,8 @@ namespace CampingUI
         private double _pricePerNightPerPersonEdit;
         private int _amountOfPeopleEdit;
         private PlacesOverviewPageFilter _placesOverviewPageFilter;
+        private double desiredWidth = 2500;
+        private double desiredHeight = 937.5;
 
         public PlacesOverviewPage(Camping camping, CampingRepository campingRepository)
         {
@@ -59,8 +62,9 @@ namespace CampingUI
             _placesSortedAndOrFiltered = _camping.Places;
             PlacesListView.ItemsSource = _placesSortedAndOrFiltered; 
             this._headerTag = "PlaceID";
+            new Transform(field2, desiredWidth, desiredHeight);
             MainPage MapPage = new MainPage(camping);
-            MapPage.GenerateMap();
+            MapPage.GenerateMap(field2);
         }
 
         private void TextBox_Changed(object sender, TextChangedEventArgs e)

@@ -317,7 +317,21 @@
                         <!--<Button Grid.Row="2" Content="Nieuwe plaats toevoegen" Click="AddPlaceButton_Click" Height="Auto"/>-->
                     </Grid>
                 </Border>
-                <Border Grid.Column="1" Margin="25,25,25,25" Padding="15" Background="#334A6E" CornerRadius="25">
+            <Border Grid.Column="1" Margin="25,25,25,25" Padding="15" Background="#334A6E" CornerRadius="25" Visibility="Visible">
+                <Grid Grid.Column="1" Name="PlaceOverviewGridMain" Visibility="Visible" Grid.Row="1">
+
+                    <Grid >
+                    <Canvas Background="white" Width="500" Height="375" x:Name="field" >
+                        <Canvas.LayoutTransform>
+                            <ScaleTransform x:Name="plattegrondOverviewMain" />
+                        </Canvas.LayoutTransform>
+                    </Canvas>
+                    </Grid>
+                </Grid>
+            </Border>
+            <Border Grid.Column="1" Margin="25,25,25,25" Padding="15" Background="#334A6E" CornerRadius="25">
+                
+
                     <!--Grid for the overview of the selected place-->
                     <Grid Grid.Column="2" Name="PlaceOverviewGrid" Visibility="Collapsed" Grid.Row="2">
                         <Grid.RowDefinitions>
@@ -331,7 +345,7 @@
 
 
                     <Grid Grid.Row="0" Grid.Column="1">
-                        <Canvas Background="white" Width="500" Height="375" x:Name="field" >
+                        <Canvas  Margin="0,0,250,50" Background="white" Width="500" Height="375" x:Name="field2" >
                             <Canvas.LayoutTransform>
                                 <ScaleTransform x:Name="plattegrond" />
                             </Canvas.LayoutTransform>
@@ -367,7 +381,7 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1*"/>
                         </Grid.ColumnDefinitions>
-                        <Viewbox HorizontalAlignment="Left" Margin="0,0,0,0" >
+                        <Viewbox HorizontalAlignment="Left"  Margin="0,0,0,0" >
                             <Calendar x:Name="ReservationCalender" Height="auto" Width="auto" Visibility="Visible"/>
                         </Viewbox>
                          </Grid>
@@ -375,11 +389,13 @@
                         <Grid Grid.Row="2" Grid.Column="2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="1*"/>
-                            </Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
 
-                        <Button Style="{DynamicResource ButtonStyle1Apply}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="White" FontWeight="Bold" Grid.Column="5" Name="NewReservationButton" Content="Nieuwe resevering maken" Margin="20" Height="50" Width="200" Click="NewReservation_Click"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button Style="{DynamicResource ButtonStyle1Apply}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Foreground="White" FontWeight="Bold" Grid.Column="0" Name="NewReservationButton" Content="Nieuwe resevering maken" Margin="20" Height="50" Width="200" Click="NewReservation_Click"/>
                             <!--<Button Style="{DynamicResource ButtonStyle1Edit}" Foreground="White" FontWeight="Bold" Grid.Column="1" Name="EditPlaceButton" Content="Plaats aanpassen" Margin="20" Height="50" Width="200" Click="EditPlaceButton_Click"/>-->
-                            <Button Style="{DynamicResource ButtonStyle1Cancel}" Foreground="White" FontWeight="Bold" Grid.Column="2" Name="DeletePlaceButton" Content="Verwijder plaats" Margin="20" Height="50" Width="200" Click="DeletePlaceButton_Click"/>
+                        <Button Style="{DynamicResource ButtonStyle1Cancel}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="White" FontWeight="Bold" Grid.Column="5" Name="DeletePlaceButton" Content="Verwijder plaats" Margin="20" Height="50" Width="200" Click="DeletePlaceButton_Click"/>
                         </Grid>
                     </Grid>
                 </Border>

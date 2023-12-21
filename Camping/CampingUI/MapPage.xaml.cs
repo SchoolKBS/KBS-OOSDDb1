@@ -39,6 +39,8 @@ namespace CampingUI
         private bool _AddStreet = false;
         private List<Border> AreaBorderList;
         private List<Border> PlaceBorderList;
+        private double desiredWidth = 1000;
+        private double desiredHeight = 750;
         public Area SelectedArea { get; private set; }
 
         private bool _editPlaceBool, _wrongInput;
@@ -48,8 +50,8 @@ namespace CampingUI
             AreaBorderList = new List<Border>();
             PlaceBorderList = new List<Border>();
             _camping = camping;
-            new Transform(field); // Transform scale of the map.
-            GenerateMap();
+            new Transform(field, desiredWidth, desiredHeight); // Transform scale of the map.
+            GenerateMap(field);
 
             // For the keyboard handler
             Loaded += (sender, e) =>
@@ -61,16 +63,16 @@ namespace CampingUI
             KeyDown += Handle_KeyDown;      // Handle keyboard buttons.
         }
 
-        public void GenerateMap()
+        public void GenerateMap(Canvas canvas)
         {
             _areas = _camping.CampingRepository.CampingMapRepository.GetAreas().ToList();
             _streets = _camping.CampingRepository.CampingMapRepository.GetStreets().ToList();
             _places = _camping.CampingRepository.CampingPlaceRepository.GetPlaces().ToList();
-            GenerateComponentsMap(_areas);
-            GenerateComponentsMap(_streets);
-            GenerateComponentsMap(_places);
+            GenerateComponentsMap(_areas, canvas);
+            GenerateComponentsMap(_streets, canvas);
+            GenerateComponentsMap(_places, canvas);
         }
-        public void GenerateComponentsMap<T>(List<T> list)
+        public void GenerateComponentsMap<T>(List<T> list, Canvas canvas)
         {
             if(list != null && list.Count() > 0)
             {
@@ -80,15 +82,15 @@ namespace CampingUI
                     if(comp is Area && !comp.Equals(SelectedArea))
                     {
                         AreaBorderList.Add(CreateBorder((Area)(object)comp));
-                        field.Children.Add(AreaBorderList.Last());
+                        canvas.Children.Add(AreaBorderList.Last());
                     }
                     if (comp is Street)
                     {
-                        field.Children.Add(MapPageStreet.GenerateStreet((Street)(object)comp));
+                        canvas.Children.Add(MapPageStreet.GenerateStreet((Street)(object)comp));
                     }
                     if (comp is Place)
                     {
-                        PlaceBorderList.Add(GeneratePlace((Place)(object)comp, Brushes.Black, true));
+                        PlaceBorderList.Add(GeneratePlace((Place)(object)comp, Brushes.Black, true, canvas));
                         //GeneratePlace((Place)(object)comp, Brushes.Black, true);
                     }
                 }
@@ -130,7 +132,7 @@ namespace CampingUI
             };
             return border;
         }
-        public Border GeneratePlace(Place place, SolidColorBrush brush, bool AddPlaceBool)
+        public Border GeneratePlace(Place place, SolidColorBrush brush, bool AddPlaceBool, Canvas canvas)
         {
             var coordinates = place.GetPlacePositions();
 
@@ -154,7 +156,7 @@ namespace CampingUI
             Canvas.SetTop(border, coordinates[1]);
             Canvas.SetLeft(border, coordinates[0]);
 
-            field.Children.Add(border);
+            canvas.Children.Add(border);
 
             if (AddPlaceBool)
             {
@@ -296,12 +298,12 @@ namespace CampingUI
                 {*/
                     field.Children.Clear();
                     ClearSelection();
-                    GenerateMap();
+                    GenerateMap(field);
                     _camping.Places = _camping.CampingRepository.CampingPlaceRepository.GetPlaces();
                     int i = _camping.Places.Last().PlaceID + 1;
 
                     Place place1 = new Place(0, false, 1, 1, false, 0, 0, 0, _xPressed, _yPressed);
-                    GeneratePlace(place1, Brushes.Gray, false);
+                    GeneratePlace(place1, Brushes.Gray, false, field);
                     EnableExtendComboBoxes(false);
                     HandlePlaceClick(place1, true);
                 //}
@@ -378,7 +380,7 @@ namespace CampingUI
             }
             ClearSelection();
             field.Children.Clear();
-            GenerateMap();
+            GenerateMap(field);
         }
 
         private void GetAddValues()

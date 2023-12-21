@@ -38,6 +38,7 @@ namespace CampingUI
         private Camping _camping { get; set; }
         private Reservation _reservation { get; set; }
         private bool _appliedFilters {  get; set; }
+        public Canvas MapOverview {  get; set; }
 
         public ReservationsOverviewWindow(Camping camping, CampingRepository campingRepository)
         {

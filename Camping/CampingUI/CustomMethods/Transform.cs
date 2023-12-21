@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Converters;
 
 namespace CampingUI.NewFolder
 {
     public class Transform
     {
 
-        public Transform(Canvas field) {
+        public Transform(Canvas field, double desiredWidth, double desiredHeight) {
             double screenWidth = SystemParameters.PrimaryScreenWidth;
             double screenHeight = SystemParameters.PrimaryScreenHeight;
 
-            double desiredWidth = 1000;
-            double desiredHeight = 750;
+      
 
             double aspectRatio = desiredWidth / desiredHeight;
             double screenAspectRatio = screenWidth / screenHeight;
