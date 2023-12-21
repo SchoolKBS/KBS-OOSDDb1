@@ -117,13 +117,13 @@ namespace CampingUI
         }
         private void SetStreetEvents(Line line, Street comp )
         {
-            line.MouseLeftButtonDown += (sender, e) => HandleStreetClick((Street)(object)comp);
+            line.MouseLeftButtonDown += (sender, e) => HandleStreetClick(comp);
             line.MouseLeftButtonDown += (sender, e) => line.Stroke = Brushes.DarkCyan;
             line.MouseEnter += (sender, e) => line.Stroke = Brushes.DarkCyan;
 
             line.MouseLeave += (sender, e) =>
             {
-                if (SelectedStreet == null) line.Stroke = Brushes.Black;
+                if (SelectedStreet == null || SelectedStreet != null && line.Stroke != Brushes.DarkCyan) line.Stroke = Brushes.Black;
             };
         }
        
