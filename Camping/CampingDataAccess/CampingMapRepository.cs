@@ -92,6 +92,10 @@ namespace CampingDataAccess
         }
         public Street GetStreetByStreetID(Place place)
         {
+            return GetStreetByStreetID(place.StreetID);
+        }
+        public Street GetStreetByStreetID(int streetID)
+        {
             string sql = "SELECT * FROM Street WHERE StreetID = @StreetID";
             Street street = null;
             using (var connection = new SqliteConnection(ConnectionString))
@@ -99,7 +103,7 @@ namespace CampingDataAccess
                 connection.Open();
                 using (var cmd = new SqliteCommand(sql, connection))
                 {
-                    cmd.Parameters.AddWithValue("@StreetID", place.StreetID);
+                    cmd.Parameters.AddWithValue("@StreetID", streetID);
                     using (var reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
@@ -124,6 +128,7 @@ namespace CampingDataAccess
                 return street;
             }
         }
+
         public Street GetStreetByStreetName(string streetName)
         {
             string sql = "SELECT * FROM Street WHERE Name = @Name";
