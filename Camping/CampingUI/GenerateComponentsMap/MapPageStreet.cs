@@ -134,28 +134,6 @@ namespace CampingUI.GenerateComponentsMap
             textBlock.Text = street.Name;
             line.Stroke = color;
 
-            line.MouseEnter += (sender, e) =>
-            {
-                line.Stroke = Brushes.DarkCyan;
-            };
-
-            line.MouseLeave += (sender, e) =>
-            {
-               if(_streetLine == null || line != _streetLine) {
-                    line.Stroke = Brushes.Black;
-                }
-            };
-
-            line.MouseDown += (sender, e) =>
-            {
-                if(_streetLine != null)
-                {
-                    _streetLine.Stroke = Brushes.Black;
-                }
-                line.Stroke = Brushes.DarkCyan;
-                _streetLine = line;
-            };
-
             SetLine(line);
             SetTextBlock(textBlock);
         }

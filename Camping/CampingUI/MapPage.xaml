@@ -1,4 +1,4 @@
-﻿<Page x:Class="CampingUI.MainPage"
+﻿<Page x:Class="CampingUI.MapPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -567,7 +567,7 @@
                     Background="LightGray"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center">
-                    <Canvas ClipToBounds="true" Background="white" Width="1000" Height="750" x:Name="field" MouseDown="field_MouseDown">
+                    <Canvas ClipToBounds="true" Background="black" Width="1000" Height="750" x:Name="field" MouseDown="field_MouseDown">
                         <Canvas.LayoutTransform>
                             <ScaleTransform x:Name="plattegrond" />
                         </Canvas.LayoutTransform>
