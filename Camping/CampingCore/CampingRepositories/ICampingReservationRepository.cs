@@ -14,5 +14,6 @@ namespace CampingCore.CampingRepositories
         public void AddReservation(Reservation reservation);
         public Guest GetGuestFromGuestID(int id);
         public void UpdateReservation(Reservation reservation);
+
     }
 }

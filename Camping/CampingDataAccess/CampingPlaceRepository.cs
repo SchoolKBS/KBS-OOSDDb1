@@ -70,6 +70,24 @@ namespace CampingDataAccess
                 connection.Close();
             }
         }
+
+        public void RemovePlaceExtends(Place place)
+        {
+            string sql = "DELETE FROM Place_Extends WHERE PlaceID = @PlaceID";
+
+            using (var connection = new SqliteConnection(ConnectionString))
+            {
+                connection.Open();
+                using (var cmd = new SqliteCommand(sql, connection))
+                {
+                    cmd.Prepare();
+                    cmd.Parameters.AddWithValue("@PlaceID", place.PlaceID);
+                    cmd.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+        }
+
         public void AddPlace(Place place)
         {
             string sql = "INSERT INTO Place (PlaceID, StreetID, AreaID, Power, SurfaceArea, PricePerNightPerPerson, AmountOfPeople, Dogs, XCord, YCord) VALUES (@PlaceID, @StreetID, @AreaID, @Power, @SurfaceArea, @PricePerNightPerPerson, @AmountOfPeople, @Dogs, @XCord, @YCord);";
@@ -156,10 +174,9 @@ namespace CampingDataAccess
             }
 
         }
-        public void GetPlaceExtend()
+        public void UpdatePlaceDataExtending(int placeID, string setText)
         {
-            Place place = null;
-            string sql = "SELECT * FROM Place WHERE PlaceID = @PlaceID;";
+            string sql = "UPDATE Place SET " + setText + " WHERE PlaceID = @PlaceID;";
 
             using (var connection = new SqliteConnection(ConnectionString))
             {
@@ -167,52 +184,47 @@ namespace CampingDataAccess
                 using (var command = new SqliteCommand(sql, connection))
                 {
                     command.Prepare();
-                    //command.Parameters.AddWithValue("@PlaceID", id);
-                    using (var reader = command.ExecuteReader())
-                    {
-
-                        while (reader.Read())
-                        {
-                            ArrayList Properties = new ArrayList();
-                            for (int i = 0; i < reader.FieldCount; i++)
-                            {
-                                string columnName = reader.GetName(i);
-                                Type columnType = reader.GetFieldType(i);
-                                object colmnValue = reader.GetValue(i);
-
-                                PropertyInfo property = typeof(Place).GetProperty(columnName);
-                                if (property != null)
-                                {
-                                    Properties.Add(Convert.ChangeType(colmnValue, property.PropertyType));
-                                }
-                            }
-                            place = new Place(Properties);
-                        }
-                    }
-                }
-            }
-            //return place;
-        }
-        public void UpdatePlaceDataExtending(bool power, bool dogs, int surfaceArea, double pricePerNightPerPerson, int amountOfPeople, int placeID)
-        {
-            string sql = "UPDATE Place SET Power = @Power, Dogs = @Dogs, SurfaceArea = @SurfaceArea, PricePerNightPerPerson = @PricePerNightPerPerson, AmountOfPeople = @AmountOfPeople WHERE PlaceID = @PlaceID;";
-
-            using (var connection = new SqliteConnection(ConnectionString))
-            {
-                connection.Open();
-                using (var command = new SqliteCommand(sql, connection))
-                {
-                    command.Prepare();
-                    command.Parameters.AddWithValue("@Power", power);
-                    command.Parameters.AddWithValue("@Dogs", dogs);
-                    command.Parameters.AddWithValue("@SurfaceArea", surfaceArea);
-                    command.Parameters.AddWithValue("@PricePerNightPerPerson", pricePerNightPerPerson);
-                    command.Parameters.AddWithValue("@AmountOfPeople", amountOfPeople);
                     command.Parameters.AddWithValue("@PlaceID", placeID);
                     command.ExecuteNonQuery();
                 }
                 connection.Close();
             }
         }
+        public List<bool?> GetPlaceExtendingByPlaceID(int placeID)
+        {
+            List<bool?> properties = new List<bool?>();
+            string sql = "SELECT * FROM Place_Extends WHERE PlaceID = @PlaceID;";
+
+            using (var connection = new SqliteConnection(ConnectionString))
+            {
+                connection.Open();
+                using (var command = new SqliteCommand(sql, connection))
+                {
+                    command.Prepare();
+                    command.Parameters.AddWithValue("@PlaceID", placeID);
+                    using (var reader = command.ExecuteReader())
+                    {
+
+                        while (reader.Read())
+                        {
+                            for (int i = 0; i < reader.FieldCount; i++)
+                            {
+                                if (reader.GetValue(i).Equals(DBNull.Value))
+                                {
+                                    properties.Add(null);
+                                }
+                                else
+                                {
+                                    properties.Add(reader.GetBoolean(i));
+                                }
+                                
+                            }
+                        }
+                    }
+                }
+            }
+            return properties;
+        }
     } 
+
 }

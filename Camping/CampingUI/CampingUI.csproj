@@ -21,6 +21,9 @@
 
   <ItemGroup>
     <None Remove="close.png" />
+    <None Remove="Images\add-area.png" />
+    <None Remove="Images\add-place.png" />
+    <None Remove="Images\add-street.png" />
     <None Remove="minimise.png" />
   </ItemGroup>
 
@@ -34,13 +37,22 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="close.png">
+    <Resource Include="Images\add-area.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="logo.png">
+    <Resource Include="Images\add-place.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="minimise.png">
+    <Resource Include="Images\add-street.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\close.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\logo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\minimise.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
