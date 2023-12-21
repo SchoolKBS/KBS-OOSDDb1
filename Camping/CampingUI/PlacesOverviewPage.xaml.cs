@@ -66,7 +66,7 @@ namespace CampingUI
             this._headerTag = "PlaceID";
             new Transform(field2, desiredWidthMini, desiredHeightMini, "plattegrond");
             new Transform(field, desiredWidthMain, desiredHeightMain, "plattegrondMain");
-            MainPage MapPage = new MainPage(camping);
+            MapPage MapPage = new MapPage(camping);
             MapPage.GenerateMap(field2);
             MapPage.GenerateMap(field);
 

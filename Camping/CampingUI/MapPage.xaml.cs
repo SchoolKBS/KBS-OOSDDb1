@@ -34,7 +34,7 @@ namespace CampingUI
         private List<Area> _areas;
         private List<Place> _places;
         private List<Street> _streets;
-        private int _placeSurfaceArea, _placePersons, _placePlaceID, _placeStreetID, _placeAreaID, SelectedPlace, _yPressed, _xPressed;
+        private int _placeSurfaceArea, _placePersons, _placePlaceID, _placeStreetID, _placeAreaID, _yPressed, _xPressed;
         private double _placePricePerNight;
         private Canvas previousSelectedCanvas;
         private string selectedMapButton = "View";
@@ -45,8 +45,6 @@ namespace CampingUI
         private double desiredWidth = 1000;
         private double desiredHeight = 750;
         public Area SelectedArea { get; private set; }
-
-        private int _placeSurfaceArea, _placePersons, _placePlaceID, _placeStreetID, _placeAreaID, _yPressed, _xPressed;
         private Canvas SelectedPlace;
         private int _streetSurfaceArea, _streetPersons;
         private double _placePricePerNightPerPerson, _streetPricePerNightPerPerson, _xCord1, _yCord1, _xCord2, _yCord2;
@@ -55,7 +53,6 @@ namespace CampingUI
         private bool _editPlaceBool, _wrongInput;
         private string _selectedMapButton = "View";
         private Point _streetPoint1 = new Point(-1, -1), _streetPoint2;
-        public Area SelectedArea { get; private set; }
         public Street SelectedStreet;
         public MapPage(Camping camping)
         {
@@ -104,7 +101,7 @@ namespace CampingUI
                         SetStreetEvents(line, (Street)(object)comp);
                     }                      
                     if (comp is Place)
-                        GeneratePlace((Place)(object)comp, Brushes.Black, true);
+                        GeneratePlace((Place)(object)comp, Brushes.Black, true, canvas);
                 }
             }
         }
@@ -218,7 +215,7 @@ namespace CampingUI
                 if (_selectedMapButton.Contains("View"))
                 {
                     if (_previousSelectedCanvas != null) _previousSelectedCanvas.Background = Brushes.Black;
-                    GenerateMap();
+                    GenerateMap(canvas);
                     canvasPlace.Background = Brushes.DarkCyan;
                     _previousSelectedCanvas = canvasPlace;
                     SelectedStreet = null;
@@ -258,7 +255,7 @@ namespace CampingUI
             {
                 HighLightPlaces(SelectedStreet, Brushes.Black);
             }
-            GenerateMap();
+            GenerateMap(field);
             SelectedPlace = null;
             SelectedArea = null;
             SelectedStreet = street;
@@ -406,7 +403,7 @@ namespace CampingUI
             }
             else if (_selectedMapButton.Contains("Street"))
             {
-                GenerateMap();
+                GenerateMap(field);
                 Point point = Mouse.GetPosition(field);
                 double xCord = Math.Round(point.X);
                 double yCord = Math.Round(point.Y); 
@@ -507,7 +504,7 @@ namespace CampingUI
                         _camping.CampingRepository.CampingMapRepository.AddNewStreet(_streetName, hasPower, hasDogs, _streetSurfaceArea, _streetPricePerNightPerPerson, _streetPersons, (int)_xCord1, (int)_yCord1, (int)_xCord2, (int)_yCord2);
                         _streetPoint1 = new Point(-1, -1);
                     }
-                    GenerateMap();
+                    GenerateMap(field);
                     ResetAfterAddingMapComponent("Street");
                 }
             }
@@ -594,7 +591,7 @@ namespace CampingUI
                         }
                     }
                 }
-                GenerateMap();
+                GenerateMap(field);
             }
         }
 
@@ -880,7 +877,7 @@ namespace CampingUI
             else
             {
                 button.Style = editStyle;
-                GenerateMap();
+                GenerateMap(field);
                 _selectedMapButton = "View";
             }
         }
