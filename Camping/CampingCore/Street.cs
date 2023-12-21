@@ -29,7 +29,20 @@ namespace CampingCore
             YCord1 = (int)properties[8];
             XCord2 = (int)properties[9];
             YCord2 = (int)properties[10];
-
+        }
+        public Street(int streetID, string name, bool power, bool dogs, int surfaceArea, double pricePerNightPerPerson, int amountOfPeople, int Xcord1, int Ycord1, int Xcord2, int Ycord2)
+        {
+            StreetID = streetID;
+            Name = name;
+            Power = power;
+            Dogs = dogs;
+            SurfaceArea = surfaceArea; 
+            PricePerNightPerPerson = pricePerNightPerPerson;
+            AmountOfPeople = amountOfPeople;
+            XCord1 = Xcord1;
+            YCord1 = Ycord1;
+            XCord2 = Xcord2;
+            YCord2 = Ycord2;
         }
 
         public int[] GetStreetPositions()

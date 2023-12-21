@@ -390,16 +390,17 @@ namespace CampingDataAccess
         public void AddDummyData()
         {
             AddDummyDataArea();
-            AddDummyDataStreet();
-            AddDummyDataPlaces();
-            AddDummyDataPlaceExtends();
-            List<Place> places = CampingPlaceRepository.GetPlaces();
-            AddDummyDataGuests();
-            List<Guest> guests = CampingGuestRepository.GetGuests();
-            for (int i = 1; i <= guests.Count; i++)
-            {
-                AddDummyDataReservations(places[i - 1].PlaceID, i);
-            }
+            //AddDummyDataStreet();
+            //AddDummyDataPlaces();
+            //AddDummyDataPlaceExtends();
+            //List<Place> places = CampingPlaceRepository.GetPlaces();
+            //AddDummyDataGuests();
+            //List<Guest> guests = CampingGuestRepository.GetGuests();
+            //for (int i = 1; i <= guests.Count; i++)
+            //{
+            //    AddDummyDataReservations(places[i - 1].PlaceID, i);
+            //}
+
         }
     }
 }

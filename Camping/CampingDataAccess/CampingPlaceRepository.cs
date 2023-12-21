@@ -156,5 +156,63 @@ namespace CampingDataAccess
             }
 
         }
-    }
+        public void GetPlaceExtend()
+        {
+            Place place = null;
+            string sql = "SELECT * FROM Place WHERE PlaceID = @PlaceID;";
+
+            using (var connection = new SqliteConnection(ConnectionString))
+            {
+                connection.Open();
+                using (var command = new SqliteCommand(sql, connection))
+                {
+                    command.Prepare();
+                    //command.Parameters.AddWithValue("@PlaceID", id);
+                    using (var reader = command.ExecuteReader())
+                    {
+
+                        while (reader.Read())
+                        {
+                            ArrayList Properties = new ArrayList();
+                            for (int i = 0; i < reader.FieldCount; i++)
+                            {
+                                string columnName = reader.GetName(i);
+                                Type columnType = reader.GetFieldType(i);
+                                object colmnValue = reader.GetValue(i);
+
+                                PropertyInfo property = typeof(Place).GetProperty(columnName);
+                                if (property != null)
+                                {
+                                    Properties.Add(Convert.ChangeType(colmnValue, property.PropertyType));
+                                }
+                            }
+                            place = new Place(Properties);
+                        }
+                    }
+                }
+            }
+            //return place;
+        }
+        public void UpdatePlaceDataExtending(bool power, bool dogs, int surfaceArea, double pricePerNightPerPerson, int amountOfPeople, int placeID)
+        {
+            string sql = "UPDATE Place SET Power = @Power, Dogs = @Dogs, SurfaceArea = @SurfaceArea, PricePerNightPerPerson = @PricePerNightPerPerson, AmountOfPeople = @AmountOfPeople WHERE PlaceID = @PlaceID;";
+
+            using (var connection = new SqliteConnection(ConnectionString))
+            {
+                connection.Open();
+                using (var command = new SqliteCommand(sql, connection))
+                {
+                    command.Prepare();
+                    command.Parameters.AddWithValue("@Power", power);
+                    command.Parameters.AddWithValue("@Dogs", dogs);
+                    command.Parameters.AddWithValue("@SurfaceArea", surfaceArea);
+                    command.Parameters.AddWithValue("@PricePerNightPerPerson", pricePerNightPerPerson);
+                    command.Parameters.AddWithValue("@AmountOfPeople", amountOfPeople);
+                    command.Parameters.AddWithValue("@PlaceID", placeID);
+                    command.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+        }
+    } 
 }

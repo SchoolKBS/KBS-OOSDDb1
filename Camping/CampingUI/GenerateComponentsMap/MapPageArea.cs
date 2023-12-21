@@ -21,7 +21,6 @@ namespace CampingUI.NewFolder
             Canvas canvasArea = new Canvas
             {
                 Background = new SolidColorBrush(StaticUIMethods.GetColorFromInt(area.Color)),
-                Name = "Canvas_" + area.AreaID.ToString(),
             };
             canvasArea.Children.Add(new TextBlock
             {
@@ -37,6 +36,7 @@ namespace CampingUI.NewFolder
                 BorderBrush = Brushes.Black,
                 BorderThickness = new Thickness(1),
                 Child = canvasArea,
+                Name = "Canvas_" + area.AreaID.ToString(),
             };
             Canvas.SetTop(border, coordinates[1]);
             Canvas.SetLeft(border, coordinates[0]);

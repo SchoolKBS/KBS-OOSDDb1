@@ -31,13 +31,13 @@ namespace CampingUI
 
             this.Camping = new Camping(CampingRepository);
 
-            Main.Navigate(new MainPage(Camping));
+            Main.Navigate(new MapPage(Camping));
 
         }
         private void HomeButton_Click(object sender, RoutedEventArgs e)
         {
             // Navigate back to the main screen or set the desired page
-            Main.Navigate(new MainPage(Camping)); // Replace MainPage with the appropriate page class for your main screen
+            Main.Navigate(new MapPage(Camping)); // Replace MainPage with the appropriate page class for your main screen
         }
 
         //Function (EventHandler) to open the reservations page
