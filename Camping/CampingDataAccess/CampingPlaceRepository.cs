@@ -156,5 +156,64 @@ namespace CampingDataAccess
             }
 
         }
+
+        public void UpdatePlaceDataExtending(int placeID, bool? power, bool? dogs, bool? surfaceArea, bool? pricePerNightPerPerson, bool? amountOfPeople)
+        {
+            string sql = "UPDATE Place_Extends SET Power = @Power, Dogs = @Dogs, SurfaceArea = @SurfaceArea, PricePerNightPerPerson = @PricePerNightPerPerson, AmountOfPeople = @AmountOfPeople WHERE PlaceID = @PlaceID;";
+
+            using (var connection = new SqliteConnection(ConnectionString))
+            {
+                connection.Open();
+                using (var command = new SqliteCommand(sql, connection))
+                {
+                    command.Prepare();
+                    command.Parameters.Add(new SqliteParameter("@PlaceID", placeID));
+                    if (power != null)
+                    {
+                        command.Parameters.Add(new SqliteParameter("@Power", power));
+                    }
+                    else
+                    {
+                        command.Parameters.Add(new SqliteParameter("@Power", DBNull.Value));
+                    }
+                    if (dogs != null)
+                    {
+                        command.Parameters.Add(new SqliteParameter("@Dogs", dogs));
+                    }
+                    else
+                    {
+                        command.Parameters.Add(new SqliteParameter("@Dogs", DBNull.Value));
+                    }
+                    if (surfaceArea != null)
+                    {
+                        command.Parameters.Add(new SqliteParameter("@SurfaceArea", surfaceArea));
+                    }
+                    else
+                    {
+                        command.Parameters.Add(new SqliteParameter("@SurfaceArea", DBNull.Value));
+                    }
+
+                    if (pricePerNightPerPerson != null)
+                    {
+                        command.Parameters.Add(new SqliteParameter("@PricePerNightPerPerson", pricePerNightPerPerson));
+                    }
+                    else
+                    {
+                        command.Parameters.Add(new SqliteParameter("@PricePerNightPerPerson", DBNull.Value));
+                    }
+
+                    if (amountOfPeople != null)
+                    {
+                        command.Parameters.Add(new SqliteParameter("@AmountOfPeople", amountOfPeople));
+                    }
+                    else
+                    {
+                        command.Parameters.Add(new SqliteParameter("@AmountOfPeople", DBNull.Value));
+                    }
+                    command.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+        }
     }
 }

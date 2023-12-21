@@ -313,6 +313,12 @@ namespace CampingUI
                 if (_editPlaceBool)
                 {
                     _camping.CampingRepository.CampingPlaceRepository.UpdatePlaceData(Int32.Parse(PlacePlaceID.Text), street.StreetID, area.AreaID, hasPower, _placeSurfaceArea, _placePricePerNight, _placePersons, hasDogs);
+                    _camping.CampingRepository.CampingPlaceRepository.UpdatePlaceDataExtending(Int32.Parse(PlacePlaceID.Text),
+                                                          GetValueFromExtendComboBox(PlacePowerComboBox),
+                                                          GetValueFromExtendComboBox(PlaceDogsComboBox),
+                                                          GetValueFromExtendComboBox(PlaceSurfaceAreaComboBox),
+                                                          GetValueFromExtendComboBox(PlacePricePerNightPerPersonComboBox),
+                                                          GetValueFromExtendComboBox(PlacePersonsComboBox));
                     HandleCancelAddPlace();
                     return;
                 }
