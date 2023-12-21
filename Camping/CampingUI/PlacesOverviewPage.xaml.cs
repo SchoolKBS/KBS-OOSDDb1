@@ -46,8 +46,10 @@ namespace CampingUI
         private double _pricePerNightPerPersonEdit;
         private int _amountOfPeopleEdit;
         private PlacesOverviewPageFilter _placesOverviewPageFilter;
-        private double desiredWidth = 2500;
-        private double desiredHeight = 937.5;
+        private double desiredWidthMini = 2500;
+        private double desiredHeightMini = 937.5;
+        private double desiredWidthMain = 1000;
+        private double desiredHeightMain = 750;
 
         public PlacesOverviewPage(Camping camping, CampingRepository campingRepository)
         {
@@ -62,9 +64,12 @@ namespace CampingUI
             _placesSortedAndOrFiltered = _camping.Places;
             PlacesListView.ItemsSource = _placesSortedAndOrFiltered; 
             this._headerTag = "PlaceID";
-            new Transform(field2, desiredWidth, desiredHeight);
+            new Transform(field2, desiredWidthMini, desiredHeightMini, "plattegrond");
+            new Transform(field, desiredWidthMain, desiredHeightMain, "plattegrondMain");
             MainPage MapPage = new MainPage(camping);
             MapPage.GenerateMap(field2);
+            MapPage.GenerateMap(field);
+
         }
 
         private void TextBox_Changed(object sender, TextChangedEventArgs e)
@@ -270,6 +275,7 @@ namespace CampingUI
         {
             EditPlaceGrid.Visibility = Visibility.Collapsed;
             PlaceOverviewGrid.Visibility = Visibility.Visible;
+            BorderOverview.Visibility = Visibility.Visible;
         }
         private void OpenEditPlace()
         {
@@ -280,6 +286,8 @@ namespace CampingUI
         {
             EditPlaceGrid.Visibility = Visibility.Collapsed;
             PlaceOverviewGrid.Visibility = Visibility.Collapsed;
+            BorderOverview.Visibility = Visibility.Collapsed;
+
         }
         private IEnumerable<Place> SortColumns(string headerTag)
         {

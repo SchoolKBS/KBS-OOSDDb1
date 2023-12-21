@@ -13,7 +13,7 @@ namespace CampingUI.NewFolder
     public class Transform
     {
 
-        public Transform(Canvas field, double desiredWidth, double desiredHeight) {
+        public Transform(Canvas field, double desiredWidth, double desiredHeight, string fieldname) {
             double screenWidth = SystemParameters.PrimaryScreenWidth;
             double screenHeight = SystemParameters.PrimaryScreenHeight;
 
@@ -35,11 +35,11 @@ namespace CampingUI.NewFolder
                 scaleY = screenHeight / desiredHeight / 2;
                 scaleX = scaleY;
             }
-            ApplyScaleTransform(scaleX, scaleY, field);
+            ApplyScaleTransform(scaleX, scaleY, field, fieldname);
         }
-        private static void ApplyScaleTransform(double scaleX, double scaleY, Canvas field)
+        private static void ApplyScaleTransform(double scaleX, double scaleY, Canvas field, string fieldname)
         {
-            if (field.FindName("plattegrond") is ScaleTransform plattegrond)
+            if (field.FindName(fieldname) is ScaleTransform plattegrond )
             {
                 plattegrond.ScaleX = scaleX;
                 plattegrond.ScaleY = scaleY;

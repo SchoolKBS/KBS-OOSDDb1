@@ -317,19 +317,25 @@
                         <!--<Button Grid.Row="2" Content="Nieuwe plaats toevoegen" Click="AddPlaceButton_Click" Height="Auto"/>-->
                     </Grid>
                 </Border>
-            <Border Grid.Column="1" Margin="25,25,25,25" Padding="15" Background="#334A6E" CornerRadius="25" Visibility="Visible">
-                <Grid Grid.Column="1" Name="PlaceOverviewGridMain" Visibility="Visible" Grid.Row="1">
+            <Border Grid.Column="1" Margin="25" Padding="0" Background="#334A6E" CornerRadius="25">
 
-                    <Grid >
-                    <Canvas Background="white" Width="500" Height="375" x:Name="field" >
-                        <Canvas.LayoutTransform>
-                            <ScaleTransform x:Name="plattegrondOverviewMain" />
-                        </Canvas.LayoutTransform>
-                    </Canvas>
-                    </Grid>
-                </Grid>
+                
+                        <Border
+                             BorderThickness="2"
+                             BorderBrush="Black"
+                             Background="LightGray"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center">
+                            <Canvas Background="white" Width="1000" Height="750" x:Name="field">
+                                <Canvas.LayoutTransform>
+                                    <ScaleTransform x:Name="plattegrondMain" />
+                                </Canvas.LayoutTransform>
+                            </Canvas>
+                        </Border>
+                    
+                
             </Border>
-            <Border Grid.Column="1" Margin="25,25,25,25" Padding="15" Background="#334A6E" CornerRadius="25">
+            <Border Name="BorderOverview" Grid.Column="1" Margin="25,25,25,25" Padding="15" Background="#334A6E" CornerRadius="25" Visibility="Collapsed">
                 
 
                     <!--Grid for the overview of the selected place-->
@@ -345,11 +351,12 @@
 
 
                     <Grid Grid.Row="0" Grid.Column="1">
-                        <Canvas  Margin="0,0,250,50" Background="white" Width="500" Height="375" x:Name="field2" >
-                            <Canvas.LayoutTransform>
-                                <ScaleTransform x:Name="plattegrond" />
-                            </Canvas.LayoutTransform>
-                        </Canvas>
+                      
+                            <Canvas  Margin="0,0,250,50" Background="white" Width="500" Height="375" x:Name="field2" >
+                                <Canvas.LayoutTransform>
+                                    <ScaleTransform x:Name="plattegrond" />
+                                </Canvas.LayoutTransform>
+                            </Canvas>
                     </Grid>
                         <!--Grid for place info-->
                         <Grid Grid.Row="0" Name="UpperGrid">

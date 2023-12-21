@@ -50,7 +50,7 @@ namespace CampingUI
             AreaBorderList = new List<Border>();
             PlaceBorderList = new List<Border>();
             _camping = camping;
-            new Transform(field, desiredWidth, desiredHeight); // Transform scale of the map.
+            new Transform(field, desiredWidth, desiredHeight, "plattegrond"); // Transform scale of the map.
             GenerateMap(field);
 
             // For the keyboard handler
