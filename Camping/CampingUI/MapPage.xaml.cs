@@ -900,7 +900,7 @@ namespace CampingUI
             _streetPoint1 = new Point(-1, -1);
             _streetPoint2 = new Point(-1, -1);
             _selectedMapButton = "View";
-            GenerateMap();
+            GenerateMap(field);
         }
 
         private void MakeMapComponentButton_Click(object sender, RoutedEventArgs e)
