@@ -391,7 +391,7 @@
                         </Grid.ColumnDefinitions>
 
                         <Label Name="AreaNameLabel" Content="Gebied: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <Label Name="AreaName" VerticalAlignment="Center" Foreground="White" FontSize="16" Width="150" HorizontalAlignment="Right" Grid.Column="1"/>
+                        <TextBox Name="AreaName" VerticalAlignment="Center" FontSize="16" Width="190" Height="40" HorizontalAlignment="Right" Grid.Column="1"/>
 
                     </Grid>
 
@@ -402,8 +402,9 @@
                         </Grid.ColumnDefinitions>
 
                         <Label Name="AreaColorLabel" Content="Kleur: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <Label Name="AreaColor" VerticalAlignment="Center" Foreground="White" FontSize="16" Width="150" HorizontalAlignment="Right" Grid.Column="1"/>
-
+                        <Border Grid.Column="1" Name="AreaColorBorder" Width="190" Height="40" HorizontalAlignment="Right">
+                            <ComboBox Name="AreaColor" VerticalAlignment="Center" FontSize="16" Width="190" HorizontalAlignment="Right" SelectedValuePath="Value" DisplayMemberPath="Text" SelectionChanged="SelectedArea_ColorChange"/>
+                        </Border>
                     </Grid>
                     <Grid Grid.Row="2" Name="AreaRow2">
                         <Grid.ColumnDefinitions>
@@ -433,7 +434,7 @@
                         </Grid.ColumnDefinitions>
 
                         <Label Name="AreaPlaceSurfaceAreaLabel" Content="Oppervlakte plaats: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <Label Name="AreaPlaceSurfaceArea" VerticalAlignment="Center" Foreground="White" FontSize="16" Width="150" HorizontalAlignment="Right" Grid.Column="1"/>
+                        <TextBox Name="AreaPlaceSurfaceArea" VerticalAlignment="Center" FontSize="16" Width="190" Height="40" HorizontalAlignment="Right" Grid.Column="1"/>
 
                     </Grid>
                     <Grid Grid.Row="5" Name="AreaRow5">
@@ -443,7 +444,7 @@
                         </Grid.ColumnDefinitions>
 
                         <Label Name="AreaPriceLabel" Content="Prijs plaats: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <Label Name="AreaPrice" VerticalAlignment="Center" Foreground="White" FontSize="16" Width="150" HorizontalAlignment="Right" Grid.Column="1"/>
+                        <TextBox Name="AreaPrice" VerticalAlignment="Center" FontSize="16" Width="190" Height="40" HorizontalAlignment="Right" Grid.Column="1"/>
 
                     </Grid>
                     <Grid Grid.Row="6" Name="AreaRow6">
@@ -453,7 +454,14 @@
                         </Grid.ColumnDefinitions>
 
                         <Label Name="AreaAmountOfPeopleLabel" Content="Aantal personen: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <Label Name="AreaAmountOfPeople" VerticalAlignment="Center" Foreground="White" FontSize="16" Width="150" HorizontalAlignment="Right" Grid.Column="1"/>
+                        <TextBox Name="AreaAmountOfPeople" VerticalAlignment="Center" FontSize="16" Width="190" Height="40" HorizontalAlignment="Right" Grid.Column="1"/>
+                    </Grid>                    
+                    <Grid Grid.Row="7" Name="AreaRow7">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Foreground="White" FontWeight="Bold" Style="{DynamicResource ButtonStyle1Apply}" Name="AddAreaButton" Content="Toevoegen" Height="40" Width="140" HorizontalAlignment="Left" Click="HandleAddArea_Click"/>
+                        <Button Foreground="White" FontWeight="Bold" Style="{DynamicResource ButtonStyle1Cancel}" Name="CancelAddAreaButton" Content="Annuleren" Height="40" Width="140" HorizontalAlignment="Right" Click="HandleCancelAddArea_Click"/>
 
                     </Grid>
                 </Grid>
