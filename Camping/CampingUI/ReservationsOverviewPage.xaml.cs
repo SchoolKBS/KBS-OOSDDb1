@@ -252,7 +252,8 @@ namespace CampingUI
             StaticUIMethods.ResetDatePickerBorder(ArrivalDatePickerr);
             StaticUIMethods.ResetDatePickerBorder(DepartureDatePickerr);
             _appliedFilters = false;
-
+            PriceCheckBox.Content = "Geen Voorkeur";
+            PriceCheckBox.IsChecked = false;
 
             // Reload the original data without filters
             LoadReservationList();
