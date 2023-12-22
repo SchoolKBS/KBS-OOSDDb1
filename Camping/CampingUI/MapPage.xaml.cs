@@ -5,6 +5,7 @@ using CampingUI.NewFolder;
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.Windows.Themes;
 using Org.BouncyCastle.Asn1.BC;
+using Org.BouncyCastle.Asn1.X509;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Operators;
 using System;
@@ -46,7 +47,7 @@ namespace CampingUI
         private Canvas _previousSelectedCanvas;
         private bool _editPlaceBool, _editStreetBool, _wrongInput;
         private string _selectedMapButton = "View";
-        private Point _streetPoint1 = new Point(-1, -1), _streetPoint2;
+        private Point _streetPoint1 = new Point(-1, -1);
         private Point _areaStartPoint = new Point(-1, -1);
         private Border _newArea;
         public Area SelectedArea { get; private set; }
@@ -411,7 +412,6 @@ namespace CampingUI
             Point p = Mouse.GetPosition(field);
             _xPressed = (int)Math.Round(p.X) - 15;
             _yPressed = (int)Math.Round(p.Y) - 15;
-
             GeneratePlace(place, color, false);
         }
 
@@ -439,8 +439,8 @@ namespace CampingUI
                         Point p = Mouse.GetPosition(field);
                         if (border != null)
                         {
-                            Canvas.SetLeft(border, p.X - 7.5);
-                            Canvas.SetTop(border, p.Y - 7.5);
+                            Canvas.SetLeft(border, p.X - 15);
+                            Canvas.SetTop(border, p.Y - 15);
                         }
                     }
                 }
@@ -471,13 +471,37 @@ namespace CampingUI
                 }
             }
         }
+        private void field_MouseLeave(object sender, MouseEventArgs e)
+        {
+            Border borderPlace = new Border();
+            foreach (var component in field.Children)
+            {
+                if (component is Border border && border.Name.Equals("Place_1000000000"))
+                {
+                    borderPlace = border;
+                }
+            }
+            field.Children.Remove(borderPlace);
+        }
 
         private void field_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (_selectedMapButton.Contains("Place"))
             {
+                foreach (var component in field.Children)
+                {
+                    if (component is Border border && border.Name.Equals("Place_0"))
+                    {
+                        border.Name = "Place_1000000000";
+                        Canvas place = (Canvas)border.Child;
+                        place.Background = Brushes.Aquamarine;
+                    }
+                }
+                Point p = Mouse.GetPosition(field);
+                _xPressed = (int)Math.Round(p.X) - 15;
+                _yPressed = (int)Math.Round(p.Y) - 15;
                 Place place1 = new Place(0, false, 1, 1, false, 0, 0, 0, _xPressed, _yPressed);
-                GeneratePreviewPlace(place1, Brushes.Aquamarine);
+                GeneratePreviewPlace(place1, Brushes.DarkGray);
                 EnableExtendComboBoxes(false);
                 HandlePlaceClick(place1, true);
             }
@@ -551,8 +575,6 @@ namespace CampingUI
                 Point point = Mouse.GetPosition(field);
                 double xCord = Math.Round(point.X);
                 double yCord = Math.Round(point.Y);
-                AreaInfoGrid.Visibility = Visibility.Visible;
-                AreaInfo.Visibility = Visibility.Visible;
                 if (_areaStartPoint.X == -1 && _areaStartPoint.Y == -1)
                 {
                     _areaStartPoint = new Point(xCord, yCord);
@@ -563,19 +585,25 @@ namespace CampingUI
                     ellipse.Height = 15;
                     ellipse.Fill = Brushes.DarkGray;
                     field.Children.Add(ellipse);
-                    SelectedArea = new Area();
-                    HandleAreaClick();
                     ResertAreaBorders();
                 }
                 else
                 {
-
-                    if(xCord < _areaStartPoint.X) (xCord, _areaStartPoint.X) = (_areaStartPoint.X, xCord);
+                    AreaInfoGrid.Visibility = Visibility.Visible;
+                    AreaInfo.Visibility = Visibility.Visible;
+                    SelectedArea = new Area();
+                    HandleAreaClick();
+                    if (xCord < _areaStartPoint.X) (xCord, _areaStartPoint.X) = (_areaStartPoint.X, xCord);
                     if(yCord < _areaStartPoint.Y) (yCord, _areaStartPoint.Y) = (_areaStartPoint.Y, yCord);
+                    if (_areaStartPoint.X < 5) _areaStartPoint.X = 0;
+                    if (_areaStartPoint.Y < 5) _areaStartPoint.Y = 0;
+
                     SelectedArea.XCord1 = (int)_areaStartPoint.X;
                     SelectedArea.YCord1 = (int)_areaStartPoint.Y;
                     SelectedArea.Width = (int)xCord - SelectedArea.XCord1;
                     SelectedArea.Height = (int)yCord - SelectedArea.YCord1;
+                    if (_areaStartPoint.X + SelectedArea.Width > (int)field.Width - 5) SelectedArea.Width = (int)field.Width - SelectedArea.Width;
+                    if (_areaStartPoint.Y + SelectedArea.Height > (int)field.Height - 5) SelectedArea.Height = (int)field.Height - SelectedArea.Height;
                     Border border = MapPageArea.GenerateArea(SelectedArea);
                     field.Children.Add(border);
                     _newArea = border;
@@ -584,10 +612,6 @@ namespace CampingUI
                     ToggleAreaInput(true);
                     AreaInfoVisible();
                 }
-            }
-            else
-            {
-
             }
         }
         private void HandleAddStreet_Click(Object sender, RoutedEventArgs e)
@@ -871,7 +895,7 @@ namespace CampingUI
         private void GetAddAreaValues()
         {
             _wrongInput = false;
-            SelectedArea.Name = GetAddStreetNameTextbox(AreaName, _areaName);
+            SelectedArea.Name = GetAddComponentNameTextbox(AreaName, _areaName);
             GetColorID();
             SelectedArea.AmountOfPeople = GetAddAmountOfPeople(AreaAmountOfPeople, _areaPersons);
             SelectedArea.PricePerNightPerPerson = GetAddPricePerNightPerPerson(AreaPrice, _areaPricePerNightPerPerson);
@@ -1034,8 +1058,8 @@ namespace CampingUI
                     }
                 }
                 else HideInfoGrids();
-                _streetPoint1.X = -1;
-                _streetPoint1.Y = -1;
+                _streetPoint1 = new Point(-1, -1);
+                _areaStartPoint = new Point(-1, -1);
                 GenerateMap();
                 if(_selectedMapButton == "Place")
                 {
@@ -1062,7 +1086,6 @@ namespace CampingUI
             SelectedPlace = null;
             SelectedStreet = null;
             _streetPoint1 = new Point(-1, -1);
-            _streetPoint2 = new Point(-1, -1);
             GenerateMap();
         }
 
@@ -1099,6 +1122,7 @@ namespace CampingUI
         }
         private void HandleAreaClick()
         {
+            AreaInfoVisible();
             AreaName.Text = SelectedArea.Name;
             SetAreaComboBox();
             AreaPower.IsChecked = SelectedArea.Power;

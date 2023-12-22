@@ -14,7 +14,6 @@
         <SolidColorBrush Color="#11284D"/>
         <!-- Set the background color for the window -->
     </Window.Background>
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="70" />
