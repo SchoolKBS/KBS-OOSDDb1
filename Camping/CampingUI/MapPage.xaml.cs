@@ -900,8 +900,8 @@ namespace CampingUI
                     }
                 }
                 else HideInfoGrids();
-
             }
+
         }
 
         private void HideInfoGrids()
