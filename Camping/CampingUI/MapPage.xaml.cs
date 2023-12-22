@@ -403,7 +403,15 @@ namespace CampingUI
             }
             if(_selectedMapButton.Contains("Street"))
             {
-                GeneratePreviewLine("MoveablePoint", Brushes.Aquamarine);
+                Line line1 = new Line();
+                foreach (var component in field.Children)
+                {
+                    if (component is Line line && !line.Name.Equals("MoveablePoint"))
+                    {
+                        line1 = GeneratePreviewLine("MoveablePoint", Brushes.Aquamarine);
+                    }
+                }
+                field.Children.Add(line1);
             }
         }
 
@@ -415,7 +423,7 @@ namespace CampingUI
             GeneratePlace(place, color, false);
         }
 
-        private void GeneratePreviewLine(string name, SolidColorBrush color)
+        private Line GeneratePreviewLine(string name, SolidColorBrush color)
         {
             Point p = Mouse.GetPosition(field);
             Line line = new Line();
@@ -426,7 +434,8 @@ namespace CampingUI
             line.StrokeThickness = 15;
             line.Stroke = color;
             line.Name = name;
-            field.Children.Add(line);
+            return line;
+            
         }
         private void field_MouseMove(object sender, MouseEventArgs e)
         {
@@ -1063,7 +1072,12 @@ namespace CampingUI
                 GenerateMap();
                 if(_selectedMapButton == "Place")
                 {
-                    GeneratePreviewLine("MoveablePoint", Brushes.Aquamarine);
+                    Point p = Mouse.GetPosition(field);
+                    _xPressed = (int)p.X;
+                    _yPressed = (int)p.Y;
+
+                    Place place = new Place(1000000000, false, 1, 1, false, 0, 0, 0, _xPressed, _yPressed);
+                    GeneratePreviewPlace(place, Brushes.Aquamarine);
                 }
                 if (_selectedMapButton == "Street")
                 {
