@@ -30,6 +30,8 @@ namespace CampingUI
     /// </summary>
     public partial class MapPage : Page
     {
+        public event Action<Place> PlaceSelectedOnMap;
+
         private Camping _camping;
         private List<Area> _areas;
         private List<Place> _places;
@@ -54,10 +56,13 @@ namespace CampingUI
         private string _selectedMapButton = "View";
         private Point _streetPoint1 = new Point(-1, -1), _streetPoint2;
         public Street SelectedStreet;
+
+
         public MapPage(Camping camping)
         {
             InitializeComponent();
             _camping = camping;
+
             new Transform(field, desiredWidth, desiredHeight, "plattegrond"); // Transform scale of the map.
             GenerateMap(field);
 
@@ -70,6 +75,7 @@ namespace CampingUI
             KeyDown += Handle_KeyDown;     
         }
 
+
         public void GenerateMap(Canvas canvas)
         {
             field.Children.Clear();
@@ -79,6 +85,11 @@ namespace CampingUI
             GenerateComponentsMap(_areas, canvas);
             GenerateComponentsMap(_streets, canvas);
             GenerateComponentsMap(_places, canvas);
+        }
+        private void HandlePlaceClicker(Place place)
+        {
+            
+            PlaceSelectedOnMap?.Invoke(place);
         }
         public void GenerateComponentsMap<T>(List<T> list, Canvas canvas)
         {
@@ -212,11 +223,11 @@ namespace CampingUI
                     SelectedArea = null;
                     SelectedPlace = canvasPlace;
                     HandlePlaceClick(place, false);
-                }
+                    HandlePlaceClicker(place);  }
             };
             return border;
         }
-
+      
         public void HandlePlaceClick(Place place, bool AddPlaceBool)
         {
             PlaceInfo.Visibility = Visibility.Visible;

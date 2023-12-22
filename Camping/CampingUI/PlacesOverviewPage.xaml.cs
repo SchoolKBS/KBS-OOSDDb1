@@ -30,6 +30,7 @@ namespace CampingUI
     /// </summary>
     public partial class PlacesOverviewPage : Page
     {
+
         private Camping _camping;
         private IEnumerable<Place> _placesSortedAndOrFiltered;
         private bool? _hasPower = null, _dogsAllowed = null;
@@ -66,12 +67,31 @@ namespace CampingUI
             this._headerTag = "PlaceID";
             new Transform(field2, desiredWidthMini, desiredHeightMini, "plattegrond");
             new Transform(field, desiredWidthMain, desiredHeightMain, "plattegrondMain");
-            MapPage MapPage = new MapPage(camping);
-            MapPage.GenerateMap(field2);
-            MapPage.GenerateMap(field);
+            MapPage mapPage = new MapPage(camping);
+            mapPage.GenerateMap(field2);
+            mapPage.GenerateMap(field);
+            mapPage.PlaceSelectedOnMap += HandlePlaceSelectedOnMap;
 
         }
 
+        public void HandlePlaceSelectedOnMap(Place place)
+        {
+
+            ResetFilters();
+            PlacesListView.SelectedItem = place;
+            DogCheckBoxFilter.IsChecked = place.Dogs;
+            if (CheckBoxChecked(DogCheckBoxFilter, "hond") == true ) { DogCheckBoxFilter.Content = "Wel hond"; }
+            if (CheckBoxChecked(DogCheckBoxFilter, "hond") == false) { DogCheckBoxFilter.Content = "Geen hond"; }
+
+            PowerCheckBoxFilter.IsChecked = place.Power;
+            if (CheckBoxChecked(PowerCheckBoxFilter, "stroom") == true) { DogCheckBoxFilter.Content = "Wel stroom"; }
+            if (CheckBoxChecked(PowerCheckBoxFilter, "stroom") == false) { DogCheckBoxFilter.Content = "Geen stroom"; }
+
+
+            AmountOfPeopleTextBox.Text = $"{place.AmountOfPeople}";
+            MaxPriceRangeTextBox.Text = $"{place.PricePerNightPerPerson}";
+        }
+  
         private void TextBox_Changed(object sender, TextChangedEventArgs e)
         {
             TextBox textbox = (TextBox)sender;
@@ -339,6 +359,7 @@ namespace CampingUI
                 PlaceOverviewGrid.Visibility = Visibility.Collapsed;
             }
         }
+  
         private void SetReservationsInCalendar(Place place)
         {
             ReservationCalender.BlackoutDates.Clear();
