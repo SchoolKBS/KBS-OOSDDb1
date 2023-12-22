@@ -236,7 +236,7 @@ namespace CampingDataAccess
         public List<bool?> GetPlaceExtendingByPlaceID(int placeID)
         {
             List<bool?> properties = new List<bool?>();
-            string sql = "SELECT * FROM Place_Extends WHERE PlaceID = @PlaceID;";
+            string sql = "SELECT Power, Dogs, SurfaceArea, PricePerNightPerPerson, AmountOfPeople FROM Place_Extends WHERE PlaceID = @PlaceID;";
 
             using (var connection = new SqliteConnection(ConnectionString))
             {

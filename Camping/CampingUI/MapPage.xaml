@@ -204,7 +204,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <Button Foreground="White" FontWeight="Bold" Style="{DynamicResource ButtonStyle1Apply}" Name="AddPlaceButton" Content="Aanpassen" Click="HandleAddPlace_Click" Height="40" Width="140" HorizontalAlignment="Left"/>
+                            <Button Foreground="White" FontWeight="Bold" Style="{DynamicResource ButtonStyle1Apply}" Name="AddPlaceButton" Content="Opslaan" Click="HandleAddPlace_Click" Height="40" Width="140" HorizontalAlignment="Left"/>
                             <Button Foreground="White" FontWeight="Bold" Style="{DynamicResource ButtonStyle1Cancel}" Name="CancelAddPlaceButton" Content="Annuleren" Click="HandleCancelAddComponent_Click" Height="40" Width="140" HorizontalAlignment="Right"/>
                         </Grid>
                     </Grid>
@@ -390,7 +390,7 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Button Foreground="White" FontWeight="Bold" Style="{DynamicResource ButtonStyle1Apply}" Name="AddStreetButton" Content="Toevoegen" Click="HandleAddStreet_Click" Height="40" Width="140" HorizontalAlignment="Left"/>
+                        <Button Foreground="White" FontWeight="Bold" Style="{DynamicResource ButtonStyle1Apply}" Name="AddStreetButton" Content="Opslaan" Click="HandleAddStreet_Click" Height="40" Width="140" HorizontalAlignment="Left"/>
                         <Button Foreground="White" FontWeight="Bold" Style="{DynamicResource ButtonStyle1Cancel}" Name="CancelAddStreetButton" Content="Annuleren" Click="HandleCancelAddComponent_Click" Height="40" Width="140" HorizontalAlignment="Right"/>
                     </Grid>
                 </Grid>
