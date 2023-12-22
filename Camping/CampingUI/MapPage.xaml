@@ -205,7 +205,7 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <Button Foreground="White" FontWeight="Bold" Style="{DynamicResource ButtonStyle1Apply}" Name="AddPlaceButton" Content="Aanpassen" Click="HandleAddPlace_Click" Height="40" Width="140" HorizontalAlignment="Left"/>
-                            <Button Foreground="White" FontWeight="Bold" Style="{DynamicResource ButtonStyle1Cancel}" Name="CancelAddPlaceButton" Content="Annuleren" Click="HandleCancelAddPlace_Click" Height="40" Width="140" HorizontalAlignment="Right"/>
+                            <Button Foreground="White" FontWeight="Bold" Style="{DynamicResource ButtonStyle1Cancel}" Name="CancelAddPlaceButton" Content="Annuleren" Click="HandleCancelAddComponent_Click" Height="40" Width="140" HorizontalAlignment="Right"/>
                         </Grid>
                     </Grid>
             </Border>
@@ -320,7 +320,7 @@
                         </Grid.ColumnDefinitions>
 
                         <Label Name="StreetNameLabel" Content="Straatnaam: " Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <TextBox TextChanged="TextBox_Changed" Margin="10, 0, 0, 0" Name="StreetName" VerticalAlignment="Center" FontSize="14" Width="175" Height="40" BorderBrush="Transparent" HorizontalAlignment="Right" Grid.Column="1"/>
+                        <TextBox TextChanged="TextBox_Changed" Margin="10, 0, 0, 0" Name="StreetName" VerticalAlignment="Center" FontSize="14" Width="175" Height="40" BorderBrush="Transparent" HorizontalAlignment="Right" Grid.Column="1" />
                     </Grid>
 
                     <!-- Checkbox for power -->
@@ -370,7 +370,7 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Label Name="StreetPricePerNightLabel" Content="Prijs p/nacht p/persoon: "  Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <Label Name="StreetPricePerNightLabel" Content="Prijs p/nacht: "  Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                         <TextBox Name="StreetPricePerNight" Margin="10, 0, 0, 0" VerticalAlignment="Center" FontSize="14" Width="175" Height="40" BorderBrush="Transparent" HorizontalAlignment="Right" Grid.Column="1" TextChanged="TextBox_Changed">
                         </TextBox>
                     </Grid>
@@ -391,7 +391,7 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Button Foreground="White" FontWeight="Bold" Style="{DynamicResource ButtonStyle1Apply}" Name="AddStreetButton" Content="Toevoegen" Click="HandleAddStreet_Click" Height="40" Width="140" HorizontalAlignment="Left"/>
-                        <Button Foreground="White" FontWeight="Bold" Style="{DynamicResource ButtonStyle1Cancel}" Name="CancelAddStreetButton" Content="Annuleren" Click="HandleCancelAddPlace_Click" Height="40" Width="140" HorizontalAlignment="Right"/>
+                        <Button Foreground="White" FontWeight="Bold" Style="{DynamicResource ButtonStyle1Cancel}" Name="CancelAddStreetButton" Content="Annuleren" Click="HandleCancelAddComponent_Click" Height="40" Width="140" HorizontalAlignment="Right"/>
                     </Grid>
                 </Grid>
             </Border>
