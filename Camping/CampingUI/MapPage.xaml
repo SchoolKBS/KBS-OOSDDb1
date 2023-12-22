@@ -406,7 +406,7 @@
                     Background="LightGray"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center">
-                    <Canvas ClipToBounds="true" Background="black" Width="1000" Height="750" x:Name="field" MouseDown="field_MouseDown">
+                    <Canvas ClipToBounds="true" Background="black" Width="1000" Height="750" x:Name="field" MouseDown="field_MouseDown" MouseEnter="field_MouseEnter" MouseMove="field_MouseMove">
                         <Canvas.LayoutTransform>
                             <ScaleTransform x:Name="plattegrond" />
                         </Canvas.LayoutTransform>

@@ -390,92 +390,144 @@ namespace CampingUI
             ResetComboBoxBorder(PlaceStreetBorder);
         }
 
+        private void field_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (_selectedMapButton.Contains("Place"))
+            {
+                Place place = new Place(1000000000, false, 1, 1, false, 0, 0, 0, _xPressed, _yPressed);
+                GeneratePreviewPlace(place, Brushes.Aquamarine);
+            }
+            if(_selectedMapButton.Contains("Street"))
+            {
+                GeneratePreviewLine("MoveablePoint", Brushes.Aquamarine);
+            }
+        }
+
+        private void GeneratePreviewPlace(Place place, SolidColorBrush color)
+        {
+            Point p = Mouse.GetPosition(field);
+            _xPressed = (int)Math.Round(p.X) - 15;
+            _yPressed = (int)Math.Round(p.Y) - 15;
+
+            GeneratePlace(place, color, false);
+        }
+
+        private void GeneratePreviewLine(string name, SolidColorBrush color)
+        {
+            Point p = Mouse.GetPosition(field);
+            Line line = new Line();
+            line.X1 = p.X - 7.5;
+            line.Y1 = p.Y - 3.75;
+            line.X2 = p.X + 7.5;
+            line.Y2 = p.Y - 3.75; 
+            line.StrokeThickness = 15;
+            line.Stroke = color;
+            line.Name = name;
+            field.Children.Add(line);
+        }
+        private void field_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (_selectedMapButton.Contains("Place"))
+            {
+                foreach (var component in field.Children)
+                {
+                    if (component is Border border && border.Name.Equals("Place_1000000000"))
+                    {
+                        Point p = Mouse.GetPosition(field);
+                        if (border != null)
+                        {
+                            Canvas.SetLeft(border, p.X - 7.5);
+                            Canvas.SetTop(border, p.Y - 7.5);
+                        }
+                    }
+                }
+            }
+            else if (_selectedMapButton.Contains("Street"))
+            {
+                Point p = Mouse.GetPosition(field);
+                foreach (var component in field.Children)
+                {
+                    if (component is Line line && line.Name.Equals("MoveablePoint") && !line.Name.Equals("firstPoint"))
+                    {
+                        double centerX = line.X1 + (line.X2 - line.X1) / 2;
+                        double centerY = line.Y1 + (line.Y2 - line.Y1) / 2;
+
+                        double offsetX = p.X - centerX;
+                        double offsetY = p.Y - centerY;
+
+                        line.X1 += offsetX;
+                        line.Y1 += offsetY;
+                        line.X2 += offsetX;
+                        line.Y2 += offsetY;
+                    }
+                    else if (component is Line firstPoint && firstPoint.Name.Equals("firstPoint"))
+                    {
+                        firstPoint.X2 = p.X + 7.5;
+                        firstPoint.Y2 = p.Y - 3.75;
+                    }
+                }
+            }
+        }
+
         private void field_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (_selectedMapButton.Contains("Place"))
             {
-                Point p = Mouse.GetPosition(field);
-                foreach (Place place in _places)
-                {
-                    place.XCord -= 15;
-                    place.YCord -= 15;
-                }
-                _xPressed = (int)Math.Round(p.X) - 15;
-                _yPressed = (int)Math.Round(p.Y) - 15;
-                List<Area> PlaceWithinAreas = _areas.Where(i => i.XCord1 <= (_xPressed - 15))
-                                                   .Where(i => i.XCord1 + i.Width >= (_xPressed + 45))
-                                                   .Where(i => i.YCord1 <= (_yPressed - 15))
-                                                   .Where(i => i.YCord1 + i.Height >= (_yPressed + 45))
-                                                   .ToList();
-                List<Place> placesNotInNewPlaceBorder = _places.Where(i => i.XCord >= (_xPressed - 45) && i.XCord <= (_xPressed + 45))
-                                                              .Where(i => i.YCord >= (_yPressed - 45) && i.YCord <= (_yPressed + 45))
-                                                              .ToList();
-
-                GenerateMap();
-                int i = 1;
-                if (_places.Count > 0)
-                {
-                    i = _places.Last().PlaceID + 1;
-                }
-
                 Place place1 = new Place(0, false, 1, 1, false, 0, 0, 0, _xPressed, _yPressed);
-                GeneratePlace(place1, Brushes.Gray, false);
+                GeneratePreviewPlace(place1, Brushes.Aquamarine);
                 EnableExtendComboBoxes(false);
-                HandlePlaceClick(place1, true); 
+                HandlePlaceClick(place1, true);
             }
             else if (_selectedMapButton.Contains("Street"))
             {
                 _editStreetBool = false;
-                GenerateMap();
-                Point point = Mouse.GetPosition(field);
-                double xCord = Math.Round(point.X);
-                double yCord = Math.Round(point.Y); 
                 if (_streetPoint1.X == -1 && _streetPoint1.Y == -1) 
-                { 
-                    _streetPoint1 = new Point(xCord, yCord);
-                    Ellipse ellipse = new Ellipse();
-                    Canvas.SetLeft(ellipse, xCord-7.5);
-                    Canvas.SetTop(ellipse, yCord-7.5);
-                    ellipse.Width = 15;
-                    ellipse.Height = 15;
-                    ellipse.Fill = Brushes.DarkGray;
-                    field.Children.Add(ellipse);
+                {
+                    _streetPoint1.X = -2;
+                    _streetPoint1.Y = -2;
+                    foreach (var component in field.Children)
+                        if (component is Line line && line.Name.Equals("MoveablePoint")) {
+                            _xCord1 = line.X1;
+                            _yCord1 = line.Y1;
+                            line.Name = "firstPoint";
+                        }
                 }
                 else
                 {
-                    _streetPoint2 = new Point(xCord, yCord);
                     StreetInfo.Visibility = Visibility.Visible;
                     StreetInfoGrid.Visibility = Visibility.Visible;
-                    Line line = new Line();
-                    line.X1 = _streetPoint1.X;
-                    line.Y1 = _streetPoint1.Y;
-                    line.X2 = _streetPoint2.X;
-                    line.Y2 = _streetPoint2.Y;
-                    _xCord1 = line.X1;
-                    _yCord1 = line.Y1;
-                    _xCord2 = line.X2;
-                    _yCord2 = line.Y2;
 
-                    line.StrokeThickness = 20;
-                    line.Stroke = Brushes.DarkGray;
+                    foreach (var component in field.Children)
+                    {
+                        if (component is Line createdLine && createdLine.Name.Equals("LineSet"))
+                        {
+                            createdLine.Name = "firstPoint";
+                        }
+                        if (component is Line line && line.Name.Equals("firstPoint"))
+                        {
+                            _xCord2 = line.X2;
+                            _yCord2 = line.Y2;
 
-                    double deltaY;
-                    double deltaX;
-                    if(line.X1 > line.X2) deltaX = line.X1 - line.X2;
-                    else deltaX = line.X2 - line.X1;
+                            line.Stroke = Brushes.DarkGray;
+                            line.Name = "LineSet";
 
-                    if (line.Y1 > line.Y2) deltaY = line.Y1 - line.Y2;
-                    else deltaY = line.Y2 - line.Y1;
+                            double deltaY;
+                            double deltaX;
+                            if (line.X1 > line.X2) deltaX = line.X1 - line.X2;
+                            else deltaX = line.X2 - line.X1;
 
-                    double degrees = Math.Atan(deltaY/deltaX)*180/Math.PI;
-                    if(degrees < 7) line.Y2 = line.Y1;
-                    if(degrees > 83) line.X2 = line.X1;
+                            if (line.Y1 > line.Y2) deltaY = line.Y1 - line.Y2;
+                            else deltaY = line.Y2 - line.Y1;
 
-                    _xCord2 = line.X2;
-                    _yCord2 = line.Y2;
+                            double degrees = Math.Atan(deltaY / deltaX) * 180 / Math.PI;
+                            if (degrees < 7) line.Y2 = line.Y1;
+                            if (degrees > 83) line.X2 = line.X1;
 
-                    field.Children.Add(line);
-                    
+                            _xCord2 = line.X2;
+                            _yCord2 = line.Y2;
+                        }
+                    }
+
                     PlaceInfo.Visibility = Visibility.Visible;
                     PlaceInfoGrid.Visibility = Visibility.Visible;
                     AreaInfo.Visibility = Visibility.Visible;
@@ -488,10 +540,6 @@ namespace CampingUI
                             if (comp is CheckBox checkbox) checkbox.IsChecked = false;
                         }
                     }
-                    //Aanmaken straat openen
-                    // -> straat aanmaken 
-                    // -> straat aan database toevoegen
-
                 }
             }
             else if (_selectedMapButton.Contains("Area"))
@@ -900,6 +948,17 @@ namespace CampingUI
                     }
                 }
                 else HideInfoGrids();
+                _streetPoint1.X = -1;
+                _streetPoint1.Y = -1;
+                GenerateMap();
+                if(_selectedMapButton == "Place")
+                {
+                    GeneratePreviewLine("MoveablePoint", Brushes.Aquamarine);
+                }
+                if (_selectedMapButton == "Street")
+                {
+                    GeneratePreviewLine("MoveablePoint", Brushes.Aquamarine);
+                }
             }
 
         }
