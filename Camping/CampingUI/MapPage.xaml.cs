@@ -11,6 +11,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design.Serialization;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Reflection;
@@ -60,7 +61,6 @@ namespace CampingUI
         private Point _streetPoint1 = new Point(-1, -1), _streetPoint2;
         public Street SelectedStreet;
 
-
         public MapPage(Camping camping)
         {
             InitializeComponent();
@@ -75,13 +75,16 @@ namespace CampingUI
                 Focusable = true;
                 Keyboard.Focus(this);
             };
-            KeyDown += Handle_KeyDown;     
+            KeyDown += Handle_KeyDown;
+
+
+
         }
 
-
+ 
         public void GenerateMap(Canvas canvas)
         {
-            field.Children.Clear();
+            canvas.Children.Clear();
             _areas = _camping.CampingRepository.CampingMapRepository.GetAreas().ToList();
             _streets = _camping.CampingRepository.CampingMapRepository.GetStreets().ToList();
             _places = _camping.CampingRepository.CampingPlaceRepository.GetPlaces().ToList();
@@ -89,6 +92,7 @@ namespace CampingUI
             GenerateComponentsMap(_streets, canvas);
             GenerateComponentsMap(_places, canvas);
         }
+
         private void HandlePlaceClicker(Place place)
         {
             
@@ -320,6 +324,7 @@ namespace CampingUI
             HighLightPlaces(street, Brushes.DarkCyan);
         }
 
+
         private void HighLightPlaces(Object type, SolidColorBrush color)
         {
             List<Place> places = new List<Place>() ;
@@ -341,6 +346,25 @@ namespace CampingUI
                 }
             }
         }
+
+  public void HighLightPlace(Place place, Canvas fieldHolder)
+        {
+
+            foreach (var comp in fieldHolder.Children)
+            {
+                if (comp is Border placeBlock && placeBlock.Child is Canvas canvas && canvas.Name.Contains("Place"))
+                {
+                   
+                    if (canvas.Name.Equals("Place" + place.PlaceID.ToString()))
+                    {
+                        canvas.Background = Brushes.Red;
+                        MessageBox.Show("Vasthouden");
+                    }
+                }
+            }
+            
+        }
+
         private void DeselectAllFields()
         {
             foreach(var comp in field.Children)

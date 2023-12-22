@@ -20,6 +20,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Transform = CampingUI.NewFolder.Transform;
 
@@ -30,6 +31,8 @@ namespace CampingUI
     /// </summary>
     public partial class PlacesOverviewPage : Page
     {
+
+        private MapPage _mapPage;
 
         private Camping _camping;
         private IEnumerable<Place> _placesSortedAndOrFiltered;
@@ -55,7 +58,8 @@ namespace CampingUI
         public PlacesOverviewPage(Camping camping, CampingRepository campingRepository)
         {
             InitializeComponent();
-            _placesOverviewPageFilter = new PlacesOverviewPageFilter();
+      
+        _placesOverviewPageFilter = new PlacesOverviewPageFilter();
             this._camping = camping; 
             _camping.Places = _camping.CampingRepository.CampingPlaceRepository.GetPlaces();
             if (!_camping.Places.IsNullOrEmpty())
@@ -67,12 +71,20 @@ namespace CampingUI
             this._headerTag = "PlaceID";
             new Transform(field2, desiredWidthMini, desiredHeightMini, "plattegrond");
             new Transform(field, desiredWidthMain, desiredHeightMain, "plattegrondMain");
-            MapPage mapPage = new MapPage(camping);
-            mapPage.GenerateMap(field2);
-            mapPage.GenerateMap(field);
-            mapPage.PlaceSelectedOnMap += HandlePlaceSelectedOnMap;
-
+            _mapPage = new MapPage(camping);
+            _mapPage.GenerateMap(field2);
+            _mapPage.GenerateMap(field);
+            _mapPage.PlaceSelectedOnMap += HandlePlaceSelectedOnMap;
         }
+        
+        public void SetupMap()
+        {
+            _mapPage.GenerateMap(field2);
+            _mapPage.GenerateMap(field);
+          
+        }
+
+     
 
         public void HandlePlaceSelectedOnMap(Place place)
         {
@@ -86,7 +98,7 @@ namespace CampingUI
             PowerCheckBoxFilter.IsChecked = place.Power;
             if (CheckBoxChecked(PowerCheckBoxFilter, "stroom") == true) { DogCheckBoxFilter.Content = "Wel stroom"; }
             if (CheckBoxChecked(PowerCheckBoxFilter, "stroom") == false) { DogCheckBoxFilter.Content = "Geen stroom"; }
-
+            
 
             AmountOfPeopleTextBox.Text = $"{place.AmountOfPeople}";
             MaxPriceRangeTextBox.Text = $"{place.PricePerNightPerPerson}";
@@ -280,6 +292,9 @@ namespace CampingUI
         {
             NavigationService.Navigate(new ReservationCreationPage(this));
         }
+
+     
+
         private void DeletePlaceButton_Click(object sender, RoutedEventArgs e)
         {
             Place place = (Place)PlacesListView.SelectedItem;
@@ -289,8 +304,16 @@ namespace CampingUI
                 _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Where(i => i.PlaceID != place.PlaceID).ToList();
                 PlacesOverviewDelete.DeletePlace(_camping, place, DateTime.Now.Date);
                 ReloadScreenDataPlaces();
+                ReloadMaps();
+              
             }
 
+        }
+
+        private void ReloadMaps()
+        {
+            _mapPage.GenerateMap(field);
+            _mapPage.GenerateMap(field2);
         }
         private void OpenPlaceOverview()
         {
@@ -330,6 +353,7 @@ namespace CampingUI
             PlacesListView.SelectedItems.Clear();
             PlacesListView.ItemsSource = _placesSortedAndOrFiltered;
 
+    
             if (!_placesSortedAndOrFiltered.IsNullOrEmpty() && _maxPriceRange > _placesSortedAndOrFiltered.Max(i => i.PricePerNightPerPerson))
                 _maxPriceRange = _placesSortedAndOrFiltered.Max(i => i.PricePerNightPerPerson);
             else
@@ -349,11 +373,26 @@ namespace CampingUI
         {
             if (PlacesListView.SelectedItems.Count > 0)
             {
+
                 Place place = (Place)PlacesListView.SelectedItem;
                 SetLabelsPlaceOverview(place);
                 OpenPlaceOverview();
                 SetReservationsInCalendar(place);
                 SetDeleteButtonClickableIfNoReservations();
+                ReloadMaps();
+                foreach (var comp in field2.Children )
+                {
+                    if (comp is Border placeBlock && placeBlock.Child is Canvas canvas && canvas.Name.Contains("Place"))
+                    {
+
+                        if (canvas.Name.Equals("Place" + place.PlaceID.ToString()))
+                        {
+                            canvas.Background = Brushes.DarkCyan;
+                        }
+                    }
+                }
+                
+
             }
             else
             {
