@@ -11,6 +11,7 @@ namespace CampingUI
 {
     public static class StaticUIMethods
     {
+        public static int ColorCount = 8;
         public static void SetErrorTextboxBorder(TextBox textbox)
         {
             textbox.BorderBrush = Brushes.Red;

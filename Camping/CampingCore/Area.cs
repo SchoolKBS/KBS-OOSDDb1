@@ -28,7 +28,10 @@ namespace CampingCore
         public int XCord1 { get; set; }
         public int Width { get; set; } 
         public int Height { get; set; } 
-
+        public Area()
+        {
+            Color = 9;
+        }
         public Area(ArrayList properties)
         {
             AreaID = (int)properties[0];

@@ -337,5 +337,32 @@ namespace CampingDataAccess
 
             }
         }
+
+        public void AddNewArea(Area area)
+        {
+            string sql = "INSERT INTO Area (Name, Color, Power, Dogs, SurfaceArea, PricePerNightPerPerson, AmountOfPeople, XCord1, YCord1, Width, Height) " +
+                "VALUES (@Name, @Color, @Power, @Dogs, @SurfaceArea, @PricePerNightPerPerson, @AmountOfPeople, @XCord1, @YCord1, @Width, @Height);";
+            using (var connection = new SqliteConnection(ConnectionString))
+            {
+                connection.Open();
+                using (var command = new SqliteCommand(sql, connection))
+                {
+                    command.Prepare();
+                    command.Parameters.AddWithValue("@Name", area.Name);
+                    command.Parameters.AddWithValue("@Color", area.Color);
+                    command.Parameters.AddWithValue("@Power", area.Power);
+                    command.Parameters.AddWithValue("@Dogs", area.Dogs);
+                    command.Parameters.AddWithValue("@SurfaceArea", area.SurfaceArea);
+                    command.Parameters.AddWithValue("@PricePerNightPerPerson", area.PricePerNightPerPerson);
+                    command.Parameters.AddWithValue("@AmountOfPeople", area.AmountOfPeople);
+                    command.Parameters.AddWithValue("@XCord1", area.XCord1);
+                    command.Parameters.AddWithValue("@YCord1", area.YCord1);
+                    command.Parameters.AddWithValue("@Width", area.Width);
+                    command.Parameters.AddWithValue("@Height", area.Height);
+                    command.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+        }
     }
 }

@@ -40,12 +40,15 @@ namespace CampingUI
         private int _placeSurfaceArea, _placePersons, _placePlaceID, _placeStreetID, _placeAreaID, _yPressed, _xPressed;
         private Canvas SelectedPlace;
         private int _streetSurfaceArea, _streetPersons;
-        private double _placePricePerNightPerPerson, _streetPricePerNightPerPerson, _xCord1, _yCord1, _xCord2, _yCord2;
-        private string _streetName;
+        private int _areaSurfaceArea, _areaPersons;
+        private double _placePricePerNightPerPerson, _streetPricePerNightPerPerson, _areaPricePerNightPerPerson, _xCord1, _yCord1, _xCord2, _yCord2;
+        private string _streetName, _areaName;
         private Canvas _previousSelectedCanvas;
         private bool _editPlaceBool, _editStreetBool, _wrongInput;
         private string _selectedMapButton = "View";
         private Point _streetPoint1 = new Point(-1, -1), _streetPoint2;
+        private Point _areaStartPoint = new Point(-1, -1);
+        private Border _newArea;
         public Area SelectedArea { get; private set; }
         public Street SelectedStreet;
         public MapPage(Camping camping)
@@ -111,7 +114,8 @@ namespace CampingUI
                     SelectedArea = area;
                     SelectedStreet = null;
                     SelectedPlace = null;
-                    HandleAreaClick(area);
+                    ToggleAreaInput(false);
+                    HandleAreaClick();
                     border.BorderBrush = Brushes.LightCyan;
                     border.BorderThickness = new Thickness(4);
                     HighLightPlaces(area, Brushes.DarkCyan);
@@ -217,7 +221,6 @@ namespace CampingUI
             };
             return border;
         }
-
         public void HandlePlaceClick(Place place, bool AddPlaceBool)
         {
             PlaceInfo.Visibility = Visibility.Visible;
@@ -544,7 +547,43 @@ namespace CampingUI
             }
             else if (_selectedMapButton.Contains("Area"))
             {
+                GenerateMap();
+                Point point = Mouse.GetPosition(field);
+                double xCord = Math.Round(point.X);
+                double yCord = Math.Round(point.Y);
+                AreaInfoGrid.Visibility = Visibility.Visible;
+                AreaInfo.Visibility = Visibility.Visible;
+                if (_areaStartPoint.X == -1 && _areaStartPoint.Y == -1)
+                {
+                    _areaStartPoint = new Point(xCord, yCord);
+                    Ellipse ellipse = new Ellipse();
+                    Canvas.SetLeft(ellipse, xCord - 7.5);
+                    Canvas.SetTop(ellipse, yCord - 7.5);
+                    ellipse.Width = 15;
+                    ellipse.Height = 15;
+                    ellipse.Fill = Brushes.DarkGray;
+                    field.Children.Add(ellipse);
+                    SelectedArea = new Area();
+                    HandleAreaClick();
+                    ResertAreaBorders();
+                }
+                else
+                {
 
+                    if(xCord < _areaStartPoint.X) (xCord, _areaStartPoint.X) = (_areaStartPoint.X, xCord);
+                    if(yCord < _areaStartPoint.Y) (yCord, _areaStartPoint.Y) = (_areaStartPoint.Y, yCord);
+                    SelectedArea.XCord1 = (int)_areaStartPoint.X;
+                    SelectedArea.YCord1 = (int)_areaStartPoint.Y;
+                    SelectedArea.Width = (int)xCord - SelectedArea.XCord1;
+                    SelectedArea.Height = (int)yCord - SelectedArea.YCord1;
+                    Border border = MapPageArea.GenerateArea(SelectedArea);
+                    field.Children.Add(border);
+                    _newArea = border;
+                    SetAreaEvents(border, SelectedArea);
+
+                    ToggleAreaInput(true);
+                    AreaInfoVisible();
+                }
             }
             else
             {
@@ -806,6 +845,53 @@ namespace CampingUI
             }
             return editNumber;
         }
+        private void HandleCancelAddArea_Click(object sender, RoutedEventArgs e)
+        {
+            _areaStartPoint.X = -1;
+            _areaStartPoint.Y = -1;
+            SelectedArea = null;
+            _newArea = null;
+            GenerateMap();
+            AreaInfoGrid.Visibility = Visibility.Hidden;
+        }
+
+        private void HandleAddArea_Click(object sender, RoutedEventArgs e)
+        {
+            ResertAreaBorders();
+            GetAddAreaValues();
+            if(!_wrongInput)
+            {
+                _camping.CampingRepository.CampingMapRepository.AddNewArea(SelectedArea);
+                AreaInfoGrid.Visibility = Visibility.Hidden;
+                _areaStartPoint.X = -1;
+                _areaStartPoint.Y = -1;
+                GenerateMap();
+            }
+        }
+        private void GetAddAreaValues()
+        {
+            _wrongInput = false;
+            SelectedArea.Name = GetAddStreetNameTextbox(AreaName, _areaName);
+            GetColorID();
+            SelectedArea.AmountOfPeople = GetAddAmountOfPeople(AreaAmountOfPeople, _areaPersons);
+            SelectedArea.PricePerNightPerPerson = GetAddPricePerNightPerPerson(AreaPrice, _areaPricePerNightPerPerson);
+            SelectedArea.SurfaceArea = GetAddSurfaceArea(AreaPlaceSurfaceArea, _areaSurfaceArea);
+            SelectedArea.Power = (bool)AreaPower.IsChecked;
+            SelectedArea.Dogs = (bool)AreaDogs.IsChecked;
+            
+        }
+        private void SelectedArea_ColorChange(object sender, SelectionChangedEventArgs e)
+        {
+            if (_newArea != null)
+            {
+                Canvas usedCanvas = (Canvas)_newArea.Child;
+                if (AreaColor.SelectedItem != null)
+                {
+                    int color = int.Parse(AreaColor.SelectedValue.ToString());
+                    usedCanvas.Background = new SolidColorBrush(StaticUIMethods.GetColorFromInt(color));
+                }
+            }
+        }
 
         public void SetErrorComboBoxBorder(Border border)
         {
@@ -1002,21 +1088,70 @@ namespace CampingUI
                 _selectedMapButton = "View";
             }
         }
-        private void HandleAreaClick(Area area)
+        private void AreaInfoVisible()
         {
-            AreaName.Content = area.Name;
-            AreaColor.Content = StaticUIMethods.GetColorNameFromInt(area.Color);
-            AreaPower.IsChecked = area.Power;
-            AreaDogs.IsChecked = area.Dogs;
-            AreaPlaceSurfaceArea.Content = area.SurfaceArea;
-            AreaPrice.Content = area.PricePerNightPerPerson;
-            AreaAmountOfPeople.Content = area.AmountOfPeople;
-            StreetInfoGrid.Visibility = Visibility.Hidden;
-            AreaInfoGrid.Visibility = Visibility.Visible;
-            PlaceInfoGrid.Visibility = Visibility.Hidden;
             PlaceInfo.Visibility = Visibility.Hidden;
             StreetInfo.Visibility = Visibility.Hidden;
             AreaInfo.Visibility = Visibility.Visible;
+            PlaceInfoGrid.Visibility = Visibility.Hidden;
+            StreetInfoGrid.Visibility = Visibility.Hidden;
+            AreaInfoGrid.Visibility = Visibility.Visible;
+        }
+        private void HandleAreaClick()
+        {
+            AreaName.Text = SelectedArea.Name;
+            SetAreaComboBox();
+            AreaPower.IsChecked = SelectedArea.Power;
+            AreaDogs.IsChecked = SelectedArea.Dogs;
+            if (SelectedArea.SurfaceArea > 0) AreaPlaceSurfaceArea.Text = SelectedArea.SurfaceArea.ToString();
+            else AreaPlaceSurfaceArea.Text = "";
+            if (SelectedArea.PricePerNightPerPerson > 0) AreaPrice.Text = SelectedArea.PricePerNightPerPerson.ToString();
+            else AreaPrice.Text = "";
+            if (SelectedArea.AmountOfPeople > 0) AreaAmountOfPeople.Text = SelectedArea.AmountOfPeople.ToString();
+            else AreaAmountOfPeople.Text = "";
+        }
+        private void SetAreaComboBox()
+        {
+            AreaColor.Items.Clear();
+            List<int> activeColors =_areas.Where(a => SelectedArea != null ? a.Color != SelectedArea.Color : true).Select(a => a.Color).ToList();
+            List<int> possibelColors = Enumerable.Range(0, StaticUIMethods.ColorCount).Except(activeColors).ToList();
+            for (int i = 0; i < possibelColors.Count; i++)
+            {
+                AreaColor.Items.Add(new {Text = StaticUIMethods.GetColorNameFromInt(possibelColors[i]), Value = possibelColors[i]});
+            }
+            if( SelectedArea != null ) AreaColor.SelectedValue = SelectedArea.Color;
+        }
+        private void ToggleAreaInput(bool enabled)
+        {
+            AreaName.IsEnabled = enabled;
+            AreaColor.IsEnabled = enabled;
+            AreaPower.IsEnabled = enabled;
+            AreaDogs.IsEnabled = enabled;
+            AreaPlaceSurfaceArea.IsEnabled = enabled;
+            AreaPrice.IsEnabled = enabled;
+            AreaAmountOfPeople.IsEnabled = enabled;
+            if (enabled) AddAreaButton.Visibility = Visibility.Visible;
+            else AddAreaButton.Visibility = Visibility.Hidden;
+        }
+        private void GetColorID()
+        {
+            if (AreaColor.SelectedItem != null)
+            {
+                SelectedArea.Color = (int)AreaColor.SelectedValue;
+            }
+            else
+            {
+                SetErrorComboBoxBorder(AreaColorBorder);
+                _wrongInput = true;
+            }
+        }
+        private void ResertAreaBorders()
+        {
+            StaticUIMethods.ResetTextboxBorder(AreaName);
+            StaticUIMethods.ResetTextboxBorder(AreaPrice);
+            StaticUIMethods.ResetTextboxBorder(AreaAmountOfPeople);
+            StaticUIMethods.ResetTextboxBorder(AreaPlaceSurfaceArea);
+            ResetComboBoxBorder(AreaColorBorder);
         }
     }
 }
