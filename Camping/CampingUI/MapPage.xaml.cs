@@ -478,23 +478,26 @@ namespace CampingUI
                     ellipse.Height = 15;
                     ellipse.Fill = Brushes.DarkGray;
                     field.Children.Add(ellipse);
+                    SelectedArea = new Area();
+                    HandleAreaClick();
+                    ResertAreaBorders();
                 }
                 else
                 {
-                    Area area = new Area();
+
                     if(xCord < _areaStartPoint.X) (xCord, _areaStartPoint.X) = (_areaStartPoint.X, xCord);
                     if(yCord < _areaStartPoint.Y) (yCord, _areaStartPoint.Y) = (_areaStartPoint.Y, yCord);
-                    area.XCord1 = (int)_areaStartPoint.X;
-                    area.YCord1 = (int)_areaStartPoint.Y;
-                    area.Width = (int)xCord - area.XCord1;
-                    area.Height = (int)yCord - area.YCord1;
-                    Border border = MapPageArea.GenerateArea(area);
+                    SelectedArea.XCord1 = (int)_areaStartPoint.X;
+                    SelectedArea.YCord1 = (int)_areaStartPoint.Y;
+                    SelectedArea.Width = (int)xCord - SelectedArea.XCord1;
+                    SelectedArea.Height = (int)yCord - SelectedArea.YCord1;
+                    Border border = MapPageArea.GenerateArea(SelectedArea);
                     field.Children.Add(border);
                     _newArea = border;
-                    SetAreaEvents(border, area);
-                    SelectedArea = area;
+                    SetAreaEvents(border, SelectedArea);
+
                     ToggleAreaInput(true);
-                    HandleAreaClick();
+                    AreaInfoVisible();
                 }
             }
             else
@@ -743,6 +746,7 @@ namespace CampingUI
 
         private void HandleAddArea_Click(object sender, RoutedEventArgs e)
         {
+            ResertAreaBorders();
             GetAddAreaValues();
             if(!_wrongInput)
             {
@@ -758,7 +762,6 @@ namespace CampingUI
             _wrongInput = false;
             SelectedArea.Name = GetAddStreetNameTextbox(AreaName, _areaName);
             GetColorID();
-            MessageBox.Show(SelectedArea.Name);
             SelectedArea.AmountOfPeople = GetAddAmountOfPeople(AreaAmountOfPeople, _areaPersons);
             SelectedArea.PricePerNightPerPerson = GetAddPricePerNightPerPerson(AreaPrice, _areaPricePerNightPerPerson);
             SelectedArea.SurfaceArea = GetAddSurfaceArea(AreaPlaceSurfaceArea, _areaSurfaceArea);
@@ -951,7 +954,7 @@ namespace CampingUI
                 _selectedMapButton = "View";
             }
         }
-        private void HandleAreaClick()
+        private void AreaInfoVisible()
         {
             PlaceInfo.Visibility = Visibility.Hidden;
             StreetInfo.Visibility = Visibility.Hidden;
@@ -959,6 +962,9 @@ namespace CampingUI
             PlaceInfoGrid.Visibility = Visibility.Hidden;
             StreetInfoGrid.Visibility = Visibility.Hidden;
             AreaInfoGrid.Visibility = Visibility.Visible;
+        }
+        private void HandleAreaClick()
+        {
             AreaName.Text = SelectedArea.Name;
             SetAreaComboBox();
             AreaPower.IsChecked = SelectedArea.Power;
@@ -1004,6 +1010,14 @@ namespace CampingUI
                 SetErrorComboBoxBorder(AreaColorBorder);
                 _wrongInput = true;
             }
+        }
+        private void ResertAreaBorders()
+        {
+            StaticUIMethods.ResetTextboxBorder(AreaName);
+            StaticUIMethods.ResetTextboxBorder(AreaPrice);
+            StaticUIMethods.ResetTextboxBorder(AreaAmountOfPeople);
+            StaticUIMethods.ResetTextboxBorder(AreaPlaceSurfaceArea);
+            ResetComboBoxBorder(AreaColorBorder);
         }
     }
 }
