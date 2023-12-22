@@ -316,15 +316,16 @@ namespace CampingDataAccess
                 connection.Close();
             }
         }
-        public void UpdateStreetByStreetID(bool power, bool dogs, int surfaceArea, double pricePerNightPerPerson, int amountOfPeople, int streetID)
+        public void UpdateStreetByStreetID(string streetName, bool power, bool dogs, int surfaceArea, double pricePerNightPerPerson, int amountOfPeople, int streetID)
         {
-            string sql = "UPDATE Street SET Power = @Power, Dogs = @Dogs, SurfaceArea = @SurfaceArea, PricePerNightPerPerson = @PricePerNightPerPerson, AmountOfPeople = @AmountOfPeople WHERE StreetID = @StreetID;";
+            string sql = "UPDATE Street SET Name = @Name, Power = @Power, Dogs = @Dogs, SurfaceArea = @SurfaceArea, PricePerNightPerPerson = @PricePerNightPerPerson, AmountOfPeople = @AmountOfPeople WHERE StreetID = @StreetID;";
             using (var connection = new SqliteConnection(ConnectionString))
             {
                 connection.Open();
                 using (var command = new SqliteCommand(sql, connection))
                 {
                     command.Prepare();
+                    command.Parameters.AddWithValue("@Name", streetName);
                     command.Parameters.AddWithValue("@Power", power);
                     command.Parameters.AddWithValue("@Dogs", dogs);
                     command.Parameters.AddWithValue("@SurfaceArea", surfaceArea);

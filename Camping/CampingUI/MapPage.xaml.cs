@@ -2,12 +2,15 @@ using CampingCore;
 using CampingDataAccess;
 using CampingUI.GenerateComponentsMap;
 using CampingUI.NewFolder;
+using Google.Protobuf.WellKnownTypes;
+using Microsoft.Windows.Themes;
 using Org.BouncyCastle.Asn1.BC;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Operators;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.Design.Serialization;
 using System.Linq;
 using System.Numerics;
 using System.Reflection;
@@ -52,7 +55,7 @@ namespace CampingUI
         private double _placePricePerNightPerPerson, _streetPricePerNightPerPerson, _xCord1, _yCord1, _xCord2, _yCord2;
         private string _streetName;
         private Canvas _previousSelectedCanvas;
-        private bool _editPlaceBool, _wrongInput;
+        private bool _editPlaceBool, _editStreetBool, _wrongInput;
         private string _selectedMapButton = "View";
         private Point _streetPoint1 = new Point(-1, -1), _streetPoint2;
         public Street SelectedStreet;
@@ -103,13 +106,13 @@ namespace CampingUI
                         canvas.Children.Add(border);
                         SetAreaEvents(border, (Area)(object)comp);
                     }
-                    if (comp is Street)
+                    if (comp is Street street )
                     {
-                        MapPageStreet.GenerateStreet((Street)(object)comp, Brushes.Black);
+                        MapPageStreet.GenerateStreet(street, Brushes.Black);
                         Line line = MapPageStreet.GetLine();
                         canvas.Children.Add(line);
                         canvas.Children.Add(MapPageStreet.GetTextBlock());
-                        SetStreetEvents(line, (Street)(object)comp);
+                        SetStreetEvents(line, street);
                     }                      
                     if (comp is Place)
                         GeneratePlace((Place)(object)comp, Brushes.Black, true, canvas);
@@ -134,15 +137,21 @@ namespace CampingUI
                 }
             };
         }
-        private void SetStreetEvents(Line line, Street comp )
+        private void SetStreetEvents(Line line, Street street )
         {
-            line.MouseLeftButtonDown += (sender, e) => HandleStreetClick((Street)(object)comp);
-            line.MouseLeftButtonDown += (sender, e) => line.Stroke = Brushes.DarkCyan;
-            line.MouseEnter += (sender, e) => line.Stroke = Brushes.DarkCyan;
+            line.MouseLeftButtonDown += (sender, e) =>
+            {
+                if (_selectedMapButton.Equals("View"))
+                {
+                    HandleStreetClick(street);
+                    line.Stroke = Brushes.DarkCyan;
+                }
+            };
 
+            line.MouseEnter += (sender, e) => { if (SelectedStreet == null || (SelectedStreet != null && !SelectedStreet.Equals(street))) line.Stroke = Brushes.DarkCyan; };
             line.MouseLeave += (sender, e) =>
             {
-                if (SelectedStreet == null) line.Stroke = Brushes.Black;
+                if (SelectedStreet == null || (SelectedStreet != null && !SelectedStreet.Equals(street))) line.Stroke = Brushes.Black;
             };
         }
        
@@ -236,24 +245,57 @@ namespace CampingUI
             PlaceInfoGrid.Visibility = Visibility.Visible;
             StreetInfoGrid.Visibility = Visibility.Hidden;
             AreaInfoGrid.Visibility = Visibility.Hidden;
-/*            if (!AddPlaceBool)
+            ResetInputFields("Place");
+            _editPlaceBool = false;
+            if (!AddPlaceBool)
             {
-                //ClearSelection();
-                GenerateMap();
-            }*/
-            //else
-            //{
-                ResetInputFields();
-                AddPlaceButton.Content = "Toevoegen";
-                _editPlaceBool = false;
-                PlaceInfoGrid.Visibility = Visibility.Visible;
-                AddPlaceButton.Visibility = Visibility.Visible;
-            //}
+                _editPlaceBool = true;
+                SetPlaceDataOnFields(place);
+                SetPlaceDataExtending(place);
+            }
+        }
+
+        private void SetPlaceDataExtending(Place place)
+        {
+            List<bool?> placeExtend = _camping.CampingRepository.CampingPlaceRepository.GetPlaceExtendingByPlaceID(place.PlaceID);
+            int counter = 0;
+            foreach (Grid grid in PlaceInfoGrid.Children)
+            {
+                foreach (var  comp in grid.Children)
+                {
+                    if (comp is ComboBox comboBox && !comboBox.Name.Equals("PlaceStreetComboBox") && !comboBox.Name.Equals("PlaceAreaComboBox"))
+                    {
+                        if (placeExtend[counter].HasValue)
+                        {
+                            if (placeExtend[counter] == true) comboBox.SelectedIndex = 0;
+                            else comboBox.SelectedIndex = 1;
+                        }
+                        else comboBox.SelectedIndex = 2;
+                        counter++;
+                       
+                    }
+                }
+                
+            }
+
+        }
+
+        private void SetPlaceDataOnFields(Place place)
+        {
+            PlaceStreetComboBox.Text = _camping.CampingRepository.CampingMapRepository.GetStreetByStreetID(place).Name;
+            PlaceAreaComboBox.Text = _camping.CampingRepository.CampingMapRepository.GetAreaByAreaID(place).Name;
+            PlacePlaceID.IsEnabled = false;
+            PlacePlaceID.Text = place.PlaceID.ToString();
+            PlaceHasPower.IsChecked = place.Power;
+            PlaceHasDogs.IsChecked = place.Dogs;
+            PlaceSurfaceArea.Text = place.SurfaceArea.ToString();
+            PlacePricePerNight.Text = place.PricePerNightPerPerson.ToString();
+            PlacePersons.Text = place.AmountOfPeople.ToString();
         }
         public void HandleStreetClick(Street street)
         {
             DeselectAllFields();
-            GenerateMap(field);
+            _editStreetBool = true;
             SelectedPlace = null;
             SelectedArea = null;
             SelectedStreet = street;
@@ -271,23 +313,15 @@ namespace CampingUI
             {
                 foreach (var comp in grid.Children)
                 {
-                    if (comp is TextBox textbox) textbox.IsEnabled = false;
-                    if (comp is CheckBox checkbox) checkbox.IsEnabled = false;
+                    if (comp is TextBox textbox) textbox.IsEnabled = true;
+                    if (comp is CheckBox checkbox) checkbox.IsEnabled = true;
                 }
             }
             HighLightPlaces(street, Brushes.DarkCyan);
-            AddStreetButton.Content = "Aanpassen";
-
-            //Als annuleren -> onzichtbaar maken en deselecteren
-
-            //Als toevoegen -> Check op alle invoervelden
-            //              -> Update straat gegevens in de database
-            // 
         }
 
         private void HighLightPlaces(Object type, SolidColorBrush color)
         {
-
             List<Place> places = new List<Place>() ;
 
             if (type is Street street)
@@ -302,9 +336,7 @@ namespace CampingUI
                     if (comp is Border placeBlock && placeBlock.Child is Canvas canvas && canvas.Name.Contains("Place"))
                     {
                         foreach (Place placeData in places)
-                        {
                             if (canvas.Name.Equals("Place" + placeData.PlaceID.ToString())) canvas.Background = color;
-                        }
                     }
                 }
             }
@@ -314,32 +346,31 @@ namespace CampingUI
             foreach(var comp in field.Children)
             {
                 if(comp is Line line)
-                {
                     line.Stroke = Brushes.Black;
-                }
                 if (comp is Border borderArea && borderArea.Name.Contains("Canvas"))
                 {
                     borderArea.BorderBrush = Brushes.Black;
                     borderArea.BorderThickness = new Thickness(1);
                 }
                 if (comp is Border borderPlace && borderPlace.Name.Contains("Place") && borderPlace.Child is Canvas canvasPlace)
-                {
                     canvasPlace.Background = Brushes.Black;
-                }
             }
         }
 
-        private void ResetInputFields()
+        private void ResetInputFields(string componentString)
         {
-            PlaceStreetComboBox.Items.Clear();
-            PlaceAreaComboBox.Items.Clear();
-            foreach (Street street in _streets)
+            if (componentString.Equals("Place"))
             {
-                PlaceStreetComboBox.Items.Add(street.Name);
-            }
-            foreach (Area area in _areas)
-            {
-                PlaceAreaComboBox.Items.Add(area.Name);
+                PlaceStreetComboBox.Items.Clear();
+                PlaceAreaComboBox.Items.Clear();
+                foreach (Street street in _streets)
+                {
+                    PlaceStreetComboBox.Items.Add(street.Name);
+                }
+                foreach (Area area in _areas)
+                {
+                    PlaceAreaComboBox.Items.Add(area.Name);
+                }
             }
             foreach (Grid grid in PlaceInfoGrid.Children)
             {
@@ -413,6 +444,7 @@ namespace CampingUI
             }
             else if (_selectedMapButton.Contains("Street"))
             {
+                _editStreetBool = false;
                 GenerateMap(field);
                 Point point = Mouse.GetPosition(field);
                 double xCord = Math.Round(point.X);
@@ -433,9 +465,6 @@ namespace CampingUI
                     _streetPoint2 = new Point(xCord, yCord);
                     StreetInfo.Visibility = Visibility.Visible;
                     StreetInfoGrid.Visibility = Visibility.Visible;
-                    Grid grid = new Grid();
-                    Label label = new Label();
-                    label.Content = "Straatnaam";
                     Line line = new Line();
                     line.X1 = _streetPoint1.X;
                     line.Y1 = _streetPoint1.Y;
@@ -448,8 +477,6 @@ namespace CampingUI
 
                     line.StrokeThickness = 20;
                     line.Stroke = Brushes.DarkGray;
-                    grid.Children.Add(line);
-                    grid.Children.Add(label);
 
                     double deltaY;
                     double deltaX;
@@ -466,8 +493,20 @@ namespace CampingUI
                     _xCord2 = line.X2;
                     _yCord2 = line.Y2;
 
-                    field.Children.Add(grid);
+                    field.Children.Add(line);
                     
+                    PlaceInfo.Visibility = Visibility.Visible;
+                    PlaceInfoGrid.Visibility = Visibility.Visible;
+                    AreaInfo.Visibility = Visibility.Visible;
+                    AreaInfoGrid.Visibility = Visibility.Visible;
+                    foreach (Grid grid1 in StreetInfoGrid.Children)
+                    {
+                        foreach (var comp in grid1.Children)
+                        {
+                            if (comp is TextBox textbox) textbox.Text = null;
+                            if (comp is CheckBox checkbox) checkbox.IsChecked = false;
+                        }
+                    }
                     //Aanmaken straat openen
                     // -> straat aanmaken 
                     // -> straat aan database toevoegen
@@ -485,70 +524,54 @@ namespace CampingUI
         }
         private void HandleAddStreet_Click(Object sender, RoutedEventArgs e)
         {
-            if (AddStreetButton.Content.Equals("Aanpassen"))
+            GetAddStreetValues();
+            if (!_wrongInput)
             {
-                foreach (Grid grid in StreetInfoGrid.Children)
+                bool hasPower = (bool)StreetHasPower.IsChecked;
+                bool hasDogs = (bool)StreetHasDogs.IsChecked;
+                if (_editStreetBool)
                 {
-                    foreach (var comp in grid.Children)
+                    _camping.CampingRepository.CampingMapRepository.UpdateStreetByStreetID(_streetName, hasPower, hasDogs, _streetSurfaceArea, _streetPricePerNightPerPerson, _streetPersons, SelectedStreet.StreetID);
+                    Street street = _camping.CampingRepository.CampingMapRepository.GetStreetByStreetID(SelectedStreet.StreetID);
+                    List<Place> streetPlaces = _places.Where(p => p.StreetID == street.StreetID).ToList();
+                    foreach (Place place in streetPlaces)
                     {
-                        if (comp is TextBox textbox) textbox.IsEnabled = true;
-                        if (comp is CheckBox checkbox) checkbox.IsEnabled = true;
-                    }
-                }
-                AddStreetButton.Content = "Opslaan";
-            }
-            else
-            {
-                GetAddStreetValues();
-                if (!_wrongInput)
-                {
-                    bool hasPower = (bool)StreetHasPower.IsChecked;
-                    bool hasDogs = (bool)StreetHasDogs.IsChecked;
-                    MessageBox.Show($"{AddStreetButton.Content}");
-                    if (AddStreetButton.Content.Equals("Opslaan"))
-                    {
-                        _camping.CampingRepository.CampingMapRepository.UpdateStreetByStreetID(hasPower, hasDogs, _streetSurfaceArea, _streetPricePerNightPerPerson, _streetPersons, SelectedStreet.StreetID);
-                        Street street = _camping.CampingRepository.CampingMapRepository.GetStreetByStreetID(SelectedStreet.StreetID);
-                        List<Place> streetPlaces = _places.Where(p => p.StreetID == street.StreetID).ToList();
-                        foreach(Place place in streetPlaces)
-                        {
-                            bool placeExtendPower = place.Power;
-                            bool placeExtendDogs = place.Dogs;
-                            int placeExtendSurfaceArea = place.SurfaceArea;
-                            double placeExtendPricePerNightPerPerson = place.PricePerNightPerPerson;
-                            int placeExtendAmountOfPeople = place.AmountOfPeople;
+                        bool placeExtendPower = place.Power;
+                        bool placeExtendDogs = place.Dogs;
+                        int placeExtendSurfaceArea = place.SurfaceArea;
+                        double placeExtendPricePerNightPerPerson = place.PricePerNightPerPerson;
+                        int placeExtendAmountOfPeople = place.AmountOfPeople;
 
-                            List<bool?> placeExtend = _camping.CampingRepository.CampingPlaceRepository.GetPlaceExtendingByPlaceID(place.PlaceID);
-                            if (placeExtend[0] == true) placeExtendPower = true;
-                            if (placeExtend[1] == true) placeExtendDogs = true;
-                            if (placeExtend[2] == true) placeExtendSurfaceArea = street.SurfaceArea;
-                            if (placeExtend[3] == true) placeExtendPricePerNightPerPerson = street.PricePerNightPerPerson;
-                            if (placeExtend[4] == true) placeExtendAmountOfPeople = street.AmountOfPeople;
-                            MessageBox.Show($"{placeExtendPower}, {placeExtendDogs}, {placeExtendSurfaceArea}, {_streetSurfaceArea}, {placeExtendPricePerNightPerPerson}, {placeExtendAmountOfPeople}");
-                            _camping.CampingRepository.CampingPlaceRepository.UpdatePlaceData(place.PlaceID, 
-                                                                                              place.StreetID, 
-                                                                                              place.AreaID, 
-                                                                                              placeExtendPower, 
-                                                                                              placeExtendSurfaceArea, 
-                                                                                              placeExtendPricePerNightPerPerson, 
-                                                                                              placeExtendAmountOfPeople,
-                                                                                              placeExtendDogs);
-                        }
+                        List<bool?> placeExtend = _camping.CampingRepository.CampingPlaceRepository.GetPlaceExtendingByPlaceID(place.PlaceID);
+                        if (placeExtend[0] == true) placeExtendPower = true;
+                        if (placeExtend[1] == true) placeExtendDogs = true;
+                        if (placeExtend[2] == true) placeExtendSurfaceArea = street.SurfaceArea;
+                        if (placeExtend[3] == true) placeExtendPricePerNightPerPerson = street.PricePerNightPerPerson;
+                        if (placeExtend[4] == true) placeExtendAmountOfPeople = street.AmountOfPeople;
+                        _camping.CampingRepository.CampingPlaceRepository.UpdatePlaceData(place.PlaceID,
+                                                                                          place.StreetID,
+                                                                                          place.AreaID,
+                                                                                          placeExtendPower,
+                                                                                          placeExtendSurfaceArea,
+                                                                                          placeExtendPricePerNightPerPerson,
+                                                                                          placeExtendAmountOfPeople,
+                                                                                          placeExtendDogs);
                     }
-                    else
-                    {
-                        _camping.CampingRepository.CampingMapRepository.AddNewStreet(_streetName, hasPower, hasDogs, _streetSurfaceArea, _streetPricePerNightPerPerson, _streetPersons, (int)_xCord1, (int)_yCord1, (int)_xCord2, (int)_yCord2);
-                        _streetPoint1 = new Point(-1, -1);
-                    }
-                    GenerateMap(field);
-                    ResetAfterAddingMapComponent("Street");
                 }
+                else
+                {
+                    _camping.CampingRepository.CampingMapRepository.AddNewStreet(_streetName, hasPower, hasDogs, _streetSurfaceArea, _streetPricePerNightPerPerson, _streetPersons, (int)_xCord1, (int)_yCord1, (int)_xCord2, (int)_yCord2);
+                    _streetPoint1 = new Point(-1, -1);
+                }
+                ResetAfterAddingMapComponent("Street");
+                GenerateMap();
             }
+            
         }
 
         public void GetAddStreetValues()
         {
-            _streetName = GetAddStreetNameTextbox(StreetName, _streetName);
+            _streetName = GetAddComponentNameTextbox(StreetName, _streetName);
             _streetSurfaceArea = GetAddSurfaceArea(StreetSurfaceArea, _streetSurfaceArea);
             _streetPersons = GetAddAmountOfPeople(StreetPersons, _streetPersons);
             _streetPricePerNightPerPerson = GetAddPricePerNightPerPerson(StreetPricePerNight, _streetPricePerNightPerPerson);
@@ -567,12 +590,22 @@ namespace CampingUI
                     hasDogs = true;
                 Street street = _camping.CampingRepository.CampingMapRepository.GetStreetByStreetName(PlaceStreetComboBox.SelectedItem.ToString());
                 Area area = _camping.CampingRepository.CampingMapRepository.GetAreaByAreaName(PlaceAreaComboBox.SelectedItem.ToString());
-                Place place = new Place(_placePlaceID, hasPower, street.StreetID, area.AreaID, hasDogs, _placeSurfaceArea, _placePersons, _placePricePerNightPerPerson, _xPressed, _yPressed);
+
                 if (_editPlaceBool)
                 {
-                    _camping.CampingRepository.CampingPlaceRepository.UpdatePlaceData(place.PlaceID, street.StreetID, area.AreaID, hasPower, _placeSurfaceArea, _placePricePerNightPerPerson, _placePersons, hasDogs);
+                    _camping.CampingRepository.CampingPlaceRepository.UpdatePlaceData(Int32.Parse(PlacePlaceID.Text), street.StreetID, area.AreaID, hasPower, _placeSurfaceArea, _placePricePerNightPerPerson, _placePersons, hasDogs);
+                    _camping.CampingRepository.CampingPlaceRepository.UpdatePlaceDataExtending(Int32.Parse(PlacePlaceID.Text),
+                                                          GetValueFromExtendComboBox(PlacePowerComboBox),
+                                                          GetValueFromExtendComboBox(PlaceDogsComboBox),
+                                                          GetValueFromExtendComboBox(PlaceSurfaceAreaComboBox),
+                                                          GetValueFromExtendComboBox(PlacePricePerNightPerPersonComboBox),
+                                                          GetValueFromExtendComboBox(PlacePersonsComboBox));
+                    ResetAfterAddingMapComponent("Place");
+                    return;
                 }
-                else
+                Place place = new Place(_placePlaceID, hasPower, street.StreetID, area.AreaID, hasDogs, _placeSurfaceArea, _placePersons, _placePricePerNightPerPerson, _xPressed, _yPressed);
+
+                if (!_editPlaceBool)
                 {
                     _camping.CampingRepository.CampingPlaceRepository.AddPlace(place);
                     _camping.CampingRepository.CampingMapRepository.AddExtend(place.PlaceID,
@@ -583,13 +616,7 @@ namespace CampingUI
                                                           GetValueFromExtendComboBox(PlacePersonsComboBox));
                     _camping.CampingRepository.CampingPlaceRepository.GetPlaces();
                 }
-                ResetInputFields();
-                _selectedMapButton = "View";
-                foreach (Button gridButton in MapGridButtons.Children)
-                {
-                    Style selectionStyle = (Style)gridButton.FindResource("ButtonStyle1Selection");
-                    gridButton.Style = selectionStyle;
-                }
+                ResetInputFields("Place");
                 ResetAfterAddingMapComponent("Place");
             }
         }
@@ -601,10 +628,11 @@ namespace CampingUI
             return extendBool;
         }
 
-        public void HandleCancelAddPlace_Click(Object sender, RoutedEventArgs e)
+        public void HandleCancelAddComponent_Click(Object sender, RoutedEventArgs e)
         {
             ResetAfterAddingMapComponent("Place");
             ResetAfterAddingMapComponent("Street");
+            HideInfoGrids();
         }
 
         private void ResetAfterAddingMapComponent(string mapComponent)
@@ -619,7 +647,6 @@ namespace CampingUI
             {
                 collection = StreetInfoGrid.Children;
                 StreetInfoGrid.Visibility = Visibility.Hidden;
-                
             }
 
             if(collection != null && collection.Count > 0)
@@ -724,7 +751,7 @@ namespace CampingUI
                 _wrongInput = false;
             }
         }
-        private string GetAddStreetNameTextbox(TextBox textbox, string name)
+        private string GetAddComponentNameTextbox(TextBox textbox, string name)
         {
             if (!string.IsNullOrEmpty(textbox.Text))
             {
@@ -773,13 +800,13 @@ namespace CampingUI
                 ResetComboBoxBorder(border);
                 _wrongInput = false;
             }
+            EnableExtendComboBoxes(false);
             if (PlaceStreetComboBox.SelectedItem != null && PlaceAreaComboBox.SelectedItem != null)
             {
                 EnableExtendComboBoxes(true);
 
                 foreach (Grid grid in PlaceInfoGrid.Children)
                 {
-
                     foreach (var component in grid.Children)
                     {
                         if (component is ComboBox com)
@@ -790,10 +817,6 @@ namespace CampingUI
                         }
                     }
                 }
-            }
-            else
-            {
-                EnableExtendComboBoxes(false);
             }
         }
 
@@ -886,14 +909,18 @@ namespace CampingUI
         {
             if (e.Key == Key.Escape)
             {
-                HideInfoGrids();
-                
-                foreach (Button gridButton in MapGridButtons.Children)
+                if(PlaceInfoGrid.Visibility.Equals(Visibility.Hidden) && StreetInfoGrid.Visibility.Equals(Visibility.Hidden) && AreaInfoGrid.Visibility.Equals(Visibility.Hidden))
                 {
-                    Style selectionStyle = (Style)gridButton.FindResource("ButtonStyle1Selection");
-                    gridButton.Style = selectionStyle;
+                    _selectedMapButton = "View";
+                    foreach (Button gridButton in MapGridButtons.Children)
+                    {
+                        Style selectionStyle = (Style)gridButton.FindResource("ButtonStyle1Selection");
+                        gridButton.Style = selectionStyle;
+                    }
                 }
+                else HideInfoGrids();
             }
+
         }
 
         private void HideInfoGrids()
@@ -910,7 +937,6 @@ namespace CampingUI
             SelectedStreet = null;
             _streetPoint1 = new Point(-1, -1);
             _streetPoint2 = new Point(-1, -1);
-            _selectedMapButton = "View";
             GenerateMap(field);
         }
 

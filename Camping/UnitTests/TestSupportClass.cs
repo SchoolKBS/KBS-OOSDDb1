@@ -16,11 +16,11 @@ namespace UnitTests
             List<Place> listToCheck = new List<Place>();
             for (int i = 1; i <= 5; i++)
             {
-                listToCheck.Add(new Place(i, true, i, true, i, i, i, i, i));
+                listToCheck.Add(new Place(i, true, i, i, true, i, i, i, i, i));
             }
             for (int i = 6; i <= 10; i++)
             {
-                listToCheck.Add(new Place(i, false, i, false, i, i, i, i, i));
+                listToCheck.Add(new Place(i, false, i, i, false, i, i, i, i, i));
             }
             return listToCheck;
         }

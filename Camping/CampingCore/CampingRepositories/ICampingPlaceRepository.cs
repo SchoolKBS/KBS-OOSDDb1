@@ -15,5 +15,6 @@ namespace CampingCore.CampingRepositories
         public void UpdatePlaceData(int placeID, int streetID, int areaID, bool power, int surfaceArea, double pricePerNightPerPerson, int amountOfPeople, bool dogs);
         public List<bool?> GetPlaceExtendingByPlaceID(int placeID);
         public void RemovePlaceExtends(Place place);
+        public void UpdatePlaceDataExtending(int placeID, bool? power, bool? dogs, bool? surfaceArea, bool? pricePerNightPerPerson, bool? amountOfPeople);
     }
 }
