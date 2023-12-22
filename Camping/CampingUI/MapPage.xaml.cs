@@ -564,7 +564,7 @@ namespace CampingUI
                     _streetPoint1 = new Point(-1, -1);
                 }
                 ResetAfterAddingMapComponent("Street");
-                GenerateMap();
+                GenerateMap(field);
             }
             
         }

@@ -90,6 +90,7 @@ namespace CampingUI
 
             AmountOfPeopleTextBox.Text = $"{place.AmountOfPeople}";
             MaxPriceRangeTextBox.Text = $"{place.PricePerNightPerPerson}";
+
         }
   
         private void TextBox_Changed(object sender, TextChangedEventArgs e)
