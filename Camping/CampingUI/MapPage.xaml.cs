@@ -11,6 +11,7 @@ using Org.BouncyCastle.Crypto.Operators;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Linq;
 using System.Numerics;
@@ -399,19 +400,23 @@ namespace CampingUI
             if (_selectedMapButton.Contains("Place"))
             {
                 Place place = new Place(1000000000, false, 1, 1, false, 0, 0, 0, _xPressed, _yPressed);
-                GeneratePreviewPlace(place, Brushes.Aquamarine);
+                GeneratePreviewPlace(place, Brushes.Aquamarine);          
             }
             if(_selectedMapButton.Contains("Street"))
             {
-                Line line1 = new Line();
+                Line line1 = null;
+                bool canMakeLine = true;
                 foreach (var component in field.Children)
                 {
-                    if (component is Line line && !line.Name.Equals("MoveablePoint"))
+                    if (component is Line line)
                     {
-                        line1 = GeneratePreviewLine("MoveablePoint", Brushes.Aquamarine);
+                        if (line.Name.Equals("firstPoint")) line1 = line;
+                        if (line.Name.Equals("LineSet")) canMakeLine = false;
+                        
                     }
                 }
-                field.Children.Add(line1);
+                if(line1 == null && canMakeLine)
+                    GeneratePreviewLine("MoveablePoint", Brushes.Aquamarine);         
             }
         }
 
@@ -423,7 +428,7 @@ namespace CampingUI
             GeneratePlace(place, color, false);
         }
 
-        private Line GeneratePreviewLine(string name, SolidColorBrush color)
+        private void GeneratePreviewLine(string name, SolidColorBrush color)
         {
             Point p = Mouse.GetPosition(field);
             Line line = new Line();
@@ -434,8 +439,7 @@ namespace CampingUI
             line.StrokeThickness = 15;
             line.Stroke = color;
             line.Name = name;
-            return line;
-            
+            field.Children.Add(line);
         }
         private void field_MouseMove(object sender, MouseEventArgs e)
         {
@@ -451,6 +455,7 @@ namespace CampingUI
                             Canvas.SetLeft(border, p.X - 15);
                             Canvas.SetTop(border, p.Y - 15);
                         }
+                        break;
                     }
                 }
             }
@@ -482,15 +487,18 @@ namespace CampingUI
         }
         private void field_MouseLeave(object sender, MouseEventArgs e)
         {
-            Border borderPlace = new Border();
-            foreach (var component in field.Children)
+            if(_selectedMapButton.Contains("Place"))
             {
-                if (component is Border border && border.Name.Equals("Place_1000000000"))
+                foreach (var component in field.Children)
                 {
-                    borderPlace = border;
+                    if (component is Border border && border.Name.Equals("Place_1000000000"))
+                    {
+                        field.Children.Remove(border);
+                        break;
+                    }
                 }
             }
-            field.Children.Remove(borderPlace);
+
         }
 
         private void field_MouseDown(object sender, MouseButtonEventArgs e)
@@ -501,10 +509,9 @@ namespace CampingUI
                 {
                     if (component is Border border && border.Name.Equals("Place_0"))
                     {
-                        border.Name = "Place_1000000000";
-                        Canvas place = (Canvas)border.Child;
-                        place.Background = Brushes.Aquamarine;
-                    }
+                        field.Children.Remove(border);
+                        break;
+                    } 
                 }
                 Point p = Mouse.GetPosition(field);
                 _xPressed = (int)Math.Round(p.X) - 15;
@@ -530,9 +537,6 @@ namespace CampingUI
                 }
                 else
                 {
-                    StreetInfo.Visibility = Visibility.Visible;
-                    StreetInfoGrid.Visibility = Visibility.Visible;
-
                     foreach (var component in field.Children)
                     {
                         if (component is Line createdLine && createdLine.Name.Equals("LineSet"))
@@ -541,33 +545,15 @@ namespace CampingUI
                         }
                         if (component is Line line && line.Name.Equals("firstPoint"))
                         {
-                            _xCord2 = line.X2;
-                            _yCord2 = line.Y2;
-
-                            line.Stroke = Brushes.DarkGray;
-                            line.Name = "LineSet";
-
-                            double deltaY;
-                            double deltaX;
-                            if (line.X1 > line.X2) deltaX = line.X1 - line.X2;
-                            else deltaX = line.X2 - line.X1;
-
-                            if (line.Y1 > line.Y2) deltaY = line.Y1 - line.Y2;
-                            else deltaY = line.Y2 - line.Y1;
-
-                            double degrees = Math.Atan(deltaY / deltaX) * 180 / Math.PI;
-                            if (degrees < 7) line.Y2 = line.Y1;
-                            if (degrees > 83) line.X2 = line.X1;
-
-                            _xCord2 = line.X2;
-                            _yCord2 = line.Y2;
+                            CalculateStreetLineAngle(line);
                         }
                     }
-
-                    PlaceInfo.Visibility = Visibility.Visible;
-                    PlaceInfoGrid.Visibility = Visibility.Visible;
-                    AreaInfo.Visibility = Visibility.Visible;
-                    AreaInfoGrid.Visibility = Visibility.Visible;
+                    StreetInfo.Visibility = Visibility.Visible;
+                    StreetInfoGrid.Visibility = Visibility.Visible;
+                    PlaceInfo.Visibility = Visibility.Hidden;
+                    PlaceInfoGrid.Visibility = Visibility.Hidden;
+                    AreaInfo.Visibility = Visibility.Hidden;
+                    AreaInfoGrid.Visibility = Visibility.Hidden;
                     foreach (Grid grid1 in StreetInfoGrid.Children)
                     {
                         foreach (var comp in grid1.Children)
@@ -617,11 +603,33 @@ namespace CampingUI
                     field.Children.Add(border);
                     _newArea = border;
                     SetAreaEvents(border, SelectedArea);
-
                     ToggleAreaInput(true);
                     AreaInfoVisible();
                 }
             }
+        }
+        private void CalculateStreetLineAngle(Line line)
+        {
+            _xCord2 = line.X2;
+            _yCord2 = line.Y2;
+
+            line.Stroke = Brushes.DarkGray;
+            line.Name = "LineSet";
+
+            double deltaY;
+            double deltaX;
+            if (line.X1 > line.X2) deltaX = line.X1 - line.X2;
+            else deltaX = line.X2 - line.X1;
+
+            if (line.Y1 > line.Y2) deltaY = line.Y1 - line.Y2;
+            else deltaY = line.Y2 - line.Y1;
+
+            double degrees = Math.Atan(deltaY / deltaX) * 180 / Math.PI;
+            if (degrees < 7) line.Y2 = line.Y1;
+            if (degrees > 83) line.X2 = line.X1;
+
+            _xCord2 = line.X2;
+            _yCord2 = line.Y2;
         }
         private void HandleAddStreet_Click(Object sender, RoutedEventArgs e)
         {
@@ -788,7 +796,7 @@ namespace CampingUI
         private double GetAddPricePerNightPerPerson(TextBox textbox, double pricePerNightPerPerson)
         {
             double number;
-            if (double.TryParse(textbox.Text, out number) && number >= 0 && !string.IsNullOrEmpty(textbox.Text))
+            if (double.TryParse(textbox.Text, out number) && number > 0 && !string.IsNullOrEmpty(textbox.Text))
                 pricePerNightPerPerson = number;
             else
             {
@@ -869,7 +877,7 @@ namespace CampingUI
         private int GetAddTextBox(TextBox textbox, int editNumber)
         {
             int number;
-            if (int.TryParse(textbox.Text, out number) && number >= 0 && !string.IsNullOrEmpty(textbox.Text))// Checks if int can be parsed and if number is bigger or equal to 0
+            if (int.TryParse(textbox.Text, out number) && number > 0 && !string.IsNullOrEmpty(textbox.Text))// Checks if int can be parsed and if number is bigger or equal to 0
                 editNumber = number;
             else
             {
@@ -1070,7 +1078,7 @@ namespace CampingUI
                 _streetPoint1 = new Point(-1, -1);
                 _areaStartPoint = new Point(-1, -1);
                 GenerateMap();
-                if(_selectedMapButton == "Place")
+                if (_selectedMapButton.Contains("Place"))
                 {
                     Point p = Mouse.GetPosition(field);
                     _xPressed = (int)p.X;
@@ -1079,12 +1087,11 @@ namespace CampingUI
                     Place place = new Place(1000000000, false, 1, 1, false, 0, 0, 0, _xPressed, _yPressed);
                     GeneratePreviewPlace(place, Brushes.Aquamarine);
                 }
-                if (_selectedMapButton == "Street")
-                {
+                if (_selectedMapButton.Contains("Street"))
+                {      
                     GeneratePreviewLine("MoveablePoint", Brushes.Aquamarine);
                 }
             }
-
         }
 
         private void HideInfoGrids()
