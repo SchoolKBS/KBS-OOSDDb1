@@ -161,6 +161,7 @@ namespace CampingUI
         }
         private void ResetFilters()
         {
+            SetupMap();
             ArrivalDatePicker.SelectedDate = null;
             DepartureDatePicker.SelectedDate = null;
             DogCheckBoxFilter.Content = "Geen voorkeur (hond)";
@@ -202,10 +203,34 @@ namespace CampingUI
                 _placesSortedAndOrFiltered = PlacesOverviewFilter.GetFilteredListOnDate(_emptyDates, arrivalDate, departureDate, _placesSortedAndOrFiltered, _camping);
                 _placesSortedAndOrFiltered = PlacesOverviewFilter.GetFilteredListOnPower(hasPower, _placesSortedAndOrFiltered, _camping);
                 _placesSortedAndOrFiltered = PlacesOverviewSorting.SetSortDuringFiltering(_isSortedAscending, _headerTag, _placesSortedAndOrFiltered);
+                HighLightFilteredMiniMap(_placesSortedAndOrFiltered);
                 PlacesListView.ItemsSource = _placesSortedAndOrFiltered;
                 _filterApplied = true;
             }
 
+        }
+
+        private void HighLightFilteredMiniMap(IEnumerable<Place> filteredPlaces)
+        {
+            foreach (var comp in field.Children)
+            {
+                if (comp is Border placeBlock && placeBlock.Child is Canvas canvas && canvas.Name.Contains("Place"))
+                {
+                    foreach (Place placeData in filteredPlaces)
+                    {
+                        if (canvas.Name.Equals("Place" + placeData.PlaceID.ToString()))
+                        {
+                          
+                            canvas.Opacity = 1.0;
+                            break; 
+                        }
+                        else
+                        {
+                            canvas.Opacity = 0.3;
+                        }
+                    }
+                }
+            }
         }
         private bool? CheckBoxChecked(CheckBox checkbox, string content)
         {
