@@ -17,11 +17,11 @@ using CampingUI.NewFolder;
 
 namespace CampingUI.Map
 {
-    public class MapMethods : MapPage
+    public class MapMethods //: MapPage
     {
         protected MapPage MapPage { get; private set; }
         private Camping _camping;
-        public MapMethods(MapPage mapPage, Camping camping) : base(camping)
+        public MapMethods(MapPage mapPage, Camping camping) //: base(camping)
         {
             MapPage = mapPage;
             _camping = camping;
@@ -29,7 +29,7 @@ namespace CampingUI.Map
         }
         public void DeselectAllFields()
         {
-            foreach (var comp in field.Children)
+            foreach (var comp in MapPage.field.Children)
             {
                 if (comp is Line line)
                     line.Stroke = Brushes.Black;
@@ -47,28 +47,28 @@ namespace CampingUI.Map
             SetInfoGridsInvisible();
             if (component.Equals("Place"))
             {
-                PlaceInfo.Visibility = Visibility.Visible;
-                PlaceInfoGrid.Visibility = Visibility.Visible;
+                MapPage.PlaceInfo.Visibility = Visibility.Visible;
+                MapPage.PlaceInfoGrid.Visibility = Visibility.Visible;
             }
             else if (component.Equals("Street"))
             {
-                StreetInfo.Visibility = Visibility.Visible;
-                StreetInfoGrid.Visibility = Visibility.Visible;
+                MapPage.StreetInfo.Visibility = Visibility.Visible;
+                MapPage.StreetInfoGrid.Visibility = Visibility.Visible;
             }
             else if (component.Equals("Area"))
             {
-                AreaInfo.Visibility = Visibility.Visible;
-                AreaInfoGrid.Visibility = Visibility.Visible;
+                MapPage.AreaInfo.Visibility = Visibility.Visible;
+                MapPage.AreaInfoGrid.Visibility = Visibility.Visible;
             }
         }
         public void SetInfoGridsInvisible()
         {
-            PlaceInfo.Visibility = Visibility.Visible;
-            StreetInfo.Visibility = Visibility.Hidden;
-            AreaInfo.Visibility = Visibility.Hidden;
-            PlaceInfoGrid.Visibility = Visibility.Hidden;
-            StreetInfoGrid.Visibility = Visibility.Hidden;
-            AreaInfoGrid.Visibility = Visibility.Hidden;
+            MapPage.PlaceInfo.Visibility = Visibility.Visible;
+            MapPage.StreetInfo.Visibility = Visibility.Hidden;
+            MapPage.AreaInfo.Visibility = Visibility.Hidden;
+            MapPage.PlaceInfoGrid.Visibility = Visibility.Hidden;
+            MapPage.StreetInfoGrid.Visibility = Visibility.Hidden;
+            MapPage.AreaInfoGrid.Visibility = Visibility.Hidden;
         }
         public void ResetBorders(Grid grid)
         {
@@ -98,7 +98,7 @@ namespace CampingUI.Map
                 }
                 else if (component is ComboBox combobox)
                 {
-                    if (!combobox.Name.Equals(PlaceAreaComboBox.Name) && !combobox.Name.Equals(PlaceStreetComboBox.Name))
+                    if (!combobox.Name.Equals(MapPage.PlaceAreaComboBox.Name) && !combobox.Name.Equals(MapPage.PlaceStreetComboBox.Name))
                     {
                         combobox.SelectedIndex = 2;
                         combobox.IsEnabled = false;
@@ -117,7 +117,7 @@ namespace CampingUI.Map
             else
             {
                 StaticUIMethods.SetErrorTextboxBorder(textbox);
-                _wrongInput = true;
+                MapPage._wrongInput = true;
             }
             return editNumber;
         }
@@ -137,7 +137,7 @@ namespace CampingUI.Map
             else
             {
                 StaticUIMethods.SetErrorTextboxBorder(textbox);
-                _wrongInput = true;
+                MapPage._wrongInput = true;
             }
             return pricePerNightPerPerson;
         }
@@ -148,33 +148,33 @@ namespace CampingUI.Map
             else
             {
                 StaticUIMethods.SetErrorTextboxBorder(textbox);
-                _wrongInput = true;
+                MapPage._wrongInput = true;
             }
             return name;
         }
         public void HideInfoGrids()
         {
             SetInfoGridsInvisible();
-            SelectedArea = null;
-            SelectedPlace = null;
-            SelectedStreet = null;
-            _streetPoint1 = new Point(-1, -1);
+            MapPage.SelectedArea = null;
+            MapPage.SelectedPlace = null;
+            MapPage.SelectedStreet = null;
+            MapPage._streetPoint1 = new Point(-1, -1);
             GenerateMap();
         }
         public void ResetInputFields(string componentString)
         {
-            Grid grid = PlaceInfoGrid;
+            Grid grid = MapPage.PlaceInfoGrid;
             if (componentString.Equals("Place"))
             {
-                PlaceStreetComboBox.Items.Clear();
-                PlaceAreaComboBox.Items.Clear();
-                foreach (Street street in _streets)
-                    PlaceStreetComboBox.Items.Add(street.Name);
-                foreach (Area area in _areas)
-                    PlaceAreaComboBox.Items.Add(area.Name);
+                MapPage.PlaceStreetComboBox.Items.Clear();
+                MapPage.PlaceAreaComboBox.Items.Clear();
+                foreach (Street street in MapPage._streets)
+                    MapPage.PlaceStreetComboBox.Items.Add(street.Name);
+                foreach (Area area in MapPage._areas)
+                    MapPage.PlaceAreaComboBox.Items.Add(area.Name);
             }
-            else if (componentString.Equals("Street")) grid = StreetInfoGrid;
-            else if (componentString.Equals("Area")) grid = AreaInfoGrid;
+            else if (componentString.Equals("Street")) grid = MapPage.StreetInfoGrid;
+            else if (componentString.Equals("Area")) grid = MapPage.AreaInfoGrid;
 
             ResetInputs(grid);
             ResetBorders(grid);
@@ -184,20 +184,20 @@ namespace CampingUI.Map
             UIElementCollection collection = null;
             if (mapComponent.Contains("Place"))
             {
-                PlaceInfoGrid.Visibility = Visibility.Hidden;
-                collection = PlaceInfoGrid.Children;
+                MapPage.PlaceInfoGrid.Visibility = Visibility.Hidden;
+                collection = MapPage.PlaceInfoGrid.Children;
             }
             if (mapComponent.Contains("Street"))
             {
-                collection = StreetInfoGrid.Children;
-                StreetInfoGrid.Visibility = Visibility.Hidden;
+                collection = MapPage.StreetInfoGrid.Children;
+                MapPage.StreetInfoGrid.Visibility = Visibility.Hidden;
             }
 
             if (collection != null && collection.Count > 0)
             {
                 foreach (Grid grid in collection)
                 {
-                    _placeOnMap.ResetBorders(grid);
+                    MapPage._placeOnMap.ResetBorders(grid);
                 }
                 GenerateMap();
             }
@@ -207,13 +207,13 @@ namespace CampingUI.Map
             List<Place> places = new List<Place>();
 
             if (type is Street street)
-                places = _places.Where(p => p.StreetID == street.StreetID).ToList();
+                places = MapPage._places.Where(p => p.StreetID == street.StreetID).ToList();
             if (type is Area area)
-                places = _places.Where(p => p.AreaID == area.AreaID).ToList();
+                places = MapPage._places.Where(p => p.AreaID == area.AreaID).ToList();
 
             if (places.Count > 0)
             {
-                foreach (var comp in field.Children)
+                foreach (var comp in MapPage.field.Children)
                 {
                     if (comp is Border placeBlock && placeBlock.Child is Canvas canvas && canvas.Name.Contains("Place"))
                     {
@@ -225,13 +225,13 @@ namespace CampingUI.Map
         }
         public void GenerateMap()
         {
-            field.Children.Clear();
-            _areas = _camping.GetAreas();
-            _streets = _camping.GetStreets();
-            _places = _camping.GetPlaces();
-            GenerateComponentsMap(_areas);
-            GenerateComponentsMap(_streets);
-            GenerateComponentsMap(_places);
+            MapPage.field.Children.Clear();
+            MapPage._areas = _camping.GetAreas();
+            MapPage._streets = _camping.GetStreets();
+            MapPage._places = _camping.GetPlaces();
+            GenerateComponentsMap(MapPage._areas);
+            GenerateComponentsMap(MapPage._streets);
+            GenerateComponentsMap(MapPage._places);
         }
         public void GenerateComponentsMap<T>(List<T> list)
         {
@@ -242,21 +242,21 @@ namespace CampingUI.Map
                     if (comp is Area)
                     {
                         Border border = MapPageArea.GenerateArea((Area)(object)(comp));
-                        field.Children.Add(border);
-                        _areaOnMap.SetAreaEvents(border, (Area)(object)comp);
+                        MapPage.field.Children.Add(border);
+                        MapPage._areaOnMap.SetAreaEvents(border, (Area)(object)comp);
                     }
                     else if (comp is Street street)
                     {
                         MapPageStreet.GenerateStreet(street, Brushes.Black);
                         Line line = MapPageStreet.GetLine();
-                        field.Children.Add(line);
-                        field.Children.Add(MapPageStreet.GetTextBlock());
-                        _streetOnMap.SetStreetEvents(line, street);
+                        MapPage.field.Children.Add(line);
+                        MapPage.field.Children.Add(MapPageStreet.GetTextBlock());
+                        MapPage._streetOnMap.SetStreetEvents(line, street);
                     }
                     else if (comp is Place place)
                     {
-                        MapPagePlace.GeneratePlace(field, (Place)(object)comp, Brushes.Black, true);
-                        _placeOnMap.SetPlaceEvents(Brushes.Black, MapPagePlace.Canvas, place);
+                        MapPagePlace.GeneratePlace(MapPage.field, (Place)(object)comp, Brushes.Black, true);
+                        MapPage._placeOnMap.SetPlaceEvents(Brushes.Black, MapPagePlace.Canvas, place);
                     }
                 }
             }

@@ -25,19 +25,19 @@ namespace CampingUI.Map.PlaceMap
         }
         public void SetPlaceDataOnFields(Place place, Camping camping)
         {
-            PlaceStreetComboBox.Text = camping.CampingRepository.CampingMapRepository.GetStreetByStreetID(place).Name;
-            PlaceAreaComboBox.Text = camping.CampingRepository.CampingMapRepository.GetAreaByAreaID(place).Name;
-            PlacePlaceID.IsEnabled = false;
-            PlacePlaceID.Text = place.PlaceID.ToString();
-            PlaceHasPower.IsChecked = place.Power;
-            PlaceHasDogs.IsChecked = place.Dogs;
-            PlaceSurfaceArea.Text = place.SurfaceArea.ToString();
-            PlacePricePerNight.Text = place.PricePerNightPerPerson.ToString();
-            PlacePersons.Text = place.AmountOfPeople.ToString();
+            MapPage.PlaceStreetComboBox.Text = camping.CampingRepository.CampingMapRepository.GetStreetByStreetID(place).Name;
+            MapPage.PlaceAreaComboBox.Text = camping.CampingRepository.CampingMapRepository.GetAreaByAreaID(place).Name;
+            MapPage.PlacePlaceID.IsEnabled = false;
+            MapPage.PlacePlaceID.Text = place.PlaceID.ToString();
+            MapPage.PlaceHasPower.IsChecked = place.Power;
+            MapPage.PlaceHasDogs.IsChecked = place.Dogs;
+            MapPage.PlaceSurfaceArea.Text = place.SurfaceArea.ToString();
+            MapPage.PlacePricePerNight.Text = place.PricePerNightPerPerson.ToString();
+            MapPage.PlacePersons.Text = place.AmountOfPeople.ToString();
         }
         public void EnableExtendComboBoxes(bool extend)
         {
-            foreach (Grid grid in PlaceInfoGrid.Children)
+            foreach (Grid grid in MapPage.PlaceInfoGrid.Children)
             {
                 foreach (var component in grid.Children)
                 {
@@ -52,39 +52,39 @@ namespace CampingUI.Map.PlaceMap
         }
         public void GetAddPlaceID()
         {
-            _placePlaceID = GetAddTextBox(PlacePlaceID, _placePlaceID);
-            List<Place> places = _camping.GetPlaces().Where(i => i.PlaceID == _placePlaceID).ToList();
-            if (places.Count > 0 && !_editPlaceBool)
+            MapPage._placePlaceID = GetAddTextBox(MapPage.PlacePlaceID, MapPage._placePlaceID);
+            List<Place> places = MapPage._camping.GetPlaces().Where(i => i.PlaceID == MapPage._placePlaceID).ToList();
+            if (places.Count > 0 && !MapPage._editPlaceBool)
             {
-                StaticUIMethods.SetErrorTextboxBorder(PlacePlaceID);
-                _wrongInput = true;
-                _placePlaceID = -1;
+                StaticUIMethods.SetErrorTextboxBorder(MapPage.PlacePlaceID);
+                MapPage._wrongInput = true;
+                MapPage._placePlaceID = -1;
             }
         }
         public void GetAddAreaID()
         {
-            if (PlaceAreaComboBox.SelectedItem != null)
+            if (MapPage.PlaceAreaComboBox.SelectedItem != null)
             {
-                Area area = _camping.CampingRepository.CampingMapRepository.GetAreaByAreaName(PlaceAreaComboBox.SelectedItem.ToString());
-                _placeAreaID = area.AreaID;
+                Area area = MapPage._camping.CampingRepository.CampingMapRepository.GetAreaByAreaName(MapPage.PlaceAreaComboBox.SelectedItem.ToString());
+                MapPage._placeAreaID = area.AreaID;
             }
             else
             {
-                StaticUIMethods.SetErrorComboBoxBorder(PlaceAreaBorder);
-                _wrongInput = true;
+                StaticUIMethods.SetErrorComboBoxBorder(MapPage.PlaceAreaBorder);
+                MapPage._wrongInput = true;
             }
         }
         public void GetAddStreetID()
         {
-            if (PlaceStreetComboBox.SelectedItem != null)
+            if (MapPage.PlaceStreetComboBox.SelectedItem != null)
             {
-                Street street = _camping.CampingRepository.CampingMapRepository.GetStreetByStreetName(PlaceStreetComboBox.SelectedItem.ToString());
-                _placeStreetID = street.StreetID;
+                Street street = MapPage._camping.CampingRepository.CampingMapRepository.GetStreetByStreetName(MapPage.PlaceStreetComboBox.SelectedItem.ToString());
+                MapPage._placeStreetID = street.StreetID;
             }
             else
             {
-                StaticUIMethods.SetErrorComboBoxBorder(PlaceStreetBorder);
-                _wrongInput = true;
+                StaticUIMethods.SetErrorComboBoxBorder(MapPage.PlaceStreetBorder);
+                MapPage._wrongInput = true;
             }
         }
         public void GetAddPlaceValues()
@@ -92,9 +92,9 @@ namespace CampingUI.Map.PlaceMap
             GetAddPlaceID();
             GetAddStreetID();
             GetAddAreaID();
-            _placePersons = GetAddAmountOfPeople(PlacePersons, _placePersons);
-            _placeSurfaceArea = GetAddSurfaceArea(PlaceSurfaceArea, _placeSurfaceArea);
-            _placePricePerNightPerPerson = GetAddPricePerNightPerPerson(PlacePricePerNight, _placePricePerNightPerPerson);
+            MapPage._placePersons = GetAddAmountOfPeople(MapPage.PlacePersons, MapPage._placePersons);
+            MapPage._placeSurfaceArea = GetAddSurfaceArea(MapPage.PlaceSurfaceArea, MapPage._placeSurfaceArea);
+            MapPage._placePricePerNightPerPerson = GetAddPricePerNightPerPerson(MapPage.PlacePricePerNight, MapPage._placePricePerNightPerPerson);
         }
         public void SetTextboxValues(ComboBox comboBox, TextBox textbox, Street street, Area area)
         {
@@ -136,31 +136,31 @@ namespace CampingUI.Map.PlaceMap
 
             if (!string.IsNullOrEmpty(comboBox.Text))
             {
-                if (PlaceAreaComboBox.SelectedItem != null)
-                    area = _camping.CampingRepository.CampingMapRepository.GetAreaByAreaName(PlaceAreaComboBox.SelectedItem.ToString());
-                if (PlaceStreetComboBox.SelectedItem != null)
-                    street = _camping.CampingRepository.CampingMapRepository.GetStreetByStreetName(PlaceStreetComboBox.SelectedItem.ToString());
+                if (MapPage.PlaceAreaComboBox.SelectedItem != null)
+                    area = MapPage._camping.CampingRepository.CampingMapRepository.GetAreaByAreaName(MapPage.PlaceAreaComboBox.SelectedItem.ToString());
+                if (MapPage.PlaceStreetComboBox.SelectedItem != null)
+                    street = MapPage._camping.CampingRepository.CampingMapRepository.GetStreetByStreetName(MapPage.PlaceStreetComboBox.SelectedItem.ToString());
             }
 
             if (street != null || area != null)
             {
-                foreach (Grid grid in PlaceInfoGrid.Children)
+                foreach (Grid grid in MapPage.PlaceInfoGrid.Children)
                 {
                     foreach (var component in grid.Children)
                     {
                         if (component is TextBox textbox)
-                            _placeOnMap.SetTextboxValues(comboBox, textbox, street, area);
+                            MapPage._placeOnMap.SetTextboxValues(comboBox, textbox, street, area);
                         else if (component is CheckBox checkbox)
-                            _placeOnMap.SetCheckboxValues(comboBox, checkbox, street, area);
+                            MapPage._placeOnMap.SetCheckboxValues(comboBox, checkbox, street, area);
                     }
                 }
             }
         }
         public void SetPlaceDataExtending(Place place)
         {
-            List<bool?> placeExtend = _camping.CampingRepository.CampingPlaceRepository.GetPlaceExtendingByPlaceID(place.PlaceID);
+            List<bool?> placeExtend = MapPage._camping.CampingRepository.CampingPlaceRepository.GetPlaceExtendingByPlaceID(place.PlaceID);
             int counter = 0;
-            foreach (Grid grid in PlaceInfoGrid.Children)
+            foreach (Grid grid in MapPage.PlaceInfoGrid.Children)
             {
                 foreach (var comp in grid.Children)
                 {
@@ -181,11 +181,11 @@ namespace CampingUI.Map.PlaceMap
         {
             SetInfoVisible("Place");
             ResetInputFields("Place");
-            _editPlaceBool = false;
+            MapPage._editPlaceBool = false;
             if (!AddPlaceBool)
             {
-                _editPlaceBool = true;
-                SetPlaceDataOnFields(place, _camping);
+                MapPage._editPlaceBool = true;
+                SetPlaceDataOnFields(place, MapPage._camping);
                 SetPlaceDataExtending(place);
             }
         }
@@ -195,60 +195,60 @@ namespace CampingUI.Map.PlaceMap
             {
                 canvasPlace.MouseEnter += (sender, e) =>
                 {
-                    if (_selectedMapButton.Contains("View")) canvasPlace.Background = Brushes.DarkCyan;
+                    if (MapPage._selectedMapButton.Contains("View")) canvasPlace.Background = Brushes.DarkCyan;
                 };
 
                 canvasPlace.MouseLeave += (sender, e) =>
                 {
-                    if (!((SelectedPlace != null && SelectedPlace.Name.Equals(canvasPlace.Name))
-                       || (SelectedArea != null && SelectedArea.AreaID == place.AreaID)
-                       || (SelectedStreet != null && SelectedStreet.StreetID == place.StreetID)))
+                    if (!((MapPage.SelectedPlace != null && MapPage.SelectedPlace.Name.Equals(canvasPlace.Name))
+                       || (MapPage.SelectedArea != null && MapPage.SelectedArea.AreaID == place.AreaID)
+                       || (MapPage.SelectedStreet != null && MapPage.SelectedStreet.StreetID == place.StreetID)))
                         canvasPlace.Background = Brushes.Black;
                 };
             }
 
             canvasPlace.MouseLeftButtonDown += (sender, e) =>
             {
-                if (_selectedMapButton.Contains("View"))
+                if (MapPage._selectedMapButton.Contains("View"))
                 {
-                    _mapMethods.DeselectAllFields();
+                    DeselectAllFields();
                     GenerateMap();
                     canvasPlace.Background = Brushes.DarkCyan;
-                    _previousSelectedCanvas = canvasPlace;
-                    SelectedStreet = null;
-                    SelectedArea = null;
-                    SelectedPlace = canvasPlace;
-                    _placeOnMap.HandlePlaceClick(place, false);
+                    MapPage._previousSelectedCanvas = canvasPlace;
+                    MapPage.SelectedStreet = null;
+                    MapPage.SelectedArea = null;
+                    MapPage.SelectedPlace = canvasPlace;
+                    HandlePlaceClick(place, false);
                 }
             };
         }
         public void RemoveOldPreviewPlace()
         {
-            foreach (var component in field.Children)
+            foreach (var component in MapPage.field.Children)
             {
                 if (component is Border border && border.Name.Equals("Place_0"))
                 {
-                    field.Children.Remove(border);
+                    MapPage.field.Children.Remove(border);
                     break;
                 }
             }
         }
         public void GenerateNewPlaceWithInfoBoxes()
         {
-            Point p = Mouse.GetPosition(field);
-            _xPressed = (int)Math.Round(p.X) - 15;
-            _yPressed = (int)Math.Round(p.Y) - 15;
-            Place place1 = new Place(0, false, 1, 1, false, 0, 0, 0, _xPressed, _yPressed);
+            Point p = Mouse.GetPosition(MapPage.field);
+            MapPage._xPressed = (int)Math.Round(p.X) - 15;
+            MapPage._yPressed = (int)Math.Round(p.Y) - 15;
+            Place place1 = new Place(0, false, 1, 1, false, 0, 0, 0, MapPage._xPressed, MapPage._yPressed);
             GeneratePreviewPlace(place1, Brushes.DarkGray);
             EnableExtendComboBoxes(false);
             HandlePlaceClick(place1, true);
         }
         public void GeneratePreviewPlace(Place place, SolidColorBrush color)
         {
-            Point p = Mouse.GetPosition(field);
-            _xPressed = (int)Math.Round(p.X) - 15;
-            _yPressed = (int)Math.Round(p.Y) - 15;
-            MapPagePlace.GeneratePlace(field, place, color, false);
+            Point p = Mouse.GetPosition(MapPage.field);
+            MapPage._xPressed = (int)Math.Round(p.X) - 15;
+            MapPage._yPressed = (int)Math.Round(p.Y) - 15;
+            MapPagePlace.GeneratePlace(MapPage.field, place, color, false);
         }
     }
 }

@@ -18,15 +18,15 @@ namespace CampingUI.Map.StreetMap
 
         public void GetAddStreetValues()
         {
-            _streetName = GetAddComponentNameTextbox(StreetName, _streetName);
-            _streetSurfaceArea = GetAddSurfaceArea(StreetSurfaceArea, _streetSurfaceArea);
-            _streetPersons = GetAddAmountOfPeople(StreetPersons, _streetPersons);
-            _streetPricePerNightPerPerson = GetAddPricePerNightPerPerson(StreetPricePerNight, _streetPricePerNightPerPerson);
+            MapPage._streetName = GetAddComponentNameTextbox(MapPage.StreetName, MapPage._streetName);
+            MapPage._streetSurfaceArea = GetAddSurfaceArea(MapPage.StreetSurfaceArea, MapPage._streetSurfaceArea);
+            MapPage._streetPersons = GetAddAmountOfPeople(MapPage.StreetPersons, MapPage._streetPersons);
+            MapPage._streetPricePerNightPerPerson = GetAddPricePerNightPerPerson(MapPage.StreetPricePerNight, MapPage._streetPricePerNightPerPerson);
         }
         public void CalculateStreetLineAngle(Line line)
         {
-            _xCord2 = line.X2;
-            _yCord2 = line.Y2;
+            MapPage._xCord2 = line.X2;
+            MapPage._yCord2 = line.Y2;
 
             line.Stroke = Brushes.DarkGray;
             line.Name = "LineSet";
@@ -43,24 +43,24 @@ namespace CampingUI.Map.StreetMap
             if (degrees < 7) line.Y2 = line.Y1;
             if (degrees > 83) line.X2 = line.X1;
 
-            _xCord2 = line.X2;
-            _yCord2 = line.Y2;
+            MapPage._xCord2 = line.X2;
+            MapPage._yCord2 = line.Y2;
         }
         public void HandleStreetClick(Street street)
         {
-            _streetOnMap.DeselectAllFields();
-            _editStreetBool = true;
-            SelectedPlace = null;
-            SelectedArea = null;
-            SelectedStreet = street;
-            _streetOnMap.SetInfoVisible("Street");
-            StreetHasDogs.IsChecked = street.Dogs;
-            StreetHasPower.IsChecked = street.Power;
-            StreetPersons.Text = street.AmountOfPeople.ToString();
-            StreetName.Text = street.Name;
-            StreetPricePerNight.Text = street.PricePerNightPerPerson.ToString();
-            StreetSurfaceArea.Text = street.SurfaceArea.ToString();
-            foreach (Grid grid in StreetInfoGrid.Children)
+            DeselectAllFields();
+            MapPage._editStreetBool = true;
+            MapPage.SelectedPlace = null;
+            MapPage.SelectedArea = null;
+            MapPage.SelectedStreet = street;
+            SetInfoVisible("Street");
+            MapPage.StreetHasDogs.IsChecked = street.Dogs;
+            MapPage.StreetHasPower.IsChecked = street.Power;
+            MapPage.StreetPersons.Text = street.AmountOfPeople.ToString();
+            MapPage.StreetName.Text = street.Name;
+            MapPage.StreetPricePerNight.Text = street.PricePerNightPerPerson.ToString();
+            MapPage.StreetSurfaceArea.Text = street.SurfaceArea.ToString();
+            foreach (Grid grid in MapPage.StreetInfoGrid.Children)
             {
                 foreach (var comp in grid.Children)
                 {
@@ -74,28 +74,28 @@ namespace CampingUI.Map.StreetMap
         {
             line.MouseLeftButtonDown += (sender, e) =>
             {
-                if (_selectedMapButton.Equals("View"))
+                if (MapPage._selectedMapButton.Equals("View"))
                 {
-                    _streetOnMap.HandleStreetClick(street);
+                    MapPage._streetOnMap.HandleStreetClick(street);
                     line.Stroke = Brushes.DarkCyan;
                 }
             };
 
-            line.MouseEnter += (sender, e) => { if (SelectedStreet == null || (SelectedStreet != null && !SelectedStreet.Equals(street))) line.Stroke = Brushes.DarkCyan; };
+            line.MouseEnter += (sender, e) => { if (MapPage.SelectedStreet == null || (MapPage.SelectedStreet != null && !MapPage.SelectedStreet.Equals(street))) line.Stroke = Brushes.DarkCyan; };
             line.MouseLeave += (sender, e) =>
             {
-                if (SelectedStreet == null || (SelectedStreet != null && !SelectedStreet.Equals(street))) line.Stroke = Brushes.Black;
+                if (MapPage.SelectedStreet == null || (MapPage.SelectedStreet != null && !MapPage.SelectedStreet.Equals(street))) line.Stroke = Brushes.Black;
             };
         }
 
         public void SetFirstLinePoint()
         {
-            foreach (var component in field.Children)
+            foreach (var component in MapPage.field.Children)
             {
                 if (component is Line line && line.Name.Equals("MoveablePoint"))
                 {
-                    _xCord1 = line.X1;
-                    _yCord1 = line.Y1;
+                    MapPage._xCord1 = line.X1;
+                    MapPage._yCord1 = line.Y1;
                     line.Name = "firstPoint";
                 }
             }
@@ -103,32 +103,32 @@ namespace CampingUI.Map.StreetMap
 
         public void SetSecondLinePoint()
         {
-            foreach (var component in field.Children)
+            foreach (var component in MapPage.field.Children)
             {
                 if (component is Line createdLine && createdLine.Name.Equals("LineSet"))
                     createdLine.Name = "firstPoint";
                 if (component is Line line && line.Name.Equals("firstPoint"))
-                    _streetOnMap.CalculateStreetLineAngle(line);
+                    MapPage._streetOnMap.CalculateStreetLineAngle(line);
             }
         }
         public void FieldMouseDownStreet()
         {
-            _editStreetBool = false;
-            if (_streetPoint1.X == -1)
+            MapPage._editStreetBool = false;
+            if (MapPage._streetPoint1.X == -1)
             {
-                _streetPoint1.X = -2;
-                _streetOnMap.SetFirstLinePoint();
+                MapPage._streetPoint1.X = -2;
+                MapPage._streetOnMap.SetFirstLinePoint();
             }
             else
             {
-                _streetOnMap.SetSecondLinePoint();
-                _streetOnMap.SetInfoVisible("Street");
-                _streetOnMap.ResetInputs(StreetInfoGrid);
+                MapPage._streetOnMap.SetSecondLinePoint();
+                MapPage._streetOnMap.SetInfoVisible("Street");
+                MapPage._streetOnMap.ResetInputs(MapPage.StreetInfoGrid);
             }
         }
         public void GeneratePreviewLine(string name, SolidColorBrush color)
         {
-            Point p = Mouse.GetPosition(field);
+            Point p = Mouse.GetPosition(MapPage.field);
             Line line = new Line();
             line.X1 = p.X - 7.5;
             line.Y1 = p.Y - 3.75;
@@ -137,7 +137,7 @@ namespace CampingUI.Map.StreetMap
             line.StrokeThickness = 15;
             line.Stroke = color;
             line.Name = name;
-            field.Children.Add(line);
+            MapPage.field.Children.Add(line);
         }
     }
 }
