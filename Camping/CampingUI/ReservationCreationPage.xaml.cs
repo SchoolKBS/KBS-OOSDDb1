@@ -167,7 +167,7 @@ namespace CampingUI
         {
             ArrivalDatePicker.DisplayDateStart = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
             ArrivalDatePicker.BlackoutDates.AddDatesInPast();
-            var reservations = _camping.Reservations.Where(r => r.PlaceID == _place.PlaceID && r.DepartureDate > DateTime.Now).ToList();
+            var reservations = _camping.GetReservations().Where(r => r.PlaceID == _place.PlaceID && r.DepartureDate > DateTime.Now).ToList();
             foreach( var reservation in reservations )
             {
                 ArrivalDatePicker.BlackoutDates.Add(new CalendarDateRange(reservation.ArrivalDate, reservation.DepartureDate));
@@ -184,7 +184,7 @@ namespace CampingUI
                 DepartureDatePicker.IsEnabled = true;
                 DepartureDatePicker.DisplayDateStart = new DateTime(arrivalDate.Year, arrivalDate.Month, 1);
                 DepartureDatePicker.BlackoutDates.Add(new CalendarDateRange(DepartureDatePicker.DisplayDateStart.Value, arrivalDate));
-                var reservations = _camping.Reservations.Where(r => r.PlaceID == _place.PlaceID && r.ArrivalDate > DateTime.Today).ToList();
+                var reservations = _camping.GetReservations().Where(r => r.PlaceID == _place.PlaceID && r.ArrivalDate > DateTime.Today).ToList();
                 if (reservations.Count > 0  && reservations.Min(r => r.ArrivalDate) > ArrivalDatePicker.SelectedDate)
                 {
                     var SoonestReservationStart = reservations.Min(r => r.ArrivalDate);

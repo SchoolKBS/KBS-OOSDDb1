@@ -17,7 +17,7 @@ namespace UnitTests
         public void SortColumnPrice_boolAndInt_returnsList(bool isSorted, int number)
         {
             Camping camping = new Camping(TestSupportClass.MockIcampingRepository().Object);
-            IEnumerable<Place> places = PlacesOverviewSorting.SortColumnPrice(isSorted, camping.Places);
+            IEnumerable<Place> places = PlacesOverviewSorting.SortColumnPrice(isSorted, camping.GetPlaces());
             Assert.That(places.First().PricePerNightPerPerson, Is.EqualTo(number));
         }
 
@@ -26,7 +26,7 @@ namespace UnitTests
         public void SortColumnAmountOfPeople_boolAndInt_returnsList(bool isSorted, int number)
         {
             Camping camping = new Camping(TestSupportClass.MockIcampingRepository().Object);
-            IEnumerable<Place>places = PlacesOverviewSorting.SortColumnAmountOfPeople(isSorted, camping.Places);
+            IEnumerable<Place>places = PlacesOverviewSorting.SortColumnAmountOfPeople(isSorted, camping.GetPlaces());
             Assert.That(places.First().PricePerNightPerPerson, Is.EqualTo(number));
         }
 
@@ -35,7 +35,7 @@ namespace UnitTests
         public void SortColumnPlaceID_boolAndInt_returnsList(bool isSorted, int number)
         {
             Camping camping = new Camping(TestSupportClass.MockIcampingRepository().Object);
-            IEnumerable<Place> places = PlacesOverviewSorting.SortColumnPlaceID(isSorted, camping.Places);
+            IEnumerable<Place> places = PlacesOverviewSorting.SortColumnPlaceID(isSorted, camping.GetPlaces());
             Assert.That(places.First().PricePerNightPerPerson, Is.EqualTo(number));
         }
     }

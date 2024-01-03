@@ -14,7 +14,7 @@ namespace UnitTests
         {
             Camping camping = new Camping(TestSupportClass.MockIcampingRepository().Object);
             IEnumerable<Place> places = new List<Place>();
-            places = PlacesOverviewFilter.GetFilteredListOnPower(true, camping.Places, camping);
+            places = PlacesOverviewFilter.GetFilteredListOnPower(true, camping.GetPlaces(), camping);
             Assert.That(places.Count(), Is.EqualTo(5));
         }
 
@@ -23,7 +23,7 @@ namespace UnitTests
         {
             Camping camping = new Camping(TestSupportClass.MockIcampingRepository().Object);
             IEnumerable<Place> places = new List<Place>();
-            places = PlacesOverviewFilter.GetFilteredListOnAmountOfPeople(6, camping.Places, camping);
+            places = PlacesOverviewFilter.GetFilteredListOnAmountOfPeople(6, camping.GetPlaces(), camping);
             Assert.That(places.Count(), Is.EqualTo(5));
         }
         [Test]
@@ -31,7 +31,7 @@ namespace UnitTests
         {
             Camping camping = new Camping(TestSupportClass.MockIcampingRepository().Object);
             IEnumerable<Place> places = new List<Place>();
-            places = PlacesOverviewFilter.GetFilteredListOnPrice(5.5, camping.Places, camping);
+            places = PlacesOverviewFilter.GetFilteredListOnPrice(5.5, camping.GetPlaces(), camping);
             Assert.That(places.Count(), Is.EqualTo(5));
         }
 
@@ -40,7 +40,7 @@ namespace UnitTests
         {
             Camping camping = new Camping(TestSupportClass.MockIcampingRepository().Object);
             IEnumerable<Place> places = new List<Place>();
-            places = PlacesOverviewFilter.GetFilteredListOnDate(false, DateTime.Now.Date.AddDays(1), DateTime.Now.Date.AddDays(5), camping.Places, camping);
+            places = PlacesOverviewFilter.GetFilteredListOnDate(false, DateTime.Now.Date.AddDays(1), DateTime.Now.Date.AddDays(5), camping.GetPlaces(), camping);
             Assert.That(places.Count(), Is.EqualTo(5));
         }
 
