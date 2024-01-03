@@ -78,7 +78,7 @@
                             </Grid.ColumnDefinitions>
 
                             <Label Name="PlacePlaceIDLabel" Content="Plaatsnummer: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                            <TextBox TextChanged="TextBox_Changed" Name="PlacePlaceID" VerticalAlignment="Center" FontSize="16" Width="150" Height="40" BorderBrush="Transparent" HorizontalAlignment="Right" Grid.Column="1">
+                            <TextBox TextChanged="TextBox_Changed" Name="PlacePlaceIDTextbox" VerticalAlignment="Center" FontSize="16" Width="150" Height="40" BorderBrush="Transparent" HorizontalAlignment="Right" Grid.Column="1">
                             </TextBox>
                         </Grid>
 
@@ -122,7 +122,7 @@
                                 <ComboBoxItem Tag="Area">Overerven gebied</ComboBoxItem>
                                 <ComboBoxItem Tag="Own" IsSelected="True">Eigen invoer</ComboBoxItem>
                             </ComboBox>
-                            <CheckBox IsThreeState="False" Name="PlaceHasPower" Margin="32, 0, 0, 0" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="2">
+                            <CheckBox IsThreeState="False" Name="PlaceHasPowerCheckbox" Margin="32, 0, 0, 0" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="2">
                                 <CheckBox.LayoutTransform>
                                     <ScaleTransform ScaleX="2" ScaleY="2" />
                                 </CheckBox.LayoutTransform>
@@ -142,7 +142,7 @@
                                 <ComboBoxItem Tag="Area">Overerven gebied</ComboBoxItem>
                                 <ComboBoxItem Tag="Own" IsSelected="True">Eigen invoer</ComboBoxItem>
                             </ComboBox>
-                            <CheckBox IsThreeState="False" Name="PlaceHasDogs" Margin="29, 0, 0, 0" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="2">
+                            <CheckBox IsThreeState="False" Name="PlaceHasDogsCheckbox" Margin="29, 0, 0, 0" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="2">
                                 <CheckBox.LayoutTransform>
                                     <ScaleTransform ScaleX="2" ScaleY="2" />
                                 </CheckBox.LayoutTransform>
@@ -162,7 +162,7 @@
                                 <ComboBoxItem Tag="Area">Overerven gebied</ComboBoxItem>
                                 <ComboBoxItem Tag="Own" IsSelected="True">Eigen invoer</ComboBoxItem>
                             </ComboBox>
-                            <TextBox TextChanged="TextBox_Changed" Margin="10, 0, 0, 0" Name="PlaceSurfaceArea" VerticalAlignment="Center" FontSize="14" Width="50" Height="40" BorderBrush="Transparent" HorizontalAlignment="Right" Grid.Column="2">
+                            <TextBox TextChanged="TextBox_Changed" Margin="10, 0, 0, 0" Name="PlaceSurfaceAreaTextbox" VerticalAlignment="Center" FontSize="14" Width="50" Height="40" BorderBrush="Transparent" HorizontalAlignment="Right" Grid.Column="2">
                             </TextBox>
                         </Grid>
 
@@ -174,13 +174,13 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <Label Name="PlacePricePerNightLabel" Content="Prijs p/nacht: "  Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <Label Name="PlacePricePerNightPerPersonLabel" Content="Prijs p/nacht: "  Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                             <ComboBox Grid.Column="1" Height="40" Width="125" HorizontalAlignment="Right" Name="PlacePricePerNightPerPersonComboBox" SelectionChanged="HandleExtendChange_Click">
                                 <ComboBoxItem Tag="Street">Overerven straat</ComboBoxItem>
                                 <ComboBoxItem Tag="Area">Overerven gebied</ComboBoxItem>
                                 <ComboBoxItem Tag="Own" IsSelected="True">Eigen invoer</ComboBoxItem>
                             </ComboBox>
-                            <TextBox Name="PlacePricePerNight" Margin="10, 0, 0, 0" VerticalAlignment="Center" FontSize="14" Width="50" Height="40" BorderBrush="Transparent" HorizontalAlignment="Right" Grid.Column="2" TextChanged="TextBox_Changed">
+                            <TextBox Name="PlacePricePerNightPerPersonTextbox" Margin="10, 0, 0, 0" VerticalAlignment="Center" FontSize="14" Width="50" Height="40" BorderBrush="Transparent" HorizontalAlignment="Right" Grid.Column="2" TextChanged="TextBox_Changed">
                             </TextBox>
                         </Grid>
 
@@ -191,13 +191,13 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <Label Name="PlacePersonsLabel" Content="Personen aantal: " Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                            <ComboBox Grid.Column="1" Height="40" Width="125" HorizontalAlignment="Right" Name="PlacePersonsComboBox" SelectionChanged="HandleExtendChange_Click">
+                            <Label Name="PlaceAmountOfPeopleLabel" Content="Personen aantal: " Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <ComboBox Grid.Column="1" Height="40" Width="125" HorizontalAlignment="Right" Name="PlaceAmountOfPeopleComboBox" SelectionChanged="HandleExtendChange_Click">
                                 <ComboBoxItem Tag="Street">Overerven straat</ComboBoxItem>
                                 <ComboBoxItem Tag="Area">Overerven gebied</ComboBoxItem>
                                 <ComboBoxItem Tag="Own" IsSelected="True">Eigen invoer</ComboBoxItem>
                             </ComboBox>
-                            <TextBox Name="PlacePersons" Margin="10, 0, 0, 0" VerticalAlignment="Center" FontSize="14" Width="50" Height="40" BorderBrush="Transparent" HorizontalAlignment="Right" Grid.Column="2" TextChanged="TextBox_Changed">
+                            <TextBox Name="PlaceAmountOfPeopleTextbox" Margin="10, 0, 0, 0" VerticalAlignment="Center" FontSize="14" Width="50" Height="40" BorderBrush="Transparent" HorizontalAlignment="Right" Grid.Column="2" TextChanged="TextBox_Changed">
                             </TextBox>
                         </Grid>
                         <Grid Grid.Row="8" IsEnabled="True" VerticalAlignment="Bottom">
@@ -230,7 +230,7 @@
                         </Grid.ColumnDefinitions>
 
                         <Label Name="AreaNameLabel" Content="Gebied: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <TextBox Name="AreaName" VerticalAlignment="Center" FontSize="16" Width="190" Height="40" HorizontalAlignment="Right" Grid.Column="1"/>
+                        <TextBox Name="AreaNameTextbox" VerticalAlignment="Center" FontSize="16" Width="190" Height="40" HorizontalAlignment="Right" Grid.Column="1"/>
 
                     </Grid>
 
@@ -252,7 +252,7 @@
                         </Grid.ColumnDefinitions>
 
                         <Label Name="AreaPowerLabel" Content="Heeft stroom: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <CheckBox Name="AreaPower" VerticalAlignment="Center" IsEnabled="False" HorizontalAlignment="Center" Grid.Column="1"/>
+                        <CheckBox Name="AreaPowerCheckbox" VerticalAlignment="Center" IsEnabled="False" HorizontalAlignment="Center" Grid.Column="1"/>
 
                     </Grid>
 
@@ -263,7 +263,7 @@
                         </Grid.ColumnDefinitions>
 
                         <Label Name="AreaDogsLabel" Content="Mag honden: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <CheckBox Name="AreaDogs" VerticalAlignment="Center" IsEnabled="False" HorizontalAlignment="Center" Grid.Column="1"/>
+                        <CheckBox Name="AreaDogsCheckbox" VerticalAlignment="Center" IsEnabled="False" HorizontalAlignment="Center" Grid.Column="1"/>
                     </Grid>
 
                     <Grid Grid.Row="4" Name="AreaRow4">
@@ -273,7 +273,7 @@
                         </Grid.ColumnDefinitions>
 
                         <Label Name="AreaPlaceSurfaceAreaLabel" Content="Oppervlakte plaats: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <TextBox Name="AreaPlaceSurfaceArea" VerticalAlignment="Center" FontSize="16" Width="190" Height="40" HorizontalAlignment="Right" Grid.Column="1"/>
+                        <TextBox Name="AreaPlaceSurfaceAreaTextbox" VerticalAlignment="Center" FontSize="16" Width="190" Height="40" HorizontalAlignment="Right" Grid.Column="1"/>
 
                     </Grid>
                     <Grid Grid.Row="5" Name="AreaRow5">
@@ -282,8 +282,8 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Label Name="AreaPriceLabel" Content="Prijs plaats: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <TextBox Name="AreaPrice" VerticalAlignment="Center" FontSize="16" Width="190" Height="40" HorizontalAlignment="Right" Grid.Column="1"/>
+                        <Label Name="AreaPricePerNightPerPersonLabel" Content="Prijs plaats: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <TextBox Name="AreaPricePerNightPerPersonTextbox" VerticalAlignment="Center" FontSize="16" Width="190" Height="40" HorizontalAlignment="Right" Grid.Column="1"/>
 
                     </Grid>
                     <Grid Grid.Row="6" Name="AreaRow6">
@@ -293,7 +293,7 @@
                         </Grid.ColumnDefinitions>
 
                         <Label Name="AreaAmountOfPeopleLabel" Content="Aantal personen: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <TextBox Name="AreaAmountOfPeople" VerticalAlignment="Center" FontSize="16" Width="190" Height="40" HorizontalAlignment="Right" Grid.Column="1"/>
+                        <TextBox Name="AreaAmountOfPeopleTextbox" VerticalAlignment="Center" FontSize="16" Width="190" Height="40" HorizontalAlignment="Right" Grid.Column="1"/>
                     </Grid>                    
                     <Grid Grid.Row="7" Name="AreaRow7">
                         <Grid.ColumnDefinitions>
@@ -328,7 +328,7 @@
                         </Grid.ColumnDefinitions>
 
                         <Label Name="StreetNameLabel" Content="Straatnaam: " Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <TextBox TextChanged="TextBox_Changed" Margin="10, 0, 0, 0" Name="StreetName" VerticalAlignment="Center" FontSize="14" Width="175" Height="40" BorderBrush="Transparent" HorizontalAlignment="Right" Grid.Column="1" />
+                        <TextBox TextChanged="TextBox_Changed" Margin="10, 0, 0, 0" Name="StreetNameTextbox" VerticalAlignment="Center" FontSize="14" Width="175" Height="40" BorderBrush="Transparent" HorizontalAlignment="Right" Grid.Column="1" />
                     </Grid>
 
                     <!-- Checkbox for power -->
@@ -339,7 +339,7 @@
                         </Grid.ColumnDefinitions>
 
                         <Label Name="StreetHasPowerLabel" Content="Stroom:" Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <CheckBox Name="StreetHasPower" Margin="32, 0, 0, 0" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="1">
+                        <CheckBox Name="StreetHasPowerCheckbox" Margin="32, 0, 0, 0" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="1">
                             <CheckBox.LayoutTransform>
                                 <ScaleTransform ScaleX="2" ScaleY="2" />
                             </CheckBox.LayoutTransform>
@@ -353,7 +353,7 @@
                         </Grid.ColumnDefinitions>
 
                         <Label Name="StreetHasDogsLabel" Content="Honden: " Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <CheckBox Name="StreetHasDogs" Margin="29, 0, 0, 0" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="1">
+                        <CheckBox Name="StreetHasDogsCheckbox" Margin="29, 0, 0, 0" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="1">
                             <CheckBox.LayoutTransform>
                                 <ScaleTransform ScaleX="2" ScaleY="2" />
                             </CheckBox.LayoutTransform>
@@ -367,7 +367,7 @@
                         </Grid.ColumnDefinitions>
 
                         <Label Name="StreetSurfaceAreaLabel" Content="Oppervlakte: " Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <TextBox TextChanged="TextBox_Changed" Margin="10, 0, 0, 0" Name="StreetSurfaceArea" VerticalAlignment="Center" FontSize="14" Width="175" Height="40" BorderBrush="Transparent" HorizontalAlignment="Right" Grid.Column="1">
+                        <TextBox TextChanged="TextBox_Changed" Margin="10, 0, 0, 0" Name="StreetSurfaceAreaTextbox" VerticalAlignment="Center" FontSize="14" Width="175" Height="40" BorderBrush="Transparent" HorizontalAlignment="Right" Grid.Column="1">
                         </TextBox>
                     </Grid>
 
@@ -378,8 +378,8 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Label Name="StreetPricePerNightLabel" Content="Prijs p/nacht: "  Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <TextBox Name="StreetPricePerNight" Margin="10, 0, 0, 0" VerticalAlignment="Center" FontSize="14" Width="175" Height="40" BorderBrush="Transparent" HorizontalAlignment="Right" Grid.Column="1" TextChanged="TextBox_Changed">
+                        <Label Name="StreetPricePerNightPerPersonLabel" Content="Prijs p/nacht: "  Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <TextBox Name="StreetPricePerNightPerPersonTextbox" Margin="10, 0, 0, 0" VerticalAlignment="Center" FontSize="14" Width="175" Height="40" BorderBrush="Transparent" HorizontalAlignment="Right" Grid.Column="1" TextChanged="TextBox_Changed">
                         </TextBox>
                     </Grid>
 
@@ -391,7 +391,7 @@
                         </Grid.ColumnDefinitions>
 
                         <Label Name="StreetPersonsLabel" Content="Personen aantal: " Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <TextBox Name="StreetPersons" Margin="10, 0, 0, 0" VerticalAlignment="Center" FontSize="14" Width="175" Height="40" BorderBrush="Transparent" HorizontalAlignment="Right" Grid.Column="1" TextChanged="TextBox_Changed">
+                        <TextBox Name="StreetAmountOfPeopleTextbox" Margin="10, 0, 0, 0" VerticalAlignment="Center" FontSize="14" Width="175" Height="40" BorderBrush="Transparent" HorizontalAlignment="Right" Grid.Column="1" TextChanged="TextBox_Changed">
                         </TextBox>
                     </Grid>
                     <Grid Grid.Row="8" IsEnabled="True" VerticalAlignment="Bottom" Name="StreetRow8">

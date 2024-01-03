@@ -24,38 +24,38 @@ namespace CampingUI.Map.AreaMap
             else
             {
                 StaticUIMethods.SetErrorComboBoxBorder(MapPage.AreaColorBorder);
-                MapPage._wrongInput = true;
+                MapPage.WrongInput = true;
             }
         }
         public void GetAddAreaValues()
         {
-            MapPage._wrongInput = false;
-            MapPage.SelectedArea.Name = GetAddComponentNameTextbox(MapPage.AreaName, MapPage._areaName);
-            MapPage._areaOnMap.GetColorID();
-            MapPage.SelectedArea.AmountOfPeople = GetAddAmountOfPeople(MapPage.AreaAmountOfPeople, MapPage._areaPersons);
-            MapPage.SelectedArea.PricePerNightPerPerson = GetAddPricePerNightPerPerson(MapPage.AreaPrice, MapPage._areaPricePerNightPerPerson);
-            MapPage.SelectedArea.SurfaceArea = GetAddSurfaceArea(MapPage.AreaPlaceSurfaceArea, MapPage._areaSurfaceArea);
-            MapPage.SelectedArea.Power = (bool)MapPage.AreaPower.IsChecked;
-            MapPage.SelectedArea.Dogs = (bool)MapPage.AreaDogs.IsChecked;
+            MapPage.WrongInput = false;
+            MapPage.SelectedArea.Name = GetAddComponentNameTextbox(MapPage.AreaNameTextbox, MapPage.AreaName);
+            MapPage.AreaOnMap.GetColorID();
+            MapPage.SelectedArea.AmountOfPeople = GetAddAmountOfPeople(MapPage.AreaAmountOfPeopleTextbox, MapPage.AreaAmountOfPeople);
+            MapPage.SelectedArea.PricePerNightPerPerson = GetAddPricePerNightPerPerson(MapPage.AreaPricePerNightPerPersonTextbox, MapPage.AreaPricePerNightPerPerson);
+            MapPage.SelectedArea.SurfaceArea = GetAddSurfaceArea(MapPage.AreaPlaceSurfaceAreaTextbox, MapPage.AreaSurfaceArea);
+            MapPage.SelectedArea.Power = (bool)MapPage.AreaPowerCheckbox.IsChecked;
+            MapPage.SelectedArea.Dogs = (bool)MapPage.AreaDogsCheckbox.IsChecked;
         }
         public void HandleAreaClick()
         {
             SetInfoVisible("Area");
-            MapPage.AreaName.Text = MapPage.SelectedArea.Name;
+            MapPage.AreaNameTextbox.Text = MapPage.SelectedArea.Name;
             SetAreaComboBox();
-            MapPage.AreaPower.IsChecked = MapPage.SelectedArea.Power;
-            MapPage.AreaDogs.IsChecked = MapPage.SelectedArea.Dogs;
-            if (MapPage.SelectedArea.SurfaceArea > 0) MapPage.AreaPlaceSurfaceArea.Text = MapPage.SelectedArea.SurfaceArea.ToString();
-            else MapPage.AreaPlaceSurfaceArea.Text = "";
-            if (MapPage.SelectedArea.PricePerNightPerPerson > 0) MapPage.AreaPrice.Text = MapPage.SelectedArea.PricePerNightPerPerson.ToString();
-            else MapPage.AreaPrice.Text = "";
-            if (MapPage.SelectedArea.AmountOfPeople > 0) MapPage.AreaAmountOfPeople.Text = MapPage.SelectedArea.AmountOfPeople.ToString();
-            else MapPage.AreaAmountOfPeople.Text = "";
+            MapPage.AreaPowerCheckbox.IsChecked = MapPage.SelectedArea.Power;
+            MapPage.AreaDogsCheckbox.IsChecked = MapPage.SelectedArea.Dogs;
+            if (MapPage.SelectedArea.SurfaceArea > 0) MapPage.AreaPlaceSurfaceAreaTextbox.Text = MapPage.SelectedArea.SurfaceArea.ToString();
+            else MapPage.AreaPlaceSurfaceAreaTextbox.Text = "";
+            if (MapPage.SelectedArea.PricePerNightPerPerson > 0) MapPage.AreaPricePerNightPerPersonTextbox.Text = MapPage.SelectedArea.PricePerNightPerPerson.ToString();
+            else MapPage.AreaPricePerNightPerPersonTextbox.Text = "";
+            if (MapPage.SelectedArea.AmountOfPeople > 0) MapPage.AreaAmountOfPeopleTextbox.Text = MapPage.SelectedArea.AmountOfPeople.ToString();
+            else MapPage.AreaAmountOfPeopleTextbox.Text = "";
         }
         public void SetAreaComboBox()
         {
             MapPage.AreaColor.Items.Clear();
-            List<int> activeColors = MapPage._areas.Where(a => MapPage.SelectedArea != null ? a.Color != MapPage.SelectedArea.Color : true).Select(a => a.Color).ToList();
+            List<int> activeColors = MapPage.Areas.Where(a => MapPage.SelectedArea != null ? a.Color != MapPage.SelectedArea.Color : true).Select(a => a.Color).ToList();
             List<int> possibelColors = Enumerable.Range(0, StaticUIMethods.ColorCount).Except(activeColors).ToList();
             for (int i = 0; i < possibelColors.Count; i++)
             {
@@ -65,35 +65,35 @@ namespace CampingUI.Map.AreaMap
         }
         public void ToggleAreaInput(bool enabled)
         {
-            MapPage.AreaName.IsEnabled = enabled;
+            MapPage.AreaNameTextbox.IsEnabled = enabled;
             MapPage.AreaColor.IsEnabled = enabled;
-            MapPage.AreaPower.IsEnabled = enabled;
-            MapPage.AreaDogs.IsEnabled = enabled;
-            MapPage.AreaPlaceSurfaceArea.IsEnabled = enabled;
-            MapPage.AreaPrice.IsEnabled = enabled;
-            MapPage.AreaAmountOfPeople.IsEnabled = enabled;
+            MapPage.AreaPowerCheckbox.IsEnabled = enabled;
+            MapPage.AreaDogsCheckbox.IsEnabled = enabled;
+            MapPage.AreaPlaceSurfaceAreaTextbox.IsEnabled = enabled;
+            MapPage.AreaPricePerNightPerPersonTextbox.IsEnabled = enabled;
+            MapPage.AreaAmountOfPeopleTextbox.IsEnabled = enabled;
             MapPage.AddAreaButton.Visibility = Visibility.Hidden;
             if (enabled) MapPage.AddAreaButton.Visibility = Visibility.Visible;
         }
         public void CalculateAreaSize(double xCord, double yCord)
         {
-            if (xCord < MapPage._areaStartPoint.X) (xCord, MapPage._areaStartPoint.X) = (MapPage._areaStartPoint.X, xCord);
-            if (yCord < MapPage._areaStartPoint.Y) (yCord, MapPage._areaStartPoint.Y) = (MapPage._areaStartPoint.Y, yCord);
-            if (MapPage._areaStartPoint.X < 5) MapPage._areaStartPoint.X = 0;
-            if (MapPage._areaStartPoint.Y < 5) MapPage._areaStartPoint.Y = 0;
-            MapPage.SelectedArea.XCord1 = (int)MapPage._areaStartPoint.X;
-            MapPage.SelectedArea.YCord1 = (int)MapPage._areaStartPoint.Y;
+            if (xCord < MapPage.AreaStartPoint.X) (xCord, MapPage.AreaStartPoint.X) = (MapPage.AreaStartPoint.X, xCord);
+            if (yCord < MapPage.AreaStartPoint.Y) (yCord, MapPage.AreaStartPoint.Y) = (MapPage.AreaStartPoint.Y, yCord);
+            if (MapPage.AreaStartPoint.X < 5) MapPage.AreaStartPoint.X = 0;
+            if (MapPage.AreaStartPoint.Y < 5) MapPage.AreaStartPoint.Y = 0;
+            MapPage.SelectedArea.XCord1 = (int)MapPage.AreaStartPoint.X;
+            MapPage.SelectedArea.YCord1 = (int)MapPage.AreaStartPoint.Y;
             MapPage.SelectedArea.Width = (int)xCord - MapPage.SelectedArea.XCord1;
             MapPage.SelectedArea.Height = (int)yCord - MapPage.SelectedArea.YCord1;
-            if (MapPage._areaStartPoint.X + MapPage.SelectedArea.Width > (int)MapPage.field.Width - 5) MapPage.SelectedArea.Width = (int)MapPage.field.Width - MapPage.SelectedArea.XCord1;
-            if (MapPage._areaStartPoint.Y + MapPage.SelectedArea.Height > (int)MapPage.field.Height - 5) MapPage.SelectedArea.Height = (int)MapPage.field.Height - MapPage.SelectedArea.YCord1;
+            if (MapPage.AreaStartPoint.X + MapPage.SelectedArea.Width > (int)MapPage.field.Width - 5) MapPage.SelectedArea.Width = (int)MapPage.field.Width - MapPage.SelectedArea.XCord1;
+            if (MapPage.AreaStartPoint.Y + MapPage.SelectedArea.Height > (int)MapPage.field.Height - 5) MapPage.SelectedArea.Height = (int)MapPage.field.Height - MapPage.SelectedArea.YCord1;
         }
         public void SetAreaEvents(Border border, Area area)
         {
             border.MouseLeftButtonDown += (sender, e) =>
             {
-                MapPage._areaOnMap.DeselectAllFields();
-                if (MapPage._selectedMapButton.Contains("View"))
+                MapPage.AreaOnMap.DeselectAllFields();
+                if (MapPage.SelectedMapButton.Contains("View"))
                 {
                     MapPage.SelectedArea = area;
                     MapPage.SelectedStreet = null;
@@ -108,7 +108,7 @@ namespace CampingUI.Map.AreaMap
         }
         public void GenerateAreaStartPoint(double xCord, double yCord)
         {
-            MapPage._areaStartPoint = new Point(xCord, yCord);
+            MapPage.AreaStartPoint = new Point(xCord, yCord);
             Ellipse ellipse = new Ellipse();
             Canvas.SetLeft(ellipse, xCord - 7.5);
             Canvas.SetTop(ellipse, yCord - 7.5);
@@ -123,7 +123,7 @@ namespace CampingUI.Map.AreaMap
             Point point = Mouse.GetPosition(MapPage.field);
             double xCord = Math.Round(point.X);
             double yCord = Math.Round(point.Y);
-            if (MapPage._areaStartPoint.X == -1 && MapPage._areaStartPoint.Y == -1)
+            if (MapPage.AreaStartPoint.X == -1 && MapPage.AreaStartPoint.Y == -1)
             {
                 GenerateAreaStartPoint(xCord, yCord);
                 ResetBorders(MapPage.AreaInfoGrid);
@@ -135,7 +135,7 @@ namespace CampingUI.Map.AreaMap
                 CalculateAreaSize(xCord, yCord);
                 Border border = MapPageArea.GenerateArea(MapPage.SelectedArea);
                 MapPage.field.Children.Add(border);
-                MapPage._newArea = border;
+                MapPage.NewArea = border;
                 ToggleAreaInput(true);
                 SetInfoVisible("Area");
             }
