@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -19,115 +20,35 @@ namespace CampingUI.GenerateComponentsMap
         public static void GenerateStreet(Street street, SolidColorBrush? color)
         {
             var coordinates = street.GetStreetPositions();
-            double deltaY;
-            double deltaX;
-            double firstX;
-            double firstY;
-            double secondX;
-            double secondY;
-            /*//if (street.XCord1 < street.XCord2)
-            //{
-            //deltaX = street.XCord2 - street.XCord1;
-            //firstX = street.XCord1;
-            // secondX = street.XCord2;
-            //}
-            // else
-            //{
-            //deltaX = street.XCord1 - street.XCord2;
-            //firstX = street.XCord2;
-            //secondX = street.XCord1;
-            //}
-            //if (street.YCord1 > street.YCord2)
-            // {
-            //deltaY = street.YCord1 - street.YCord2;
-            //firstY = street.YCord1;
-            //secondY = street.YCord2;
-            //}
-            //else
-            //{
-            //deltaY = street.YCord2 - street.YCord1;
-            //firstY = street.YCord2;
-            //secondY = street.YCord1;
-            //}
-            //double radials = Math.Atan(deltaY / deltaX);
-            //double degrees = radials * 180 / Math.PI;
 
-            // int offsetX = 0;
-            //int offsetY = 0;
-            //Line starts on the left, ends on the right
-            //if (street.XCord1 <= street.XCord2)
-            //{
-            //Line starts lower and gets higher
-            //if (street.YCord1 >= street.YCord2)
-            //{
-            // degrees *= -1;
-            //offsetX = 15;
-            // }
-            //Line starts higher and gets lower
-            // else
-            //{
-            //degrees *= 1;
-            //offsetX = 10;
-            //}
-            //}
-            //Line starts on the right, ends on the left
-            //else
-            // {
-            //Line starts lower and gets higher
-            //if (street.YCord1 >= street.YCord2)
-            //{
+            if (street.XCord1 > street.XCord2 || (street.XCord1 == street.XCord2 && street.YCord2 > street.YCord1))
+            {
+                (street.XCord1, street.XCord2) = (street.XCord2, street.XCord1);
+                (street.YCord1, street.YCord2) = (street.YCord2, street.YCord1);
+            }
 
-            //degrees *= 1;
-            //}
-            //Line starts higher and gets lower
-            //else
-            //{
-            //degrees *= -1;
-            //offsetX = 35;
-            //}
-            //}
-            //Vertical line
-            //if (street.XCord1 == street.XCord2)
-            //{
-            //degrees = 90;
-            //offsetX = 15;
-            // }
-            //Horizontal line
-            // if (street.YCord1 == street.YCord2)
-            //{
-            // offsetY = 10;
-            //}*/
-
-            int angle = 0;
-            if(street.YCord1 < street.YCord2 && street.XCord1 < street.XCord2)
-            {
-                angle = (int)(Math.Atan2(street.YCord2 - street.YCord1, street.XCord2 - street.XCord1) * (180/Math.PI));
-            } else
-            {
-                angle = (int)(Math.Atan2(street.YCord1 - street.YCord2, street.XCord1 - street.XCord2) * (180/Math.PI));
-            }
-            if(street.YCord1 > street.YCord2 && street.XCord1 < street.XCord2)
-            {
-                angle = (int)(Math.Atan2(street.YCord1 - street.YCord2, street.XCord1 - street.XCord2) * (180 / Math.PI))+180;
-            }
-            if(street.YCord1 == street.YCord2) {
-                angle = 0;
-            }
-            if(street.XCord1 == street.XCord2)
-            {
-                angle = 90;
-            }
             RotateTransform rotate = new RotateTransform();
-            rotate.Angle = angle;
+            rotate.Angle = CalcAngle(street);
 
             Line line = CreateStreet(street, coordinates);
             TextBlock textBlock = createTextBlock(rotate);
-            //Canvas.SetLeft(textBlock, secondX - (deltaX / 2) +(offsetX * (radials)));
-            //Canvas.SetTop(textBlock, firstY - (deltaY / 2) + (offsetY * (radials)));
 
-            double textBlockX = ((street.XCord1 + street.XCord2 - textBlock.ActualWidth) / 2);
-            double textBlockY = ((street.YCord1 + street.YCord2 - textBlock.ActualHeight) / 2);
-
+            double textBlockX;
+            double textBlockY;
+            if (street.XCord1 < street.XCord2) {
+                textBlockX = street.XCord1;
+                textBlockY = street.YCord1;
+            }
+            else
+            {
+                textBlockX = street.XCord2;
+                textBlockY = street.YCord2;
+            }
+            double LineLenght = Math.Sqrt(Math.Pow(street.XCord2 - street.XCord1, 2) + Math.Pow(street.YCord1 - street.YCord2, 2));
+            if(street.XCord1 != street.XCord2) textBlockY -= 10 * (Math.Cos((street.YCord2-street.YCord1) / LineLenght));
+            if(street.YCord1 != street.YCord2 && street.XCord1 != street.XCord2) textBlockX += 10 * (Math.Sin((street.YCord2 - street.YCord1) / LineLenght));
+            else if (street.XCord1 == street.XCord2) textBlockX += 10;
+            
             Canvas.SetLeft(textBlock, textBlockX);
             Canvas.SetTop(textBlock, textBlockY);
 
@@ -137,14 +58,31 @@ namespace CampingUI.GenerateComponentsMap
             SetLine(line);
             SetTextBlock(textBlock);
         }
-       
+        public static int CalcAngle(Street street)
+        {
+            if (street.YCord1 < street.YCord2 && street.XCord1 < street.XCord2)
+            {
+                return (int)(Math.Atan2(street.YCord2 - street.YCord1, street.XCord2 - street.XCord1) * (180 / Math.PI));
+            }
+            else if (street.YCord1 > street.YCord2 && street.XCord1 < street.XCord2)
+            {
+                return (int)(Math.Atan2(street.YCord1 - street.YCord2, street.XCord1 - street.XCord2) * (180 / Math.PI)) + 180;
+            }
+            else if (street.YCord1 == street.YCord2)
+            {
+                return 0;
+            }
+            else 
+            {
+                return 90;
+            }
+        }
         public static TextBlock createTextBlock(RotateTransform rotate)
         {
             return new TextBlock
             {
                 Text = "",
 
-                RenderTransformOrigin = new Point(0.5, 0.5),
                 RenderTransform = rotate,
                 Foreground = Brushes.White,
                 HorizontalAlignment = HorizontalAlignment.Center,
