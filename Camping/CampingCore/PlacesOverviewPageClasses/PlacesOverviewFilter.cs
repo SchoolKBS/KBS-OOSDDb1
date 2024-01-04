@@ -13,7 +13,7 @@ namespace CampingCore.PlacesOverviewPageClasses
         {
             if (dogsAllowed != null)
             {
-                _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Intersect(_camping.Places.Where(i => i.Power == dogsAllowed).Select(i => i));
+                _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Intersect(_camping.Places.Where(i => i.Dogs == dogsAllowed).Select(i => i));
             }
             return _placesSortedAndOrFiltered;
         }

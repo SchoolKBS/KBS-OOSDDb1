@@ -96,8 +96,8 @@ namespace CampingUI
             if (CheckBoxChecked(DogCheckBoxFilter, "hond") == false) { DogCheckBoxFilter.Content = "Geen hond"; }
 
             PowerCheckBoxFilter.IsChecked = place.Power;
-            if (CheckBoxChecked(PowerCheckBoxFilter, "stroom") == true) { DogCheckBoxFilter.Content = "Wel stroom"; }
-            if (CheckBoxChecked(PowerCheckBoxFilter, "stroom") == false) { DogCheckBoxFilter.Content = "Geen stroom"; }
+            if (CheckBoxChecked(PowerCheckBoxFilter, "stroom") == true) { PowerCheckBoxFilter.Content = "Wel stroom"; }
+            if (CheckBoxChecked(PowerCheckBoxFilter, "stroom") == false) { PowerCheckBoxFilter.Content = "Geen stroom"; }
             
 
             AmountOfPeopleTextBox.Text = $"{place.AmountOfPeople}";
@@ -149,8 +149,8 @@ namespace CampingUI
         private bool? FilterAfterCheckboxChanged(CheckBox checkbox, string inputstring)
         {
             bool? attributeboolean = CheckBoxChecked(checkbox, inputstring);
-            SetFilterVariables();
             ResetListViewForFilter();
+            SetFilterVariables();
             return attributeboolean;
         }
         private void RemoveFilters_Click(object sender, RoutedEventArgs e)
@@ -161,6 +161,7 @@ namespace CampingUI
         }
         private void ResetFilters()
         {
+            PlacesListView.SelectedItems.Clear();
             SetupMap();
             ArrivalDatePicker.SelectedDate = null;
             DepartureDatePicker.SelectedDate = null;
@@ -330,7 +331,9 @@ namespace CampingUI
                 PlacesOverviewDelete.DeletePlace(_camping, place, DateTime.Now.Date);
                 ReloadScreenDataPlaces();
                 ReloadMaps();
-              
+                ResetFilters();
+
+
             }
 
         }
@@ -396,6 +399,7 @@ namespace CampingUI
         }
         private void PlacesListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+
             if (PlacesListView.SelectedItems.Count > 0)
             {
 
