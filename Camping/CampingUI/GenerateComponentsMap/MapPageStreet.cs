@@ -32,21 +32,22 @@ namespace CampingUI.GenerateComponentsMap
 
             Line line = CreateStreet(street, coordinates);
             TextBlock textBlock = createTextBlock(rotate);
+            textBlock.Text = street.Name;
 
             double textBlockX;
             double textBlockY;
-            CalcTextBlockXY(street, out textBlockX, out textBlockY);
+            textBlock.Measure(new Size(Double.PositiveInfinity, Double.PositiveInfinity));
+            textBlock.Arrange(new Rect(textBlock.DesiredSize));
+            CalcTextBlockXY(street, textBlock, out textBlockX, out textBlockY);
             
             Canvas.SetLeft(textBlock, textBlockX);
             Canvas.SetTop(textBlock, textBlockY);
 
-            textBlock.Text = street.Name;
             line.Stroke = color;
-
             SetLine(line);
             SetTextBlock(textBlock);
         }
-        public static void CalcTextBlockXY(Street street, out double textBlockX, out double textBlockY)
+        public static void CalcTextBlockXY(Street street, TextBlock textblock, out double textBlockX, out double textBlockY)
         {
             if (street.XCord1 < street.XCord2)
             {
@@ -59,10 +60,40 @@ namespace CampingUI.GenerateComponentsMap
                 textBlockY = street.YCord2;
             }
             double LineLenght = Math.Sqrt(Math.Pow(street.XCord2 - street.XCord1, 2) + Math.Pow(street.YCord1 - street.YCord2, 2));
-            if (street.XCord1 != street.XCord2) textBlockY -= 10 * (Math.Cos((street.YCord2 - street.YCord1) / LineLenght));
-            if (street.YCord1 != street.YCord2 && street.XCord1 != street.XCord2) textBlockX += 10 * (Math.Sin((street.YCord2 - street.YCord1) / LineLenght));
-            else if (street.XCord1 == street.XCord2) textBlockX += 10;
 
+            if (street.XCord1 == street.XCord2)
+            {
+                textBlockX += 10;
+                textBlockY += (LineLenght / 2 - textblock.ActualWidth / 2);
+            }
+            else if (street.YCord1 == street.YCord2)
+            {
+                textBlockX += (LineLenght / 2 - textblock.ActualWidth / 2);
+                textBlockY -= (10 * (Math.Cos((street.YCord2 - street.YCord1) / LineLenght)));
+            }
+            else
+            {
+                if (street.YCord1 < street.YCord2)
+                {
+                    textBlockY -= (10 * (Math.Cos((street.YCord2 - street.YCord1) / LineLenght))) - CalcSideLenght(street, textblock, false);
+                }
+                else
+                {
+                    textBlockY -= (10 * (Math.Cos((street.YCord2 - street.YCord1) / LineLenght))) + CalcSideLenght(street, textblock, false);
+
+                }
+                textBlockX += 10 * (Math.Sin((street.YCord2 - street.YCord1) / LineLenght)) + CalcSideLenght(street,textblock, true);
+            }
+
+
+        }
+        public static double CalcSideLenght(Street street, TextBlock textblock, bool XSide)
+        {
+            double LineLenght = Math.Sqrt(Math.Pow(street.XCord2 - street.XCord1, 2) + Math.Pow(street.YCord1 - street.YCord2, 2));
+            if (textblock.ActualWidth > LineLenght) return 0;
+            double angle = Math.Atan2(street.XCord2 - street.XCord1, street.YCord2 - street.YCord1);
+            if(XSide) return Math.Abs(Math.Sin(angle) * ((LineLenght - textblock.ActualWidth) / 2));
+            else return Math.Abs(Math.Cos(angle) * ((LineLenght - textblock.ActualWidth) / 2));
         }
         public static int CalcAngle(Street street)
         {
@@ -89,6 +120,7 @@ namespace CampingUI.GenerateComponentsMap
             {
                 Text = "",
 
+                IsHitTestVisible = false,
                 RenderTransform = rotate,
                 Foreground = Brushes.White,
                 HorizontalAlignment = HorizontalAlignment.Center,
@@ -99,7 +131,6 @@ namespace CampingUI.GenerateComponentsMap
 
             };
         }
-        public 
         private static Line CreateStreet(Street street, int[] coordinates)
         {
             return new Line
