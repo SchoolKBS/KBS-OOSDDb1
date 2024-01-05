@@ -1,6 +1,7 @@
 ﻿using CampingCore;
 using CampingCore.PlacesOverviewPageClasses;
 using CampingDataAccess;
+using CampingUI.Map;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -51,12 +52,11 @@ namespace CampingUI
             InitializeComponent();
             _placesOverviewPageFilter = new PlacesOverviewPageFilter();
             this._camping = camping; 
-            _camping.Places = _camping.CampingRepository.CampingPlaceRepository.GetPlaces();
-            if (!_camping.Places.IsNullOrEmpty())
-                _maxPriceRange = _camping.Places.Max(i => i.PricePerNightPerPerson);
+            if (!_camping.GetPlaces().IsNullOrEmpty())
+                _maxPriceRange = _camping.GetPlaces().Max(i => i.PricePerNightPerPerson);
             MaxPriceRangeTextBox.Text = $"{_maxPriceRange}"; 
             AmountOfPeopleTextBox.Text = $"{_amountOfPeople}"; 
-            _placesSortedAndOrFiltered = _camping.Places;
+            _placesSortedAndOrFiltered = _camping.GetPlaces();
             PlacesListView.ItemsSource = _placesSortedAndOrFiltered; 
             this._headerTag = "PlaceID";
         }
@@ -126,10 +126,10 @@ namespace CampingUI
             _hasPower = null;
             _dogsAllowed = null;
             _amountOfPeople = 0;
-            if (!_camping.Places.IsNullOrEmpty())
+            if (!_camping.GetPlaces().IsNullOrEmpty())
             {
-                _maxPriceRange = _camping.Places.Max(i => i.PricePerNightPerPerson);
-                _placesSortedAndOrFiltered = _camping.Places;
+                _maxPriceRange = _camping.GetPlaces().Max(i => i.PricePerNightPerPerson);
+                _placesSortedAndOrFiltered = _camping.GetPlaces();
                 PlacesListView.ItemsSource = _placesSortedAndOrFiltered;
             }
             else
@@ -145,7 +145,7 @@ namespace CampingUI
         {
             PlacesListView.SelectedItems.Clear();
             ClosePlaceOverview();
-            _placesSortedAndOrFiltered = _camping.Places;
+            _placesSortedAndOrFiltered = _camping.GetPlaces();
         }
         private void Filter(DateTime arrivalDate, DateTime departureDate, int amountOfPeople, double maxPriceRange, bool? hasPower, bool? dogsAllowed)
         {
@@ -221,7 +221,7 @@ namespace CampingUI
 
         private void SetSorterColumn_Click(object sender, RoutedEventArgs e)
         {
-            if (!_camping.Places.IsNullOrEmpty())
+            if (!_camping.GetPlaces().IsNullOrEmpty())
             {
                 GridViewColumnHeader gridViewColumnHeader = (GridViewColumnHeader)sender;
                 _placesSortedAndOrFiltered = SortColumns(gridViewColumnHeader.Tag.ToString());
@@ -242,7 +242,6 @@ namespace CampingUI
                 PlacesOverviewDelete.DeletePlace(_camping, place, DateTime.Now.Date);
                 ReloadScreenDataPlaces();
             }
-
         }
         private void OpenPlaceOverview()
         {
@@ -266,8 +265,7 @@ namespace CampingUI
         }
         private void ReloadScreenDataPlaces()
         {
-            _camping.Places = _camping.CampingRepository.CampingPlaceRepository.GetPlaces();
-            _placesSortedAndOrFiltered = _camping.Places;
+            _placesSortedAndOrFiltered = _camping.GetPlaces();
             ClosePlaceOverview();
             PlacesListView.SelectedItems.Clear();
             PlacesListView.ItemsSource = _placesSortedAndOrFiltered;
@@ -281,7 +279,7 @@ namespace CampingUI
         private void SetDeleteButtonClickableIfNoReservations()
         {
             Place place = (Place)PlacesListView.SelectedItem;
-            List<Reservation> placesReservations = _camping.Reservations.Where(i => i.PlaceID == place.PlaceID)
+            List<Reservation> placesReservations = _camping.GetReservations().Where(i => i.PlaceID == place.PlaceID)
                                                           .Where(i => i.DepartureDate >= DateTime.Now.Date).ToList();
             DeletePlaceButton.IsEnabled = true;
             if (placesReservations.Count > 0)
@@ -306,8 +304,7 @@ namespace CampingUI
         {
             ReservationCalender.BlackoutDates.Clear();
             ReservationCalender.SelectedDate = null;
-            _camping.Reservations = _camping.CampingRepository.CampingReservationRepository.GetReservations();
-            List<Reservation> reservations = _camping.Reservations.Where(r => r.PlaceID == place.PlaceID).ToList();
+            List<Reservation> reservations = _camping.GetReservations().Where(r => r.PlaceID == place.PlaceID).ToList();
             reservations = reservations.Where(r => r.DepartureDate >= DateTime.Now).ToList();
             ReservationCalender.BlackoutDates.AddDatesInPast();
             foreach (Reservation reservation in reservations)

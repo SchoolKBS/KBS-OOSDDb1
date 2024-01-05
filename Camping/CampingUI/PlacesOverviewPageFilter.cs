@@ -1,4 +1,5 @@
 ﻿using CampingCore;
+using CampingUI.Map;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,7 +63,7 @@ namespace CampingUI
             }
             else
             {
-                number = camping.Places.Max(i => i.PricePerNightPerPerson);
+                number = camping.GetPlaces().Max(i => i.PricePerNightPerPerson);
                 textbox.Text = $"{number}";
             }
             MaxPriceRange = number;

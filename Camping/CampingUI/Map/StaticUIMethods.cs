@@ -7,7 +7,7 @@ using System.Windows.Media;
 using System.Windows.Controls;
 using System.Windows;
 
-namespace CampingUI
+namespace CampingUI.Map
 {
     public static class StaticUIMethods
     {
@@ -32,30 +32,40 @@ namespace CampingUI
             datePicker.BorderBrush = Brushes.White;
             datePicker.BorderThickness = new Thickness(1);
         }
+        public static void ResetComboBoxBorder(Border border)
+        {
+            border.BorderBrush = Brushes.White;
+            border.BorderThickness = new Thickness(1, 1, 1, 1);
+        }
+        public static void SetErrorComboBoxBorder(Border border)
+        {
+            border.BorderBrush = Brushes.Red;
+            border.BorderThickness = new Thickness(3, 3, 3, 3);
+        }
         public static Color GetColorFromInt(int ColorValue)
         {
             switch (ColorValue)
             {
                 case 0:
-                    return System.Windows.Media.Colors.Red;
+                    return Colors.Red;
                 case 1:
-                    return System.Windows.Media.Colors.Orange;
+                    return Colors.Orange;
                 case 2:
-                    return System.Windows.Media.Colors.Yellow;
+                    return Colors.Yellow;
                 case 3:
-                    return System.Windows.Media.Colors.Green;
+                    return Colors.Green;
                 case 4:
-                    return System.Windows.Media.Colors.Blue;
+                    return Colors.Blue;
                 case 5:
-                    return System.Windows.Media.Colors.Purple;
+                    return Colors.Purple;
                 case 6:
-                    return System.Windows.Media.Colors.Violet;
+                    return Colors.Violet;
                 case 7:
-                    return System.Windows.Media.Colors.Pink;
+                    return Colors.Pink;
                 default:
-                    return System.Windows.Media.Colors.Beige;
+                    return Colors.Beige;
             }
-        }        
+        }
         public static string GetColorNameFromInt(int ColorValue)
         {
             switch (ColorValue)

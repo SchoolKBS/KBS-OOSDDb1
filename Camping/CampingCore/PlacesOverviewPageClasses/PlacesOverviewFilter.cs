@@ -13,7 +13,7 @@ namespace CampingCore.PlacesOverviewPageClasses
         {
             if (dogsAllowed != null)
             {
-                _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Intersect(_camping.Places.Where(i => i.Power == dogsAllowed).Select(i => i));
+                _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Intersect(_camping.GetPlaces().Where(i => i.Power == dogsAllowed).Select(i => i));
             }
             return _placesSortedAndOrFiltered;
         }
@@ -22,7 +22,7 @@ namespace CampingCore.PlacesOverviewPageClasses
         {
             if (hasPower != null)
             {
-                _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Intersect(_camping.Places.Where(i => i.Power == hasPower).Select(i => i));
+                _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Intersect(_camping.GetPlaces().Where(i => i.Power == hasPower).Select(i => i));
             }
             return _placesSortedAndOrFiltered;
         }
@@ -33,7 +33,7 @@ namespace CampingCore.PlacesOverviewPageClasses
 
             if (maxPriceRange >= _placesSortedAndOrFiltered.Min(i => i.PricePerNightPerPerson))
             {
-                _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Intersect(_camping.Places.Where(i => i.PricePerNightPerPerson <= maxPriceRange).Select(i => i));
+                _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Intersect(_camping.GetPlaces().Where(i => i.PricePerNightPerPerson <= maxPriceRange).Select(i => i));
             }
             return _placesSortedAndOrFiltered;
 
@@ -44,7 +44,7 @@ namespace CampingCore.PlacesOverviewPageClasses
         {
             if (amountOfPeople >= 0)
             {
-                _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Intersect(_camping.Places.Where(i => i.AmountOfPeople >= amountOfPeople).Select(i => i));
+                _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Intersect(_camping.GetPlaces().Where(i => i.AmountOfPeople >= amountOfPeople).Select(i => i));
             }
             return _placesSortedAndOrFiltered;
         }
@@ -64,11 +64,11 @@ namespace CampingCore.PlacesOverviewPageClasses
         public static IEnumerable<Place> GetAvailablePlacesBetweenDates(DateTime arrivalDate, DateTime departureDate, Camping _camping)
         {
             List<Place> availablePlacesBetweenDates = new List<Place>();
-            foreach (Place place in _camping.Places)
+            foreach (Place place in _camping.GetPlaces())
             {
                 int counter = 0;
                 //All reservations of place
-                var reservationsOnPlace = _camping.Reservations.Where(i => i.PlaceID == place.PlaceID).Select(i => i);
+                var reservationsOnPlace = _camping.GetReservations().Where(i => i.PlaceID == place.PlaceID).Select(i => i);
                 if (reservationsOnPlace.Count() > 0)
                 {
                     foreach (Reservation reservation in reservationsOnPlace)

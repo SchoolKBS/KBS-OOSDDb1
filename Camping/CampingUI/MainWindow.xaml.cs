@@ -43,7 +43,6 @@ namespace CampingUI
         //Function (EventHandler) to open the reservations page
         private void ReservationsButton_Click(object sender, RoutedEventArgs e)
         {
-            Camping.Reservations = Camping.CampingRepository.CampingReservationRepository.GetReservations();
             Main.Content = new ReservationsOverviewWindow(Camping, CampingRepository);
         }
 

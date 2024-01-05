@@ -23,13 +23,14 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using CampingUI.Map;
 
 namespace CampingUI
 {
     /// <summary>
     /// Interaction logic for ReservationsOverviewWindow.xaml
     /// </summary>
-   
+
 
     public partial class ReservationsOverviewWindow : Page
     {
@@ -45,7 +46,7 @@ namespace CampingUI
             _appliedFilters = false;
 
             //Checks if reservations exist to load list.
-            if (_camping.Reservations.Count() > 0)
+            if (_camping.GetReservations().Count() > 0)
             {
                 LoadReservationList();
 
@@ -55,7 +56,7 @@ namespace CampingUI
         //Fills list with reservations
         public void LoadReservationList()
         {
-            ReservationsListView.ItemsSource = _camping.Reservations.Where(reservation => reservation.DepartureDate >= DateTime.Now.Date).OrderBy(reservation => reservation.ArrivalDate).ThenBy(reservation => reservation.PlaceID); //Takes reservations
+            ReservationsListView.ItemsSource = _camping.GetReservations().Where(reservation => reservation.DepartureDate >= DateTime.Now.Date).OrderBy(reservation => reservation.ArrivalDate).ThenBy(reservation => reservation.PlaceID); //Takes reservations
         }
 
   
@@ -63,7 +64,7 @@ namespace CampingUI
         // Funcion for the application of all filters
         public void ApplyFilters()
         {
-            IEnumerable<Reservation> filteredReservations = _camping.Reservations;
+            IEnumerable<Reservation> filteredReservations = _camping.GetReservations();
 
             DateTime? arrivalDate = ArrivalDatePickerr.SelectedDate;
             if (arrivalDate.HasValue)
@@ -277,7 +278,7 @@ namespace CampingUI
                     if (result == MessageBoxResult.Yes)
                     {
                         // User clicked Yes, so delete the reservation
-                        _camping.Reservations.Remove(reservationToDelete);
+                        _camping.GetReservations().Remove(reservationToDelete);
                         _camping.CampingRepository.CampingReservationRepository.RemoveReservation(reservationToDelete);
 
                         // Refresh the ListView
