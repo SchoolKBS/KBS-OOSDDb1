@@ -35,19 +35,7 @@ namespace CampingUI.GenerateComponentsMap
 
             double textBlockX;
             double textBlockY;
-            if (street.XCord1 < street.XCord2) {
-                textBlockX = street.XCord1;
-                textBlockY = street.YCord1;
-            }
-            else
-            {
-                textBlockX = street.XCord2;
-                textBlockY = street.YCord2;
-            }
-            double LineLenght = Math.Sqrt(Math.Pow(street.XCord2 - street.XCord1, 2) + Math.Pow(street.YCord1 - street.YCord2, 2));
-            if(street.XCord1 != street.XCord2) textBlockY -= 10 * (Math.Cos((street.YCord2-street.YCord1) / LineLenght));
-            if(street.YCord1 != street.YCord2 && street.XCord1 != street.XCord2) textBlockX += 10 * (Math.Sin((street.YCord2 - street.YCord1) / LineLenght));
-            else if (street.XCord1 == street.XCord2) textBlockX += 10;
+            CalcTextBlockXY(street, out textBlockX, out textBlockY);
             
             Canvas.SetLeft(textBlock, textBlockX);
             Canvas.SetTop(textBlock, textBlockY);
@@ -57,6 +45,24 @@ namespace CampingUI.GenerateComponentsMap
 
             SetLine(line);
             SetTextBlock(textBlock);
+        }
+        public static void CalcTextBlockXY(Street street, out double textBlockX, out double textBlockY)
+        {
+            if (street.XCord1 < street.XCord2)
+            {
+                textBlockX = street.XCord1;
+                textBlockY = street.YCord1;
+            }
+            else
+            {
+                textBlockX = street.XCord2;
+                textBlockY = street.YCord2;
+            }
+            double LineLenght = Math.Sqrt(Math.Pow(street.XCord2 - street.XCord1, 2) + Math.Pow(street.YCord1 - street.YCord2, 2));
+            if (street.XCord1 != street.XCord2) textBlockY -= 10 * (Math.Cos((street.YCord2 - street.YCord1) / LineLenght));
+            if (street.YCord1 != street.YCord2 && street.XCord1 != street.XCord2) textBlockX += 10 * (Math.Sin((street.YCord2 - street.YCord1) / LineLenght));
+            else if (street.XCord1 == street.XCord2) textBlockX += 10;
+
         }
         public static int CalcAngle(Street street)
         {
@@ -93,6 +99,7 @@ namespace CampingUI.GenerateComponentsMap
 
             };
         }
+        public 
         private static Line CreateStreet(Street street, int[] coordinates)
         {
             return new Line
