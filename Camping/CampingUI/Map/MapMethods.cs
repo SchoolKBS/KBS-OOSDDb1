@@ -226,9 +226,9 @@ namespace CampingUI.Map
         public void GenerateMap()
         {
             MapPage.field.Children.Clear();
-            MapPage.Areas = _camping.GetAreas();
-            MapPage.Streets = _camping.GetStreets();
-            MapPage.Places = _camping.GetPlaces();
+            MapPage.Areas = _camping.CampingRepository.CampingMapRepository.GetAreas();
+            MapPage.Streets = _camping.CampingRepository.CampingMapRepository.GetStreets();
+            MapPage.Places = _camping.CampingRepository.CampingPlaceRepository.GetPlaces();
             GenerateComponentsMap(MapPage.Areas);
             GenerateComponentsMap(MapPage.Streets);
             GenerateComponentsMap(MapPage.Places);

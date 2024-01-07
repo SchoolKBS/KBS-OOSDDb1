@@ -7,10 +7,10 @@ namespace CampingCore
 {
     public class Camping
     {
-        private List<Place> Places { get; set;}
-        private List<Reservation> Reservations { get; set; }
-        private List<Area> Areas { get; set; }
-        private List<Street> Streets { get; set; }
+        public List<Place> Places { get; set;}
+        public List<Reservation> Reservations { get; set; }
+        public List<Area> Areas { get; set; }
+        public List<Street> Streets { get; set; }
         public ICampingRepository CampingRepository { get; set; }
         public Camping(ICampingRepository campingRepository)
         {
@@ -29,19 +29,23 @@ namespace CampingCore
         }
         public List<Area> GetAreas()
         {
-            return this.CampingRepository.CampingMapRepository.GetAreas();
+            return this.Areas;
         }
         public List<Street> GetStreets()
         {
-            return this.CampingRepository.CampingMapRepository.GetStreets();
+            return this.Streets;
         }
         public List<Place> GetPlaces()
         {
-            return this.CampingRepository.CampingPlaceRepository.GetPlaces();
+            return this.Places;
+        }
+        public void SetPlaces(List<Place> places)
+        {
+            this.Places = places;
         }
         public List<Reservation> GetReservations()
         {
-            return this.CampingRepository.CampingReservationRepository.GetReservations();
+            return this.Reservations;
         }
     }
 }

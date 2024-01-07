@@ -37,8 +37,8 @@ namespace CampingUI
             }
             else
             {
-                AmountOfPeople = 0;
-                textbox.Text = $"{AmountOfPeople}";
+                number = 0;
+                textbox.Text = $"{number}";
             }
             AmountOfPeople = number;
             WrongInput = filterBool;

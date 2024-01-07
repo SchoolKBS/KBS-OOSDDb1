@@ -41,21 +41,18 @@ namespace CampingUI
         private string _headerTag;
         private bool _filterApplied = false;
         private bool _emptyDates = true;
-        private bool _hasPowerEdit, _dogsAllowedEdit;
-        private int _surfaceAreaEdit;
-        private double _pricePerNightPerPersonEdit;
-        private int _amountOfPeopleEdit;
         private PlacesOverviewPageFilter _placesOverviewPageFilter;
 
         public PlacesOverviewPage(Camping camping, CampingRepository campingRepository)
         {
             InitializeComponent();
             _placesOverviewPageFilter = new PlacesOverviewPageFilter();
-            this._camping = camping; 
+            this._camping = camping;
+            _camping.SetPlaces(_camping.CampingRepository.CampingPlaceRepository.GetPlaces());
             if (!_camping.GetPlaces().IsNullOrEmpty())
                 _maxPriceRange = _camping.GetPlaces().Max(i => i.PricePerNightPerPerson);
             MaxPriceRangeTextBox.Text = $"{_maxPriceRange}"; 
-            AmountOfPeopleTextBox.Text = $"{_amountOfPeople}"; 
+            AmountOfPeopleTextBox.Text = $"{_amountOfPeople}";
             _placesSortedAndOrFiltered = _camping.GetPlaces();
             PlacesListView.ItemsSource = _placesSortedAndOrFiltered; 
             this._headerTag = "PlaceID";
@@ -240,6 +237,7 @@ namespace CampingUI
             {
                 _placesSortedAndOrFiltered = _placesSortedAndOrFiltered.Where(i => i.PlaceID != place.PlaceID).ToList();
                 PlacesOverviewDelete.DeletePlace(_camping, place, DateTime.Now.Date);
+                _camping.SetPlaces(_camping.CampingRepository.CampingPlaceRepository.GetPlaces());
                 ReloadScreenDataPlaces();
             }
         }
@@ -269,12 +267,13 @@ namespace CampingUI
             ClosePlaceOverview();
             PlacesListView.SelectedItems.Clear();
             PlacesListView.ItemsSource = _placesSortedAndOrFiltered;
+            Filter(_arrivalDate, _departureDate, _amountOfPeople, _maxPriceRange, _hasPower, _dogsAllowed);
 
-            if (!_placesSortedAndOrFiltered.IsNullOrEmpty() && _maxPriceRange > _placesSortedAndOrFiltered.Max(i => i.PricePerNightPerPerson))
+/*            if (!_placesSortedAndOrFiltered.IsNullOrEmpty() && _maxPriceRange > _placesSortedAndOrFiltered.Max(i => i.PricePerNightPerPerson))
                 _maxPriceRange = _placesSortedAndOrFiltered.Max(i => i.PricePerNightPerPerson);
             else
                 _maxPriceRange = 0;
-            MaxPriceRangeTextBox.Text = $"{_maxPriceRange}";
+            MaxPriceRangeTextBox.Text = $"{_maxPriceRange}";*/
         }
         private void SetDeleteButtonClickableIfNoReservations()
         {
