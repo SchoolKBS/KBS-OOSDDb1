@@ -29,19 +29,19 @@ namespace CampingCore
         }
         public List<Area> GetAreas()
         {
-            return this.CampingRepository.CampingMapRepository.GetAreas();
+            return this.Areas;
         }
         public List<Street> GetStreets()
         {
-            return this.CampingRepository.CampingMapRepository.GetStreets();
+            return this.Streets;
         }
         public List<Place> GetPlaces()
         {
-            return this.CampingRepository.CampingPlaceRepository.GetPlaces();
+            return this.Places;
         }
         public List<Reservation> GetReservations()
         {
-            return this.CampingRepository.CampingReservationRepository.GetReservations();
+            return this.Reservations;
         }
     }
 }
