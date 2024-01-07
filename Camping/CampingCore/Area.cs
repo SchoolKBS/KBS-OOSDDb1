@@ -47,6 +47,21 @@ namespace CampingCore
             Width = (int)properties[10];
             Height = (int)properties[11];
         }
+        public Area(int areaID, string name, int color, bool power, bool dogs, int surfaceArea, double pricePerNightPerPerson, int amountOfPeople, int xCord1, int yCord1, int width, int height)
+        {
+            AreaID = areaID;
+            Name = name;
+            Color = color;
+            Power = power;
+            Dogs = dogs;
+            SurfaceArea = surfaceArea;
+            PricePerNightPerPerson = pricePerNightPerPerson;
+            AmountOfPeople = amountOfPeople;
+            XCord1 = xCord1;
+            YCord1 = yCord1;
+            Width = width;
+            Height = height;
+        }
 
         public int[] GetAreaPositions()
         {
