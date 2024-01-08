@@ -47,5 +47,9 @@ namespace CampingCore
         {
             return this.Reservations;
         }
+        public void SetReservations(List<Reservation> reservations)
+        {
+            this.Reservations = reservations;
+        }
     }
 }

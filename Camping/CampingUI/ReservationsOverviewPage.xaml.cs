@@ -45,6 +45,7 @@ namespace CampingUI
         {
             InitializeComponent();
             _camping = camping;
+            _camping.SetReservations(campingRepository.CampingReservationRepository.GetReservations());
             _appliedFilters = false;
 
             //Checks if reservations exist to load list.
