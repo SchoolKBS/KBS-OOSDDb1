@@ -200,8 +200,8 @@
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
-                    <Button Style="{DynamicResource ButtonStyle1Apply}" Foreground="White" FontWeight="Bold" Grid.Column="0" Name="AcceptReservationCreationBtn" Content="Accept" Height="40" Margin="40,0,40,0" Click="AcceptReservation_Click"/>
-                    <Button Style="{DynamicResource ButtonStyle1Cancel}" Foreground="White" FontWeight="Bold" Grid.Column="1" Name="CancelReservationCreationBtn" Content="Cancel" Height="40" Margin="40,0,40,0" Click="CancelReservation_Click"/>
+                    <Button Style="{DynamicResource ButtonStyle1Apply}" Foreground="White" FontWeight="Bold" Grid.Column="0" Name="AcceptReservationCreationBtn" Content="Opslaan" Height="40" Margin="40,0,40,0" Click="AcceptReservation_Click"/>
+                    <Button Style="{DynamicResource ButtonStyle1Cancel}" Foreground="White" FontWeight="Bold" Grid.Column="1" Name="CancelReservationCreationBtn" Content="Annuleren" Height="40" Margin="40,0,40,0" Click="CancelReservation_Click"/>
                 </Grid>
             </Grid>
         </Border>

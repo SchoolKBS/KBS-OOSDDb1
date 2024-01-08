@@ -251,10 +251,11 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
                         <Label Name="AreaPowerLabel" Content="Heeft stroom: " Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <CheckBox Name="AreaPowerCheckbox" VerticalAlignment="Center" IsEnabled="False" HorizontalAlignment="Center" Grid.Column="1">
+                        <CheckBox Name="AreaPowerCheckbox" VerticalAlignment="Center" Margin="32, 0, 0, 0" IsEnabled="False" HorizontalAlignment="Right" Grid.Column="1">
                             <CheckBox.LayoutTransform>
                                 <ScaleTransform ScaleX="2" ScaleY="2" />
                             </CheckBox.LayoutTransform>
@@ -266,10 +267,11 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
                         <Label Name="AreaDogsLabel" Content="Mag honden: " Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <CheckBox Name="AreaDogsCheckbox" VerticalAlignment="Center" IsEnabled="False" HorizontalAlignment="Center" Grid.Column="1">
+                        <CheckBox Name="AreaDogsCheckbox" VerticalAlignment="Center" Margin="32, 0, 0, 0" IsEnabled="False" HorizontalAlignment="Right" Grid.Column="1">
                             <CheckBox.LayoutTransform>
                                 <ScaleTransform ScaleX="2" ScaleY="2" />
                             </CheckBox.LayoutTransform>
