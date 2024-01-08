@@ -212,18 +212,25 @@ namespace CampingUI
             {
                 if (comp is Border placeBlock && placeBlock.Child is Canvas canvas && canvas.Name.Contains("Place"))
                 {
-                    foreach (Place placeData in filteredPlaces)
+                    if (filteredPlaces.Count() > 0) {
+                        foreach (Place placeData in filteredPlaces)
+                        {
+                            if (canvas.Name.Equals("Place" + placeData.PlaceID.ToString()))
+                            {
+
+                                canvas.Opacity = 1.0;
+                                break;
+                            }
+
+                            else
+                            {
+                                canvas.Opacity = 0.3;
+                            }
+                        }
+                    }
+                    else
                     {
-                        if (canvas.Name.Equals("Place" + placeData.PlaceID.ToString()))
-                        {
-                          
-                            canvas.Opacity = 1.0;
-                            break; 
-                        }
-                        else
-                        {
-                            canvas.Opacity = 0.3;
-                        }
+                        canvas.Opacity = 0.3;
                     }
                 }
             }
