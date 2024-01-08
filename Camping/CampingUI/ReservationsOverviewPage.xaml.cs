@@ -25,6 +25,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using CampingUI.Map;
 
+
 namespace CampingUI
 {
     /// <summary>
@@ -38,6 +39,7 @@ namespace CampingUI
         private Camping _camping { get; set; }
         private Reservation _reservation { get; set; }
         private bool _appliedFilters {  get; set; }
+        public Canvas MapOverview {  get; set; }
 
         public ReservationsOverviewWindow(Camping camping, CampingRepository campingRepository)
         {
@@ -251,7 +253,8 @@ namespace CampingUI
             StaticUIMethods.ResetDatePickerBorder(ArrivalDatePickerr);
             StaticUIMethods.ResetDatePickerBorder(DepartureDatePickerr);
             _appliedFilters = false;
-
+            PriceCheckBox.Content = "Geen Voorkeur";
+            PriceCheckBox.IsChecked = false;
 
             // Reload the original data without filters
             LoadReservationList();

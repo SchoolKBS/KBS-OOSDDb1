@@ -1,4 +1,5 @@
-﻿using CampingCore;
+using CampingCore;
+using CampingDataAccess;
 using CampingUI.GenerateComponentsMap;
 using CampingUI.Map;
 using CampingUI.Map.AreaMap;
@@ -7,6 +8,8 @@ using CampingUI.Map.StreetMap;
 using CampingUI.NewFolder;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design.Serialization;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -58,7 +61,10 @@ namespace CampingUI
                 Focusable = true;
                 Keyboard.Focus(this);
             };
-            KeyDown += Handle_KeyDown;     
+            KeyDown += Handle_KeyDown;
+
+
+
         }
         private void field_MouseEnter(object sender, MouseEventArgs e)
         {

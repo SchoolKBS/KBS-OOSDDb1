@@ -21,7 +21,9 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Transform = CampingUI.NewFolder.Transform;
 
 namespace CampingUI
 {
@@ -30,6 +32,9 @@ namespace CampingUI
     /// </summary>
     public partial class PlacesOverviewPage : Page
     {
+
+        private MapPage _mapPage;
+
         private Camping _camping;
         private IEnumerable<Place> _placesSortedAndOrFiltered;
         private bool? _hasPower = null, _dogsAllowed = null;
@@ -42,6 +47,10 @@ namespace CampingUI
         private bool _filterApplied = false;
         private bool _emptyDates = true;
         private PlacesOverviewPageFilter _placesOverviewPageFilter;
+        private double desiredWidthMini = 2500;
+        private double desiredHeightMini = 937.5;
+        private double desiredWidthMain = 1000;
+        private double desiredHeightMain = 750;
 
         public PlacesOverviewPage(Camping camping, CampingRepository campingRepository)
         {
@@ -56,8 +65,42 @@ namespace CampingUI
             _placesSortedAndOrFiltered = _camping.GetPlaces();
             PlacesListView.ItemsSource = _placesSortedAndOrFiltered; 
             this._headerTag = "PlaceID";
+            new Transform(field2, desiredWidthMini, desiredHeightMini, "plattegrond");
+            new Transform(field, desiredWidthMain, desiredHeightMain, "plattegrondMain");
+            _mapPage = new MapPage(camping);
+            _mapPage.GenerateMap(field2);
+            _mapPage.GenerateMap(field);
+            _mapPage.PlaceSelectedOnMap += HandlePlaceSelectedOnMap;
+        }
+        
+        public void SetupMap()
+        {
+            _mapPage.GenerateMap(field2);
+            _mapPage.GenerateMap(field);
+          
         }
 
+     
+
+        public void HandlePlaceSelectedOnMap(Place place)
+        {
+
+            ResetFilters();
+            PlacesListView.SelectedItem = place;
+            DogCheckBoxFilter.IsChecked = place.Dogs;
+            if (CheckBoxChecked(DogCheckBoxFilter, "hond") == true ) { DogCheckBoxFilter.Content = "Wel hond"; }
+            if (CheckBoxChecked(DogCheckBoxFilter, "hond") == false) { DogCheckBoxFilter.Content = "Geen hond"; }
+
+            PowerCheckBoxFilter.IsChecked = place.Power;
+            if (CheckBoxChecked(PowerCheckBoxFilter, "stroom") == true) { PowerCheckBoxFilter.Content = "Wel stroom"; }
+            if (CheckBoxChecked(PowerCheckBoxFilter, "stroom") == false) { PowerCheckBoxFilter.Content = "Geen stroom"; }
+            
+
+            AmountOfPeopleTextBox.Text = $"{place.AmountOfPeople}";
+            MaxPriceRangeTextBox.Text = $"{place.PricePerNightPerPerson}";
+
+        }
+  
         private void TextBox_Changed(object sender, TextChangedEventArgs e)
         {
             TextBox textbox = (TextBox)sender;
@@ -102,8 +145,8 @@ namespace CampingUI
         private bool? FilterAfterCheckboxChanged(CheckBox checkbox, string inputstring)
         {
             bool? attributeboolean = CheckBoxChecked(checkbox, inputstring);
-            SetFilterVariables();
             ResetListViewForFilter();
+            SetFilterVariables();
             return attributeboolean;
         }
         private void RemoveFilters_Click(object sender, RoutedEventArgs e)
@@ -114,6 +157,8 @@ namespace CampingUI
         }
         private void ResetFilters()
         {
+            PlacesListView.SelectedItems.Clear();
+            SetupMap();
             ArrivalDatePicker.SelectedDate = null;
             DepartureDatePicker.SelectedDate = null;
             DogCheckBoxFilter.Content = "Geen voorkeur (hond)";
@@ -155,10 +200,34 @@ namespace CampingUI
                 _placesSortedAndOrFiltered = PlacesOverviewFilter.GetFilteredListOnDate(_emptyDates, arrivalDate, departureDate, _placesSortedAndOrFiltered, _camping);
                 _placesSortedAndOrFiltered = PlacesOverviewFilter.GetFilteredListOnPower(hasPower, _placesSortedAndOrFiltered, _camping);
                 _placesSortedAndOrFiltered = PlacesOverviewSorting.SetSortDuringFiltering(_isSortedAscending, _headerTag, _placesSortedAndOrFiltered);
+                HighLightFilteredMiniMap(_placesSortedAndOrFiltered);
                 PlacesListView.ItemsSource = _placesSortedAndOrFiltered;
                 _filterApplied = true;
             }
 
+        }
+
+        private void HighLightFilteredMiniMap(IEnumerable<Place> filteredPlaces)
+        {
+            foreach (var comp in field.Children)
+            {
+                if (comp is Border placeBlock && placeBlock.Child is Canvas canvas && canvas.Name.Contains("Place"))
+                {
+                    foreach (Place placeData in filteredPlaces)
+                    {
+                        if (canvas.Name.Equals("Place" + placeData.PlaceID.ToString()))
+                        {
+                          
+                            canvas.Opacity = 1.0;
+                            break; 
+                        }
+                        else
+                        {
+                            canvas.Opacity = 0.3;
+                        }
+                    }
+                }
+            }
         }
         private bool? CheckBoxChecked(CheckBox checkbox, string content)
         {
@@ -229,6 +298,9 @@ namespace CampingUI
         {
             NavigationService.Navigate(new ReservationCreationPage(this));
         }
+
+     
+
         private void DeletePlaceButton_Click(object sender, RoutedEventArgs e)
         {
             Place place = (Place)PlacesListView.SelectedItem;
@@ -239,15 +311,28 @@ namespace CampingUI
                 PlacesOverviewDelete.DeletePlace(_camping, place, DateTime.Now.Date);
                 _camping.SetPlaces(_camping.CampingRepository.CampingPlaceRepository.GetPlaces());
                 ReloadScreenDataPlaces();
+                ReloadMaps();
+                ResetFilters();
+
+
             }
+        }
+
+        private void ReloadMaps()
+        {
+            _mapPage.GenerateMap(field);
+            _mapPage.GenerateMap(field2);
         }
         private void OpenPlaceOverview()
         {
             PlaceOverviewGrid.Visibility = Visibility.Visible;
+            BorderOverview.Visibility = Visibility.Visible;
         }
         private void ClosePlaceOverview()
         {
             PlaceOverviewGrid.Visibility = Visibility.Collapsed;
+            BorderOverview.Visibility = Visibility.Collapsed;
+
         }
         private IEnumerable<Place> SortColumns(string headerTag)
         {
@@ -268,12 +353,6 @@ namespace CampingUI
             PlacesListView.SelectedItems.Clear();
             PlacesListView.ItemsSource = _placesSortedAndOrFiltered;
             Filter(_arrivalDate, _departureDate, _amountOfPeople, _maxPriceRange, _hasPower, _dogsAllowed);
-
-/*            if (!_placesSortedAndOrFiltered.IsNullOrEmpty() && _maxPriceRange > _placesSortedAndOrFiltered.Max(i => i.PricePerNightPerPerson))
-                _maxPriceRange = _placesSortedAndOrFiltered.Max(i => i.PricePerNightPerPerson);
-            else
-                _maxPriceRange = 0;
-            MaxPriceRangeTextBox.Text = $"{_maxPriceRange}";*/
         }
         private void SetDeleteButtonClickableIfNoReservations()
         {
@@ -286,19 +365,36 @@ namespace CampingUI
         }
         private void PlacesListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+
             if (PlacesListView.SelectedItems.Count > 0)
             {
+
                 Place place = (Place)PlacesListView.SelectedItem;
                 SetLabelsPlaceOverview(place);
                 OpenPlaceOverview();
                 SetReservationsInCalendar(place);
                 SetDeleteButtonClickableIfNoReservations();
+                ReloadMaps();
+                foreach (var comp in field2.Children )
+                {
+                    if (comp is Border placeBlock && placeBlock.Child is Canvas canvas && canvas.Name.Contains("Place"))
+                    {
+
+                        if (canvas.Name.Equals("Place" + place.PlaceID.ToString()))
+                        {
+                            canvas.Background = Brushes.DarkCyan;
+                        }
+                    }
+                }
+                
+
             }
             else
             {
                 PlaceOverviewGrid.Visibility = Visibility.Collapsed;
             }
         }
+  
         private void SetReservationsInCalendar(Place place)
         {
             ReservationCalender.BlackoutDates.Clear();

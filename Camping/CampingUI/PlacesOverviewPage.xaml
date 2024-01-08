@@ -150,9 +150,96 @@
                         <!--<Button Grid.Row="2" Content="Nieuwe plaats toevoegen" Click="AddPlaceButton_Click" Height="Auto"/>-->
                     </Grid>
                 </Border>
-            <Border Grid.Column="1" Margin="25,25,25,25" Padding="15" Background="#334A6E" CornerRadius="25">
-                <!--Grid for the overview of the selected place-->
-                <Grid Grid.Column="1" Name="PlaceOverviewGrid" Visibility="Collapsed" Grid.Row="3">
+            <Border Grid.Column="1" Margin="25" Padding="0" Background="#334A6E" CornerRadius="25">
+
+                
+                        <Border
+                             BorderThickness="2"
+                             BorderBrush="Black"
+                             Background="LightGray"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center">
+                            <Canvas Background="white" Width="1000" Height="750" x:Name="field">
+                                <Canvas.LayoutTransform>
+                                    <ScaleTransform x:Name="plattegrondMain" />
+                                </Canvas.LayoutTransform>
+                            </Canvas>
+                        </Border>
+                    
+                
+            </Border>
+            <Border Name="BorderOverview" Grid.Column="1" Margin="25,25,25,25" Padding="15" Background="#334A6E" CornerRadius="25" Visibility="Collapsed">
+                
+
+                    <!--Grid for the overview of the selected place-->
+                    <Grid Grid.Column="2" Name="PlaceOverviewGrid" Visibility="Collapsed" Grid.Row="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="4*"/>
+                            <RowDefinition Height="3*"/>
+                        </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1.5*"/>
+                        <ColumnDefinition Width="3*"/>
+                    </Grid.ColumnDefinitions>
+
+
+                    <Grid Grid.Row="0" Grid.Column="1">
+                      
+                            <Canvas  Margin="0,0,250,50" Background="white" Width="500" Height="375" x:Name="field2" >
+                                <Canvas.LayoutTransform>
+                                    <ScaleTransform x:Name="plattegrond" />
+                                </Canvas.LayoutTransform>
+                            </Canvas>
+                    </Grid>
+                        <!--Grid for place info-->
+                        <Grid Grid.Row="0" Name="UpperGrid">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="4*"/>
+                                <ColumnDefinition Width="2*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0" Name="InfoGrid">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                </Grid.RowDefinitions>
+                                <Label Grid.Row="0" Margin="0,0,0,0" Name="nrLabel" FontSize="25" FontWeight="Bold" Content=""></Label>
+                                <Label Grid.Row="1" Margin="0,0,0,0" Name="areaLabel" FontSize="16" Content=""></Label>
+                                <Label Grid.Row="2" Margin="0,0,0,0" Name="amountOfPeopleLabel" FontSize="16" Content=""></Label>
+                                <Label Grid.Row="3" Margin="0,0,0,0" Name="powerLabel" FontSize="16" Content=""></Label>
+                                <Label Grid.Row="4" Margin="0,0,0,0" Name="dogsLabel" FontSize="16" Content=""></Label>
+                                <Label Grid.Row="5" Margin="0,0,0,0" Name="priceLabel" FontSize="16" Content=""></Label>
+                          
+                        </Grid>
+     
+                        </Grid>
+                         <Grid Grid.Row="1" Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Viewbox HorizontalAlignment="Left"  Margin="0,0,0,0" >
+                            <Calendar x:Name="ReservationCalender" Height="auto" Width="auto" Visibility="Visible"/>
+                        </Viewbox>
+                         </Grid>
+                        <!--Grid for button -->
+                        <Grid Grid.Row="2" Grid.Column="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+
+                        </Grid.ColumnDefinitions>
+
+                        <Button Style="{DynamicResource ButtonStyle1Apply}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Foreground="White" FontWeight="Bold" Grid.Column="0" Name="NewReservationButton" Content="Nieuwe resevering maken" Margin="20" Height="50" Width="200" Click="NewReservation_Click"/>
+                            <!--<Button Style="{DynamicResource ButtonStyle1Edit}" Foreground="White" FontWeight="Bold" Grid.Column="1" Name="EditPlaceButton" Content="Plaats aanpassen" Margin="20" Height="50" Width="200" Click="EditPlaceButton_Click"/>-->
+                        <Button Style="{DynamicResource ButtonStyle1Cancel}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="White" FontWeight="Bold" Grid.Column="5" Name="DeletePlaceButton" Content="Verwijder plaats" Margin="20" Height="50" Width="200" Click="DeletePlaceButton_Click"/>
+                        </Grid>
+                    </Grid>
+                </Border>
+                <Grid Grid.Column="1" Name="EditPlaceGrid" Visibility="Collapsed" Grid.Row="2">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="4*"/>
                         <RowDefinition Height="1*"/>

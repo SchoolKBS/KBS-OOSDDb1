@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Converters;
 
 namespace CampingUI.NewFolder
 {
     public class Transform
     {
 
-        public Transform(Canvas field) {
+        public Transform(Canvas field, double desiredWidth, double desiredHeight, string fieldname) {
             double screenWidth = SystemParameters.PrimaryScreenWidth;
             double screenHeight = SystemParameters.PrimaryScreenHeight;
 
-            double desiredWidth = 1000;
-            double desiredHeight = 750;
+      
 
             double aspectRatio = desiredWidth / desiredHeight;
             double screenAspectRatio = screenWidth / screenHeight;
@@ -36,11 +36,11 @@ namespace CampingUI.NewFolder
                 scaleY = screenHeight / desiredHeight / 2;
                 scaleX = scaleY;
             }
-            ApplyScaleTransform(scaleX, scaleY, field);
+            ApplyScaleTransform(scaleX, scaleY, field, fieldname);
         }
-        private static void ApplyScaleTransform(double scaleX, double scaleY, Canvas field)
+        private static void ApplyScaleTransform(double scaleX, double scaleY, Canvas field, string fieldname)
         {
-            if (field.FindName("plattegrond") is ScaleTransform plattegrond)
+            if (field.FindName(fieldname) is ScaleTransform plattegrond )
             {
                 plattegrond.ScaleX = scaleX;
                 plattegrond.ScaleY = scaleY;
