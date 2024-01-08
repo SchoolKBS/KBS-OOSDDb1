@@ -159,7 +159,7 @@ namespace CampingUI.Map
             MapPage.SelectedPlace = null;
             MapPage.SelectedStreet = null;
             MapPage.StreetPoint1 = new Point(-1, -1);
-            GenerateMap();
+            GenerateMap(MapPage.field);
         }
         public void ResetInputFields(string componentString)
         {
@@ -199,7 +199,7 @@ namespace CampingUI.Map
                 {
                     MapPage.PlaceOnMap.ResetBorders(grid);
                 }
-                GenerateMap();
+                GenerateMap(MapPage.field);
             }
         }
         public void HighLightPlaces(Object type, SolidColorBrush color)
@@ -223,17 +223,17 @@ namespace CampingUI.Map
                 }
             }
         }
-        public void GenerateMap()
+        public void GenerateMap(Canvas canvas)
         {
-            MapPage.field.Children.Clear();
+            canvas.Children.Clear();
             MapPage.Areas = _camping.CampingRepository.CampingMapRepository.GetAreas();
             MapPage.Streets = _camping.CampingRepository.CampingMapRepository.GetStreets();
             MapPage.Places = _camping.CampingRepository.CampingPlaceRepository.GetPlaces();
-            GenerateComponentsMap(MapPage.Areas);
-            GenerateComponentsMap(MapPage.Streets);
-            GenerateComponentsMap(MapPage.Places);
+            GenerateComponentsMap(MapPage.Areas, canvas);
+            GenerateComponentsMap(MapPage.Streets, canvas);
+            GenerateComponentsMap(MapPage.Places, canvas);
         }
-        public void GenerateComponentsMap<T>(List<T> list)
+        public void GenerateComponentsMap<T>(List<T> list, Canvas canvas)
         {
             if (list != null && list.Count() > 0)
             {
@@ -242,20 +242,20 @@ namespace CampingUI.Map
                     if (comp is Area)
                     {
                         Border border = MapPageArea.GenerateArea((Area)(object)(comp));
-                        MapPage.field.Children.Add(border);
+                        canvas.Children.Add(border);
                         MapPage.AreaOnMap.SetAreaEvents(border, (Area)(object)comp);
                     }
                     else if (comp is Street street)
                     {
                         MapPageStreet.GenerateStreet(street, Brushes.Black);
                         Line line = MapPageStreet.GetLine();
-                        MapPage.field.Children.Add(line);
-                        MapPage.field.Children.Add(MapPageStreet.GetTextBlock());
+                        canvas.Children.Add(line);
+                        canvas.Children.Add(MapPageStreet.GetTextBlock());
                         MapPage.StreetOnMap.SetStreetEvents(line, street);
                     }
                     else if (comp is Place place)
                     {
-                        MapPagePlace.GeneratePlace(MapPage.field, (Place)(object)comp, Brushes.Black, true);
+                        MapPagePlace.GeneratePlace(canvas, (Place)(object)comp, Brushes.Black, true);
                         MapPage.PlaceOnMap.SetPlaceEvents(Brushes.Black, MapPagePlace.Canvas, place);
                     }
                 }

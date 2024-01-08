@@ -119,7 +119,7 @@ namespace CampingUI.Map.AreaMap
         }
         public void FieldMouseDownArea()
         {
-            GenerateMap();
+            GenerateMap(MapPage.field);
             Point point = Mouse.GetPosition(MapPage.field);
             double xCord = Math.Round(point.X);
             double yCord = Math.Round(point.Y);

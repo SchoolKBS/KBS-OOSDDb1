@@ -212,7 +212,7 @@ namespace CampingUI.Map.PlaceMap
                 if (MapPage.SelectedMapButton.Contains("View"))
                 {
                     DeselectAllFields();
-                    GenerateMap();
+                    GenerateMap(MapPage.field);
                     canvasPlace.Background = Brushes.DarkCyan;
                     MapPage.PreviousSelectedCanvas = canvasPlace;
                     MapPage.SelectedStreet = null;

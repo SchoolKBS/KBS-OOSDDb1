@@ -22,6 +22,7 @@ namespace CampingUI
 {
     public partial class MapPage : Page
     {
+        public event Action<Place> PlaceSelectedOnMap;
         public Camping Camping;
         public List<Area> Areas;
         public List<Place> Places;
@@ -33,6 +34,8 @@ namespace CampingUI
         public double PlacePricePerNightPerPerson, StreetPricePerNightPerPerson, AreaPricePerNightPerPerson, XCord1, YCord1, XCord2, YCord2;
         public string StreetName, AreaName;
         public Canvas PreviousSelectedCanvas;
+        public double DesiredWidth = 1000;
+        public double DesiredHeight = 750;
         public bool EditPlaceBool, EditStreetBool, WrongInput;
         public string SelectedMapButton = "View";
         public Point StreetPoint1 = new Point(-1, -1);
@@ -53,8 +56,8 @@ namespace CampingUI
             StreetOnMap = new StreetOnMap(this, camping);
             AreaOnMap = new AreaOnMap(this, camping);
             MapMethods = new MapMethods(this, camping);
-            new Transform(field);
-            MapMethods.GenerateMap();
+            new Transform(field, DesiredWidth, DesiredHeight, "plattegrond");
+            MapMethods.GenerateMap(field);
 
             Loaded += (sender, e) =>
             {
@@ -177,7 +180,7 @@ namespace CampingUI
                 else MapMethods.HideInfoGrids();
                 StreetPoint1 = new Point(-1, -1);
                 AreaStartPoint = new Point(-1, -1);
-                MapMethods.GenerateMap();
+                MapMethods.GenerateMap(field);
                 if (SelectedMapButton.Contains("Place"))
                 {
                     Point p = Mouse.GetPosition(field);
@@ -208,7 +211,7 @@ namespace CampingUI
             else
             {
                 button.Style = selectionStyle;
-                MapMethods.GenerateMap();
+                MapMethods.GenerateMap(field);
                 SelectedMapButton = "View";
             }
         }
@@ -298,7 +301,7 @@ namespace CampingUI
                     StreetPoint1 = new Point(-1, -1);
                 }
                 StreetOnMap.ResetAfterAddingMapComponent("Street");
-                MapMethods.GenerateMap();
+                MapMethods.GenerateMap(field);
             }
         }
         private void SelectedArea_ColorChange(object sender, SelectionChangedEventArgs e)
@@ -334,7 +337,7 @@ namespace CampingUI
             AreaStartPoint.Y = -1;
             SelectedArea = null;
             NewArea = null;
-            MapMethods.GenerateMap();
+            MapMethods.GenerateMap(field);
             AreaInfoGrid.Visibility = Visibility.Hidden;
         }
         private void HandleAddArea_Click(object sender, RoutedEventArgs e)
@@ -347,7 +350,7 @@ namespace CampingUI
                 AreaInfoGrid.Visibility = Visibility.Hidden;
                 AreaStartPoint.X = -1;
                 AreaStartPoint.Y = -1;
-                MapMethods.GenerateMap();
+                MapMethods.GenerateMap(field);
             }
         }
         private void PlaceStreetAreaComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

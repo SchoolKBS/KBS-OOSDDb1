@@ -34,7 +34,6 @@ namespace CampingUI
     {
 
         private MapPage _mapPage;
-
         private Camping _camping;
         private IEnumerable<Place> _placesSortedAndOrFiltered;
         private bool? _hasPower = null, _dogsAllowed = null;
@@ -68,15 +67,15 @@ namespace CampingUI
             new Transform(field2, desiredWidthMini, desiredHeightMini, "plattegrond");
             new Transform(field, desiredWidthMain, desiredHeightMain, "plattegrondMain");
             _mapPage = new MapPage(camping);
-            _mapPage.GenerateMap(field2);
-            _mapPage.GenerateMap(field);
+            _mapPage.MapMethods.GenerateMap(field2);
+            _mapPage.MapMethods.GenerateMap(field);
             _mapPage.PlaceSelectedOnMap += HandlePlaceSelectedOnMap;
         }
         
         public void SetupMap()
         {
-            _mapPage.GenerateMap(field2);
-            _mapPage.GenerateMap(field);
+            _mapPage.MapMethods.GenerateMap(field2);
+            _mapPage.MapMethods.GenerateMap(field);
           
         }
 
@@ -320,8 +319,8 @@ namespace CampingUI
 
         private void ReloadMaps()
         {
-            _mapPage.GenerateMap(field);
-            _mapPage.GenerateMap(field2);
+            _mapPage.MapMethods.GenerateMap(field);
+            _mapPage.MapMethods.GenerateMap(field2);
         }
         private void OpenPlaceOverview()
         {
