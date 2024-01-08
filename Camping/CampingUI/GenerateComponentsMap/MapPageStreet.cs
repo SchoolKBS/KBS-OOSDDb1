@@ -69,19 +69,11 @@ namespace CampingUI.GenerateComponentsMap
             else if (street.YCord1 == street.YCord2)
             {
                 textBlockX += (LineLenght / 2 - textblockActualWidth / 2);
-                textBlockY -= (10 * (Math.Cos((street.YCord2 - street.YCord1) / LineLenght)));
+                textBlockY -= 10;
             }
             else
             {
-                if (street.YCord1 < street.YCord2)
-                {
-                    textBlockY -= (10 * (Math.Cos((street.YCord2 - street.YCord1) / LineLenght))) - Street.CalcSideLenght(street, textblockActualWidth, false);
-                }
-                else
-                {
-                    textBlockY -= (10 * (Math.Cos((street.YCord2 - street.YCord1) / LineLenght))) + Street.CalcSideLenght(street, textblockActualWidth, false);
-
-                }
+                textBlockY -= 10 * (Math.Cos((street.YCord2 - street.YCord1) / LineLenght)) - Street.CalcSideLenght(street, textblockActualWidth, false);
                 textBlockX += 10 * (Math.Sin((street.YCord2 - street.YCord1) / LineLenght)) + Street.CalcSideLenght(street, textblockActualWidth, true);
             }
 

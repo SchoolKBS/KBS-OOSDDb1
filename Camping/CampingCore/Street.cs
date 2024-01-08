@@ -60,7 +60,7 @@ namespace CampingCore
             if (textblockWidth > LineLenght) return 0;
             double angle = Math.Atan2(street.XCord2 - street.XCord1, street.YCord2 - street.YCord1);
             if (XSide) return Math.Abs(Math.Sin(angle) * ((LineLenght - textblockWidth) / 2));
-            else return Math.Abs(Math.Cos(angle) * ((LineLenght - textblockWidth) / 2));
+            else return Math.Cos(angle) * ((LineLenght - textblockWidth) / 2);
         }
 
     }
