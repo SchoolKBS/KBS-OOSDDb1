@@ -53,7 +53,7 @@ namespace CampingUI.Map.PlaceMap
         public void GetAddPlaceID()
         {
             MapPage.PlacePlaceID = GetAddTextBox(MapPage.PlacePlaceIDTextbox, MapPage.PlacePlaceID);
-            List<Place> places = MapPage.Camping.GetPlaces().Where(i => i.PlaceID == MapPage.PlacePlaceID).ToList();
+            List<Place> places = MapPage.Camping.CampingRepository.CampingPlaceRepository.GetPlaces().Where(i => i.PlaceID == MapPage.PlacePlaceID).ToList();
             if (places.Count > 0 && !MapPage.EditPlaceBool)
             {
                 StaticUIMethods.SetErrorTextboxBorder(MapPage.PlacePlaceIDTextbox);

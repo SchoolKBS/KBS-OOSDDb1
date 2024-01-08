@@ -38,7 +38,7 @@ namespace CampingUI.GenerateComponentsMap
             double textBlockY;
             textBlock.Measure(new Size(Double.PositiveInfinity, Double.PositiveInfinity));
             textBlock.Arrange(new Rect(textBlock.DesiredSize));
-            CalcTextBlockXY(street, textBlock, out textBlockX, out textBlockY);
+            CalcTextBlockXY(street, textBlock.ActualWidth, out textBlockX, out textBlockY);
             
             Canvas.SetLeft(textBlock, textBlockX);
             Canvas.SetTop(textBlock, textBlockY);
@@ -47,7 +47,7 @@ namespace CampingUI.GenerateComponentsMap
             SetLine(line);
             SetTextBlock(textBlock);
         }
-        public static void CalcTextBlockXY(Street street, TextBlock textblock, out double textBlockX, out double textBlockY)
+        public static void CalcTextBlockXY(Street street, double textblockActualWidth, out double textBlockX, out double textBlockY)
         {
             if (street.XCord1 < street.XCord2)
             {
@@ -64,36 +64,28 @@ namespace CampingUI.GenerateComponentsMap
             if (street.XCord1 == street.XCord2)
             {
                 textBlockX += 10;
-                textBlockY += (LineLenght / 2 - textblock.ActualWidth / 2);
+                textBlockY += (LineLenght / 2 - textblockActualWidth / 2);
             }
             else if (street.YCord1 == street.YCord2)
             {
-                textBlockX += (LineLenght / 2 - textblock.ActualWidth / 2);
+                textBlockX += (LineLenght / 2 - textblockActualWidth / 2);
                 textBlockY -= (10 * (Math.Cos((street.YCord2 - street.YCord1) / LineLenght)));
             }
             else
             {
                 if (street.YCord1 < street.YCord2)
                 {
-                    textBlockY -= (10 * (Math.Cos((street.YCord2 - street.YCord1) / LineLenght))) - CalcSideLenght(street, textblock, false);
+                    textBlockY -= (10 * (Math.Cos((street.YCord2 - street.YCord1) / LineLenght))) - Street.CalcSideLenght(street, textblockActualWidth, false);
                 }
                 else
                 {
-                    textBlockY -= (10 * (Math.Cos((street.YCord2 - street.YCord1) / LineLenght))) + CalcSideLenght(street, textblock, false);
+                    textBlockY -= (10 * (Math.Cos((street.YCord2 - street.YCord1) / LineLenght))) + Street.CalcSideLenght(street, textblockActualWidth, false);
 
                 }
-                textBlockX += 10 * (Math.Sin((street.YCord2 - street.YCord1) / LineLenght)) + CalcSideLenght(street,textblock, true);
+                textBlockX += 10 * (Math.Sin((street.YCord2 - street.YCord1) / LineLenght)) + Street.CalcSideLenght(street, textblockActualWidth, true);
             }
 
 
-        }
-        public static double CalcSideLenght(Street street, TextBlock textblock, bool XSide)
-        {
-            double LineLenght = Math.Sqrt(Math.Pow(street.XCord2 - street.XCord1, 2) + Math.Pow(street.YCord1 - street.YCord2, 2));
-            if (textblock.ActualWidth > LineLenght) return 0;
-            double angle = Math.Atan2(street.XCord2 - street.XCord1, street.YCord2 - street.YCord1);
-            if(XSide) return Math.Abs(Math.Sin(angle) * ((LineLenght - textblock.ActualWidth) / 2));
-            else return Math.Abs(Math.Cos(angle) * ((LineLenght - textblock.ActualWidth) / 2));
         }
         public static int CalcAngle(Street street)
         {

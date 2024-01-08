@@ -184,13 +184,18 @@ namespace CampingUI.Map
             UIElementCollection collection = null;
             if (mapComponent.Contains("Place"))
             {
-                MapPage.PlaceInfoGrid.Visibility = Visibility.Hidden;
                 collection = MapPage.PlaceInfoGrid.Children;
+                MapPage.PlaceInfoGrid.Visibility = Visibility.Hidden;
             }
             if (mapComponent.Contains("Street"))
             {
                 collection = MapPage.StreetInfoGrid.Children;
                 MapPage.StreetInfoGrid.Visibility = Visibility.Hidden;
+            }
+            if (mapComponent.Contains("Area"))
+            {
+                collection = MapPage.AreaInfoGrid.Children;
+                MapPage.AreaInfoGrid.Visibility = Visibility.Hidden;
             }
 
             if (collection != null && collection.Count > 0)

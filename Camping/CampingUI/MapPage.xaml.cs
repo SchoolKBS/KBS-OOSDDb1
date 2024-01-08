@@ -320,6 +320,7 @@ namespace CampingUI
         {
             PlaceOnMap.ResetAfterAddingMapComponent("Place");
             StreetOnMap.ResetAfterAddingMapComponent("Street");
+            AreaOnMap.ResetAfterAddingMapComponent("Area");
             MapMethods.HideInfoGrids();
         }
         private void TextBox_Changed(object sender, TextChangedEventArgs e)
