@@ -219,9 +219,11 @@ namespace CampingUI.Map.PlaceMap
                     MapPage.SelectedArea = null;
                     MapPage.SelectedPlace = canvasPlace;
                     HandlePlaceClick(place, false);
+                    MapPage.HandlePlaceClicker(place);
                 }
             };
         }
+
         public void RemoveOldPreviewPlace()
         {
             foreach (var component in MapPage.field.Children)

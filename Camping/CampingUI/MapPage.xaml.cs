@@ -69,6 +69,12 @@ namespace CampingUI
 
 
         }
+        public void HandlePlaceClicker(Place place)
+        {
+
+            PlaceSelectedOnMap?.Invoke(place);
+        }
+
         private void field_MouseEnter(object sender, MouseEventArgs e)
         {
             if (SelectedMapButton.Contains("Place"))
