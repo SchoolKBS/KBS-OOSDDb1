@@ -50,7 +50,7 @@ namespace CampingUI
             if (!string.IsNullOrEmpty(textbox.Text))
             {
                 string MaxPriceRangeText = textbox.Text.Replace(".", ",");
-                if (double.TryParse(MaxPriceRangeText, out number1) && number1 >= 0)       // Checks if int can be parsed and if number is bigger or equal to 0
+                if (double.TryParse(MaxPriceRangeText, out number1) && number1 > 0)       // Checks if int can be parsed and if number is bigger or equal to 0
                 {
                     number = number1;
                 }
