@@ -221,6 +221,8 @@
                         <RowDefinition/>
                         <RowDefinition/>
                         <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
 
                     <Grid Grid.Row="0" Name="AreaRow0">
@@ -229,8 +231,8 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Label Name="AreaNameLabel" Content="Gebied: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <TextBox Name="AreaNameTextbox" VerticalAlignment="Center" FontSize="16" Width="190" Height="40" HorizontalAlignment="Right" Grid.Column="1"/>
+                        <Label Name="AreaNameLabel" Content="Gebied: " Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <TextBox Name="AreaNameTextbox" VerticalAlignment="Center" FontSize="14" Width="190" Height="40" HorizontalAlignment="Right" Grid.Column="1"/>
 
                     </Grid>
 
@@ -240,9 +242,9 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Label Name="AreaColorLabel" Content="Kleur: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <Label Name="AreaColorLabel" Content="Kleur: " Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                         <Border Grid.Column="1" Name="AreaColorBorder" Width="190" Height="40" HorizontalAlignment="Right">
-                            <ComboBox Name="AreaColor" VerticalAlignment="Center" FontSize="16" Width="190" HorizontalAlignment="Right" Height="40" SelectedValuePath="Value" DisplayMemberPath="Text" SelectionChanged="SelectedArea_ColorChange"/>
+                            <ComboBox Name="AreaColor" VerticalAlignment="Center" FontSize="14" Width="190" HorizontalAlignment="Right" Height="40" SelectedValuePath="Value" DisplayMemberPath="Text" SelectionChanged="SelectedArea_ColorChange"/>
                         </Border>
                     </Grid>
                     <Grid Grid.Row="2" Name="AreaRow2">
@@ -251,8 +253,12 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Label Name="AreaPowerLabel" Content="Heeft stroom: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <CheckBox Name="AreaPowerCheckbox" VerticalAlignment="Center" IsEnabled="False" HorizontalAlignment="Center" Grid.Column="1"/>
+                        <Label Name="AreaPowerLabel" Content="Heeft stroom: " Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <CheckBox Name="AreaPowerCheckbox" VerticalAlignment="Center" IsEnabled="False" HorizontalAlignment="Center" Grid.Column="1">
+                            <CheckBox.LayoutTransform>
+                                <ScaleTransform ScaleX="2" ScaleY="2" />
+                            </CheckBox.LayoutTransform>
+                        </CheckBox>
 
                     </Grid>
 
@@ -262,8 +268,12 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Label Name="AreaDogsLabel" Content="Mag honden: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <CheckBox Name="AreaDogsCheckbox" VerticalAlignment="Center" IsEnabled="False" HorizontalAlignment="Center" Grid.Column="1"/>
+                        <Label Name="AreaDogsLabel" Content="Mag honden: " Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <CheckBox Name="AreaDogsCheckbox" VerticalAlignment="Center" IsEnabled="False" HorizontalAlignment="Center" Grid.Column="1">
+                            <CheckBox.LayoutTransform>
+                                <ScaleTransform ScaleX="2" ScaleY="2" />
+                            </CheckBox.LayoutTransform>
+                        </CheckBox>
                     </Grid>
 
                     <Grid Grid.Row="4" Name="AreaRow4">
@@ -272,8 +282,8 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Label Name="AreaPlaceSurfaceAreaLabel" Content="Oppervlakte plaats: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <TextBox Name="AreaPlaceSurfaceAreaTextbox" VerticalAlignment="Center" FontSize="16" Width="190" Height="40" HorizontalAlignment="Right" Grid.Column="1"/>
+                        <Label Name="AreaPlaceSurfaceAreaLabel" Content="Oppervlakte plaats: " Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <TextBox Name="AreaPlaceSurfaceAreaTextbox" Margin="10, 0, 0, 0" VerticalAlignment="Center" FontSize="14" Width="190" Height="40" HorizontalAlignment="Right" Grid.Column="1"/>
 
                     </Grid>
                     <Grid Grid.Row="5" Name="AreaRow5">
@@ -282,8 +292,8 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Label Name="AreaPricePerNightPerPersonLabel" Content="Prijs plaats: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <TextBox Name="AreaPricePerNightPerPersonTextbox" VerticalAlignment="Center" FontSize="16" Width="190" Height="40" HorizontalAlignment="Right" Grid.Column="1"/>
+                        <Label Name="AreaPricePerNightPerPersonLabel" Content="Prijs plaats: " Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <TextBox Name="AreaPricePerNightPerPersonTextbox" Margin="10, 0, 0, 0" VerticalAlignment="Center" FontSize="14" Width="190" Height="40" HorizontalAlignment="Right" Grid.Column="1"/>
 
                     </Grid>
                     <Grid Grid.Row="6" Name="AreaRow6">
@@ -292,10 +302,10 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Label Name="AreaAmountOfPeopleLabel" Content="Aantal personen: " Foreground="White" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <TextBox Name="AreaAmountOfPeopleTextbox" VerticalAlignment="Center" FontSize="16" Width="190" Height="40" HorizontalAlignment="Right" Grid.Column="1"/>
+                        <Label Name="AreaAmountOfPeopleLabel" Content="Aantal personen: " Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <TextBox Name="AreaAmountOfPeopleTextbox" VerticalAlignment="Center" Margin="10, 0, 0, 0" FontSize="14" Width="190" Height="40" HorizontalAlignment="Right" Grid.Column="1"/>
                     </Grid>                    
-                    <Grid Grid.Row="7" Name="AreaRow7">
+                    <Grid Grid.Row="8" Name="AreaRow7">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>

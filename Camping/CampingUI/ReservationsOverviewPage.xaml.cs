@@ -23,7 +23,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using CampingUI.Map;
 
 
 namespace CampingUI
@@ -106,8 +105,12 @@ namespace CampingUI
             {
                 if (departureDate > DateTime.Now.Date && departureDate >= arrivalDate || ArrivalDatePickerr.Text == string.Empty && !(DepartureDatePickerr.Text == string.Empty))
                 {
-                    ArrivalDatePickerr.Background = Brushes.White;
-                    DepartureDatePickerr.Background = Brushes.White;
+                    ArrivalDatePickerr.BorderBrush = Brushes.White;
+                    ArrivalDatePickerr.BorderThickness = new Thickness(3);
+
+                    DepartureDatePickerr.BorderBrush = Brushes.White;
+                    DepartureDatePickerr.BorderThickness = new Thickness(3);
+
                     _appliedFilters = true;
                     filteredReservations = filteredReservations.Where(reservation => reservation.DepartureDate.Date <= departureDate.Value.Date);
                 }
@@ -115,8 +118,12 @@ namespace CampingUI
                 {
                     ArrivalDatePickerr.Text = string.Empty;
                     DepartureDatePickerr.Text = string.Empty;
-                    ArrivalDatePickerr.Background = Brushes.Red;
-                    DepartureDatePickerr.Background = Brushes.Red;
+                    ArrivalDatePickerr.BorderBrush = Brushes.Red;
+                    ArrivalDatePickerr.BorderThickness = new Thickness(3);
+
+                    DepartureDatePickerr.BorderBrush = Brushes.Red;
+                    DepartureDatePickerr.BorderThickness = new Thickness(3);
+
 
                 }
             }
@@ -128,18 +135,23 @@ namespace CampingUI
             if (int.TryParse(ReservationIdBox.Text, out int reservatieID) && reservatieID >= 0)
             {
                 _appliedFilters = true;
-                ReservationIdBox.Background = Brushes.White;
+                ReservationIdBox.BorderBrush = Brushes.White;
+                ReservationIdBox.BorderThickness = new Thickness(3);
+
                 filteredReservations = filteredReservations.Where(reservation => reservation.ReservationID == reservatieID);
             }
             else if (ReservationIdBox.Text == string.Empty)
             {
-                ReservationIdBox.Background = Brushes.White;
+                ReservationIdBox.BorderBrush = Brushes.White;
+                ReservationIdBox.BorderThickness = new Thickness(3);
 
             }
             else
             {
                 ReservationIdBox.Text = string.Empty;
-                ReservationIdBox.Background = Brushes.Red;
+                ReservationIdBox.BorderBrush = Brushes.Red;
+                ReservationIdBox.BorderThickness = new Thickness(3);
+
             }
 
 
@@ -147,27 +159,34 @@ namespace CampingUI
             if (int.TryParse(PlaceNumberBox.Text, out int placeNumber) && placeNumber >= 0)
             {
                 _appliedFilters = true;
-                PlaceNumberBox.Background = Brushes.White;
+                PlaceNumberBox.BorderBrush = Brushes.White;
+                PlaceNumberBox.BorderThickness = new Thickness(3);
+
                 filteredReservations = filteredReservations.Where(reservation => reservation.PlaceID == placeNumber);
             }
             else if (PlaceNumberBox.Text == string.Empty)
             {
-                PlaceNumberBox.Background = Brushes.White;
+                PlaceNumberBox.BorderBrush = Brushes.White;
+                PlaceNumberBox.BorderThickness = new Thickness(3);
 
             }
             else 
             {
                 PlaceNumberBox.Text = string.Empty;
-                PlaceNumberBox.Background = Brushes.Red;
+                PlaceNumberBox.BorderBrush = Brushes.Red;
+                PlaceNumberBox.BorderThickness = new Thickness(3);
+
             }
 
-                
-              
+
+
             // Filter by Guest Name
             if (!string.IsNullOrEmpty(GuestNameBox.Text) && !(int.TryParse(GuestNameBox.Text, out int guest)))
             {
                 _appliedFilters = true;
-                GuestNameBox.Background = Brushes.White;
+                GuestNameBox.BorderBrush = Brushes.White;
+                GuestNameBox.BorderThickness = new Thickness(3);
+
                 filteredReservations = filteredReservations
        .Where(reservation =>
            reservation.GuestName.Contains(GuestNameBox.Text, StringComparison.OrdinalIgnoreCase)
@@ -175,15 +194,19 @@ namespace CampingUI
             }
             else if (GuestNameBox.Text == string.Empty)
             {
-                GuestNameBox.Background = Brushes.White;
+                GuestNameBox.BorderBrush = Brushes.White;
+                GuestNameBox.BorderThickness = new Thickness(3);
+
 
             }
             else 
             {
                 GuestNameBox.Text = string.Empty;
-                GuestNameBox.Background = Brushes.Red;
+                GuestNameBox.BorderBrush = Brushes.Red;
+                GuestNameBox.BorderThickness = new Thickness(3);
+
             }
-           
+
             // Apply the combined filters and update the ListView
             ReservationsListView.ItemsSource = filteredReservations
                 .OrderBy(reservation => reservation.ArrivalDate)
@@ -382,7 +405,7 @@ namespace CampingUI
             {
                 PlaceIDLabel.Content = string.IsNullOrEmpty(PlaceDropDown.Text) ? "Plaatsnummer: Er moet een plaats geselecteerd worden" : "Plaatsnummer:";
 
-                if (ArrivalDateBox.SelectedDate <= DepartureDateBox.SelectedDate)
+                if (ArrivalDateBox.SelectedDate < DepartureDateBox.SelectedDate)
                 {
                     ArrivalDateBox.BorderBrush = Brushes.White;
                     DepartureDateBox.BorderBrush = Brushes.White;

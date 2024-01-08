@@ -36,7 +36,7 @@ namespace CampingDataAccess
             CampingReservationRepository = new CampingReservationRepository(ConnectionString);
             if (!File.Exists("Camping.db")) {
                 CreateDB();
-                AddDummyData();
+                //AddDummyData();
             }
         }
         public void CreateDB()
