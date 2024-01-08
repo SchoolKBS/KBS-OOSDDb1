@@ -78,9 +78,6 @@ namespace CampingUI
             _mapPage.MapMethods.GenerateMap(field);
           
         }
-
-     
-
         public void HandlePlaceSelectedOnMap(Place place)
         {
 
@@ -99,7 +96,6 @@ namespace CampingUI
             MaxPriceRangeTextBox.Text = $"{place.PricePerNightPerPerson}";
 
         }
-  
         private void TextBox_Changed(object sender, TextChangedEventArgs e)
         {
             TextBox textbox = (TextBox)sender;
@@ -205,7 +201,6 @@ namespace CampingUI
             }
 
         }
-
         private void HighLightFilteredMiniMap(IEnumerable<Place> filteredPlaces)
         {
             foreach (var comp in field.Children)
@@ -290,7 +285,6 @@ namespace CampingUI
             StaticUIMethods.ResetTextboxBorder(MaxPriceRangeTextBox);
             StaticUIMethods.ResetTextboxBorder(AmountOfPeopleTextBox);
         }
-
         private void SetSorterColumn_Click(object sender, RoutedEventArgs e)
         {
             if (!_camping.GetPlaces().IsNullOrEmpty())
@@ -304,9 +298,6 @@ namespace CampingUI
         {
             NavigationService.Navigate(new ReservationCreationPage(this));
         }
-
-     
-
         private void DeletePlaceButton_Click(object sender, RoutedEventArgs e)
         {
             Place place = (Place)PlacesListView.SelectedItem;
@@ -323,7 +314,6 @@ namespace CampingUI
 
             }
         }
-
         private void ReloadMaps()
         {
             _mapPage.MapMethods.GenerateMap(field);
@@ -399,8 +389,7 @@ namespace CampingUI
             {
                 PlaceOverviewGrid.Visibility = Visibility.Collapsed;
             }
-        }
-  
+        }   
         private void SetReservationsInCalendar(Place place)
         {
             ReservationCalender.BlackoutDates.Clear();

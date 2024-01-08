@@ -40,7 +40,6 @@ namespace CampingUI
             DepartureDatePicker.IsEnabled = false;
             SetKnownInformation();
         }
-        // Function to set known information from filter.
         public void SetKnownInformation()
         {
             _place = (Place)_page.PlacesListView.SelectedItem;
@@ -55,7 +54,6 @@ namespace CampingUI
                 if(_page.GetCampingAmountOfPeople() > 0)PeopleCountText.Text = _page.GetCampingAmountOfPeople().ToString();
             }
         }
-        // Event for when arrival date is changed, This enables deparutre date and calls ShowAvailableDatesDeparture()
         private void ArrivalDatePicker_DateChanged(object sender, SelectionChangedEventArgs e)
         {
             DepartureDatePicker.SelectedDate = null;
@@ -69,7 +67,6 @@ namespace CampingUI
             ShowAvailableDatesDeparture();
 
         }
-        // Sets Backgroud back to null if date is changed
         private void DepartureDatePicker_DateChanged(object sender, SelectionChangedEventArgs e)
         {
             DepartureDatePicker.BorderBrush = Brushes.White;
@@ -78,7 +75,6 @@ namespace CampingUI
             Price = CalcPrice();
             PriceLabel.Content = Price.ToString() + "€";
         }
-        //Calcultes the price for the reservation based on the input fields PeopleCountText and the datepickers. Returns last (correct) price if input is incorrect
         private double CalcPrice()
         {
             int.TryParse(PeopleCountText.Text, out var TextToInt);
@@ -97,7 +93,6 @@ namespace CampingUI
                 return 0;
             }
         }
-        // A method that calls the different Check methods to see if a reservation can be made
         public bool CheckValues()
         {
             bool result = true;
@@ -106,7 +101,6 @@ namespace CampingUI
             if(!CheckGuestInputFields() && result) result = false;
             return result;
         }
-        //Checks if the dates are selected
         public bool CheckDates()
         {
             if (!ArrivalDatePicker.SelectedDate.HasValue)
@@ -121,7 +115,6 @@ namespace CampingUI
             }
             return ArrivalDatePicker.SelectedDate.HasValue && DepartureDatePicker.SelectedDate.HasValue;
         }
-        // Checks if people count is a viable number
         public bool CheckPeopleCount()
         {
             bool result = int.TryParse(PeopleCountText.Text, out int number);
@@ -138,7 +131,6 @@ namespace CampingUI
             }
             return result;
         }
-        // Checks if the First name, Last name, and phonenumber are filled in
         public bool CheckGuestInputFields()
         {
             if (FirstNameTB.Text.IsNullOrEmpty())
@@ -158,14 +150,12 @@ namespace CampingUI
             }
                 return !FirstNameTB.Text.IsNullOrEmpty() && !LastnameTB.Text.IsNullOrEmpty() && !PhoneNumberTB.Text.IsNullOrEmpty();
         }
-        // Changes the PriceTV each time a different people count was entered
         private void PeopleCountText_Changed(object sender, TextChangedEventArgs e)
         {
             Price = CalcPrice();
             PriceLabel.Content = Price.ToString() + "$";
 
         }
-        // Sets the possible Arrivaldates in the ArrivalDatePicker
         private void ShowAvailableDatesArrival()
         {
             ArrivalDatePicker.DisplayDateStart = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
@@ -176,7 +166,6 @@ namespace CampingUI
                 ArrivalDatePicker.BlackoutDates.Add(new CalendarDateRange(reservation.ArrivalDate, reservation.DepartureDate));
             }
         }
-        // Sets the possible DepartureDates in the DepartureDatePicker
         private void ShowAvailableDatesDeparture()
         {
             if (ArrivalDatePicker.SelectedDate != null)
@@ -197,12 +186,10 @@ namespace CampingUI
 
             }
         }
-        // Cancels the reservation, goes back to last page
         private void CancelReservation_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.GoBack();
         }
-        // Accepts the reservation, checks if values are correct, creates a reservation and guest, and goes to a new place overview page
         private void AcceptReservation_Click(object sender, RoutedEventArgs e)
         {
             if (CheckValues())
@@ -215,7 +202,6 @@ namespace CampingUI
                 NavigationService.Navigate(new PlacesOverviewPage(_camping, (CampingRepository)_camping.CampingRepository));
             }
         }
-        // Changes the background of textbox back to normal if its value was changed
         private void Input_Changed(object sender, TextChangedEventArgs e)
         {
             if(sender.GetType() == typeof(TextBox)) {

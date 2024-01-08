@@ -44,19 +44,5 @@ namespace CampingUI.NewFolder
             Canvas.SetZIndex(border, -1);
             return border;
         }
-        public static Border SelectBorder(Border border, Area area)
-        {
-            var coordinates = area.GetAreaPositions();
-            border.BorderThickness = new Thickness(_selectionThicknes);
-            border.BorderBrush = Brushes.LightBlue;
-            return border;
-        }        
-        public static Border DeselectBorder(Border border, Area area)
-        {
-            var coordinates = area.GetAreaPositions();
-            border.BorderThickness = new Thickness(1);
-            border.BorderBrush = Brushes.Black;
-            return border;
-        }
     }
 }

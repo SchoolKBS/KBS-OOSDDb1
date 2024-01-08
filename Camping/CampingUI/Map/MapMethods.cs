@@ -17,14 +17,14 @@ using CampingUI.NewFolder;
 
 namespace CampingUI.Map
 {
-    public class MapMethods //: MapPage
+    public class MapMethods 
     {
         protected MapPage MapPage { get; private set; }
-        private Camping _camping;
-        public MapMethods(MapPage mapPage, Camping camping) //: base(camping)
+        protected Camping Camping;
+        public MapMethods(MapPage mapPage, Camping camping) 
         {
             MapPage = mapPage;
-            _camping = camping;
+            Camping = camping;
 
         }
         public void DeselectAllFields()
@@ -231,9 +231,9 @@ namespace CampingUI.Map
         public void GenerateMap(Canvas canvas)
         {
             canvas.Children.Clear();
-            MapPage.Areas = _camping.CampingRepository.CampingMapRepository.GetAreas();
-            MapPage.Streets = _camping.CampingRepository.CampingMapRepository.GetStreets();
-            MapPage.Places = _camping.CampingRepository.CampingPlaceRepository.GetPlaces();
+            MapPage.Areas = Camping.CampingRepository.CampingMapRepository.GetAreas();
+            MapPage.Streets = Camping.CampingRepository.CampingMapRepository.GetStreets();
+            MapPage.Places = Camping.CampingRepository.CampingPlaceRepository.GetPlaces();
             GenerateComponentsMap(MapPage.Areas, canvas);
             GenerateComponentsMap(MapPage.Streets, canvas);
             GenerateComponentsMap(MapPage.Places, canvas);
