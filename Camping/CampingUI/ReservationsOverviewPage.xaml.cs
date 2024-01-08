@@ -406,7 +406,7 @@ namespace CampingUI
             {
                 PlaceIDLabel.Content = string.IsNullOrEmpty(PlaceDropDown.Text) ? "Plaatsnummer: Er moet een plaats geselecteerd worden" : "Plaatsnummer:";
 
-                if (ArrivalDateBox.SelectedDate <= DepartureDateBox.SelectedDate)
+                if (ArrivalDateBox.SelectedDate < DepartureDateBox.SelectedDate)
                 {
                     ArrivalDateBox.BorderBrush = Brushes.White;
                     DepartureDateBox.BorderBrush = Brushes.White;

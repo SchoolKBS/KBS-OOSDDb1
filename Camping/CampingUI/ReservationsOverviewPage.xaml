@@ -58,7 +58,7 @@
 
                 <!-- Third filter for Reservation ID -->
                 <StackPanel Grid.Column="3" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Label FontSize="14" Content="Reserverings Nummer: " HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Calibri" FontWeight="Bold"/>
+                    <Label FontSize="14" Content="ReserveringsNummer: " HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Calibri" FontWeight="Bold"/>
                     <TextBox KeyDown ="Texbox_Keydown"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" x:Name="ReservationIdBox" MinWidth="75" Height="30" />
                 </StackPanel>
 
