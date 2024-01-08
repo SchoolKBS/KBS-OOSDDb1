@@ -84,16 +84,17 @@ namespace CampingUI.GenerateComponentsMap
                 }
                 textBlockX += 10 * (Math.Sin((street.YCord2 - street.YCord1) / LineLenght)) + CalcSideLenght(street,textblock, true);
             }
-
-
         }
         public static double CalcSideLenght(Street street, TextBlock textblock, bool XSide)
         {
             double LineLenght = Math.Sqrt(Math.Pow(street.XCord2 - street.XCord1, 2) + Math.Pow(street.YCord1 - street.YCord2, 2));
             if (textblock.ActualWidth > LineLenght) return 0;
+
             double angle = Math.Atan2(street.XCord2 - street.XCord1, street.YCord2 - street.YCord1);
-            if(XSide) return Math.Abs(Math.Sin(angle) * ((LineLenght - textblock.ActualWidth) / 2));
-            else return Math.Abs(Math.Cos(angle) * ((LineLenght - textblock.ActualWidth) / 2));
+            double TextOffset = (LineLenght - textblock.ActualWidth) / 2;
+
+            if (XSide) return Math.Abs(Math.Sin(angle) * TextOffset);
+            else return Math.Abs(Math.Cos(angle) * TextOffset);
         }
         public static int CalcAngle(Street street)
         {
