@@ -31,7 +31,10 @@ namespace CampingUI
         {
             InitializeComponent();
             _page = placesOverviewPage;
+
             _camping = _page.GetCamping();
+            _camping.SetReservations(_camping.CampingRepository.CampingReservationRepository.GetReservations());
+
             _place = (Place) _page.PlacesListView.SelectedItem;
             ShowAvailableDatesArrival();
             DepartureDatePicker.IsEnabled = false;
