@@ -1,7 +1,6 @@
 ﻿using CampingCore;
 using CampingCore.PlacesOverviewPageClasses;
 using CampingDataAccess;
-using CampingUI.Map;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
