@@ -37,11 +37,21 @@ namespace UnitTests
             }
             return listToCheck;
         }
+        public static List<Area> CreateAreas()
+        {
+            List<Area> listToCheck = new List<Area>();
+            for (int i = 0; i < 5; i++)
+            {
+                listToCheck.Add(new Area(i, "Zwolle" + i, i, i % 2 == 0, i % 2 == 0, i, i, i, i, i, i, i));
+            }
+            return listToCheck;
+        }
         public static Mock<ICampingRepository> MockIcampingRepository()
         {
             var campingRepositoryMock = new Mock<ICampingRepository>();
             campingRepositoryMock.Setup(m => m.CampingPlaceRepository.GetPlaces()).Returns(CreatePlaces());
             campingRepositoryMock.Setup(m => m.CampingReservationRepository.GetReservations()).Returns(CreateReservations());
+            campingRepositoryMock.Setup(m => m.CampingMapRepository.GetAreas()).Returns(CreateAreas());
             return campingRepositoryMock;
         }
     }

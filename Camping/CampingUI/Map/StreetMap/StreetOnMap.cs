@@ -15,7 +15,6 @@ namespace CampingUI.Map.StreetMap
     public class StreetOnMap : MapMethods
     {
         public StreetOnMap(MapPage mapPage, Camping camping) : base(mapPage, camping) { }
-
         public void GetAddStreetValues()
         {
             MapPage.StreetName = GetAddComponentNameTextbox(MapPage.StreetNameTextbox, MapPage.StreetName);
@@ -87,7 +86,6 @@ namespace CampingUI.Map.StreetMap
                 if (MapPage.SelectedStreet == null || (MapPage.SelectedStreet != null && !MapPage.SelectedStreet.Equals(street))) line.Stroke = Brushes.Black;
             };
         }
-
         public void SetFirstLinePoint()
         {
             foreach (var component in MapPage.field.Children)
@@ -100,7 +98,6 @@ namespace CampingUI.Map.StreetMap
                 }
             }
         }
-
         public void SetSecondLinePoint()
         {
             foreach (var component in MapPage.field.Children)

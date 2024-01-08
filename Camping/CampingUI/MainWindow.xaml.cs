@@ -34,39 +34,31 @@ namespace CampingUI
             Main.Navigate(new MapPage(Camping));
 
         }
-        private void HomeButton_Click(object sender, RoutedEventArgs e)
+        private void MapButton_Click(object sender, RoutedEventArgs e)
         {
             // Navigate back to the main screen or set the desired page
             Main.Navigate(new MapPage(Camping)); // Replace MainPage with the appropriate page class for your main screen
         }
-
-        //Function (EventHandler) to open the reservations page
         private void ReservationsButton_Click(object sender, RoutedEventArgs e)
         {
             Main.Content = new ReservationsOverviewWindow(Camping, CampingRepository);
         }
-
-        //Function (EventHandler) to open the places overview page
         private void PlacesButton_Click(object sender, RoutedEventArgs e)
         {
 
             Main.Content = new PlacesOverviewPage(Camping, CampingRepository);
 
         }
-
         private void GuestOverviewButton_Click(Object sender, RoutedEventArgs e)
         {
             Main.Content = new GuestOverviewPage(Camping);
         }
-
         private void MinimizeButton_Click(object sender, RoutedEventArgs e)
         {
             WindowState = WindowState.Minimized;
         }
-
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
-            // Custom animation for closing the window
             var animation = new System.Windows.Media.Animation.DoubleAnimation(0, TimeSpan.FromSeconds(0.1));
             animation.Completed += (s, _) => Close();
             BeginAnimation(OpacityProperty, animation);

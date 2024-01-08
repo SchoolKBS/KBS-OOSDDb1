@@ -24,11 +24,8 @@ namespace CampingUI
         Guest guest;
         public GuestOverviewPage(Camping camping)
         {
-            InitializeComponent();
-
+            InitializeComponent();  
             this.Camping = camping;
-
-            //Get all guests from database
             GuestOverviewItemsControl.ItemsSource = camping.CampingRepository.CampingGuestRepository.GetGuests();
         }
 
@@ -107,7 +104,6 @@ namespace CampingUI
             ChangeGuestInformationGrid.Visibility = Visibility.Visible;
         }
        
-        //Changes guest information and saves it in database
         public void SaveNewGuestInformation(object sender, RoutedEventArgs e)
         {
             guest.FirstName = ChangeFirstNameTextBox.Text;
@@ -134,7 +130,6 @@ namespace CampingUI
             GuestDetailsGrid.Visibility = Visibility.Visible;
         }
 
-        //Checks if PostalCode is valid
         private void PostalCodeTextBox_TextChanged(object sender, RoutedEventArgs e)
         {
             if (Regex.IsMatch(ChangePostalCodeTextBox.Text, @"^\d{4}\s?[A-Za-z]{2}$"))
@@ -149,7 +144,6 @@ namespace CampingUI
             }
         }
 
-        //Checks if phonenumber is digits
         private void PhoneNumberTextBox_TextChanged(object sender, RoutedEventArgs e)
         {
             if (Regex.IsMatch(ChangePhoneNumberTextBox.Text, @"^\d+$") && !string.IsNullOrEmpty(ChangePhoneNumberTextBox.Text))

@@ -35,7 +35,7 @@
             <!-- Centered stack panel for buttons -->
             <!-- Centered stack panel for buttons -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Button x:Name="HomeButton" Background="Transparent" BorderBrush="Transparent" Foreground="White" FontWeight="Bold" Height="50" FontSize="20" Margin="0, 0, 12.5, 0" Click="HomeButton_Click">
+                <Button x:Name="HomeButton" Background="Transparent" BorderBrush="Transparent" Foreground="White" FontWeight="Bold" Height="50" FontSize="20" Margin="0, 0, 12.5, 0" Click="MapButton_Click">
                     <Button.Template>
                         <ControlTemplate TargetType="{x:Type Button}">
                             <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">

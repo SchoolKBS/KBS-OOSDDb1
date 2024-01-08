@@ -69,12 +69,10 @@ namespace CampingUI
 
 
         }
-        public void HandlePlaceClicker(Place place)
+        public void HandlePlaceClickMinimap(Place place)
         {
-
             PlaceSelectedOnMap?.Invoke(place);
         }
-
         private void field_MouseEnter(object sender, MouseEventArgs e)
         {
             if (SelectedMapButton.Contains("Place"))
@@ -264,7 +262,6 @@ namespace CampingUI
                 PlaceOnMap.ResetAfterAddingMapComponent("Place");
             }
         }
-
         private void HandleAddStreet_Click(Object sender, RoutedEventArgs e)
         {
             StreetOnMap.GetAddStreetValues();
