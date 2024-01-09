@@ -210,7 +210,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:OOSDD"
         "ProductCode" = "8:{8E36A141-38A7-49CE-AB16-8357E91F7F7A}"
-        "PackageCode" = "8:{D44FFB26-D20A-4703-8524-3562BEB2FC31}"
+        "PackageCode" = "8:{66CB3E55-9104-4EBB-8B4E-174A3A409825}"
         "UpgradeCode" = "8:{D7160E86-067D-4AF5-B7A3-701C5F137719}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
