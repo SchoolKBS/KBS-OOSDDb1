@@ -232,7 +232,7 @@ namespace CampingUI
                     hasDogs = true;
                 Street street = Camping.CampingRepository.CampingMapRepository.GetStreetByStreetName(PlaceStreetComboBox.SelectedItem.ToString());
                 Area area = Camping.CampingRepository.CampingMapRepository.GetAreaByAreaName(PlaceAreaComboBox.SelectedItem.ToString());
-
+                Place place = new Place(PlacePlaceID, hasPower, street.StreetID, area.AreaID, hasDogs, PlaceSurfaceArea, PlaceAmountOfPeople, PlacePricePerNightPerPerson, XPressed, YPressed);
                 if (EditPlaceBool)
                 {
                     Camping.CampingRepository.CampingPlaceRepository.UpdatePlaceData(Int32.Parse(PlacePlaceIDTextbox.Text), street.StreetID, area.AreaID, hasPower, PlaceSurfaceArea, PlacePricePerNightPerPerson, PlaceAmountOfPeople, hasDogs);
@@ -245,9 +245,7 @@ namespace CampingUI
                     PlaceOnMap.ResetAfterAddingMapComponent("Place");
                     return;
                 }
-                Place place = new Place(PlacePlaceID, hasPower, street.StreetID, area.AreaID, hasDogs, PlaceSurfaceArea, PlaceAmountOfPeople, PlacePricePerNightPerPerson, XPressed, YPressed);
-
-                if (!EditPlaceBool)
+                else 
                 {
                     Camping.CampingRepository.CampingPlaceRepository.AddPlace(place);
                     Camping.CampingRepository.CampingMapRepository.AddExtend(place.PlaceID,

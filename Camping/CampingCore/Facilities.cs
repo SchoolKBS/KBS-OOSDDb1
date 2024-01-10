@@ -13,7 +13,5 @@ namespace CampingCore
         public int SurfaceArea { get; set; }
         public double PricePerNightPerPerson { get; set; }
         public int AmountOfPeople { get; set; }
-
-        public Facilities() { }
     }
 }
